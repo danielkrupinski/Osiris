@@ -1643,6 +1643,12 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\UiPanelPatternTypes.h">
       <Filter>MemoryPatterns\PatternTypes</Filter>
     </ClInclude>
+    <ClInclude Include="MemorySearch\TempPatternPool.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternPoolBuilder.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

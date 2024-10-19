@@ -409,10 +409,12 @@
     <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
     <ClInclude Include="MemorySearch\PatternPool.h" />
+    <ClInclude Include="MemorySearch\PatternPoolBuilder.h" />
     <ClInclude Include="MemorySearch\PatternSearchResult.h" />
     <ClInclude Include="MemorySearch\PatternSearchResults.h" />
     <ClInclude Include="MemorySearch\PatternStringWildcard.h" />
     <ClInclude Include="MemorySearch\BytePatternView.h" />
+    <ClInclude Include="MemorySearch\TempPatternPool.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObject.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectPointer.h" />

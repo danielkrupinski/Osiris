@@ -5,6 +5,8 @@
 #include <limits>
 #include <Utils/TypeList.h>
 
+#include "PatternPoolBuilder.h"
+
 template <typename StrongTypeAlias>
 struct UnpackStrongTypeAlias {
     using type = typename StrongTypeAlias::Type;
@@ -41,32 +43,16 @@ struct WithSizeOf {
 template <std::size_t BufferSize = 0, std::size_t NumberOfPatterns = 0, typename PatternTypesList = TypeList<>>
 class PatternPool {
 public:
+    template <PatternPoolBuilder builder>
+    [[nodiscard]] static consteval auto from() noexcept
+    {
+        using SortedPatternTypes = typename decltype(builder)::PatternTypes::template sortBy<UnpackedStrongTypeAliasSizeOf>;
+        PatternPool<builder.tempPool.bufferSize, builder.tempPool.numberOfPatterns, SortedPatternTypes> pool;
+        copyPatterns(builder.tempPool, pool, typename decltype(builder)::PatternTypes{}, SortedPatternTypes{});
+        return pool;
+    }
+
     using PatternTypes = PatternTypesList;
-
-    [[nodiscard]] consteval auto addPatterns(auto f) const noexcept
-    {
-        return f(*this);
-    }
-
-    template <typename PatternType, CodePattern Pattern>
-    [[nodiscard]] consteval auto addPattern() const noexcept
-    {
-        static_assert(Pattern.storage.size <= (std::numeric_limits<std::uint8_t>::max)());
-        static_assert(sizeof(typename PatternType::Type) == 8 || Pattern.operation == CodePatternOperation::Read, "Incorrect result size, missing .read() in pattern declaration?");
-
-        PatternPool<BufferSize + Pattern.storage.size, NumberOfPatterns + 1, typename PatternTypesList::template add<PatternType>> newPool;
-        copyCurrentPool(newPool);
-        newPool.appendPattern(Pattern);
-        return newPool;
-    }
-
-    [[nodiscard]] consteval auto finalize() const noexcept
-    {
-        using SortedPatternTypes = typename PatternTypesList::template sortBy<UnpackedStrongTypeAliasSizeOf>;
-        PatternPool<BufferSize, NumberOfPatterns, SortedPatternTypes> finalPool;
-        copyPatterns(finalPool);
-        return finalPool;
-    }
 
     template <typename F>
     void forEach(F f) const noexcept
@@ -79,40 +65,22 @@ public:
     }
 
 private:
-    template <typename... Types>
-    consteval void copyPatterns(PatternPool<BufferSize, NumberOfPatterns, TypeList<Types...>>& pool) const noexcept
+    template <typename... SourceTypes, typename... DestTypes>
+    static consteval void copyPatterns(const auto& tempPatternPool, auto& pool, TypeList<SourceTypes...>, TypeList<DestTypes...>) noexcept
     {
         std::size_t outPatternIndex{0}, outBufferIndex{0};
-        (copyPattern<Types>(outPatternIndex, outBufferIndex, pool), ...);
+        (copyPattern(TypeList<SourceTypes...>::template indexOf<DestTypes>(), outPatternIndex, outBufferIndex, tempPatternPool, pool), ...);
     }
 
-    template <typename PatternType>
-    consteval void copyPattern(std::size_t& outIndex, std::size_t& outBuffer, auto& pool) const noexcept
+    static consteval void copyPattern(std::size_t patternIndex, std::size_t& outIndex, std::size_t& outBuffer, const auto& tempPool, auto& pool) noexcept
     {
-        constexpr auto patternIndex = PatternTypesList::template indexOf<PatternType>();
-        const auto patternBufferIndex = std::accumulate(patternLengths.begin(), patternLengths.begin() + patternIndex, 0);
-        std::ranges::copy_n(buffer.begin() + patternBufferIndex, patternLengths[patternIndex], pool.buffer.begin() + outBuffer);
-        outBuffer += patternLengths[patternIndex];
-        pool.patternLengths[outIndex] = patternLengths[patternIndex];
-        pool.patternOffsets[outIndex] = patternOffsets[patternIndex];
-        pool.operations[outIndex] = operations[patternIndex];
+        const auto patternBufferIndex = std::accumulate(tempPool.patternLengths.begin(), tempPool.patternLengths.begin() + patternIndex, 0);
+        std::ranges::copy_n(tempPool.buffer.begin() + patternBufferIndex, tempPool.patternLengths[patternIndex], pool.buffer.begin() + outBuffer);
+        outBuffer += tempPool.patternLengths[patternIndex];
+        pool.patternLengths[outIndex] = tempPool.patternLengths[patternIndex];
+        pool.patternOffsets[outIndex] = tempPool.patternOffsets[patternIndex];
+        pool.operations[outIndex] = tempPool.operations[patternIndex];
         ++outIndex;
-    }
-
-    consteval void appendPattern(auto pattern) noexcept
-    {
-        std::ranges::copy_n(pattern.storage.pattern.begin(), pattern.storage.size, buffer.end() - pattern.storage.size);
-        patternLengths.back() = static_cast<std::uint8_t>(pattern.storage.size);
-        patternOffsets.back() = pattern.offset;
-        operations.back() = pattern.operation;
-    }
-
-    consteval void copyCurrentPool(auto& newPool) const noexcept
-    {
-        std::ranges::copy(buffer, newPool.buffer.begin());
-        std::ranges::copy(patternLengths, newPool.patternLengths.begin());
-        std::ranges::copy(patternOffsets, newPool.patternOffsets.begin());
-        std::ranges::copy(operations, newPool.operations.begin());
     }
 
     template <std::size_t, std::size_t, typename>
