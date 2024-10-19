@@ -8,6 +8,7 @@
 #include "PanoramaUiPanelChildPanels.h"
 #include "PanoramaUiPanelClasses.h"
 #include "PanoramaUiPanelMethodInvoker.h"
+#include <MemoryPatterns/PatternTypes/UiPanelPatternTypes.h>
 
 template <typename HookContext>
 struct PanoramaUiPanelContext {
