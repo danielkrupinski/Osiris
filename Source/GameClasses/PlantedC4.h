@@ -5,7 +5,6 @@
 #include <CS2/Constants/BombSiteIndex.h>
 #include <CS2/Constants/EntityHandle.h>
 #include <CS2/Constants/IconURLs.h>
-#include <GameDependencies/PlantedC4Deps.h>
 #include <GameClasses/GlobalVars.h>
 
 template <typename HookContext>
@@ -19,27 +18,27 @@ public:
 
     [[nodiscard]] auto blowTime() const noexcept
     {
-        return deps().blowTime.of(plantedC4);
+        return hookContext.clientPatternSearchResults().template get<BombBlowTimeOffset>().of(plantedC4);
     }
 
     [[nodiscard]] auto defuser() const noexcept
     {
-        return deps().defuser.of(plantedC4);
+        return hookContext.clientPatternSearchResults().template get<BombDefuserOffset>().of(plantedC4);
     }
 
     [[nodiscard]] auto defuseEndTime() const noexcept
     {
-        return deps().defuseEndTime.of(plantedC4);
+        return hookContext.clientPatternSearchResults().template get<BombDefuseEndTimeOffset>().of(plantedC4);
     }
 
     [[nodiscard]] auto bombSite() const noexcept
     {
-        return deps().bombSite.of(plantedC4);
+        return hookContext.clientPatternSearchResults().template get<BombSiteOffset>().of(plantedC4);
     }
 
     [[nodiscard]] auto ticking() const noexcept
     {
-        return deps().ticking.of(plantedC4);
+        return hookContext.clientPatternSearchResults().template get<BombTickingOffset>().of(plantedC4);
     }
 
     [[nodiscard]] decltype(auto) baseEntity() const noexcept
@@ -53,11 +52,6 @@ public:
     }
 
 private:
-    [[nodiscard]] const auto& deps() const noexcept
-    {
-        return hookContext.gameDependencies().plantedC4Deps;
-    }
-
     HookContext& hookContext;
     cs2::CPlantedC4* plantedC4;
 };

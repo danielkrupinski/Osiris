@@ -7,16 +7,13 @@ struct PanoramaUiEngineDeps {
 
     template <typename PanoramaUiEnginePatterns>
     explicit PanoramaUiEngineDeps(const PanoramaUiEnginePatterns& panoramaUiEnginePatterns) noexcept
-        : thisptr{panoramaUiEnginePatterns.uiEngine()}
-        , getPanelHandle{panoramaUiEnginePatterns.getPanelHandle()}
+        : getPanelHandle{panoramaUiEnginePatterns.getPanelHandle()}
         , getPanelPointer{panoramaUiEnginePatterns.getPanelPointer()}
         , runScript{panoramaUiEnginePatterns.runScript()}
         , makeSymbol{panoramaUiEnginePatterns.makeSymbol()}
         , onDeletePanel{panoramaUiEnginePatterns.onDeletePanel()}
     {
     }
-
-    cs2::CUIEngine** thisptr;
 
     cs2::CUIEngine::getPanelHandle getPanelHandle;
     cs2::CUIEngine::getPanelPointer getPanelPointer;

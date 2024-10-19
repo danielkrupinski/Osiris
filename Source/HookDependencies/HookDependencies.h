@@ -135,9 +135,9 @@ struct HookDependencies {
     [[nodiscard]] ConVarAccessor getConVarAccessor() noexcept
     {
         if (!fullGlobalContext.gameDependencies.conVars.has_value()) {
-            if (fullGlobalContext.gameDependencies.cvarDeps.cvar && fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList) {
-                if (const auto cvar = *fullGlobalContext.gameDependencies.cvarDeps.cvar)
-                    fullGlobalContext.gameDependencies.conVars.emplace(ConVarFinder{*fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList.of(cvar).get()});
+            const auto cvar = fullGlobalContext.clientPatternSearchResults.template get<CvarPointer>();
+            if (cvar && *cvar && fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList) {
+                fullGlobalContext.gameDependencies.conVars.emplace(ConVarFinder{*fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList.of(*cvar).get()});
             }
         }
         return ConVarAccessor{*fullGlobalContext.gameDependencies.conVars, fullGlobalContext.gameDependencies.conVarDeps, conVarAccessorState};
@@ -181,7 +181,7 @@ struct HookDependencies {
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {
-        const auto* const plantedC4s = fullGlobalContext.gameDependencies.plantedC4Deps.plantedC4s;
+        const auto* const plantedC4s = fullGlobalContext.clientPatternSearchResults.template get<PlantedC4sPointer>();
         if (plantedC4s && plantedC4s->size > 0)
             return plantedC4s->memory[0];
         return nullptr;
