@@ -9,11 +9,7 @@ struct PanoramaUiPanelDeps {
 
     template <typename PanoramaUiPanelPatterns>
     explicit PanoramaUiPanelDeps(const PanoramaUiPanelPatterns& panoramaUiPanelPatterns) noexcept
-        : setParent{panoramaUiPanelPatterns.setParent()}
-        , setVisible{panoramaUiPanelPatterns.setVisible()}
-        , getAttributeString{panoramaUiPanelPatterns.getAttributeString()}
-        , setAttributeString{panoramaUiPanelPatterns.setAttributeString()}
-        , childPanels{panoramaUiPanelPatterns.childPanelsVectorOffset()}
+        : childPanels{panoramaUiPanelPatterns.childPanelsVectorOffset()}
         , panelStyle{panoramaUiPanelPatterns.panelStyleOffset()}
         , parentWindowOffset{panoramaUiPanelPatterns.parentWindowOffset()}
         , offsetToPanelId{panoramaUiPanelPatterns.offsetToPanelId()}
@@ -21,14 +17,6 @@ struct PanoramaUiPanelDeps {
         , offsetToPanelFlags{panoramaUiPanelPatterns.offsetToPanelFlags()}
     {
     }
-
-    template <typename T>
-    using Offset = FieldOffset<const void, T, std::int32_t>;
-
-    Offset<cs2::CUIPanel::setParent> setParent;
-    Offset<cs2::CUIPanel::setVisible> setVisible;
-    Offset<cs2::CUIPanel::getAttributeString> getAttributeString;
-    Offset<cs2::CUIPanel::setAttributeString> setAttributeString;
 
     ChildPanelsVectorOffset childPanels;
     PanelStyleOffset panelStyle;

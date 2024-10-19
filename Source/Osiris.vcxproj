@@ -314,8 +314,6 @@
     <ClInclude Include="GameDependencies\PanelStyleDeps.h" />
     <ClInclude Include="GameDependencies\PanoramaUiEngineDeps.h" />
     <ClInclude Include="GameDependencies\PanoramaUiPanelDeps.h" />
-    <ClInclude Include="GameDependencies\PlantedC4Deps.h" />
-    <ClInclude Include="GameDependencies\PlayerControllerDeps.h" />
     <ClInclude Include="GameDependencies\PlayerPawnDeps.h" />
     <ClInclude Include="GameDependencies\RenderComponentDeps.h" />
     <ClInclude Include="GameDependencies\SceneObjectDeps.h" />
@@ -358,6 +356,7 @@
     <ClInclude Include="MemoryPatterns\MemoryPatterns.h" />
     <ClInclude Include="MemoryPatterns\PatternFinders.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\ClientPatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\CvarPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\EntityPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\EntitySystemPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GameRulesPatternTypes.h" />
@@ -366,6 +365,8 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\HostageServicesPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\MemAllocPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\StrongType.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\UiEnginePatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\UiPanelPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ConVarPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\CvarPatternsWindows.h" />

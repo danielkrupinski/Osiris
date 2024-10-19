@@ -91,22 +91,22 @@ struct PanoramaUiPanelContext {
 
     [[nodiscard]] auto setParent() const noexcept
     {
-        return PanoramaUiPanelMethodInvoker{panel, impl().setParent};
+        return PanoramaUiPanelMethodInvoker{panel, hookContext.clientPatternSearchResults().template get<SetParentFunctionOffset>()};
     }
 
     [[nodiscard]] auto setVisible() const noexcept
     {
-        return PanoramaUiPanelMethodInvoker{panel, impl().setVisible};
+        return PanoramaUiPanelMethodInvoker{panel, hookContext.clientPatternSearchResults().template get<SetVisibleFunctionOffset>()};
     }
 
     [[nodiscard]] auto getAttributeString() const noexcept
     {
-        return PanoramaUiPanelMethodInvoker{panel, impl().getAttributeString};
+        return PanoramaUiPanelMethodInvoker{panel, hookContext.clientPatternSearchResults().template get<GetAttributeStringFunctionOffset>()};
     }
 
     [[nodiscard]] auto setAttributeString() const noexcept
     {
-        return PanoramaUiPanelMethodInvoker{panel, impl().setAttributeString};
+        return PanoramaUiPanelMethodInvoker{panel, hookContext.clientPatternSearchResults().template get<SetAttributeStringFunctionOffset>()};
     }
 
     [[nodiscard]] auto propertyFactory() const noexcept

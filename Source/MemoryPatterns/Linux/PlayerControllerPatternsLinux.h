@@ -1,19 +1,13 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/PlayerControllerOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/PlayerControllerPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct PlayerControllerPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] OffsetToPlayerPawnHandle offsetToPlayerPawnHandle() const noexcept
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
-        return patternFinders.clientPatternFinder("84 C0 75 ? 8B 8F ? ? ? ?"_pat).add(6).template readOffset<OffsetToPlayerPawnHandle>();
-    }
-
-    [[nodiscard]] OffsetToPlayerColor offsetToPlayerColor() const noexcept
-    {
-        return patternFinders.clientPatternFinder("49 63 9C 24 ? ? ? ? 83 FB 04"_pat).add(4).template readOffset<OffsetToPlayerColor>();
+        return clientPatterns
+            .template addPattern<OffsetToPlayerPawnHandle, CodePattern{"84 C0 75 ? 8B 8F ? ? ? ?"}.add(6).read()>()
+            .template addPattern<OffsetToPlayerColor, CodePattern{"49 63 9C 24 ? ? ? ? 83 FB 04"}.add(4).read()>();
     }
 };

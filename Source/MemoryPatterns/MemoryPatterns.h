@@ -25,9 +25,6 @@ struct MemoryPatterns {
     MEMORY_PATTERNS(PanelStylePatterns, panelStylePatterns)
     MEMORY_PATTERNS(PanoramaUiEnginePatterns, panoramaUiEnginePatterns)
     MEMORY_PATTERNS(PanoramaUiPanelPatterns, panoramaUiPanelPatterns)
-    MEMORY_PATTERNS(PlantedC4Patterns, plantedC4Patterns)
-    MEMORY_PATTERNS(PlayerControllerPatterns, playerControllerPatterns)
-    MEMORY_PATTERNS(PlayerPawnPatterns, playerPawnPatterns)
     MEMORY_PATTERNS(RenderComponentPatterns, renderComponentPatterns)
     MEMORY_PATTERNS(SceneObjectPatterns, sceneObjectPatterns)
     MEMORY_PATTERNS(SceneObjectUpdaterPatterns, sceneObjectUpdaterPatterns)
@@ -54,6 +51,7 @@ struct ClientPatternsAdder {
 constexpr auto kClientPatterns = []{
     return PatternPool{}
         .addPatterns(ClientPatternsAdder<ClientPatterns>{})
+        .addPatterns(ClientPatternsAdder<CvarPatterns2>{})
         .addPatterns(ClientPatternsAdder<EntityPatterns>{})
         .addPatterns(ClientPatternsAdder<EntitySystemPatterns>{})
         .addPatterns(ClientPatternsAdder<GameRulesPatterns>{})
@@ -64,5 +62,10 @@ constexpr auto kClientPatterns = []{
         .addPatterns(ClientPatternsAdder<PanelPatterns>{})
         .addPatterns(ClientPatternsAdder<PanoramaImagePanelPatterns>{})
         .addPatterns(ClientPatternsAdder<PanoramaLabelPatterns>{})
+        .addPatterns(ClientPatternsAdder<PanoramaUiEnginePatterns2>{})
+        .addPatterns(ClientPatternsAdder<PanoramaUiPanelPatterns2>{})
+        .addPatterns(ClientPatternsAdder<PlantedC4Patterns>{})
+        .addPatterns(ClientPatternsAdder<PlayerControllerPatterns>{})
+        .addPatterns(ClientPatternsAdder<PlayerPawnPatterns>{})
         .finalize();
 }();

@@ -2,32 +2,26 @@
 
 #include <cstdint>
 
+#include <MemoryPatterns/PatternTypes/UiPanelPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
+
 #include <GameClasses/OffsetTypes/PanoramaUiPanelOffset.h>
 #include <MemorySearch/BytePatternLiteral.h>
+
+struct PanoramaUiPanelPatterns2 {
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
+    {
+        return clientPatterns
+            .template addPattern<SetParentFunctionOffset, CodePattern{"48 8B 90 ? ? ? ? 48 85 F6 74 16"}.add(3).read()>()
+            .template addPattern<SetVisibleFunctionOffset, CodePattern{"F6 48 8B 78 ? 48 8B 07 FF 90 ? ? ? ? E9 ? ? ? ? ? 8D"}.add(10).read()>()
+            .template addPattern<GetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 41 80 BC 24 ? ? ? ? ? 48 89 C2"}.add(2).read()>()
+            .template addPattern<SetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 8B 05 ? ? ? ? 39 85 ? ? ? ? 0F 84 ? ? ? ? 48 8B 3B"}.add(2).read()>();
+    }
+};
 
 template <typename PatternFinders>
 struct PanoramaUiPanelPatterns {
     const PatternFinders& patternFinders;
-
-    [[nodiscard]] std::int32_t* setParent() const noexcept
-    {
-        return patternFinders.clientPatternFinder("48 8B 90 ? ? ? ? 48 85 F6 74 16"_pat).add(3).template as<std::int32_t*>();
-    }
-
-    [[nodiscard]] std::int32_t* setVisible() const noexcept
-    {
-        return patternFinders.clientPatternFinder("F6 48 8B 78 ? 48 8B 07 FF 90 ? ? ? ? E9 ? ? ? ? ? 8D"_pat).add(10).template as<std::int32_t*>();
-    }
-
-    [[nodiscard]] std::int32_t* getAttributeString() const noexcept
-    {
-        return patternFinders.clientPatternFinder("FF 90 ? ? ? ? 41 80 BC 24 ? ? ? ? ? 48 89 C2"_pat).add(2).template as<std::int32_t*>();
-    }
-
-    [[nodiscard]] std::int32_t* setAttributeString() const noexcept
-    {
-        return patternFinders.clientPatternFinder("FF 90 ? ? ? ? 8B 05 ? ? ? ? 39 85 ? ? ? ? 0F 84 ? ? ? ? 48 8B 3B"_pat).add(2).template as<std::int32_t*>();
-    }
 
     [[nodiscard]] ChildPanelsVectorOffset childPanelsVectorOffset() const noexcept
     {

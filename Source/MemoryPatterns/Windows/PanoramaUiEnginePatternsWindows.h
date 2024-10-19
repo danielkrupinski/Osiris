@@ -1,16 +1,22 @@
 #pragma once
 
+#include <MemoryPatterns/PatternTypes/UiPanelPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
+
 #include <CS2/Panorama/CUIEngine.h>
 #include <MemorySearch/BytePatternLiteral.h>
+
+struct PanoramaUiEnginePatterns2 {
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
+    {
+        return clientPatterns
+            .template addPattern<UiEnginePointer, CodePattern{"48 89 78 ? 48 89 0D ? ? ? ?"}.add(7).abs()>();
+    }
+};
 
 template <typename PatternFinders>
 struct PanoramaUiEnginePatterns {
     const PatternFinders& patternFinders;
-
-    [[nodiscard]] cs2::CUIEngine** uiEngine() const noexcept
-    {
-        return patternFinders.clientPatternFinder("48 89 78 ? 48 89 0D ? ? ? ?"_pat).add(7).abs().template as<cs2::CUIEngine**>();
-    }
 
     [[nodiscard]] cs2::CUIEngine::getPanelHandle getPanelHandle() const noexcept
     {

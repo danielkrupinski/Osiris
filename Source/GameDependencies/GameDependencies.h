@@ -13,9 +13,6 @@
 #include "PanoramaSymbols.h"
 #include "PanoramaUiEngineDeps.h"
 #include "PanoramaUiPanelDeps.h"
-#include "PlantedC4Deps.h"
-#include "PlayerControllerDeps.h"
-#include "PlayerPawnDeps.h"
 #include "RenderComponentDeps.h"
 #include "SceneObjectDeps.h"
 #include "SceneObjectUpdaterDeps.h"
@@ -43,9 +40,6 @@ struct GameDependencies {
         , panelStyleDeps{memoryPatterns.panelStylePatterns()}
         , uiEngineDeps{memoryPatterns.panoramaUiEnginePatterns()}
         , panoramaUiPanelDeps{memoryPatterns.panoramaUiPanelPatterns()}
-        , plantedC4Deps{memoryPatterns.plantedC4Patterns()}
-        , playerControllerDeps{memoryPatterns.playerControllerPatterns()}
-        , playerPawnDeps{memoryPatterns.playerPawnPatterns()}
         , renderComponentDeps{memoryPatterns.renderComponentPatterns()}
         , sceneObjectDeps{memoryPatterns.sceneObjectPatterns()}
         , sceneObjectUpdaterDeps{memoryPatterns.sceneObjectUpdaterPatterns()}
@@ -72,9 +66,6 @@ struct GameDependencies {
     PanelStyleDeps panelStyleDeps;
     PanoramaUiEngineDeps uiEngineDeps;
     PanoramaUiPanelDeps panoramaUiPanelDeps;
-    PlantedC4Deps plantedC4Deps;
-    PlayerControllerDeps playerControllerDeps;
-    PlayerPawnDeps playerPawnDeps;
     RenderComponentDeps renderComponentDeps;
     SceneObjectDeps sceneObjectDeps;
     SceneObjectUpdaterDeps sceneObjectUpdaterDeps;

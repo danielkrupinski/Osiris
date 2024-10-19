@@ -971,12 +971,6 @@
     <ClInclude Include="GameDependencies\PanoramaUiPanelDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\PlantedC4Deps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\PlayerControllerDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\PlayerPawnDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
@@ -1639,6 +1633,15 @@
     </ClInclude>
     <ClInclude Include="MemorySearch\CodePatternOperation.h">
       <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\CvarPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\UiEnginePatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\UiPanelPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
