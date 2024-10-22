@@ -54,6 +54,11 @@ public:
 
     using PatternTypes = PatternTypesList;
 
+    [[nodiscard]] PatternPoolView getView() const noexcept
+    {
+        return {NumberOfPatterns, buffer.data(), patternLengths.data(), patternOffsets.data(), operations.data()};
+    }
+
     template <typename F>
     void forEach(F f) const noexcept
     {

@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] auto didSmokeEffect() const noexcept
     {
-        return hookContext.gameDependencies().smokeGrenadeProjectileDeps.offsetToDidSmokeEffect.of(smokeGrenadeProjectile).toOptional();
+        return hookContext.clientPatternSearchResults().template get<OffsetToDidSmokeEffect>().of(smokeGrenadeProjectile).toOptional();
     }
 
 private:

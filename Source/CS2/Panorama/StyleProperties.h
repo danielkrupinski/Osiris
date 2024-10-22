@@ -1,9 +1,12 @@
 #pragma once
 
 #include <CS2/Classes/Color.h>
+#include <CS2/Classes/CUtlString.h>
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
 #include <Platform/Macros/PlatformSpecific.h>
+
+#include "CStyleSymbol.h"
 
 namespace cs2
 {

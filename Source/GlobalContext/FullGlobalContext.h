@@ -34,7 +34,12 @@
 
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns) noexcept
-        : dummy{findPatterns(memoryPatterns)}
+        : clientPatternSearchResults{memoryPatterns.patternFinders.clientPatternFinder.findPatterns(kClientPatterns)}
+        , sceneSystemPatternSearchResults{memoryPatterns.patternFinders.sceneSystemPatternFinder.findPatterns(kSceneSystemPatterns)}
+        , tier0PatternSearchResults{memoryPatterns.patternFinders.tier0PatternFinder.findPatterns(kTier0Patterns)}
+        , fileSystemPatternSearchResults{memoryPatterns.patternFinders.fileSystemPatternFinder.findPatterns(kFileSystemPatterns)}
+        , soundSystemPatternSearchResults{memoryPatterns.patternFinders.soundSystemPatternFinder.findPatterns(kSoundSystemPatterns)}
+        , panoramaPatternSearchResults{memoryPatterns.patternFinders.panoramaPatternFinder.findPatterns(kPanoramaPatterns)}
         , gameDependencies{
             memoryPatterns,
             VmtFinder{clientDLL.getVmtFinderParams()},
@@ -54,7 +59,11 @@ struct FullGlobalContext {
     }
 
     PatternSearchResults<decltype(kClientPatterns)> clientPatternSearchResults;
-    bool dummy{};
+    PatternSearchResults<decltype(kSceneSystemPatterns)> sceneSystemPatternSearchResults;
+    PatternSearchResults<decltype(kTier0Patterns)> tier0PatternSearchResults;
+    PatternSearchResults<decltype(kFileSystemPatterns)> fileSystemPatternSearchResults;
+    PatternSearchResults<decltype(kSoundSystemPatterns)> soundSystemPatternSearchResults;
+    PatternSearchResults<decltype(kPanoramaPatterns)> panoramaPatternSearchResults;
     GameDependencies gameDependencies;
     Hooks hooks;
     FeatureHelpers featureHelpers;
@@ -64,11 +73,4 @@ struct FullGlobalContext {
     InWorldPanelContainerState inWorldPanelContainerState;
     GlowSceneObjectsState glowSceneObjectsState;
     EntityClassifier entityClassifier;
-
-private:
-    bool findPatterns(const MemoryPatterns& memoryPatterns) noexcept
-    {
-        memoryPatterns.patternFinders.clientPatternFinder.findPatterns(kClientPatterns, clientPatternSearchResults);
-        return true;
-    }
 };

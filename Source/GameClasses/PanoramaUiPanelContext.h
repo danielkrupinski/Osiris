@@ -1,7 +1,6 @@
 #pragma once
 
 #include <CS2/Panorama/Transform3D.h>
-#include <GameDependencies/PanelStyleDeps.h>
 
 #include "ClientPanel.h"
 #include "PanoramaUiEngine.h"
@@ -59,35 +58,35 @@ struct PanoramaUiPanelContext {
         if (!style)
             return;
 
-        if (const auto setPropertyFn{panelStyleDeps().setProperty})
+        if (const auto setPropertyFn{hookContext.panoramaPatternSearchResults().template get<SetPanelStylePropertyFunctionPointer>()})
             setPropertyFn(style, styleProperty, true);
     }
 
     [[nodiscard]] PanoramaUiPanelClasses classes() const noexcept
     {
-        return PanoramaUiPanelClasses{impl().classes.of(panel).get()};
+        return PanoramaUiPanelClasses{hookContext.panoramaPatternSearchResults().template get<PanelClassesVectorOffset>().of(panel).get()};
     }
 
     [[nodiscard]] auto childPanels() const noexcept
     {
-        return PanoramaUiPanelChildPanels{hookContext, impl().childPanels.of(panel).get()};
+        return PanoramaUiPanelChildPanels{hookContext, hookContext.panoramaPatternSearchResults().template get<ChildPanelsVectorOffset>().of(panel).get()};
     }
 
     [[nodiscard]] decltype(auto) getParentWindow() const noexcept
     {
-        return hookContext.template make<TopLevelWindow>(impl().parentWindowOffset.of(panel).valueOr(nullptr));
+        return hookContext.template make<TopLevelWindow>(hookContext.panoramaPatternSearchResults().template get<ParentWindowOffset>().of(panel).valueOr(nullptr));
     }
 
     [[nodiscard]] const char* getId() const noexcept
     {
-        if (const auto id = impl().offsetToPanelId.of(panel).get())
+        if (const auto id = hookContext.panoramaPatternSearchResults().template get<OffsetToPanelId>().of(panel).get())
             return id->m_pString;
         return nullptr;
     }
 
     [[nodiscard]] Optional<bool> hasFlag(cs2::EPanelFlag flag) const noexcept
     {
-        return (impl().offsetToPanelFlags.of(panel).toOptional() & flag) != 0;
+        return (hookContext.panoramaPatternSearchResults().template get<OffsetToPanelFlags>().of(panel).toOptional() & flag) != 0;
     }
 
     [[nodiscard]] auto setParent() const noexcept
@@ -135,19 +134,9 @@ private:
 
     [[nodiscard]] cs2::CPanelStyle* getStyle() const noexcept
     {
-        return impl().panelStyle.of(panel).get();
+        return hookContext.panoramaPatternSearchResults().template get<PanelStyleOffset>().of(panel).get();
     }
 
-    [[nodiscard]] const auto& panelStyleDeps() const noexcept
-    {
-        return hookContext.gameDependencies().panelStyleDeps;
-    }
-
-    [[nodiscard]] const auto& impl() const noexcept
-    {
-        return hookContext.gameDependencies().panoramaUiPanelDeps;
-    }
-    
     HookContext& hookContext;
     cs2::CUIPanel* panel;
 };

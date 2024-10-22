@@ -935,9 +935,6 @@
     <ClInclude Include="FeatureHelpers\FeatureToggle.h">
       <Filter>FeatureHelpers</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\ConVarDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\ConVars.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
@@ -975,15 +972,6 @@
       <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="GameDependencies\TopLevelWindowDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\WeaponDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\WeaponServicesDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\WeaponVDataDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\Hud\Hud.h">
@@ -1250,9 +1238,6 @@
     <ClInclude Include="GameClasses\RenderComponent.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\RenderComponentDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\RenderComponentPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -1287,12 +1272,6 @@
       <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\SceneObjectUpdaterDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\SceneSystemDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h">
@@ -1400,9 +1379,6 @@
     <ClInclude Include="GameClasses\SceneObject.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\SceneObjectDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\C_BaseCSGrenadeProjectile.h">
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
@@ -1426,9 +1402,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\OffsetTypes\SmokeGrenadeProjectileOffset.h">
       <Filter>GameClasses\OffsetTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\SmokeGrenadeProjectileDeps.h">
-      <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\SmokeGrenadeProjectilePatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>

@@ -1,14 +1,12 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/SmokeGrenadeProjectileOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/SmokeGrenadeProjectilePatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct SmokeGrenadeProjectilePatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] OffsetToDidSmokeEffect offsetToDidSmokeEffect() const noexcept
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
-        return patternFinders.clientPatternFinder("85 F6 75 ? 80 BF ? ? ? ?"_pat).add(6).template readOffset<OffsetToDidSmokeEffect>();
+        return clientPatterns
+            .template addPattern<OffsetToDidSmokeEffect, CodePattern{"85 F6 75 ? 80 BF ? ? ? ?"}.add(6).read()>();
     }
 };

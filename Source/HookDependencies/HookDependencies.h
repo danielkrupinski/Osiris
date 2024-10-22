@@ -132,15 +132,15 @@ struct HookDependencies {
         return std::optional{make<PlantedC4<HookDependencies>>(getPlantedC4())};
     }
 
-    [[nodiscard]] ConVarAccessor getConVarAccessor() noexcept
+    [[nodiscard]] auto getConVarAccessor() noexcept
     {
         if (!fullGlobalContext.gameDependencies.conVars.has_value()) {
             const auto cvar = fullGlobalContext.clientPatternSearchResults.template get<CvarPointer>();
-            if (cvar && *cvar && fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList) {
-                fullGlobalContext.gameDependencies.conVars.emplace(ConVarFinder{*fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList.of(*cvar).get()});
+            if (cvar && *cvar && fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>()) {
+                fullGlobalContext.gameDependencies.conVars.emplace(ConVarFinder{*fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>().of(*cvar).get()});
             }
         }
-        return ConVarAccessor{*fullGlobalContext.gameDependencies.conVars, fullGlobalContext.gameDependencies.conVarDeps, conVarAccessorState};
+        return ConVarAccessor{*this, *fullGlobalContext.gameDependencies.conVars, conVarAccessorState};
     }
 
     template <typename T, typename... Args>
@@ -178,6 +178,31 @@ struct HookDependencies {
         return fullGlobalContext.clientPatternSearchResults;
     }
 
+    [[nodiscard]] const auto& sceneSystemPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.sceneSystemPatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& tier0PatternSearchResults() noexcept
+    {
+        return fullGlobalContext.tier0PatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& fileSystemPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.fileSystemPatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& soundSystemPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.soundSystemPatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& panoramaPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.panoramaPatternSearchResults;
+    }
+
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {
@@ -195,7 +220,7 @@ private:
 
     void prepareDependencies(HookDependenciesMask requiredDependencies) noexcept
     {
-        const HookDependenciesBuilder builder{requiredDependencies, fullGlobalContext.gameDependencies};
+        const HookDependenciesBuilder builder{requiredDependencies, *this};
 
         presentDependencies |= builder.getSoundChannels(&soundChannels);
     }

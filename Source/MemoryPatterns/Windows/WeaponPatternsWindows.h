@@ -1,14 +1,12 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/WeaponOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/WeaponPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct WeaponPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] OffsetToClipAmmo offsetToClipAmmo() const noexcept
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
-        return patternFinders.clientPatternFinder("83 ? ? ? ? ? 00 0F 85 ? ? ? ? 80 ? ? ? ? ? 00 74 ? 48"_pat).add(2).template readOffset<OffsetToClipAmmo>();
+        return clientPatterns
+            .template addPattern<OffsetToClipAmmo, CodePattern{"83 ? ? ? ? ? 00 0F 85 ? ? ? ? 80 ? ? ? ? ? 00 74 ? 48"}.add(2).read()>();
     }
 };

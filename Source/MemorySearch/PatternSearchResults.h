@@ -1,5 +1,8 @@
 #pragma once
 
+#include "PatternPool.h"
+#include "PatternSearchResultsView.h"
+
 template <typename PatternPool>
 class PatternSearchResults {
 private:
@@ -35,26 +38,9 @@ public:
         }
     }
 
-    void store(std::size_t patternIndex, std::array<std::byte, 8> value) noexcept
+    [[nodiscard]] PatternSearchResultsView getView() noexcept
     {
-        if (patternIndex < oneByteResults.size()) {
-            std::memcpy(&oneByteResults[patternIndex], value.data(), 1);
-            return;
-        }
-        patternIndex -= oneByteResults.size();
-
-        if (patternIndex < fourByteResults.size()) {
-            std::memcpy(&fourByteResults[patternIndex], value.data(), 4);
-            return;
-        }
-        patternIndex -= fourByteResults.size();
-
-        if (patternIndex < eightByteResults.size()) {
-            std::memcpy(&eightByteResults[patternIndex], value.data(), 8);
-            return;
-        }
-
-        assert(false);
+        return {oneByteResults, fourByteResults, eightByteResults};
     }
 
 private:

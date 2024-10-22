@@ -18,7 +18,7 @@ public:
 
     [[nodiscard]] auto getUiScaleFactor() const noexcept
     {
-        return hookContext.gameDependencies().topLevelWindowDeps.uiScaleFactorOffset.of(topLevelWindow).toOptional();
+        return hookContext.panoramaPatternSearchResults().template get<UiScaleFactorOffset>().of(topLevelWindow).toOptional();
     }
 
 private:
