@@ -15,11 +15,6 @@ sdl3::SDL_PeepEvents* SDLHook_PeepEvents_cpp() noexcept
     return original;
 }
 
-cs2::CLoopModeGame::getWorldSession LoopModeGameHook_getWorldSession_cpp(const void* returnAddress) noexcept
-{
-    return GlobalContext::instance().fullContext().getWorldSessionHook(ReturnAddress{returnAddress});
-}
-
 void ViewRenderHook_onRenderStart_cpp(cs2::CViewRender* thisptr) noexcept
 {
     auto& fullContext = GlobalContext::instance().fullContext();

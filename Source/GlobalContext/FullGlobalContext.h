@@ -40,16 +40,10 @@ struct FullGlobalContext {
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
-            gameDependencies.loopModeGame,
             gameDependencies.viewRender,
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
         , entityClassifier{gameDependencies.entitiesVMTs}
     {
-    }
-    
-    [[nodiscard]] cs2::CLoopModeGame::getWorldSession getWorldSessionHook(ReturnAddress) noexcept
-    {
-        return hooks.loopModeGameHook.originalGetWorldSession;
     }
 
     [[nodiscard]] auto features(auto& dependencies) noexcept

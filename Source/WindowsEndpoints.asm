@@ -1,6 +1,5 @@
 EXTERN DllMain_cpp:PROC
 EXTERN SDLHook_PeepEvents_cpp:PROC
-EXTERN LoopModeGameHook_getWorldSession_cpp:PROC
 EXTERN ViewRenderHook_onRenderStart_cpp:PROC
 
 EXTERNDEF textSectionStartMarker:DWORD
@@ -105,20 +104,6 @@ SDLHook_PeepEvents_asm PROC
     pop rcx
     jmp rax ; jump to the original function
 SDLHook_PeepEvents_asm ENDP
-
-LoopModeGameHook_getWorldSession_asm PROC
-    push rcx ; backup volatile rcx used in the original function
-    sub rsp, 48 ; align stack pointer and allocate shadow space for function call
-    call makeTextSectionExecutable
-    mov rcx, [rsp + 56] ; load return address into rcx
-    call LoopModeGameHook_getWorldSession_cpp
-    mov [rsp + 40], rax ; backup rax as the next call will destroy it
-    call makeTextSectionNotExecutable
-    add rsp, 40
-    pop rax
-    pop rcx
-    jmp rax ; jump to the original function
-LoopModeGameHook_getWorldSession_asm ENDP
 
 ViewRenderHook_onRenderStart_asm PROC
     push rcx ; backup volatile rcx
