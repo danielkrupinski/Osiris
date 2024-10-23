@@ -220,7 +220,7 @@ private:
 
     void prepareDependencies(HookDependenciesMask requiredDependencies) noexcept
     {
-        const HookDependenciesBuilder builder{requiredDependencies, *this};
+        const HookDependenciesBuilder<HookDependencies> builder{requiredDependencies, *this};
 
         presentDependencies |= builder.getSoundChannels(&soundChannels);
     }
