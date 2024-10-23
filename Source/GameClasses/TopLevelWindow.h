@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CTopLevelWindow.h>
+#include <MemoryPatterns/PatternTypes/TopLevelWindowPatternTypes.h>
 
 template <typename HookContext>
 class TopLevelWindow {

@@ -1,6 +1,6 @@
 #pragma once
 
 #include <CS2/Panorama/CPanelStyle.h>
-#include "StrongType.h"
+#include <Utils/StrongTypeAlias.h>
 
-STRONG_TYPE(SetPanelStylePropertyFunctionPointer, cs2::CPanelStyle::SetProperty*);
+STRONG_TYPE_ALIAS(SetPanelStylePropertyFunctionPointer, cs2::CPanelStyle::SetProperty*);

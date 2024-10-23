@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Platform/Macros/IsPlatform.h>
+#include "CPanoramaSymbol.h"
 
 namespace cs2
 {

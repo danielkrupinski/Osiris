@@ -1,6 +1,6 @@
 #pragma once
 
 #include <CS2/Classes/Sound.h>
-#include "StrongType.h"
+#include <Utils/StrongTypeAlias.h>
 
-STRONG_TYPE(SoundChannelsPointer, cs2::SoundChannels**);
+STRONG_TYPE_ALIAS(SoundChannelsPointer, cs2::SoundChannels**);

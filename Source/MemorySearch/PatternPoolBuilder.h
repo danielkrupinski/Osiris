@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Utils/StrongTypeAlias.h>
 #include <Utils/TypeList.h>
 
 #include "CodePattern.h"
@@ -19,7 +20,7 @@ public:
     template <typename PatternType, CodePattern Pattern>
     [[nodiscard]] consteval auto addPattern() noexcept
     {
-        static_assert(sizeof(typename PatternType::Type) == 8 || Pattern.operation == CodePatternOperation::Read, "Incorrect result size, missing .read() in pattern declaration?");
+        static_assert(sizeof(UnpackStrongTypeAliasT<PatternType>) == 8 || Pattern.operation == CodePatternOperation::Read, "Incorrect result size, missing .read() in pattern declaration?");
         tempPool.template addPattern<Pattern>();
         return PatternPoolBuilder<TempPatternPool, typename PatternTypesList::template add<PatternType>>{tempPool};
     }

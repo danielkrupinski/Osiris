@@ -2,25 +2,8 @@
 
 #include <tuple>
 
+#include "Meta.h"
 #include "TypeIndex.h"
-
-template <template <typename> typename Predicate, auto Value>
-struct WithValue {
-    template <typename T>
-    struct Equal {
-        static constexpr auto value = (Predicate<T>::value == Value);
-    };
-
-    template <typename T>
-    struct LowerEqual {
-        static constexpr auto value = (Predicate<T>::value <= Value);
-    };
-
-    template <typename T>
-    struct Greater {
-        static constexpr auto value = (Predicate<T>::value > Value);
-    };
-};
 
 template <typename... Types>
 struct TypeList {
@@ -60,9 +43,6 @@ struct TypeList {
 
     template <template <typename> typename Predicate>
     using filter = decltype(typeListFromTuple(std::tuple_cat(std::declval<std::conditional_t<Predicate<Types>::value, std::tuple<Types>, std::tuple<>>>()...)));
-
-    template <template <typename> typename TransformOperation, template <typename> typename Predicate>
-    using filterTransformed = decltype(typeListFromTuple(std::tuple_cat(std::declval<std::conditional_t<Predicate<typename TransformOperation<Types>::type>::value, std::tuple<Types>, std::tuple<>>>()...)));
 
     template <typename T>
     using add = TypeList<Types..., T>;

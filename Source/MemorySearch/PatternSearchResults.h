@@ -1,41 +1,33 @@
 #pragma once
 
+#include <Utils/Bytes.h>
+#include <Utils/Meta.h>
+#include <Utils/StrongTypeAlias.h>
+
 #include "PatternPool.h"
 #include "PatternSearchResultsView.h"
 
 template <typename PatternPool>
 class PatternSearchResults {
 private:
-    using OneBytePatternTypes = typename PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<1>::Equal>;
-    using FourBytePatternTypes = typename PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<4>::Equal>;
-    using EightBytePatternTypes = typename PatternPool::PatternTypes::template filterTransformed<UnpackStrongTypeAlias, WithSizeOf<8>::Equal>;
+    using OneBytePatternTypes = typename PatternPool::PatternTypes::template filter<Projected<UnpackStrongTypeAlias, WithSizeOf<1>::Equal>::Value>;
+    using FourBytePatternTypes = typename PatternPool::PatternTypes::template filter<Projected<UnpackStrongTypeAlias, WithSizeOf<4>::Equal>::Value>;
+    using EightBytePatternTypes = typename PatternPool::PatternTypes::template filter<Projected<UnpackStrongTypeAlias, WithSizeOf<8>::Equal>::Value>;
 
     static_assert(OneBytePatternTypes::size() + FourBytePatternTypes::size() + EightBytePatternTypes::size() == PatternPool::PatternTypes::size());
 public:
     template <typename T>
-    auto get() const noexcept
+    [[nodiscard]] auto get() const noexcept
     {
-        if constexpr (OneBytePatternTypes::template contains<T>()) {
-            typename T::Type t;
-            static_assert(sizeof(typename T::Type) == 1);
-            static_assert(std::is_trivially_copyable_v<typename T::Type>);
-            std::memcpy(reinterpret_cast<std::byte*>(&t), &oneByteResults[OneBytePatternTypes::template indexOf<T>()], 1);
-            return t;
-        } else if constexpr (FourBytePatternTypes::template contains<T>()) {
-            typename T::Type t;
-            static_assert(sizeof(typename T::Type) == 4);
-            static_assert(std::is_trivially_copyable_v<typename T::Type>);
-            std::memcpy(reinterpret_cast<std::byte*>(&t), &fourByteResults[FourBytePatternTypes::template indexOf<T>()], 4);
-            return t;
-        } else if constexpr (EightBytePatternTypes::template contains<T>()) {
-            typename T::Type t;
-            static_assert(sizeof(typename T::Type) == 8);
-            static_assert(std::is_trivially_copyable_v<typename T::Type>);
-            std::memcpy(reinterpret_cast<std::byte*>(&t), &eightByteResults[EightBytePatternTypes::template indexOf<T>()], 8);
-            return t;
-        } else {
+        using UnpackedType = UnpackStrongTypeAliasT<T>;
+        if constexpr (OneBytePatternTypes::template contains<T>())
+            return utils::fromBytes<UnpackedType>(oneByteResults[OneBytePatternTypes::template indexOf<T>()]);
+        else if constexpr (FourBytePatternTypes::template contains<T>())
+            return utils::fromBytes<UnpackedType>(fourByteResults[FourBytePatternTypes::template indexOf<T>()]);
+        else if constexpr (EightBytePatternTypes::template contains<T>())
+            return utils::fromBytes<UnpackedType>(eightByteResults[EightBytePatternTypes::template indexOf<T>()]);
+        else
             static_assert(!std::is_same_v<T, T>, "Unknown type");
-        }
     }
 
     [[nodiscard]] PatternSearchResultsView getView() noexcept

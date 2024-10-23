@@ -3,42 +3,10 @@
 #include <array>
 #include <numeric>
 #include <limits>
+#include <Utils/StrongTypeAlias.h>
 #include <Utils/TypeList.h>
 
 #include "PatternPoolBuilder.h"
-
-template <typename StrongTypeAlias>
-struct UnpackStrongTypeAlias {
-    using type = typename StrongTypeAlias::Type;
-};
-
-template <typename T>
-struct SizeOf {
-    static constexpr auto value = sizeof(T);
-};
-
-template <typename StrongTypeAlias>
-struct UnpackedStrongTypeAliasSizeOf {
-    static constexpr auto value = sizeof(typename StrongTypeAlias::Type);
-};
-
-template <std::size_t N>
-struct WithSizeOf {
-    template <typename T>
-    struct Equal {
-        static constexpr auto value = (sizeof(T) == N);
-    };
-
-    template <typename T>
-    struct LowerEqual {
-        static constexpr auto value = (sizeof(T) <= N);
-    };
-
-    template <typename T>
-    struct Greater {
-        static constexpr auto value = (sizeof(T) > N);
-    };
-};
 
 template <std::size_t BufferSize = 0, std::size_t NumberOfPatterns = 0, typename PatternTypesList = TypeList<>>
 class PatternPool {
@@ -46,7 +14,7 @@ public:
     template <PatternPoolBuilder builder>
     [[nodiscard]] static consteval auto from() noexcept
     {
-        using SortedPatternTypes = typename decltype(builder)::PatternTypes::template sortBy<UnpackedStrongTypeAliasSizeOf>;
+        using SortedPatternTypes = typename decltype(builder)::PatternTypes::template sortBy<Projected<UnpackStrongTypeAlias, SizeOf>::Value>;
         PatternPool<builder.tempPool.bufferSize, builder.tempPool.numberOfPatterns, SortedPatternTypes> pool;
         copyPatterns(builder.tempPool, pool, typename decltype(builder)::PatternTypes{}, SortedPatternTypes{});
         return pool;
