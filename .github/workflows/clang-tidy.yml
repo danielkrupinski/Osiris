@@ -4,13 +4,13 @@ on: [push, pull_request]
 
 jobs:
   run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         configuration: [Debug, Release]
     steps:
     - uses: actions/checkout@v4
     - name: configure
-      run: CXX=clang++-14 cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -D CMAKE_DISABLE_PRECOMPILE_HEADERS=1 -B build
+      run: CXX=clang++-18 cmake -Werror=dev -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -B build
     - name: run clang-tidy
-      run: run-clang-tidy-14 Source/ -p build/
+      run: run-clang-tidy-18 Source/ -p build/
