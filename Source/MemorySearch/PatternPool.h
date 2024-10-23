@@ -42,7 +42,7 @@ private:
     static consteval void copyPatterns(const auto& tempPatternPool, auto& pool, TypeList<SourceTypes...>, TypeList<DestTypes...>) noexcept
     {
         std::size_t outPatternIndex{0}, outBufferIndex{0};
-        (copyPattern(TypeList<SourceTypes...>::template indexOf<DestTypes>(), outPatternIndex, outBufferIndex, tempPatternPool, pool), ...);
+        (copyPattern(TypeList<SourceTypes...>::template indexOf<DestTypes>, outPatternIndex, outBufferIndex, tempPatternPool, pool), ...);
     }
 
     static consteval void copyPattern(std::size_t patternIndex, std::size_t& outIndex, std::size_t& outBuffer, const auto& tempPool, auto& pool) noexcept

@@ -18,10 +18,7 @@ struct TypeList {
     }
 
     template <typename T>
-    static constexpr std::size_t indexOf() noexcept
-    {
-        return utils::typeIndex<T, std::tuple<Types...>>();
-    }
+    static constexpr std::size_t indexOf = utils::typeIndex<T, std::tuple<Types...>>();
 
     template <typename T>
     static constexpr bool contains() noexcept

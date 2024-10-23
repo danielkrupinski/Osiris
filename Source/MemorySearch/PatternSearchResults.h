@@ -21,11 +21,11 @@ public:
     {
         using UnpackedType = UnpackStrongTypeAliasT<T>;
         if constexpr (OneBytePatternTypes::template contains<T>())
-            return utils::fromBytes<UnpackedType>(oneByteResults[OneBytePatternTypes::template indexOf<T>()]);
+            return utils::fromBytes<UnpackedType>(oneByteResults[OneBytePatternTypes::template indexOf<T>]);
         else if constexpr (FourBytePatternTypes::template contains<T>())
-            return utils::fromBytes<UnpackedType>(fourByteResults[FourBytePatternTypes::template indexOf<T>()]);
+            return utils::fromBytes<UnpackedType>(fourByteResults[FourBytePatternTypes::template indexOf<T>]);
         else if constexpr (EightBytePatternTypes::template contains<T>())
-            return utils::fromBytes<UnpackedType>(eightByteResults[EightBytePatternTypes::template indexOf<T>()]);
+            return utils::fromBytes<UnpackedType>(eightByteResults[EightBytePatternTypes::template indexOf<T>]);
         else
             static_assert(!std::is_same_v<T, T>, "Unknown type");
     }
