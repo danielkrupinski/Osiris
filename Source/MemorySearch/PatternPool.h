@@ -3,6 +3,8 @@
 #include <array>
 #include <numeric>
 #include <limits>
+
+#include <Utils/Meta.h>
 #include <Utils/StrongTypeAlias.h>
 #include <Utils/TypeList.h>
 
