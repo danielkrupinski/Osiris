@@ -9,4 +9,4 @@ struct UnpackStrongTypeAlias {
 };
 
 template <typename StrongTypeAlias>
-using UnpackStrongTypeAliasT = UnpackStrongTypeAlias<StrongTypeAlias>::type;
+using UnpackStrongTypeAliasT = typename UnpackStrongTypeAlias<StrongTypeAlias>::type;
