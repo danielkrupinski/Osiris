@@ -37,7 +37,7 @@ struct TypeList {
 
     template <template <typename> typename ValueOfType>
     struct Sorter {
-        template <decltype(min<ValueOfType>)... Values>
+        template <auto... Values>
         static auto sorted(std::integer_sequence<decltype(min<ValueOfType>), Values...>) -> decltype(std::tuple_cat(std::declval<typename filter<WithValue<ValueOfType, Values + min<ValueOfType>>::template Equal>::TypesTuple>()...));
     };
 
