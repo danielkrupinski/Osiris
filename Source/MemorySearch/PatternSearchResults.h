@@ -14,17 +14,17 @@ private:
     using FourBytePatternTypes = typename PatternPool::PatternTypes::template filter<Projected<UnpackStrongTypeAlias, WithSizeOf<4>::Equal>::Value>;
     using EightBytePatternTypes = typename PatternPool::PatternTypes::template filter<Projected<UnpackStrongTypeAlias, WithSizeOf<8>::Equal>::Value>;
 
-    static_assert(OneBytePatternTypes::size() + FourBytePatternTypes::size() + EightBytePatternTypes::size() == PatternPool::PatternTypes::size());
+    static_assert(OneBytePatternTypes::size + FourBytePatternTypes::size + EightBytePatternTypes::size == PatternPool::PatternTypes::size);
 public:
     template <typename T>
     [[nodiscard]] auto get() const noexcept
     {
         using UnpackedType = UnpackStrongTypeAliasT<T>;
-        if constexpr (OneBytePatternTypes::template contains<T>())
+        if constexpr (OneBytePatternTypes::template contains<T>)
             return utils::fromBytes<UnpackedType>(oneByteResults[OneBytePatternTypes::template indexOf<T>]);
-        else if constexpr (FourBytePatternTypes::template contains<T>())
+        else if constexpr (FourBytePatternTypes::template contains<T>)
             return utils::fromBytes<UnpackedType>(fourByteResults[FourBytePatternTypes::template indexOf<T>]);
-        else if constexpr (EightBytePatternTypes::template contains<T>())
+        else if constexpr (EightBytePatternTypes::template contains<T>)
             return utils::fromBytes<UnpackedType>(eightByteResults[EightBytePatternTypes::template indexOf<T>]);
         else
             static_assert(!std::is_same_v<T, T>, "Unknown type");
@@ -36,7 +36,7 @@ public:
     }
 
 private:
-    std::array<std::byte, OneBytePatternTypes::size()> oneByteResults;
-    std::array<std::byte[4], FourBytePatternTypes::size()> fourByteResults;
-    std::array<std::byte[8], EightBytePatternTypes::size()> eightByteResults;
+    std::array<std::byte, OneBytePatternTypes::size> oneByteResults;
+    std::array<std::byte[4], FourBytePatternTypes::size> fourByteResults;
+    std::array<std::byte[8], EightBytePatternTypes::size> eightByteResults;
 };
