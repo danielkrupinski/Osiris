@@ -1,19 +1,13 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/ConVarOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/ConVarPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct ConVarPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] OffsetToConVarValueType offsetToConVarValueType() const noexcept
+    [[nodiscard]] static consteval auto addTier0Patterns(auto tier0Patterns) noexcept
     {
-        return patternFinders.tier0PatternFinder("66 41 89 46 ? 66"_pat).add(4).template readOffset<OffsetToConVarValueType>();
-    }
-
-    [[nodiscard]] OffsetToConVarValue offsetToConVarValue() const noexcept
-    {
-        return patternFinders.tier0PatternFinder("31 F6 48 8D 78 ? 48"_pat).add(5).template readOffset<OffsetToConVarValue>();
+        return tier0Patterns
+            .template addPattern<OffsetToConVarValueType, CodePattern{"66 41 89 46 ? 66"}.add(4).read()>()
+            .template addPattern<OffsetToConVarValue, CodePattern{"31 F6 48 8D 78 ? 48"}.add(5).read()>();
     }
 };

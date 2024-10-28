@@ -1,14 +1,12 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/TopLevelWindowOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/TopLevelWindowPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct TopLevelWindowPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] UiScaleFactorOffset uiScaleFactorOffset() const noexcept
+    [[nodiscard]] static consteval auto addPanoramaPatterns(auto panoramaPatterns) noexcept
     {
-        return patternFinders.panoramaPatternFinder("F3 0F 11 49 ? 48 8B F9"_pat).add(4).template readOffset<UiScaleFactorOffset>();
+        return panoramaPatterns
+            .template addPattern<UiScaleFactorOffset, CodePattern{"F3 0F 11 49 ? 48 8B F9"}.add(4).read()>();
     }
 };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CImagePanel.h>
-#include <GameDependencies/PanoramaImagePanelDeps.h>
+#include <MemoryPatterns/PatternTypes/PanoramaImagePanelPatternTypes.h>
 
 #include "PanoramaImagePanelContext.h"
 
@@ -25,7 +25,7 @@ struct PanoramaImagePanel {
 
     [[nodiscard]] cs2::ImageProperties* getImageProperties() const noexcept
     {
-        return deps().imagePropertiesOffset.of(context.panel).get();
+        return context.hookContext.clientPatternSearchResults().template get<ImagePropertiesOffset>().of(context.panel).get();
     }
 
     [[nodiscard]] std::string_view getImagePath() const noexcept
@@ -46,16 +46,11 @@ struct PanoramaImagePanel {
 
         properties->scale = context.uiPanel().getUiScaleFactor().valueOr(1.0f);
         properties->textureHeight = textureHeight;
-        if (deps().setImage)
-            deps().setImage(context.panel, imageUrl, nullptr, properties);
+        if (context.hookContext.clientPatternSearchResults().template get<SetImageFunctionPointer>())
+            context.hookContext.clientPatternSearchResults().template get<SetImageFunctionPointer>()(context.panel, imageUrl, nullptr, properties);
     }
 
 private:
-    [[nodiscard]] const auto& deps() const noexcept
-    {
-        return context.deps();
-    }
-
     Context context;
 };
 

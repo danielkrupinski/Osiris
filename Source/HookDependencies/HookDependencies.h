@@ -24,7 +24,7 @@ struct HookDependencies {
     HookDependencies(FullGlobalContext& fullGlobalContext) noexcept
         : fullGlobalContext{fullGlobalContext}
     {
-        if (fullGlobalContext.gameDependencies.worldToProjectionMatrix)
+        if (fullGlobalContext.clientPatternSearchResults.template get<WorldToProjectionMatrixPointer>())
             presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
     }
 
@@ -48,7 +48,7 @@ struct HookDependencies {
         assert(hasDependency<Dependency>());
 
         if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
-            return WorldToClipSpaceConverter{fullGlobalContext.gameDependencies.worldToProjectionMatrix};
+            return WorldToClipSpaceConverter{fullGlobalContext.clientPatternSearchResults.template get<WorldToProjectionMatrixPointer>()};
         } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
         } else {
@@ -108,22 +108,22 @@ struct HookDependencies {
 
     [[nodiscard]] auto localPlayerController() noexcept
     {
-        if (fullGlobalContext.gameDependencies.localPlayerController)
-            return PlayerController{*this, *fullGlobalContext.gameDependencies.localPlayerController};
+        if (fullGlobalContext.clientPatternSearchResults.template get<LocalPlayerControllerPointer>())
+            return PlayerController{*this, *fullGlobalContext.clientPatternSearchResults.template get<LocalPlayerControllerPointer>()};
         return PlayerController{*this, nullptr};
     }
 
     [[nodiscard]] GlobalVars globalVars() noexcept
     {
-        if (fullGlobalContext.gameDependencies.globalVarsDeps.globalVars)
-            return GlobalVars{*fullGlobalContext.gameDependencies.globalVarsDeps.globalVars};
+        if (fullGlobalContext.clientPatternSearchResults.template get<GlobalVarsPointer>())
+            return GlobalVars{*fullGlobalContext.clientPatternSearchResults.template get<GlobalVarsPointer>()};
         return GlobalVars{nullptr};
     }
 
     [[nodiscard]] auto gameRules() noexcept
     {
-        if (fullGlobalContext.gameDependencies.gameRulesDeps.gameRules)
-            return GameRules{*this, *fullGlobalContext.gameDependencies.gameRulesDeps.gameRules};
+        if (fullGlobalContext.clientPatternSearchResults.template get<GameRulesPointer>())
+            return GameRules{*this, *fullGlobalContext.clientPatternSearchResults.template get<GameRulesPointer>()};
         return GameRules{*this, nullptr};
     }
 
@@ -132,15 +132,15 @@ struct HookDependencies {
         return std::optional{make<PlantedC4<HookDependencies>>(getPlantedC4())};
     }
 
-    [[nodiscard]] ConVarAccessor getConVarAccessor() noexcept
+    [[nodiscard]] auto getConVarAccessor() noexcept
     {
         if (!fullGlobalContext.gameDependencies.conVars.has_value()) {
-            if (fullGlobalContext.gameDependencies.cvarDeps.cvar && fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList) {
-                if (const auto cvar = *fullGlobalContext.gameDependencies.cvarDeps.cvar)
-                    fullGlobalContext.gameDependencies.conVars.emplace(ConVarFinder{*fullGlobalContext.gameDependencies.cvarDeps.offsetToConVarList.of(cvar).get()});
+            const auto cvar = fullGlobalContext.clientPatternSearchResults.template get<CvarPointer>();
+            if (cvar && *cvar && fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>()) {
+                fullGlobalContext.gameDependencies.conVars.emplace(ConVarFinder{*fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>().of(*cvar).get()});
             }
         }
-        return ConVarAccessor{*fullGlobalContext.gameDependencies.conVars, fullGlobalContext.gameDependencies.conVarDeps, conVarAccessorState};
+        return ConVarAccessor{*this, *fullGlobalContext.gameDependencies.conVars, conVarAccessorState};
     }
 
     template <typename T, typename... Args>
@@ -162,7 +162,7 @@ struct HookDependencies {
 
     [[nodiscard]] auto panoramaTransformFactory() noexcept
     {
-        return PanoramaTransformFactory{*this, fullGlobalContext.gameDependencies.transformTranslate3dVmt, fullGlobalContext.gameDependencies.transformScale3dVmt};
+        return PanoramaTransformFactory{*this, fullGlobalContext.clientPatternSearchResults.template get<TransformTranslate3dVMT>(), fullGlobalContext.clientPatternSearchResults.template get<TransformScale3dVMT>()};
     }
 
     [[nodiscard]] const auto& panoramaSymbols() noexcept
@@ -173,10 +173,40 @@ struct HookDependencies {
         return *symbols;
     }
 
+    [[nodiscard]] const auto& clientPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.clientPatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& sceneSystemPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.sceneSystemPatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& tier0PatternSearchResults() noexcept
+    {
+        return fullGlobalContext.tier0PatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& fileSystemPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.fileSystemPatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& soundSystemPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.soundSystemPatternSearchResults;
+    }
+
+    [[nodiscard]] const auto& panoramaPatternSearchResults() noexcept
+    {
+        return fullGlobalContext.panoramaPatternSearchResults;
+    }
+
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {
-        const auto* const plantedC4s = fullGlobalContext.gameDependencies.plantedC4Deps.plantedC4s;
+        const auto* const plantedC4s = fullGlobalContext.clientPatternSearchResults.template get<PlantedC4sPointer>();
         if (plantedC4s && plantedC4s->size > 0)
             return plantedC4s->memory[0];
         return nullptr;
@@ -190,7 +220,7 @@ private:
 
     void prepareDependencies(HookDependenciesMask requiredDependencies) noexcept
     {
-        const HookDependenciesBuilder builder{requiredDependencies, fullGlobalContext.gameDependencies};
+        const HookDependenciesBuilder<HookDependencies> builder{requiredDependencies, *this};
 
         presentDependencies |= builder.getSoundChannels(&soundChannels);
     }

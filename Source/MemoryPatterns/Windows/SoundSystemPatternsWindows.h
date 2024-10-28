@@ -1,14 +1,12 @@
 #pragma once
 
-#include <CS2/Classes/Sound.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/SoundSystemPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct SoundSystemPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] cs2::SoundChannels** soundChannels() const noexcept
+    [[nodiscard]] static consteval auto addSoundSystemPatterns(auto soundSystemPatterns) noexcept
     {
-        return patternFinders.soundSystemPatternFinder("4C 8B 25 ? ? ? ? 4C 89 AC 24"_pat).add(3).abs().template as<cs2::SoundChannels**>();
+        return soundSystemPatterns
+            .template addPattern<SoundChannelsPointer, CodePattern{"4C 8B 25 ? ? ? ? 4C 89 AC 24"}.add(3).abs()>();
     }
 };

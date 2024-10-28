@@ -61,7 +61,7 @@ public:
         HookDependencies dependencies{fullCtx};
 
         if (justInitialized) {
-            if (const auto mainMenu{fullCtx.gameDependencies.mainMenu}; mainMenu && *mainMenu)
+            if (const auto mainMenu{fullCtx.clientPatternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
                 dependencies.make<PanoramaGUI>().init(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, (*mainMenu)->uiPanel}});
         }
 

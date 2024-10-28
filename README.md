@@ -50,7 +50,7 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 #### Linux
 
 * **CMake 3.24** or newer
-* **g++ 11 or newer** or **clang++ 15 or newer**
+* **g++ 11 or newer** or **clang++ 17 or newer**
 
 ### Compiling from source
 

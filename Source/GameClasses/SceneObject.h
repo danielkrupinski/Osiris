@@ -23,12 +23,12 @@ public:
 
     [[nodiscard]] auto isDeleted() const noexcept
     {
-        return (hookContext.gameDependencies().sceneObjectDeps.offsetToFlags.of(sceneObject).toOptional() & cs2::SceneObjectFlag_IsDeleted).notEqual(0);
+        return (hookContext.sceneSystemPatternSearchResults().template get<OffsetToSceneObjectFlags>().toOptional() & cs2::SceneObjectFlag_IsDeleted).notEqual(0);
     }
 
     [[nodiscard]] auto objectClass() const noexcept
     {
-        return hookContext.gameDependencies().sceneObjectDeps.offsetToClass.of(sceneObject).toOptional();
+        return hookContext.sceneSystemPatternSearchResults().template get<OffsetToSceneObjectClass>().of(sceneObject).toOptional();
     }
 
 private:

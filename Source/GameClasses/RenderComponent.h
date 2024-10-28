@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] decltype(auto) sceneObjectUpdaters() const noexcept
     {
-        return hookContext.template make<SceneObjectUpdaters>(hookContext.gameDependencies().renderComponentDeps.offsetToSceneObjectUpdaters.of(renderComponent).get());
+        return hookContext.template make<SceneObjectUpdaters>(hookContext.clientPatternSearchResults().template get<OffsetToSceneObjectUpdaters>().of(renderComponent).get());
     }
 
 private:

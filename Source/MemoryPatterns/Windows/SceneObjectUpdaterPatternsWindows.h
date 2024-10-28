@@ -1,14 +1,12 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/SceneObjectUpdaterOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/SceneObjectUpdaterPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct SceneObjectUpdaterPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] OffsetToSceneObject offsetToSceneObject() const noexcept
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
-        return patternFinders.clientPatternFinder("C3 48 8B 42 ? C3"_pat).add(4).template readOffset<OffsetToSceneObject>();
+        return clientPatterns
+            .template addPattern<OffsetToSceneObject, CodePattern{"C3 48 8B 42 ? C3"}.add(4).read()>();
     }
 };

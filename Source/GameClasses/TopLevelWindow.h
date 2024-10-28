@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CTopLevelWindow.h>
+#include <MemoryPatterns/PatternTypes/TopLevelWindowPatternTypes.h>
 
 template <typename HookContext>
 class TopLevelWindow {
@@ -18,7 +19,7 @@ public:
 
     [[nodiscard]] auto getUiScaleFactor() const noexcept
     {
-        return hookContext.gameDependencies().topLevelWindowDeps.uiScaleFactorOffset.of(topLevelWindow).toOptional();
+        return hookContext.panoramaPatternSearchResults().template get<UiScaleFactorOffset>().of(topLevelWindow).toOptional();
     }
 
 private:

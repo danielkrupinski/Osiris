@@ -36,7 +36,7 @@ public:
 
     [[nodiscard]] decltype(auto) weaponServices() const noexcept
     {
-        return hookContext.template make<WeaponServices>(hookContext.gameDependencies().playerPawnDeps.offsetToWeaponServices.of(playerPawn).valueOr(nullptr));
+        return hookContext.template make<WeaponServices>(hookContext.clientPatternSearchResults().template get<OffsetToWeaponServices>().of(playerPawn).valueOr(nullptr));
     }
 
     [[nodiscard]] decltype(auto) weapons() const noexcept
@@ -56,7 +56,7 @@ public:
 
     [[nodiscard]] decltype(auto) playerController() const noexcept
     {
-        const auto playerControllerHandle = hookContext.gameDependencies().playerPawnDeps.offsetToPlayerController.of(playerPawn).get();
+        const auto playerControllerHandle = hookContext.clientPatternSearchResults().template get<OffsetToPlayerController>().of(playerPawn).get();
         if (!playerControllerHandle)
             return hookContext.template make<PlayerController>(nullptr);
         return hookContext.template make<PlayerController>(static_cast<cs2::CCSPlayerController*>(hookContext.template make<EntitySystem>().getEntityFromHandle(*playerControllerHandle)));
@@ -76,7 +76,7 @@ public:
 
     [[nodiscard]] auto hasImmunity() const noexcept
     {
-        return hookContext.gameDependencies().playerPawnDeps.offsetToPlayerPawnImmunity.of(playerPawn).toOptional();
+        return hookContext.clientPatternSearchResults().template get<OffsetToPlayerPawnImmunity>().of(playerPawn).toOptional();
     }
 
     [[nodiscard]] decltype(auto) absOrigin() const noexcept
@@ -102,12 +102,12 @@ public:
 
     [[nodiscard]] auto isPickingUpHostage() const noexcept
     {
-        return hookContext.gameDependencies().playerPawnDeps.offsetToIsPickingUpHostage.of(playerPawn).toOptional();
+        return hookContext.clientPatternSearchResults().template get<OffsetToIsPickingUpHostage>().of(playerPawn).toOptional();
     }
 
     [[nodiscard]] auto isDefusing() const noexcept
     {
-        return hookContext.gameDependencies().playerPawnDeps.offsetToIsDefusing.of(playerPawn).toOptional();
+        return hookContext.clientPatternSearchResults().template get<OffsetToIsDefusing>().of(playerPawn).toOptional();
     }
 
     [[nodiscard]] bool isRescuingHostage() const noexcept
@@ -125,7 +125,7 @@ public:
         const auto curTime = hookContext.globalVars().curtime();
         if (!curTime.hasValue())
             return 0.0f;
-        const auto flashBangEndTime = hookContext.gameDependencies().playerPawnDeps.offsetToFlashBangEndTime.of(playerPawn).get();
+        const auto flashBangEndTime = hookContext.clientPatternSearchResults().template get<OffsetToFlashBangEndTime>().of(playerPawn).get();
         if (!flashBangEndTime)
             return 0.0f;
         if (*flashBangEndTime <= curTime.value())
@@ -141,12 +141,7 @@ public:
 private:
     [[nodiscard]] decltype(auto) hostageServices() const noexcept
     {
-        return hookContext.template make<HostageServices>(deps().offsetToHostageServices.of(playerPawn).valueOr(nullptr));
-    }
-
-    [[nodiscard]] const auto& deps() const noexcept
-    {
-        return hookContext.gameDependencies().playerPawnDeps;
+        return hookContext.template make<HostageServices>(hookContext.clientPatternSearchResults().template get<OffsetToHostageServices>().of(playerPawn).valueOr(nullptr));
     }
 
     [[nodiscard]] static cs2::Color getColorOfHealthFraction(float healthFraction) noexcept

@@ -18,17 +18,12 @@ public:
 private:
     [[nodiscard]] auto sceneSystem() const noexcept
     {
-        return deps().sceneSystem;
+        return hookContext.sceneSystemPatternSearchResults().template get<SceneSystemPointer>();
     }
 
     [[nodiscard]] auto deleteSceneObjectFn() const noexcept
     {
-        return deps().deleteSceneObject;
-    }
-
-    [[nodiscard]] const auto& deps() const noexcept
-    {
-        return hookContext.gameDependencies().sceneSystemDeps;
+        return hookContext.sceneSystemPatternSearchResults().template get<DeleteSceneObjectFunctionPointer>();
     }
 
     HookContext& hookContext;

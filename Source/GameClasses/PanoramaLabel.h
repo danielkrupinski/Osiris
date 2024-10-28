@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CLabel.h>
-#include <GameDependencies/PanoramaLabelDeps.h>
+#include <MemoryPatterns/PatternTypes/PanoramaLabelPatternTypes.h>
 
 template <typename HookContext>
 struct PanoramaLabel {
@@ -13,7 +13,7 @@ struct PanoramaLabel {
 
     [[nodiscard]] decltype(auto) uiPanel() const noexcept
     {
-        return hookContext.template make<PanoramaUiPanel>(panel->uiPanel);
+        return hookContext.template make<PanoramaUiPanel>(panel ? panel->uiPanel : nullptr);
     }
 
     void setText(const char* value) const noexcept
@@ -23,14 +23,14 @@ struct PanoramaLabel {
 
     void setTextInternal(const char* value, int textType, bool trustedSource) const noexcept
     {
-        if (panel && deps().setTextInternal)
-            deps().setTextInternal(panel, value, textType, trustedSource);
+        if (panel && setTextInternalFunction())
+            setTextInternalFunction()(panel, value, textType, trustedSource);
     }
 
 private:
-    [[nodiscard]] const auto& deps() const noexcept
+    [[nodiscard]] auto setTextInternalFunction() const noexcept
     {
-        return hookContext.gameDependencies().panoramaLabelDeps;
+        return hookContext.clientPatternSearchResults().template get<SetLabelTextFunctionPointer>();
     }
 
     HookContext& hookContext;

@@ -19,6 +19,7 @@
 #include <Hud/BombStatus/BombStatusPanelState.h>
 #include <Hud/BombStatus/BombStatusPanelUnloadHandler.h>
 #include <MemorySearch/PatternFinder.h>
+#include <MemorySearch/PatternSearchResults.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include <UI/Panorama/PanoramaGuiState.h>
 #include <UI/Panorama/PanoramaGuiUnloadHandler.h>
@@ -33,14 +34,20 @@
 
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns) noexcept
-        : gameDependencies{
+        : clientPatternSearchResults{memoryPatterns.patternFinders.clientPatternFinder.findPatterns(kClientPatterns)}
+        , sceneSystemPatternSearchResults{memoryPatterns.patternFinders.sceneSystemPatternFinder.findPatterns(kSceneSystemPatterns)}
+        , tier0PatternSearchResults{memoryPatterns.patternFinders.tier0PatternFinder.findPatterns(kTier0Patterns)}
+        , fileSystemPatternSearchResults{memoryPatterns.patternFinders.fileSystemPatternFinder.findPatterns(kFileSystemPatterns)}
+        , soundSystemPatternSearchResults{memoryPatterns.patternFinders.soundSystemPatternFinder.findPatterns(kSoundSystemPatterns)}
+        , panoramaPatternSearchResults{memoryPatterns.patternFinders.panoramaPatternFinder.findPatterns(kPanoramaPatterns)}
+        , gameDependencies{
             memoryPatterns,
             VmtFinder{clientDLL.getVmtFinderParams()},
             VmtFinder{panoramaDLL.getVmtFinderParams()},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
-            gameDependencies.viewRender,
+            clientPatternSearchResults.get<ViewRenderPointer>(),
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
         , entityClassifier{gameDependencies.entitiesVMTs}
     {
@@ -51,6 +58,12 @@ struct FullGlobalContext {
         return Features{featuresStates, featureHelpers, hooks, dependencies};
     }
 
+    PatternSearchResults<decltype(kClientPatterns)> clientPatternSearchResults;
+    PatternSearchResults<decltype(kSceneSystemPatterns)> sceneSystemPatternSearchResults;
+    PatternSearchResults<decltype(kTier0Patterns)> tier0PatternSearchResults;
+    PatternSearchResults<decltype(kFileSystemPatterns)> fileSystemPatternSearchResults;
+    PatternSearchResults<decltype(kSoundSystemPatterns)> soundSystemPatternSearchResults;
+    PatternSearchResults<decltype(kPanoramaPatterns)> panoramaPatternSearchResults;
     GameDependencies gameDependencies;
     Hooks hooks;
     FeatureHelpers featureHelpers;

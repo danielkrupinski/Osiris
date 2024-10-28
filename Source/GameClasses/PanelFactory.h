@@ -1,8 +1,6 @@
 #pragma once
 
 #include <GameClasses/PanoramaImagePanel.h>
-#include <GameDependencies/PanoramaImagePanelDeps.h>
-#include <GameDependencies/PanoramaLabelDeps.h>
 
 template <typename HookContext>
 struct PanelFactory {
@@ -13,47 +11,57 @@ struct PanelFactory {
 
     [[nodiscard]] decltype(auto) createPanel(cs2::CUIPanel* parentPanel, const char* id = "") noexcept
     {
-        if (parentPanel && panelDeps().create)
-            return hookContext.template make<ClientPanel>(panelDeps().create(id, parentPanel));
+        if (parentPanel && panelConstructor())
+            return hookContext.template make<ClientPanel>(panelConstructor()(id, parentPanel));
         return hookContext.template make<ClientPanel>(nullptr);
     }
 
     [[nodiscard]] decltype(auto) createLabelPanel(cs2::CUIPanel* parentPanel, const char* id = "") const noexcept
     {
-        if (!parentPanel || !labelPanelDeps().constructor || !labelPanelDeps().size)
+        if (!parentPanel || !labelPanelConstructor() || !labelPanelSize())
             return hookContext.template make<ClientPanel>(nullptr);
 
-        const auto memory{static_cast<cs2::CLabel*>(hookContext.template make<MemAlloc>().allocate(*labelPanelDeps().size))};
+        const auto memory{static_cast<cs2::CLabel*>(hookContext.template make<MemAlloc>().allocate(labelPanelSize()))};
         if (memory)
-            labelPanelDeps().constructor(memory, parentPanel->clientPanel, id);
+            labelPanelConstructor()(memory, parentPanel->clientPanel, id);
         return hookContext.template make<ClientPanel>(memory);
     }
 
     [[nodiscard]] decltype(auto) createImagePanel(cs2::CUIPanel* parentPanel, const char* id = "") noexcept
     {
-        if (!parentPanel || !imagePanelDeps().constructor || !imagePanelDeps().size)
+        if (!parentPanel || !imagePanelConstructor() || !imagePanelSize())
             return hookContext.template make<ClientPanel>(nullptr).template as<PanoramaImagePanel>();
 
-        const auto memory{static_cast<cs2::CImagePanel*>(hookContext.template make<MemAlloc>().allocate(*imagePanelDeps().size))};
+        const auto memory{static_cast<cs2::CImagePanel*>(hookContext.template make<MemAlloc>().allocate(imagePanelSize()))};
         if (memory)
-            imagePanelDeps().constructor(memory, parentPanel->clientPanel, id);
+            imagePanelConstructor()(memory, parentPanel->clientPanel, id);
         return hookContext.template make<ClientPanel>(memory).template as<PanoramaImagePanel>();
     }
 
 private:
-    [[nodiscard]] const auto& panelDeps() const noexcept
+    [[nodiscard]] auto panelConstructor() const noexcept
     {
-        return hookContext.gameDependencies().panelDeps;
+        return hookContext.clientPatternSearchResults().template get<PanelConstructorPointer>();
     }
 
-    [[nodiscard]] const auto& imagePanelDeps() const noexcept
+    [[nodiscard]] auto imagePanelConstructor() const noexcept
     {
-        return hookContext.gameDependencies().imagePanelDeps;
+        return hookContext.clientPatternSearchResults().template get<ImagePanelConstructorPointer>();
     }
 
-    [[nodiscard]] const auto& labelPanelDeps() const noexcept
+    [[nodiscard]] auto imagePanelSize() const noexcept
     {
-        return hookContext.gameDependencies().panoramaLabelDeps;
+        return hookContext.clientPatternSearchResults().template get<ImagePanelClassSize>();
+    }
+
+    [[nodiscard]] auto labelPanelConstructor() const noexcept
+    {
+        return hookContext.clientPatternSearchResults().template get<LabelPanelConstructorPointer>();
+    }
+
+    [[nodiscard]] auto labelPanelSize() const noexcept
+    {
+        return hookContext.clientPatternSearchResults().template get<LabelPanelObjectSize>();
     }
 
     HookContext& hookContext;

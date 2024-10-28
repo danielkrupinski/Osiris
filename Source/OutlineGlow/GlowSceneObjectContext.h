@@ -26,7 +26,7 @@ public:
         if (!sceneObject || !glowSceneObjectPointer)
             return;
 
-        if (const auto manageGlowSceneObject = hookContext.gameDependencies().manageGlowSceneObject) {
+        if (const auto manageGlowSceneObject = hookContext.clientPatternSearchResults().template get<ManageGlowSceneObjectPointer>()) {
             cs2::CGlowHelperSceneObject* tempGlowSceneObject{glowSceneObject()};
             cs2::CGlowHelperSceneObject* dummy{nullptr};
             float colorFloat[4]{color.r() / 255.0f, color.g() / 255.0f, color.b() / 255.0f, color.a() / 255.0f};
@@ -45,12 +45,12 @@ public:
 
     [[nodiscard]] decltype(auto) glowEntity() const noexcept
     {
-        return hookContext.gameDependencies().glowSceneObjectDeps.offsetToGlowSceneObjectEntity.of(glowSceneObject());
+        return hookContext.clientPatternSearchResults().template get<OffsetToGlowSceneObjectEntity>().of(glowSceneObject());
     }
 
     [[nodiscard]] decltype(auto) attachedSceneObject() const noexcept
     {
-        return hookContext.gameDependencies().glowSceneObjectDeps.offsetToGlowSceneObjectAttachedSceneObject.of(glowSceneObject());
+        return hookContext.clientPatternSearchResults().template get<OffsetToGlowSceneObjectAttachedSceneObject>().of(glowSceneObject());
     }
 
     [[nodiscard]] auto& storedGlowSceneObjectClass() const noexcept

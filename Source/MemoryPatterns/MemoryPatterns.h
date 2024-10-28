@@ -8,6 +8,9 @@
 
 #include "PatternFinders.h"
 
+#include <MemorySearch/PatternPool.h>
+#include <MemorySearch/TempPatternPool.h>
+
 struct MemoryPatterns {
     const PatternFinders& patternFinders;
 
@@ -17,37 +20,84 @@ struct MemoryPatterns {
     return type<PatternFinders>{patternFinders}; \
 }
 
-    MEMORY_PATTERNS(ClientPatterns, clientPatterns)
-    MEMORY_PATTERNS(ConVarPatterns, conVarPatterns)
-    MEMORY_PATTERNS(CvarPatterns, cvarPatterns)
-    MEMORY_PATTERNS(EntityPatterns, entityPatterns)
-    MEMORY_PATTERNS(EntitySystemPatterns, entitySystemPatterns)
-    MEMORY_PATTERNS(FileSystemPatterns, fileSystemPatterns)
-    MEMORY_PATTERNS(GameRulesPatterns, gameRulesPatterns)
-    MEMORY_PATTERNS(GameSceneNodePatterns, gameSceneNodePatterns)
-    MEMORY_PATTERNS(GlowSceneObjectPatterns, glowSceneObjectPatterns)
-    MEMORY_PATTERNS(HostageServicesPatterns, hostageServicesPatterns)
-    MEMORY_PATTERNS(MemAllocPatterns, memAllocPatterns)
-    MEMORY_PATTERNS(PanelPatterns, panelPatterns)
     MEMORY_PATTERNS(PanelStylePatterns, panelStylePatterns)
-    MEMORY_PATTERNS(PanoramaImagePanelPatterns, panoramaImagePanelPatterns)
-    MEMORY_PATTERNS(PanoramaLabelPatterns, panoramaLabelPatterns)
-    MEMORY_PATTERNS(PanoramaUiEnginePatterns, panoramaUiEnginePatterns)
-    MEMORY_PATTERNS(PanoramaUiPanelPatterns, panoramaUiPanelPatterns)
-    MEMORY_PATTERNS(PlantedC4Patterns, plantedC4Patterns)
-    MEMORY_PATTERNS(PlayerControllerPatterns, playerControllerPatterns)
-    MEMORY_PATTERNS(PlayerPawnPatterns, playerPawnPatterns)
-    MEMORY_PATTERNS(RenderComponentPatterns, renderComponentPatterns)
-    MEMORY_PATTERNS(SceneObjectPatterns, sceneObjectPatterns)
-    MEMORY_PATTERNS(SceneObjectUpdaterPatterns, sceneObjectUpdaterPatterns)
-    MEMORY_PATTERNS(SceneSystemPatterns, sceneSystemPatterns)
     MEMORY_PATTERNS(SdlPatterns, sdlPatterns)
-    MEMORY_PATTERNS(SmokeGrenadeProjectilePatterns, smokeGrenadeProjectilePatterns)
-    MEMORY_PATTERNS(SoundSystemPatterns, soundSystemPatterns)
-    MEMORY_PATTERNS(TopLevelWindowPatterns, topLevelWindowPatterns)
-    MEMORY_PATTERNS(WeaponPatterns, weaponPatterns)
-    MEMORY_PATTERNS(WeaponServicesPatterns, weaponServicesPatterns)
-    MEMORY_PATTERNS(WeaponVDataPatterns, weaponVDataPatterns)
 
 #undef MEMORY_PATTERNS
 };
+
+constexpr auto kClientPatterns = []() consteval {
+#define ADD_PATTERNS(patterns) addPatterns([](auto patternPool) consteval { return patterns::addClientPatterns(patternPool); })
+    constexpr auto builder = PatternPoolBuilder<TempPatternPool<1500, 100>>{}
+        .ADD_PATTERNS(ClientPatterns)
+        .ADD_PATTERNS(CvarPatterns)
+        .ADD_PATTERNS(EntityPatterns)
+        .ADD_PATTERNS(EntitySystemPatterns)
+        .ADD_PATTERNS(GameRulesPatterns)
+        .ADD_PATTERNS(GameSceneNodePatterns)
+        .ADD_PATTERNS(HostageServicesPatterns)
+        .ADD_PATTERNS(GlowSceneObjectPatterns)
+        .ADD_PATTERNS(MemAllocPatterns)
+        .ADD_PATTERNS(PanelPatterns)
+        .ADD_PATTERNS(PanoramaImagePanelPatterns)
+        .ADD_PATTERNS(PanoramaLabelPatterns)
+        .ADD_PATTERNS(PanoramaUiEnginePatterns)
+        .ADD_PATTERNS(PanoramaUiPanelPatterns)
+        .ADD_PATTERNS(PlantedC4Patterns)
+        .ADD_PATTERNS(PlayerControllerPatterns)
+        .ADD_PATTERNS(PlayerPawnPatterns)
+        .ADD_PATTERNS(RenderComponentPatterns)
+        .ADD_PATTERNS(SceneObjectUpdaterPatterns)
+        .ADD_PATTERNS(SmokeGrenadeProjectilePatterns)
+        .ADD_PATTERNS(WeaponPatterns)
+        .ADD_PATTERNS(WeaponServicesPatterns)
+        .ADD_PATTERNS(WeaponVDataPatterns);
+#undef ADD_PATTERNS
+    return PatternPool<>::from<builder>();
+}();
+
+constexpr auto kSceneSystemPatterns = []() consteval {
+#define ADD_PATTERNS(patterns) addPatterns([](auto patternPool) consteval { return patterns::addSceneSystemPatterns(patternPool); })
+    constexpr auto builder = PatternPoolBuilder<TempPatternPool<1500, 100>>{}
+        .ADD_PATTERNS(SceneObjectPatterns)
+        .ADD_PATTERNS(SceneSystemPatterns);
+#undef ADD_PATTERNS
+    return PatternPool<>::from<builder>();
+}();
+
+constexpr auto kTier0Patterns = []() consteval {
+#define ADD_PATTERNS(patterns) addPatterns([](auto patternPool) consteval { return patterns::addTier0Patterns(patternPool); })
+    constexpr auto builder = PatternPoolBuilder<TempPatternPool<1500, 100>>{}
+        .ADD_PATTERNS(ConVarPatterns)
+        .ADD_PATTERNS(CvarPatterns);
+#undef ADD_PATTERNS
+    return PatternPool<>::from<builder>();
+}();
+
+constexpr auto kFileSystemPatterns = []() consteval {
+#define ADD_PATTERNS(patterns) addPatterns([](auto patternPool) consteval { return patterns::addFileSystemPatterns(patternPool); })
+    constexpr auto builder = PatternPoolBuilder<TempPatternPool<1500, 100>>{}
+        .ADD_PATTERNS(FileSystemPatterns);
+#undef ADD_PATTERNS
+    return PatternPool<>::from<builder>();
+}();
+
+constexpr auto kSoundSystemPatterns = []() consteval {
+#define ADD_PATTERNS(patterns) addPatterns([](auto patternPool) consteval { return patterns::addSoundSystemPatterns(patternPool); })
+    constexpr auto builder = PatternPoolBuilder<TempPatternPool<1500, 100>>{}
+        .ADD_PATTERNS(FileSystemPatterns)
+        .ADD_PATTERNS(SoundSystemPatterns);
+#undef ADD_PATTERNS
+    return PatternPool<>::from<builder>();
+}();
+
+constexpr auto kPanoramaPatterns = []() consteval {
+#define ADD_PATTERNS(patterns) addPatterns([](auto patternPool) consteval { return patterns::addPanoramaPatterns(patternPool); })
+    constexpr auto builder = PatternPoolBuilder<TempPatternPool<1500, 100>>{}
+        .ADD_PATTERNS(PanelStylePatterns2)
+        .ADD_PATTERNS(PanoramaUiEnginePatterns)
+        .ADD_PATTERNS(PanoramaUiPanelPatterns)
+        .ADD_PATTERNS(TopLevelWindowPatterns);
+#undef ADD_PATTERNS
+    return PatternPool<>::from<builder>();
+}();

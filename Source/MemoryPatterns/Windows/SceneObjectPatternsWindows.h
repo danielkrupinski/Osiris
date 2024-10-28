@@ -1,19 +1,13 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/SceneObjectOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/SceneObjectPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct SceneObjectPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] OffsetToSceneObjectFlags offsetToSceneObjectFlags() const noexcept
+    [[nodiscard]] static consteval auto addSceneSystemPatterns(auto sceneSystemPatterns) noexcept
     {
-        return patternFinders.sceneSystemPatternFinder("CC F6 83 ? ? ? ?"_pat).add(3).template readOffset<OffsetToSceneObjectFlags>();
-    }
-
-    [[nodiscard]] OffsetToSceneObjectClass offsetToSceneObjectClass() const noexcept
-    {
-        return patternFinders.sceneSystemPatternFinder("B6 82 ? ? ? ? 33"_pat).add(2).template readOffset<OffsetToSceneObjectClass>();
+        return sceneSystemPatterns
+            .template addPattern<OffsetToSceneObjectFlags, CodePattern{"CC F6 83 ? ? ? ?"}.add(3).read()>()
+            .template addPattern<OffsetToSceneObjectClass, CodePattern{"B6 82 ? ? ? ? 33"}.add(2).read()>();
     }
 };

@@ -55,19 +55,19 @@ public:
 private:
     [[nodiscard]] cs2::CGameEntitySystem* entitySystem() const noexcept
     {
-        if (hookContext.gameDependencies().entitySystemDeps.entitySystem)
-            return *hookContext.gameDependencies().entitySystemDeps.entitySystem;
+        if (hookContext.clientPatternSearchResults().template get<EntitySystemPointer>())
+            return *hookContext.clientPatternSearchResults().template get<EntitySystemPointer>();
         return nullptr;
     }
 
     [[nodiscard]] auto getEntityList() const noexcept
     {
-        return hookContext.gameDependencies().entitySystemDeps.entityListOffset.of(entitySystem()).get();
+        return hookContext.clientPatternSearchResults().template get<EntityListOffset>().of(entitySystem()).get();
     }
 
     [[nodiscard]] auto getHighestEntityIndex() const noexcept
     {
-        const auto highestEntityIndex = hookContext.gameDependencies().entitySystemDeps.highestEntityIndexOffset.of(entitySystem()).get();
+        const auto highestEntityIndex = hookContext.clientPatternSearchResults().template get<HighestEntityIndexOffset>().of(entitySystem()).get();
         if (highestEntityIndex && highestEntityIndex->isValid())
             return *highestEntityIndex;
         return cs2::kMaxValidEntityIndex;

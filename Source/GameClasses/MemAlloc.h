@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/IMemAlloc.h>
+#include <MemoryPatterns/PatternTypes/MemAllocPatternTypes.h>
 #include <Platform/Macros/FunctionAttributes.h>
 
 template <typename HookContext>
@@ -16,7 +17,7 @@ public:
         if (!deps().thisptr || !*deps().thisptr)
             return nullptr;
 
-        if (const auto fn = deps().alloc.of((*deps().thisptr)->vmt).get())
+        if (const auto fn = hookContext.clientPatternSearchResults().template get<OffsetAllocVirtualMethod>().of((*deps().thisptr)->vmt).get())
             return (*fn)(*deps().thisptr, size);
         
         return nullptr;

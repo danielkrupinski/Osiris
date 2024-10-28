@@ -43,7 +43,7 @@ private:
 
     [[nodiscard]] float getFovScale() const noexcept
     {
-        return ViewToProjectionMatrix{hookContext.gameDependencies().viewToProjectionMatrix}.getFovScale();
+        return ViewToProjectionMatrix{hookContext.clientPatternSearchResults().template get<ViewToProjectionMatrixPointer>()}.getFovScale();
     }
 
     template <typename... PanelTypes>

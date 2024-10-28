@@ -1,20 +1,18 @@
 #pragma once
 
-#include <CS2/Classes/CCvar.h>
-#include <GameClasses/OffsetTypes/CvarOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/CvarPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct CvarPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] cs2::CCvar** cvar() const noexcept
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
-        return patternFinders.clientPatternFinder("53 4C 8D 65 ? 48 83 EC ? 48 8D 05 ? ? ? ?"_pat).add(12).abs().template as<cs2::CCvar**>();
+        return clientPatterns
+            .template addPattern<CvarPointer, CodePattern{"53 4C 8D 65 ? 48 83 EC ? 48 8D 05 ? ? ? ?"}.add(12).abs()>();
     }
 
-    [[nodiscard]] OffsetToConVarList offsetToConVarList() const noexcept
+    [[nodiscard]] static consteval auto addTier0Patterns(auto tier0Patterns) noexcept
     {
-        return patternFinders.tier0PatternFinder("74 ? 0F B7 F6 48 C1 E6 04 48 03 77 ?"_pat).add(12).template readOffset<OffsetToConVarList>();
+        return tier0Patterns
+            .template addPattern<OffsetToConVarList, CodePattern{"74 ? 0F B7 F6 48 C1 E6 04 48 03 77 ?"}.add(12).read()>();
     }
 };

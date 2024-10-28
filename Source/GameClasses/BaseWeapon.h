@@ -15,12 +15,12 @@ public:
     [[nodiscard]] auto getName() const noexcept
     {
         const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(hookContext.template make<BaseEntity>(baseWeapon).vData().valueOr(nullptr));
-        return hookContext.gameDependencies().weaponVDataDeps.offsetToWeaponName.of(vData).valueOr(nullptr);
+        return hookContext.clientPatternSearchResults().template get<OffsetToWeaponName>().of(vData).valueOr(nullptr);
     }
 
     [[nodiscard]] auto clipAmmo() const noexcept
     {
-        return hookContext.gameDependencies().weaponDeps.offsetToClipAmmo.of(baseWeapon).toOptional();
+        return hookContext.clientPatternSearchResults().template get<OffsetToClipAmmo>().of(baseWeapon).toOptional();
     }
 
 private:

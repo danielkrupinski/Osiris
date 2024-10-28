@@ -2,17 +2,17 @@
 
 #include <optional>
 
-#include <GameDependencies/ConVarDeps.h>
 #include <GameDependencies/ConVars.h>
 
 struct ConVarAccessorState {
     std::optional<bool> mp_teammates_are_enemies;
 };
 
+template <typename HookContext>
 struct ConVarAccessor {
-    explicit ConVarAccessor(const ConVars& conVars, const ConVarDeps& conVarDeps, ConVarAccessorState& state) noexcept
-        : conVars{conVars}
-        , conVarDeps{conVarDeps}
+    explicit ConVarAccessor(HookContext& hookContext, const ConVars& conVars, ConVarAccessorState& state) noexcept
+        : hookContext{hookContext}
+        , conVars{conVars}
         , state{state}
     {
     }
@@ -29,7 +29,7 @@ struct ConVarAccessor {
         if (!conVar)
             return false;
 
-        if (!conVarDeps.offsetToConVarValue || !conVarIsBool(conVar))
+        if (!hookContext.tier0PatternSearchResults().template get<OffsetToConVarValue>() || !conVarIsBool(conVar))
             return false;
 
         state.mp_teammates_are_enemies = readConVarValue<bool>(conVar);
@@ -49,19 +49,19 @@ private:
     [[nodiscard]] T readConVarValue(cs2::ConVar* conVar) const noexcept
     {
         T value;
-        std::memcpy(&value, conVarDeps.offsetToConVarValue.of(conVar).get(), sizeof(value));
+        std::memcpy(&value, hookContext.tier0PatternSearchResults().template get<OffsetToConVarValue>().of(conVar).get(), sizeof(value));
         return value;
     }
 
     [[nodiscard]] bool conVarIsBool(cs2::ConVar* conVar) const noexcept
     {
-        if (!conVarDeps.offsetToConVarValueType)
+        if (!hookContext.tier0PatternSearchResults().template get<OffsetToConVarValueType>())
             return true;
 
-        return cs2::ConVarValueType{*conVarDeps.offsetToConVarValueType.of(conVar).get()} == cs2::ConVarValueType::boolean;
+        return cs2::ConVarValueType{*hookContext.tier0PatternSearchResults().template get<OffsetToConVarValueType>().of(conVar).get()} == cs2::ConVarValueType::boolean;
     }
 
+    HookContext& hookContext;
     const ConVars& conVars;
-    const ConVarDeps& conVarDeps;
     ConVarAccessorState& state;
 };

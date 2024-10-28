@@ -31,7 +31,7 @@ public:
 
     [[nodiscard]] decltype(auto) playerPawn() const noexcept
     {
-        const auto playerPawnHandle = hookContext.gameDependencies().playerControllerDeps.offsetToPlayerPawnHandle.of(playerControllerPointer).get();
+        const auto playerPawnHandle = hookContext.clientPatternSearchResults().template get<OffsetToPlayerPawnHandle>().of(playerControllerPointer).get();
         if (!playerPawnHandle)
             return hookContext.template make<PlayerPawn>(nullptr);
         return hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(hookContext.template make<EntitySystem>().getEntityFromHandle(*playerPawnHandle)));
@@ -39,7 +39,7 @@ public:
 
     [[nodiscard]] std::optional<cs2::Color> getPlayerColor() const noexcept
     {
-        const auto playerColorIndex = hookContext.gameDependencies().playerControllerDeps.offsetToPlayerColor.of(playerControllerPointer).get();
+        const auto playerColorIndex = hookContext.clientPatternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).get();
         if (playerColorIndex && *playerColorIndex >= 0 && std::cmp_less(*playerColorIndex, cs2::kPlayerColors.size()))
             return cs2::kPlayerColors[*playerColorIndex];
         return {};

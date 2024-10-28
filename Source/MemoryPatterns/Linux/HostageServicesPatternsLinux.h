@@ -1,14 +1,12 @@
 #pragma once
 
-#include <GameClasses/OffsetTypes/HostageServicesOffset.h>
-#include <MemorySearch/BytePatternLiteral.h>
+#include <MemoryPatterns/PatternTypes/HostageServicesPatternTypes.h>
+#include <MemorySearch/CodePattern.h>
 
-template <typename PatternFinders>
 struct HostageServicesPatterns {
-    const PatternFinders& patternFinders;
-
-    [[nodiscard]] OffsetToCarriedHostage offsetToCarriedHostage() const noexcept
+    [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
-        return patternFinders.clientPatternFinder("07 C7 47 ? FF FF FF FF C3"_pat).add(3).template readOffset<OffsetToCarriedHostage>();
+        return clientPatterns
+            .template addPattern<OffsetToCarriedHostage, CodePattern{"07 C7 47 ? FF FF FF FF C3"}.add(3).read()>();
     }
 };
