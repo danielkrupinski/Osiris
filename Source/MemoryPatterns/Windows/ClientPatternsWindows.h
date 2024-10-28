@@ -9,10 +9,7 @@ struct ClientPatterns {
         return clientPatterns
             .template addPattern<MainMenuPanelPointer, CodePattern{"48 83 EC ? 48 8B 05 ? ? ? ? 48 8D 15"}.add(7).abs()>()
             .template addPattern<HudPanelPointer, CodePattern{"89 ? ? ? ? ? C6 ? ? ? ? ? ? 48 89 ? ? ? ? ? E8 ? ? ? ? 48"}.add(16).abs()>()
-            .template addPattern<LoopModeGamePointer, CodePattern{"48 8B 0D ? ? ? ? 44 0F 28 ? 24"}.add(3).abs()>()
             .template addPattern<GlobalVarsPointer, CodePattern{"48 8B 05 ? ? ? ? 0F 57 C0 8B 48"}.add(3).abs()>()
-            .template addPattern<ClientModePointer, CodePattern{"48 8D 3D ? ? ? ? 48 8D 35 ? ? ? ? 90"}.add(3).abs()>()
-            .template addPattern<GetWorldSessionInClientMode, CodePattern{"FF 10 ? 8B F0 48 85 C0 0F 84"}.add(2)>()
             .template addPattern<TransformTranslate3dVMT, CodePattern{"48 8D 05 ? ? ? ? 48 C7 42 ? 00"}.add(3).abs()>()
             .template addPattern<TransformScale3dVMT, CodePattern{"48 8D 0D ? ? ? ? F3 0F 10 4B ? F3 0F 10 43"}.add(3).abs()>()
             .template addPattern<WorldToProjectionMatrixPointer, CodePattern{"48 8D 0D ? ? ? ? 48 C1 E0 06"}.add(3).abs()>()
