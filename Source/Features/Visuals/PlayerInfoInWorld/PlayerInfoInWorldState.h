@@ -28,7 +28,9 @@ struct PlayerInfoInWorldState {
             .set<DefuseIconPanel>()
             .set<HostagePickupPanel>()
             .set<HostageRescuePanel>()
-            .set<BlindedIconPanel>()};
+            .set<BlindedIconPanel>()
+            .set<BombIconPanel>()
+            .set<BombPlantingIcon>()};
 
     cs2::PanelHandle containerPanelHandle;
     DynamicArray<HudInWorldPanelIndex> panelIndices;

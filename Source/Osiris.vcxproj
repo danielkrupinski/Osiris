@@ -234,6 +234,8 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanel.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanelContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanelParams.h" />
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerBombIconPanel.h" />
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerBombIconPanelContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanel.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanelContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanelParams.h" />
@@ -325,6 +327,7 @@
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
     <ClInclude Include="MemoryPatterns\MemoryPatterns.h" />
     <ClInclude Include="MemoryPatterns\PatternFinders.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\C4PatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\ClientPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\ConVarPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\CvarPatternTypes.h" />
@@ -355,6 +358,7 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\WeaponPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\WeaponServicesPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\WeaponVDataPatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\Windows\C4PatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ConVarPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\CvarPatternsWindows.h" />

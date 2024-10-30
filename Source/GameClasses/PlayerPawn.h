@@ -120,6 +120,11 @@ public:
         return weapons().template has<C4<HookContext>>();
     }
 
+    [[nodiscard]] decltype(auto) carriedC4() const noexcept
+    {
+        return weapons().template get<C4<HookContext>>();
+    }
+
     [[nodiscard]] float getRemainingFlashBangTime() const noexcept
     {
         const auto curTime = hookContext.globalVars().curtime();

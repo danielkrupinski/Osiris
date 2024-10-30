@@ -1,5 +1,6 @@
 #pragma once
 
+#include "C4PatternsWindows.h"
 #include "ClientPatternsWindows.h"
 #include "ConVarPatternsWindows.h"
 #include "CvarPatternsWindows.h"

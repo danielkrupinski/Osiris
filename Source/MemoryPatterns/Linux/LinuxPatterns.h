@@ -1,5 +1,6 @@
 #pragma once
 
+#include "C4PatternsLinux.h"
 #include "ClientPatternsLinux.h"
 #include "ConVarPatternsLinux.h"
 #include "CvarPatternsLinux.h"

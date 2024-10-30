@@ -25,7 +25,7 @@ public:
         playerStateChildren[1].setVisible(context.state().playerStateIconsToShow.template has<HostagePickupPanel>() && playerPawn.isPickingUpHostage().valueOr(false));
         playerStateChildren[2].setVisible(context.state().playerStateIconsToShow.template has<HostageRescuePanel>() && playerPawn.isRescuingHostage());
         updateBlindedIconPanel(playerStateChildren[3], playerPawn);
-        playerStateChildren[4].setVisible(context.state().playerStateIconsToShow.template has<BombIconPanel>() && playerPawn.isCarryingC4());
+        context.bombIconPanel().update(playerPawn);
     }
 
 private:

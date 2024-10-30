@@ -1619,6 +1619,18 @@
     <ClInclude Include="Utils\StrongTypeAlias.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerBombIconPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerBombIconPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\C4PatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\C4PatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

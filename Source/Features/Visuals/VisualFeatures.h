@@ -83,6 +83,11 @@ struct VisualFeatures {
         return BombIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
     }
 
+    [[nodiscard]] BombPlantingIconToggle bombPlantingIconToggle() const noexcept
+    {
+        return BombPlantingIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
+    }
+
     [[nodiscard]] decltype(auto) playerOutlineGlowToggle() const noexcept
     {
         return hookContext.template make<PlayerOutlineGlowToggle>();
