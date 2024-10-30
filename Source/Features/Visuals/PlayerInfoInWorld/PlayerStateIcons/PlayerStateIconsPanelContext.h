@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GameClasses/PanoramaUiPanel.h>
+#include "PlayerBombIconPanel.h"
 
 template <typename HookContext>
 class PlayerStateIconsPanelContext {
@@ -19,6 +20,11 @@ public:
     [[nodiscard]] decltype(auto) panel() const noexcept
     {
         return _hookContext.template make<PanoramaUiPanel>(_panel);
+    }
+
+    [[nodiscard]] decltype(auto) bombIconPanel() const noexcept
+    {
+        return _hookContext.template make<PlayerBombIconPanel<HookContext>>(panel().children()[4]);
     }
 
 private:

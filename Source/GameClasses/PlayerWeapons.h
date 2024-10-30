@@ -31,6 +31,19 @@ public:
         return false;
     }
 
+    template <typename WeaponType>
+    [[nodiscard]] decltype(auto) get() const noexcept
+    {
+        if (!weaponHandles)
+            return hookContext.template make<WeaponType>(nullptr);
+
+        for (int i = 0; i < weaponHandles->size; ++i) {
+            auto&& weapon = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(hookContext.template make<EntitySystem>().getEntityFromHandle(weaponHandles->memory[i]))).template cast<WeaponType>();
+            if (weapon)
+                return utils::lvalue<decltype(weapon)>(weapon);
+        }
+        return hookContext.template make<WeaponType>(nullptr);
+    }
 
     template <typename F>
     void forEach(F f) const noexcept

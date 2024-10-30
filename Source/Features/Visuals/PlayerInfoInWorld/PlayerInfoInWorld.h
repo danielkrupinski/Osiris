@@ -139,6 +139,7 @@ using HostagePickupIconToggle = PlayerStateIconToggle<HostagePickupPanel>;
 using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
 using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
 using BombIconToggle = PlayerStateIconToggle<BombIconPanel>;
+using BombPlantingIconToggle = PlayerStateIconToggle<BombPlantingIcon>;
 
 template <typename HookContext>
 struct PlayerInfoInWorldToggle : FeatureToggleOnOff<PlayerInfoInWorldToggle<HookContext>> {

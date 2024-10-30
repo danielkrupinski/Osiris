@@ -12,7 +12,7 @@ namespace player_state_icons_panel_params::container_panel_params
         .horizontalAlignment = cs2::k_EHorizontalAlignmentCenter,
         .verticalAlignment = cs2::k_EVerticalAlignmentTop
     };
-    static constexpr auto kMargin = PanelMarginParams{.marginTop = cs2::CUILength::pixels(1)};
+    static constexpr auto kMargin = PanelMarginParams{.marginTop = cs2::CUILength::pixels(3)};
     static constexpr auto kChildrenFlow = cs2::k_EFlowRight;
 }
 
@@ -68,11 +68,12 @@ namespace player_state_icons_panel_params::blinded_icon_panel_params
 namespace player_state_icons_panel_params::bomb_icon_panel_params
 {
     static constexpr auto kImageUrl = "s2r://panorama/images/icons/equipment/c4.svg";
-    static constexpr auto kTextureHeight = 26;
+    static constexpr auto kTextureHeight = 24;
     static constexpr auto kAlignment = PanelAlignmentParams{
         .verticalAlignment = cs2::k_EVerticalAlignmentCenter
     };
     static constexpr auto kWashColorCarryingC4 = cs2::Color{255, 255, 77};
+    static constexpr auto kWashColorPlantingC4 = cs2::Color{255, 193, 77};
     static constexpr auto kShadowParams = PanelShadowParams{
         .horizontalOffset{cs2::CUILength::pixels(0)},
         .verticalOffset{cs2::CUILength::pixels(0)},
