@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 30 October 2024
+    * Added bomb planting icon to "Player Info in World" feature
+
+    ![Bomb planting icon](https://github.com/user-attachments/assets/c7aa4e3f-4ae2-4897-8cf8-b62e3eb17b3a)
+
 * 2 October 2024
     * Added bomb carrier icon to "Player Info in World" feature
 
@@ -26,9 +31,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added outline glow for dropped bomb
 
     ![Dropped bomb glow](https://github.com/user-attachments/assets/080043c2-bff2-444e-983a-a89b275a553b)
-
-* 20 September 2024
-    * Added outline glow for grenade projectiles
 
 ## Technical features
 
