@@ -3,7 +3,7 @@
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
-#include "C_BaseEntity.h"
+#include "C_BaseModelEntity.h"
 
 namespace cs2
 {
@@ -11,7 +11,7 @@ namespace cs2
 struct CCSPlayer_HostageServices;
 struct CCSPlayer_WeaponServices;
 
-struct C_CSPlayerPawn : C_BaseEntity {
+struct C_CSPlayerPawn : C_BaseModelEntity {
     using m_bGunGameImmunity = bool;
     using m_pWeaponServices = CCSPlayer_WeaponServices*;
     using m_hController = CEntityHandle;

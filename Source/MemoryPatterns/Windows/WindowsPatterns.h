@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BaseModelEntityPatternsWindows.h"
 #include "C4PatternsWindows.h"
 #include "ClientPatternsWindows.h"
 #include "ConVarPatternsWindows.h"
@@ -10,6 +11,7 @@
 #include "HostageServicesPatternsWindows.h"
 #include "GameRulesPatternsWindows.h"
 #include "GameSceneNodePatternsWindows.h"
+#include "GlowPropertyPatternsWindows.h"
 #include "GlowSceneObjectPatternsWindows.h"
 #include "MemAllocPatternsWindows.h"
 #include "PanelPatternsWindows.h"

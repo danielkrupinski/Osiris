@@ -21,13 +21,17 @@ public:
 private:
     void handleEntity(cs2::CEntityInstance& entity) const noexcept
     {
+        auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(&entity));
+
         const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(hookContext.gameDependencies().entitiesVMTs, entity.vmt);
 
         if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::C_CSPlayerPawn, KnownEntityTypes>()) {
             auto&& playerPawn = hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity));
             playerInformationThroughWalls.drawPlayerInformation(playerPawn);
         }
-        hookContext.template make<OutlineGlow>().applyGlowToEntity(entityTypeInfo, entity);
+
+        if (entityTypeInfo.isModelEntity())
+            hookContext.template make<OutlineGlow>().applyGlowToEntity(entityTypeInfo, baseEntity.template as<BaseModelEntity>());
     }
 
     HookContext& hookContext;

@@ -12,25 +12,28 @@ public:
     {
     }
 
-    void applyGlowToEntity(EntityTypeInfo entityTypeInfo, cs2::CEntityInstance& entity) noexcept
+    void applyGlowToEntity(EntityTypeInfo entityTypeInfo, auto&& modelEntity) noexcept
     {
         if (!context.state().enabled)
             return;
 
+        if (modelEntity.glowProperty().isGlowing().valueOr(false))
+            return;
+
         if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
-            context.applyGlowToPlayer(entity);
+            context.applyGlowToPlayer(modelEntity.template as<PlayerPawn>());
         else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
-            context.applyGlowToDefuseKit(entity);
+            context.applyGlowToDefuseKit(modelEntity.baseEntity());
         else if (entityTypeInfo.is<cs2::CPlantedC4>())
-            context.applyGlowToPlantedBomb(entity);
+            context.applyGlowToPlantedBomb(modelEntity.template as<PlantedC4>());
         else if (entityTypeInfo.is<cs2::C_C4>())
-            context.applyGlowToBomb(entity);
+            context.applyGlowToBomb(modelEntity.baseEntity());
         else if (entityTypeInfo.is<cs2::C_Hostage>())
-            context.applyGlowToHostage(entity);
+            context.applyGlowToHostage(modelEntity.baseEntity());
         else if (entityTypeInfo.isGrenadeProjectile())
-            context.applyGlowToGrenadeProjectile(entityTypeInfo, entity);
+            context.applyGlowToGrenadeProjectile(entityTypeInfo, modelEntity.baseEntity());
         else if (entityTypeInfo.isWeapon())
-            context.applyGlowToWeapon(entityTypeInfo, entity);
+            context.applyGlowToWeapon(entityTypeInfo, modelEntity.baseEntity());
     }
 
 private:

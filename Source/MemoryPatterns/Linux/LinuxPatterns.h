@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BaseModelEntityPatternsLinux.h"
 #include "C4PatternsLinux.h"
 #include "ClientPatternsLinux.h"
 #include "ConVarPatternsLinux.h"
@@ -9,6 +10,7 @@
 #include "FileSystemPatternsLinux.h"
 #include "GameRulesPatternsLinux.h"
 #include "GameSceneNodePatternsLinux.h"
+#include "GlowPropertyPatternsLinux.h"
 #include "GlowSceneObjectPatternsLinux.h"
 #include "HostageServicesPatternsLinux.h"
 #include "MemAllocPatternsLinux.h"

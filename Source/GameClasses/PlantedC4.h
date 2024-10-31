@@ -59,6 +59,8 @@ private:
 template <typename HookContext, typename Context = PlantedC4Context<HookContext>>
 class PlantedC4 {
 public:
+    using RawType = cs2::CPlantedC4;
+
     template <typename... Args>
     explicit PlantedC4(Args&&... args) noexcept
         : context{std::forward<Args>(args)...}

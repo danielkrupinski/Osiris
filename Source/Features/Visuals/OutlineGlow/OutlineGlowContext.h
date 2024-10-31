@@ -25,39 +25,39 @@ public:
         return hookContext.featuresStates().visualFeaturesStates.outlineGlowState;
     }
 
-    void applyGlowToPlayer(auto& entity) const noexcept
+    void applyGlowToPlayer(auto&& playerPawn) const noexcept
     {
-        hookContext.template make<PlayerOutlineGlow>().applyGlowToPlayer(hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity)));
+        hookContext.template make<PlayerOutlineGlow>().applyGlowToPlayer(playerPawn);
     }
 
-    void applyGlowToWeapon(EntityTypeInfo entityTypeInfo, auto& entity) const noexcept
+    void applyGlowToWeapon(EntityTypeInfo entityTypeInfo, auto&& modelEntity) const noexcept
     {
-        hookContext.template make<WeaponOutlineGlow>().applyGlowToWeapon(entityTypeInfo, hookContext.template make<BaseEntity>(static_cast<cs2::C_CSWeaponBase*>(&entity)));
+        hookContext.template make<WeaponOutlineGlow>().applyGlowToWeapon(entityTypeInfo, modelEntity);
     }
 
-    void applyGlowToDefuseKit(auto& entity) const noexcept
+    void applyGlowToDefuseKit(auto&& defuseKit) const noexcept
     {
-        hookContext.template make<DefuseKitOutlineGlow>().applyGlowToDefuseKit(hookContext.template make<BaseEntity>(static_cast<cs2::CBaseAnimGraph*>(&entity)));
+        hookContext.template make<DefuseKitOutlineGlow>().applyGlowToDefuseKit(defuseKit);
     }
 
-    void applyGlowToGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto& entity) const noexcept
+    void applyGlowToGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
     {
-        hookContext.template make<GrenadeProjectileOutlineGlow>().applyGlowToGrenadeProjectile(entityTypeInfo, hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseCSGrenadeProjectile*>(&entity)));
+        hookContext.template make<GrenadeProjectileOutlineGlow>().applyGlowToGrenadeProjectile(entityTypeInfo, grenadeProjectile);
     }
     
-    void applyGlowToBomb(auto& entity) const noexcept
+    void applyGlowToBomb(auto&& bomb) const noexcept
     {
-        hookContext.template make<DroppedBombOutlineGlow>().applyGlowToBomb(hookContext.template make<BaseEntity>(static_cast<cs2::C_C4*>(&entity)));
+        hookContext.template make<DroppedBombOutlineGlow>().applyGlowToBomb(bomb);
     }
 
-    void applyGlowToPlantedBomb(auto& entity) const noexcept
+    void applyGlowToPlantedBomb(auto&& plantedC4) const noexcept
     {
-        hookContext.template make<TickingBombOutlineGlow>().applyGlowToPlantedBomb(hookContext.template make<PlantedC4<HookContext>>(static_cast<cs2::CPlantedC4*>(&entity)));
+        hookContext.template make<TickingBombOutlineGlow>().applyGlowToPlantedBomb(plantedC4);
     }
 
-    void applyGlowToHostage(auto& entity) const noexcept
+    void applyGlowToHostage(auto&& hostage) const noexcept
     {
-        hookContext.template make<HostageOutlineGlow>().applyGlowToHostage(hookContext.template make<BaseEntity>(static_cast<cs2::C_Hostage*>(&entity)));
+        hookContext.template make<HostageOutlineGlow>().applyGlowToHostage(hostage);
     }
 
     [[nodiscard]] auto& viewRenderHook() const noexcept

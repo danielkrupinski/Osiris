@@ -19,6 +19,7 @@
     <ClInclude Include="CS2\Classes\CCvar.h" />
     <ClInclude Include="CS2\Classes\CEntitySubclassVDataBase.h" />
     <ClInclude Include="CS2\Classes\CGameSceneNode.h" />
+    <ClInclude Include="CS2\Classes\CGlowProperty.h" />
     <ClInclude Include="CS2\Classes\ClientModeCSNormal.h" />
     <ClInclude Include="CS2\Classes\CLoopModeGame.h" />
     <ClInclude Include="CS2\Classes\Color.h" />
@@ -40,6 +41,7 @@
     <ClInclude Include="CS2\Classes\Entities\CEntityInstance.h" />
     <ClInclude Include="CS2\Classes\Entities\C_BaseCSGrenadeProjectile.h" />
     <ClInclude Include="CS2\Classes\Entities\C_BaseEntity.h" />
+    <ClInclude Include="CS2\Classes\Entities\C_BaseModelEntity.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSPlayerPawn.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSWeaponBase.h" />
     <ClInclude Include="CS2\Classes\Entities\C_Hostage.h" />
@@ -244,11 +246,13 @@
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="FileUtils\FileSlice.h" />
     <ClInclude Include="GameClasses\BaseEntity.h" />
+    <ClInclude Include="GameClasses\BaseModelEntity.h" />
     <ClInclude Include="GameClasses\BaseWeapon.h" />
     <ClInclude Include="GameClasses\C4.h" />
     <ClInclude Include="GameClasses\ClientPanel.h" />
     <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\GameSceneNode.h" />
+    <ClInclude Include="GameClasses\GlowProperty.h" />
     <ClInclude Include="GameClasses\HostageServices.h" />
     <ClInclude Include="GameClasses\Hud\HudContext.h" />
     <ClInclude Include="GameClasses\PlayerController.h" />
@@ -327,6 +331,7 @@
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
     <ClInclude Include="MemoryPatterns\MemoryPatterns.h" />
     <ClInclude Include="MemoryPatterns\PatternFinders.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\BaseModelEntityPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\C4PatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\ClientPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\ConVarPatternTypes.h" />
@@ -336,6 +341,7 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\FileSystemPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GameRulesPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GameSceneNodePatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\GlowPropertyPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GlowSceneObjectPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\HostageServicesPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\MemAllocPatternTypes.h" />
@@ -358,6 +364,7 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\WeaponPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\WeaponServicesPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\WeaponVDataPatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\Windows\BaseModelEntityPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\C4PatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ClientPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\ConVarPatternsWindows.h" />
@@ -367,6 +374,7 @@
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameSceneNodePatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\GlowPropertyPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />

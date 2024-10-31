@@ -9,6 +9,7 @@
 #include <Utils/ColorUtils.h>
 
 #include "BaseEntity.h"
+#include "BaseModelEntity.h"
 #include "C4.h"
 #include "GameSceneNode.h"
 #include "HostageServices.h"
@@ -23,6 +24,8 @@ class PlayerController;
 template <typename HookContext>
 class PlayerPawn {
 public:
+    using RawType = cs2::C_CSPlayerPawn;
+
     PlayerPawn(HookContext& hookContext, cs2::C_CSPlayerPawn* playerPawn) noexcept
         : hookContext{hookContext}
         , playerPawn{playerPawn}

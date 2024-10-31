@@ -21,6 +21,11 @@ struct EntityTypeInfo {
         return EntityBaseTypeInfo<cs2::C_BaseCSGrenadeProjectile>::isBaseOf(typeIndex);
     }
 
+    [[nodiscard]] constexpr bool isModelEntity() const noexcept
+    {
+        return EntityBaseTypeInfo<cs2::C_BaseModelEntity>::isBaseOf(typeIndex);
+    }
+
     template <typename EntityType>
     [[nodiscard]] constexpr bool is() const noexcept
     {

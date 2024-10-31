@@ -1631,6 +1631,30 @@
     <ClInclude Include="MemoryPatterns\Windows\C4PatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_BaseModelEntity.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CGlowProperty.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\BaseModelEntityPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\GlowPropertyPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\BaseModelEntityPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\GlowPropertyPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\BaseModelEntity.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\GlowProperty.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
