@@ -255,19 +255,23 @@ $.Osiris = (function () {
     createDropDown(parent, labelText, section, feature, ["Yes", "No"], defaultIndex);
   };
 
+  var separator = function (parent) {
+    $.CreatePanel('Panel', parent, '', { class: "horizontal-separator" });
+  };
+
   var hud = createTab('hud');
   
   var bomb = createSection(hud, 'Bomb');
   createYesNoDropDown(bomb, "Show Bomb Explosion Countdown And Site", 'hud', 'bomb_timer');
-  $.CreatePanel('Panel', bomb, '', { class: "horizontal-separator" });
+  separator(bomb);
   createYesNoDropDown(bomb, "Show Bomb Defuse Countdown", 'hud', 'defusing_alert');
   
   var killfeed = createSection(hud, 'Killfeed');
-  $.CreatePanel('Panel', killfeed, '', { class: "horizontal-separator" });
+  separator(killfeed);
   createYesNoDropDown(killfeed, "Preserve My Killfeed During The Round", 'hud', 'preserve_killfeed');
 
   var time = createSection(hud, 'Time');
-  $.CreatePanel('Panel', time, '', { class: "horizontal-separator" });
+  separator(time);
   createYesNoDropDown(time, "Show Post-round Timer", 'hud', 'postround_timer');
 
   var visuals = createVisualsTab();
@@ -279,30 +283,30 @@ $.Osiris = (function () {
 
   var playerPosition = createSection(playerInfoTab, 'Player Position');
   createYesNoDropDown(playerPosition, "Show Player Position Arrow", 'visuals', 'player_info_position', 0);
-  $.CreatePanel('Panel', playerPosition, '', { class: "horizontal-separator" });
+  separator(playerPosition);
   createDropDown(playerPosition, "Player Position Arrow Color", 'visuals', 'player_info_position_color', ['Player / Team Color', 'Team Color'], 0);
 
   var playerHealth = createSection(playerInfoTab, 'Player Health');
   createYesNoDropDown(playerHealth, "Show Player Health", 'visuals', 'player_info_health', 0);
-  $.CreatePanel('Panel', playerHealth, '', { class: "horizontal-separator" });
+  separator(playerHealth);
   createDropDown(playerHealth, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
 
   var playerWeapon = createSection(playerInfoTab, 'Player Weapon');
   createYesNoDropDown(playerWeapon, "Show Player Active Weapon Icon", 'visuals', 'player_info_weapon', 0);
-  $.CreatePanel('Panel', playerWeapon, '', { class: "horizontal-separator" });
+  separator(playerWeapon);
   createYesNoDropDown(playerWeapon, "Show Player Active Weapon Ammo", 'visuals', 'player_info_weapon_clip', 0);
 
   var playerIcons = createSection(playerInfoTab, 'Icons');
   createYesNoDropDown(playerIcons, "Show Defuse Icon", 'visuals', 'player_info_defuse', 0);
-  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  separator(playerIcons);
   createYesNoDropDown(playerIcons, 'Show Picking Up Hostage Icon', 'visuals', 'player_info_hostage_pickup', 0);
-  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  separator(playerIcons);
   createYesNoDropDown(playerIcons, 'Show Rescuing Hostage Icon', 'visuals', 'player_info_hostage_rescue', 0);
-  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  separator(playerIcons);
   createYesNoDropDown(playerIcons, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
-  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  separator(playerIcons);
   createYesNoDropDown(playerIcons, 'Show Bomb Carrier Icon', 'visuals', 'player_info_bomb_carrier', 0);
-  $.CreatePanel('Panel', playerIcons, '', { class: "horizontal-separator" });
+  separator(playerIcons);
   createYesNoDropDown(playerIcons, 'Show Bomb Planting Icon', 'visuals', 'player_info_bomb_planting', 0);
 
   var outlineGlowTab = createSubTab(visuals, 'outline_glow');
@@ -312,19 +316,19 @@ $.Osiris = (function () {
 
   var playerOutlineGlow = createSection(outlineGlowTab, 'Players');
   createDropDown(playerOutlineGlow, "Glow Players", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off'], 0);
-  $.CreatePanel('Panel', playerOutlineGlow, '', { class: "horizontal-separator" });
+  separator(playerOutlineGlow);
   createDropDown(playerOutlineGlow, "Player Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
 
   var weaponOutlineGlow = createSection(outlineGlowTab, 'Weapons');
   createYesNoDropDown(weaponOutlineGlow, "Glow Weapons on Ground Nearby", 'visuals', 'weapon_outline_glow', 0);
-  $.CreatePanel('Panel', weaponOutlineGlow, '', { class: "horizontal-separator" });
+  separator(weaponOutlineGlow);
   createYesNoDropDown(weaponOutlineGlow, "Glow Grenade Projectiles", 'visuals', 'grenade_proj_outline_glow', 0);
 
   var bombAndDefuseKitOutlineGlow = createSection(outlineGlowTab, 'Bomb & Defuse Kit');
   createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Dropped Bomb", 'visuals', 'dropped_bomb_outline_glow', 0);
-  $.CreatePanel('Panel', bombAndDefuseKitOutlineGlow, '', { class: "horizontal-separator" });
+  separator(bombAndDefuseKitOutlineGlow);
   createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Ticking Bomb", 'visuals', 'ticking_bomb_outline_glow', 0);
-  $.CreatePanel('Panel', bombAndDefuseKitOutlineGlow, '', { class: "horizontal-separator" });
+  separator(bombAndDefuseKitOutlineGlow);
   createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Defuse Kits on Ground Nearby", 'visuals', 'defuse_kit_outline_glow', 0);
 
   var hostageOutlineGlow = createSection(outlineGlowTab, 'Hostages');
@@ -335,19 +339,19 @@ $.Osiris = (function () {
   var sound = createTab('sound');
   
   var playerSoundVisualization = createSection(sound, 'Player Sound Visualization');
-  $.CreatePanel('Panel', playerSoundVisualization, '', { class: "horizontal-separator" });
+  separator(playerSoundVisualization);
   createYesNoDropDown(playerSoundVisualization, "Visualize Player Footstep Sound", 'sound', 'visualize_player_footsteps');
 
   var bombSoundVisualization = createSection(sound, 'Bomb Sound Visualization');
   createYesNoDropDown(bombSoundVisualization, "Visualize Bomb Plant Sound", 'sound', 'visualize_bomb_plant');
-  $.CreatePanel('Panel', bombSoundVisualization, '', { class: "horizontal-separator" });
+  separator(bombSoundVisualization);
   createYesNoDropDown(bombSoundVisualization, "Visualize Bomb Beep Sound", 'sound', 'visualize_bomb_beep');
-  $.CreatePanel('Panel', bombSoundVisualization, '', { class: "horizontal-separator" });
+  separator(bombSoundVisualization);
   createYesNoDropDown(bombSoundVisualization, "Visualize Bomb Defuse Sound", 'sound', 'visualize_bomb_defuse');
 
   var weaponSoundVisualization = createSection(sound, 'Weapon Sound Visualization');
   createYesNoDropDown(weaponSoundVisualization, "Visualize Weapon Scope Sound", 'sound', 'visualize_scope_sound');
-  $.CreatePanel('Panel', weaponSoundVisualization, '', { class: "horizontal-separator" });
+  separator(weaponSoundVisualization);
   createYesNoDropDown(weaponSoundVisualization, "Visualize Weapon Reload Sound", 'sound', 'visualize_reload_sound');
 
   $.Osiris.navigateToTab('hud');
