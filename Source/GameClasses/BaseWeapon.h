@@ -15,7 +15,7 @@ public:
     template <template <typename...> typename EntityType>
     [[nodiscard]] bool is() const noexcept
     {
-        return baseEntity().is<EntityType>();
+        return baseEntity().template is<EntityType>();
     }
 
     [[nodiscard]] decltype(auto) baseEntity() const noexcept

@@ -14,7 +14,7 @@ public:
 
     void update(auto&& playerPawn, Visibility bombIconVisibility) const noexcept
     {
-        if (!context.state().showPlayerActiveWeapon || (bombIconVisibility == Visibility::Visible && playerPawn.getActiveWeapon().is<C4>())) {
+        if (!context.state().showPlayerActiveWeapon || (bombIconVisibility == Visibility::Visible && playerPawn.getActiveWeapon().template is<C4>())) {
             context.panel().setVisible(false);
             return;
         }
