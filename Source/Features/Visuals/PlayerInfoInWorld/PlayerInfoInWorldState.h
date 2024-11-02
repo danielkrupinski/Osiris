@@ -22,15 +22,15 @@ struct PlayerInfoInWorldState {
     bool showPlayerHealth{true};
     PlayerHealthTextColor playerHealthTextColor{PlayerHealthTextColor::HealthBased};
     bool showPlayerActiveWeapon{true};
+    bool showBombCarrierIcon{true};
+    bool showBombPlantingIcon{true};
     bool showPlayerActiveWeaponAmmo{true};
     PlayerStateIconsToShow playerStateIconsToShow{
         PlayerStateIconsToShow{}
             .set<DefuseIconPanel>()
             .set<HostagePickupPanel>()
             .set<HostageRescuePanel>()
-            .set<BlindedIconPanel>()
-            .set<BombIconPanel>()
-            .set<BombPlantingIcon>()};
+            .set<BlindedIconPanel>()};
 
     cs2::PanelHandle containerPanelHandle;
     DynamicArray<HudInWorldPanelIndex> panelIndices;

@@ -12,6 +12,17 @@ public:
     {
     }
 
+    template <template <typename...> typename EntityType>
+    [[nodiscard]] bool is() const noexcept
+    {
+        return baseEntity().template is<EntityType>();
+    }
+
+    [[nodiscard]] decltype(auto) baseEntity() const noexcept
+    {
+        return hookContext.template make<BaseEntity>(baseWeapon);
+    }
+
     [[nodiscard]] auto getName() const noexcept
     {
         const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(hookContext.template make<BaseEntity>(baseWeapon).vData().valueOr(nullptr));

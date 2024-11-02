@@ -17,7 +17,7 @@ public:
     {
     }
 
-    template <typename WeaponType>
+    template <template <typename...> typename WeaponType>
     [[nodiscard]] bool has() const noexcept
     {
         if (!weaponHandles)
@@ -31,18 +31,18 @@ public:
         return false;
     }
 
-    template <typename WeaponType>
+    template <template <typename...> typename WeaponType>
     [[nodiscard]] decltype(auto) get() const noexcept
     {
         if (!weaponHandles)
-            return hookContext.template make<WeaponType>(nullptr);
+            return hookContext.template make<WeaponType<HookContext>>(nullptr);
 
         for (int i = 0; i < weaponHandles->size; ++i) {
             auto&& weapon = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(hookContext.template make<EntitySystem>().getEntityFromHandle(weaponHandles->memory[i]))).template cast<WeaponType>();
             if (weapon)
                 return utils::lvalue<decltype(weapon)>(weapon);
         }
-        return hookContext.template make<WeaponType>(nullptr);
+        return hookContext.template make<WeaponType<HookContext>>(nullptr);
     }
 
     template <typename F>

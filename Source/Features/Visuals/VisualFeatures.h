@@ -80,12 +80,12 @@ struct VisualFeatures {
 
     [[nodiscard]] BombIconToggle bombIconToggle() const noexcept
     {
-        return BombIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
+        return BombIconToggle{states.playerInfoInWorldState};
     }
 
     [[nodiscard]] BombPlantingIconToggle bombPlantingIconToggle() const noexcept
     {
-        return BombPlantingIconToggle{states.playerInfoInWorldState.playerStateIconsToShow};
+        return BombPlantingIconToggle{states.playerInfoInWorldState};
     }
 
     [[nodiscard]] decltype(auto) playerOutlineGlowToggle() const noexcept

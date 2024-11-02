@@ -1,7 +1,7 @@
 #pragma once
 
+#include <Common/Visibility.h>
 #include "PlayerBombIconPanelContext.h"
-#include "PlayerStateIconsPanelParams.h"
 
 template <typename HookContext, typename Context = PlayerBombIconPanelContext<HookContext>>
 class PlayerBombIconPanel {
@@ -12,17 +12,18 @@ public:
     {
     }
 
-    void update(auto&& playerPawn) const noexcept
+    [[nodiscard]] Visibility update(auto&& playerPawn) const noexcept
     {
         if (!context.shouldShowOnPlayer(playerPawn)) {
             context.panel().setVisible(false);
-            return;
+            return Visibility::Hidden;
         }
 
         context.panel().setVisible(true);
         const auto shouldShowPlantingColor = context.shouldShowPlantingColor(playerPawn);
         context.panel().children()[0].setVisible(!shouldShowPlantingColor);
         context.panel().children()[1].setVisible(shouldShowPlantingColor);
+        return Visibility::Visible;
     }
 
 private:

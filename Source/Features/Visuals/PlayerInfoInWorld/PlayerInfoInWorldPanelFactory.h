@@ -4,11 +4,13 @@
 #include <GameClasses/PanelFactory.h>
 
 #include "ActiveWeaponAmmo/ActiveWeaponAmmoPanelParams.h"
-#include "ActiveWeaponIcon/ActiveWeaponIconPanelParams.h"
 #include "PlayerHealth/PlayerHealthPanelParams.h"
 #include "PlayerInfoContainerPanelParams.h"
 #include "PlayerPositionArrow/PlayerPositionArrowPanelParams.h"
 #include "PlayerStateIcons/PlayerStateIconsPanelParams.h"
+#include "PlayerWeaponIcon/ActiveWeaponIcon/ActiveWeaponIconPanelParams.h"
+#include "PlayerWeaponIcon/BombIcon/PlayerBombIconPanelParams.h"
+#include "PlayerWeaponIcon/PlayerWeaponIconPanelParams.h"
 
 template <typename HookContext>
 class PlayerInfoInWorldPanelFactory {
@@ -66,17 +68,19 @@ public:
         createHostagePickupPanel(panel);
         createHostageRescuePanel(panel);
         createBlindedIconPanel(panel);
-        createBombIconContainerPanel(panel);
     }
 
-    void createPanel(std::type_identity<PlayerActiveWeaponIconPanel<HookContext>>, cs2::CUIPanel* containerPanel) const noexcept
+    void createPanel(std::type_identity<PlayerWeaponIconPanel<HookContext>>, cs2::CUIPanel* parentPanel) const noexcept
     {
-        using namespace active_weapon_icon_panel_params;
+        using namespace player_weapon_icon_panel_params;
 
-        auto&& panel = hookContext.panelFactory().createImagePanel(containerPanel).uiPanel();
-        panel.setAlign(kAlignment);
-        panel.setMargin(kMargin);
-        panel.setImageShadow(kShadowParams);
+        auto&& containerPanel = hookContext.panelFactory().createPanel(parentPanel).uiPanel();
+        containerPanel.setFlowChildren(kChildrenFlow);
+        containerPanel.setAlign(kAlignment);
+        containerPanel.setMargin(kMargin);
+
+        createPlayerActiveWeaponIconPanel(containerPanel);
+        createBombIconContainerPanel(containerPanel);
     }
 
     void createPanel(std::type_identity<PlayerHealthPanel<HookContext>>, cs2::CUIPanel* containerPanel) const noexcept
@@ -178,23 +182,23 @@ private:
 
     void createBombIconContainerPanel(cs2::CUIPanel* parentPanel) const noexcept
     {
-        using namespace player_state_icons_panel_params::bomb_icon_panel_params;
+        using namespace player_bomb_icon_panel_params::container_panel_params;
 
         auto&& containerPanel = hookContext.panelFactory().createPanel(parentPanel).uiPanel();
+        containerPanel.setAlign(kAlignment);
+        containerPanel.setMargin(kMargin);
+
         createBombIconPanel(containerPanel, kColorCarryingC4);
         createBombIconPanel(containerPanel, kColorPlantingC4);
     }
 
     void createBombIconPanel(cs2::CUIPanel* containerPanel, cs2::Color color) const noexcept
     {
-        using namespace player_state_icons_panel_params::bomb_icon_panel_params;
+        using namespace player_bomb_icon_panel_params::bomb_icon_panel_params;
 
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
         imagePanel.setImageSvg(SvgImageParams{.imageUrl = kImageUrl, .textureHeight = kTextureHeight, .fillColor = color});
-
-        auto&& uiPanel = imagePanel.uiPanel();
-        uiPanel.setAlign(kAlignment);
-        uiPanel.setImageShadow(kShadowParams);
+        imagePanel.uiPanel().setImageShadow(kShadowParams);
     }
 
     void createHealthIconPanel(cs2::CUIPanel* containerPanel) const
@@ -218,6 +222,15 @@ private:
         label.setFont(kFont);
         label.setAlign(kAlignment);
         label.setTextShadow(kShadowParams);
+    }
+
+    void createPlayerActiveWeaponIconPanel(cs2::CUIPanel* parentPanel) const noexcept
+    {
+        using namespace active_weapon_icon_panel_params;
+
+        auto&& panel = hookContext.panelFactory().createImagePanel(parentPanel).uiPanel();
+        panel.setAlign(kAlignment);
+        panel.setImageShadow(kShadowParams);
     }
 
     HookContext& hookContext;

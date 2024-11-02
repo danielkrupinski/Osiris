@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Common/Visibility.h>
 #include "PlayerActiveWeaponIconPanelContext.h"
 
 template <typename HookContext, typename Context = PlayerActiveWeaponIconPanelContext<HookContext>>
@@ -11,9 +12,9 @@ public:
     {
     }
 
-    void update(auto&& playerPawn) const noexcept
+    void update(auto&& playerPawn, Visibility bombIconVisibility) const noexcept
     {
-        if (!context.state().showPlayerActiveWeapon) {
+        if (!context.state().showPlayerActiveWeapon || (bombIconVisibility == Visibility::Visible && playerPawn.getActiveWeapon().template is<C4>())) {
             context.panel().setVisible(false);
             return;
         }

@@ -120,12 +120,12 @@ public:
 
     [[nodiscard]] bool isCarryingC4() const noexcept
     {
-        return weapons().template has<C4<HookContext>>();
+        return weapons().template has<C4>();
     }
 
     [[nodiscard]] decltype(auto) carriedC4() const noexcept
     {
-        return weapons().template get<C4<HookContext>>();
+        return weapons().template get<C4>();
     }
 
     [[nodiscard]] float getRemainingFlashBangTime() const noexcept
