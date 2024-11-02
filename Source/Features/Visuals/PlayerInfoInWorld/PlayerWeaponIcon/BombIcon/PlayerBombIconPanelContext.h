@@ -3,8 +3,6 @@
 #include <CS2/Panorama/CUIPanel.h>
 #include <GameClasses/PanoramaUiPanel.h>
 
-#include "PlayerStateIconsToShow.h"
-
 template <typename HookContext>
 class PlayerBombIconPanelContext {
 public:
@@ -16,16 +14,16 @@ public:
 
     [[nodiscard]] bool shouldShowOnPlayer(auto&& playerPawn) const noexcept
     {
-        if (state().playerStateIconsToShow.template has<BombIconPanel>())
+        if (state().showBombCarrierIcon)
             return playerPawn.isCarryingC4();
-        if (state().playerStateIconsToShow.template has<BombPlantingIcon>())
+        if (state().showBombPlantingIcon)
             return playerPawn.carriedC4().isBeingPlanted().valueOr(false);
         return false;
     }
 
     [[nodiscard]] bool shouldShowPlantingColor(auto&& playerPawn) const noexcept
     {
-        return state().playerStateIconsToShow.template has<BombPlantingIcon>() && playerPawn.carriedC4().isBeingPlanted().valueOr(false);
+        return state().showBombPlantingIcon && playerPawn.carriedC4().isBeingPlanted().valueOr(false);
     }
 
     [[nodiscard]] auto& state() const noexcept

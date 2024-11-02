@@ -116,6 +116,35 @@ struct PlayerActiveWeaponAmmoToggle : public FeatureToggle<PlayerActiveWeaponAmm
     PlayerInfoInWorldState& state;
 };
 
+struct BombIconToggle : public FeatureToggle<BombIconToggle> {
+    explicit BombIconToggle(PlayerInfoInWorldState& state) noexcept
+        : state{state}
+    {
+    }
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.showBombCarrierIcon;
+    }
+
+    PlayerInfoInWorldState& state;
+};
+
+struct BombPlantingIconToggle : public FeatureToggle<BombPlantingIconToggle> {
+    explicit BombPlantingIconToggle(PlayerInfoInWorldState& state) noexcept
+        : state{state}
+    {
+    }
+
+    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
+    {
+        return state.showBombPlantingIcon;
+    }
+
+    PlayerInfoInWorldState& state;
+};
+
+
 template <typename IconPanel>
 struct PlayerStateIconToggle {
     explicit PlayerStateIconToggle(PlayerStateIconsToShow& playerStateIconsToShow) noexcept
@@ -138,8 +167,6 @@ using PlayerDefuseIconToggle = PlayerStateIconToggle<DefuseIconPanel>;
 using HostagePickupIconToggle = PlayerStateIconToggle<HostagePickupPanel>;
 using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
 using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
-using BombIconToggle = PlayerStateIconToggle<BombIconPanel>;
-using BombPlantingIconToggle = PlayerStateIconToggle<BombPlantingIcon>;
 
 template <typename HookContext>
 struct PlayerInfoInWorldToggle : FeatureToggleOnOff<PlayerInfoInWorldToggle<HookContext>> {

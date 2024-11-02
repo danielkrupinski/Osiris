@@ -295,6 +295,10 @@ $.Osiris = (function () {
   createYesNoDropDown(playerWeapon, "Show Player Active Weapon Icon", 'visuals', 'player_info_weapon', 0);
   separator(playerWeapon);
   createYesNoDropDown(playerWeapon, "Show Player Active Weapon Ammo", 'visuals', 'player_info_weapon_clip', 0);
+  separator(playerWeapon);
+  createYesNoDropDown(playerWeapon, 'Show Bomb Carrier Icon', 'visuals', 'player_info_bomb_carrier', 0);
+  separator(playerWeapon);
+  createYesNoDropDown(playerWeapon, 'Show Bomb Planting Icon', 'visuals', 'player_info_bomb_planting', 0);
 
   var playerIcons = createSection(playerInfoTab, 'Icons');
   createYesNoDropDown(playerIcons, "Show Defuse Icon", 'visuals', 'player_info_defuse', 0);
@@ -304,10 +308,6 @@ $.Osiris = (function () {
   createYesNoDropDown(playerIcons, 'Show Rescuing Hostage Icon', 'visuals', 'player_info_hostage_rescue', 0);
   separator(playerIcons);
   createYesNoDropDown(playerIcons, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
-  separator(playerIcons);
-  createYesNoDropDown(playerIcons, 'Show Bomb Carrier Icon', 'visuals', 'player_info_bomb_carrier', 0);
-  separator(playerIcons);
-  createYesNoDropDown(playerIcons, 'Show Bomb Planting Icon', 'visuals', 'player_info_bomb_planting', 0);
 
   var outlineGlowTab = createSubTab(visuals, 'outline_glow');
 

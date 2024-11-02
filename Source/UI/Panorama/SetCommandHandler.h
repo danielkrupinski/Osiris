@@ -79,9 +79,9 @@ private:
         } else if (feature == "player_info_blinded") {
             handleFeature(features.visualFeatures().blindedIconToggle());
         } else if (feature == "player_info_bomb_carrier") {
-            handleFeature(features.visualFeatures().bombIconToggle());
+            handleTogglableFeature(features.visualFeatures().bombIconToggle());
         } else if (feature == "player_info_bomb_planting") {
-            handleFeature(features.visualFeatures().bombPlantingIconToggle());
+            handleTogglableFeature(features.visualFeatures().bombPlantingIconToggle());
         } else if (feature == "player_outline_glow") {
             handleFeature(features.visualFeatures().playerOutlineGlowToggle());
         } else if (feature == "player_outline_glow_color") {

@@ -172,9 +172,6 @@
     <Filter Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo">
       <UniqueIdentifier>{53821f70-6dfc-4015-8258-43d6e569aa85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon">
-      <UniqueIdentifier>{67b6993c-25af-4674-8bc9-45fe53452952}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth">
       <UniqueIdentifier>{aaa54ab8-0b96-4aea-ac80-1c6d8b99db33}</UniqueIdentifier>
     </Filter>
@@ -186,6 +183,15 @@
     </Filter>
     <Filter Include="MemoryPatterns\PatternTypes">
       <UniqueIdentifier>{0ebb425e-7ad9-482e-87e1-b2752da9f4a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon">
+      <UniqueIdentifier>{fc66b76a-4e43-487c-bfab-8a725901e0f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon">
+      <UniqueIdentifier>{e71a226e-32a1-4b79-9680-2035deb5cb49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon">
+      <UniqueIdentifier>{de68756a-3078-4f12-a335-d650318aa7da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1442,15 +1448,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\PlayerActiveWeaponAmmoPanelContext.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon\ActiveWeaponIconPanelParams.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon\PlayerActiveWeaponIconPanel.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon\PlayerActiveWeaponIconPanelContext.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponIcon</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanel.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerHealth</Filter>
     </ClInclude>
@@ -1619,12 +1616,6 @@
     <ClInclude Include="Utils\StrongTypeAlias.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerBombIconPanel.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerBombIconPanelContext.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\PatternTypes\C4PatternTypes.h">
       <Filter>MemoryPatterns\PatternTypes</Filter>
     </ClInclude>
@@ -1654,6 +1645,30 @@
     </ClInclude>
     <ClInclude Include="GameClasses\GlowProperty.h">
       <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon\ActiveWeaponIconPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon\PlayerActiveWeaponIconPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon\PlayerActiveWeaponIconPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanel.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanelParams.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
