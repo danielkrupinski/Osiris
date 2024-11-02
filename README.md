@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 2 November 2024
+    * Moved player bomb carrying/planting icon next to the active weapon icon
+
+    ![Player bomb icon next to the active weapon icon](https://github.com/user-attachments/assets/f3d88714-825a-4649-b7ba-31fadb1fe3b9)
+
 * 30 October 2024
     * Added bomb planting icon to "Player Info in World" feature
 
@@ -26,11 +31,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added outline glow for ticking bomb
 
     ![Ticking bomb glow](https://github.com/user-attachments/assets/ddc4063e-accb-44e8-b202-05a0bf2c49ae)
-
-* 23 September 2024
-    * Added outline glow for dropped bomb
-
-    ![Dropped bomb glow](https://github.com/user-attachments/assets/080043c2-bff2-444e-983a-a89b275a553b)
 
 ## Technical features
 
