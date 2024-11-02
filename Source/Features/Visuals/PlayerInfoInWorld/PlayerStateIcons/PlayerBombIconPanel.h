@@ -20,15 +20,11 @@ public:
         }
 
         context.panel().setVisible(true);
-        context.panel().setWashColor(getColor(playerPawn));
+        const auto shouldShowPlantingColor = context.shouldShowPlantingColor(playerPawn);
+        context.panel().children()[0].setVisible(!shouldShowPlantingColor);
+        context.panel().children()[1].setVisible(shouldShowPlantingColor);
     }
 
 private:
-    [[nodiscard]] auto getColor(auto&& playerPawn) const noexcept
-    {
-        using namespace player_state_icons_panel_params::bomb_icon_panel_params;
-        return context.shouldShowPlantingColor(playerPawn) ? kWashColorPlantingC4 : kWashColorCarryingC4;
-    }
-
     Context context;
 };

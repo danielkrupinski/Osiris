@@ -72,8 +72,8 @@ namespace player_state_icons_panel_params::bomb_icon_panel_params
     static constexpr auto kAlignment = PanelAlignmentParams{
         .verticalAlignment = cs2::k_EVerticalAlignmentCenter
     };
-    static constexpr auto kWashColorCarryingC4 = cs2::Color{255, 255, 77};
-    static constexpr auto kWashColorPlantingC4 = cs2::Color{255, 193, 77};
+    static constexpr auto kColorCarryingC4 = cs2::Color{255, 255, 77};
+    static constexpr auto kColorPlantingC4 = cs2::Color{255, 193, 77};
     static constexpr auto kShadowParams = PanelShadowParams{
         .horizontalOffset{cs2::CUILength::pixels(0)},
         .verticalOffset{cs2::CUILength::pixels(0)},

@@ -66,7 +66,7 @@ public:
         createHostagePickupPanel(panel);
         createHostageRescuePanel(panel);
         createBlindedIconPanel(panel);
-        createBombIconPanel(panel);
+        createBombIconContainerPanel(panel);
     }
 
     void createPanel(std::type_identity<PlayerActiveWeaponIconPanel<HookContext>>, cs2::CUIPanel* containerPanel) const noexcept
@@ -176,17 +176,25 @@ private:
         uiPanel.setImageShadow(kShadowParams);
     }
 
-    void createBombIconPanel(cs2::CUIPanel* containerPanel) const noexcept
+    void createBombIconContainerPanel(cs2::CUIPanel* parentPanel) const noexcept
+    {
+        using namespace player_state_icons_panel_params::bomb_icon_panel_params;
+
+        auto&& containerPanel = hookContext.panelFactory().createPanel(parentPanel).uiPanel();
+        createBombIconPanel(containerPanel, kColorCarryingC4);
+        createBombIconPanel(containerPanel, kColorPlantingC4);
+    }
+
+    void createBombIconPanel(cs2::CUIPanel* containerPanel, cs2::Color color) const noexcept
     {
         using namespace player_state_icons_panel_params::bomb_icon_panel_params;
 
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
+        imagePanel.setImageSvg(SvgImageParams{.imageUrl = kImageUrl, .textureHeight = kTextureHeight, .fillColor = color});
 
         auto&& uiPanel = imagePanel.uiPanel();
         uiPanel.setAlign(kAlignment);
         uiPanel.setImageShadow(kShadowParams);
-        uiPanel.setWashColor(kWashColorCarryingC4);
     }
 
     void createHealthIconPanel(cs2::CUIPanel* containerPanel) const
