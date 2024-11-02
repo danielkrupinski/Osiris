@@ -1670,6 +1670,9 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanelParams.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelContext.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
