@@ -14,7 +14,8 @@ struct FootstepSound {
     [[nodiscard]] static constexpr bool isSound(std::string_view soundName) noexcept
     {
         if (soundName.starts_with(cs2::kPlayerFootstepSoundsPath)) {
-            return !std::string_view{ soundName.data() + cs2::kPlayerFootstepSoundsPath.length(), soundName.length() - cs2::kPlayerFootstepSoundsPath.length() }.starts_with(cs2::kPlayerSuitSoundPrefix);
+            const auto soundFileName = std::string_view{soundName.data() + cs2::kPlayerFootstepSoundsPath.length(), soundName.length() - cs2::kPlayerFootstepSoundsPath.length()};
+            return !soundFileName.starts_with(cs2::kPlayerSuitSoundPrefix) && !soundFileName.starts_with(cs2::kBassSoundPrefix);
         }
         return false;
     }
