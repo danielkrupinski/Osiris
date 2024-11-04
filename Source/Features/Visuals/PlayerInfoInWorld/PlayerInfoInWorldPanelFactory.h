@@ -137,12 +137,11 @@ private:
         using namespace player_state_icons_panel_params::defuse_icon_panel_params;
 
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
+        imagePanel.setImageSvg(SvgImageParams{.imageUrl = kImageUrl, .textureHeight = kTextureHeight, .fillColor = kWashColor});
     
         auto&& uiPanel = imagePanel.uiPanel();
         uiPanel.setAlign(kAlignment);
         uiPanel.setImageShadow(kShadowParams);
-        uiPanel.setWashColor(kWashColor);
     }
 
     void createHostagePickupPanel(cs2::CUIPanel* containerPanel) const noexcept
@@ -160,12 +159,11 @@ private:
         using namespace player_state_icons_panel_params::hostage_icon_panel_params;
 
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg(kImageUrl, kTextureHeight);
+        imagePanel.setImageSvg(SvgImageParams{.imageUrl = kImageUrl, .textureHeight = kTextureHeight, .fillColor = color});
     
         auto&& uiPanel = imagePanel.uiPanel();
         uiPanel.setAlign(kAlignment);
         uiPanel.setImageShadow(kShadowParams);
-        uiPanel.setWashColor(color);
     }
 
     void createBlindedIconPanel(cs2::CUIPanel* containerPanel) const noexcept
