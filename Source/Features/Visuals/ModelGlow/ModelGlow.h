@@ -101,6 +101,14 @@ private:
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
+        if (playerPawn.hasImmunity().valueOr(false)) {
+            switch (playerPawn.teamNumber()) {
+            case TeamNumber::TT: return cs2::Color{255, 217, 128};
+            case TeamNumber::CT: return cs2::Color{128, 191, 255};
+            default: return cs2::kColorWhite;
+            }
+        }
+
         switch (playerPawn.teamNumber()) {
         case TeamNumber::TT: return cs2::Color{255, 179, 0};
         case TeamNumber::CT: return cs2::Color{0, 127, 255};
