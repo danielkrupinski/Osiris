@@ -79,6 +79,14 @@ public:
             InWorldPanelContainerUnloadHandler{dependencies}.handleUnload();
             PanoramaGuiUnloadHandler{dependencies}.handleUnload();
             fullCtx.hooks.forceUninstall();
+
+            dependencies.make<EntitySystem>().iterateEntities([&dependencies](auto& entity) {
+                auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(&entity));
+                const auto entityTypeInfo = dependencies.entityClassifier().classifyEntity(dependencies.gameDependencies().entitiesVMTs, entity.vmt);
+
+                if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
+                    dependencies.make<ModelGlow>().onUnload(baseEntity.as<PlayerPawn>());
+            });
         }
 
         return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original, static_cast<bool>(unloadFlag)};

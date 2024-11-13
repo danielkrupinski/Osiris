@@ -44,6 +44,12 @@ public:
             state().playerModelGlow = ModelGlowState::State::Disabled;
     }
 
+    void onUnload(auto&& playerPawn) const noexcept
+    {
+        if (state().masterSwitch != ModelGlowState::State::Disabled && state().playerModelGlow != ModelGlowState::State::Disabled)
+            unhookPlayerSceneObjectUpdater(playerPawn);
+    }
+
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
