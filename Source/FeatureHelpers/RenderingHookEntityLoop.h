@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/CEntityInstance.h>
+#include <Features/Visuals/ModelGlow/ModelGlow.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlow.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 
@@ -16,6 +17,7 @@ public:
     void run() const noexcept
     {
         hookContext.template make<EntitySystem>().iterateEntities([this](auto& entity) { handleEntity(entity); });
+        hookContext.template make<ModelGlow>().onEntityListTraversed();
     }
 
 private:
@@ -25,9 +27,10 @@ private:
 
         const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(hookContext.gameDependencies().entitiesVMTs, entity.vmt);
 
-        if (entityTypeInfo.typeIndex == utils::typeIndex<cs2::C_CSPlayerPawn, KnownEntityTypes>()) {
+        if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
             auto&& playerPawn = hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity));
             playerInformationThroughWalls.drawPlayerInformation(playerPawn);
+            hookContext.template make<ModelGlow>().updateSceneObjectUpdaterHook(playerPawn);
         }
 
         if (entityTypeInfo.isModelEntity())

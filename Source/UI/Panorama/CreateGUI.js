@@ -152,6 +152,14 @@ $.Osiris = (function () {
     });
 
     $.CreatePanel('Label', outlineGlowTabButton, '', { text: "Outline Glow" });
+
+    var modelGlowTabButton = $.CreatePanel('RadioButton', centerContainer, 'model_glow_button', {
+        group: "VisualsNavBar",
+        class: "content-navbar__tabs__btn",
+        onactivate: "$.Osiris.navigateToSubTab('visuals', 'model_glow');"
+    });
+
+    $.CreatePanel('Label', modelGlowTabButton, '', { text: "Model Glow" });
   };
 
   createNavbar();
@@ -333,6 +341,14 @@ $.Osiris = (function () {
 
   var hostageOutlineGlow = createSection(outlineGlowTab, 'Hostages');
   createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow', 0);
+
+  var modelGlowTab = createSubTab(visuals, 'model_glow');
+
+  var modelGlow = createSection(modelGlowTab, 'Model Glow');
+  createOnOffDropDown(modelGlow, "Master Switch", 'visuals', 'model_glow_enable');
+
+  var playerModelGlow = createSection(modelGlowTab, 'Players');
+  createDropDown(playerModelGlow, "Glow Player Models", 'visuals', 'player_model_glow', ['Enemies', 'All Players', 'Off'], 0);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 

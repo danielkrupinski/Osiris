@@ -32,4 +32,12 @@ void ViewRenderHook_onRenderStart_cpp(cs2::CViewRender* thisptr) noexcept
     dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
 }
 
+#if IS_LINUX()
+[[gnu::aligned(2)]]
+#endif
+std::uint64_t PlayerPawn_sceneObjectUpdater_cpp(cs2::C_CSPlayerPawn* playerPawn) noexcept
+{
+    return GlobalContext::instance().playerPawnSceneObjectUpdater(playerPawn);
+}
+
 }

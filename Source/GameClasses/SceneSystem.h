@@ -15,6 +15,13 @@ public:
         }
     }
 
+    void allocateAttributeList(auto&& sceneObject) const noexcept
+    {
+        if (sceneObject && sceneSystem() && allocateAttributeListFn()) {
+            allocateAttributeListFn()(sceneSystem(), sceneObject);
+        }
+    }
+
 private:
     [[nodiscard]] auto sceneSystem() const noexcept
     {
@@ -24,6 +31,11 @@ private:
     [[nodiscard]] auto deleteSceneObjectFn() const noexcept
     {
         return hookContext.sceneSystemPatternSearchResults().template get<DeleteSceneObjectFunctionPointer>();
+    }
+
+    [[nodiscard]] auto allocateAttributeListFn() const noexcept
+    {
+        return hookContext.sceneSystemPatternSearchResults().template get<AllocateAttributeListFunctionPointer>();
     }
 
     HookContext& hookContext;

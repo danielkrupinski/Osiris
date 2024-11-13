@@ -84,6 +84,14 @@ public:
         return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original, static_cast<bool>(unloadFlag)};
     }
 
+    [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn) noexcept
+    {
+        HookDependencies hookContext{fullContext()};
+        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn);
+        hookContext.make<ModelGlow>().applyModelGlow(hookContext.make<PlayerPawn>(playerPawn));
+        return originalReturnValue;
+    }
+
 private:
     bool initializeCompleteContextFromGameThread() noexcept
     {

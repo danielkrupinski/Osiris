@@ -100,6 +100,10 @@ private:
             handleTogglableFeature(features.visualFeatures().tickingBombOutlineGlowToggle());
         } else if (feature == "hostage_outline_glow") {
             handleTogglableFeature(features.visualFeatures().hostageOutlineGlowToggle());
+        } else if (feature == "model_glow_enable") {
+            features.visualFeatures().modelGlowToggle().updateMasterSwitch(parser.getChar());
+        } else if (feature == "player_model_glow") {
+            features.visualFeatures().modelGlowToggle().updatePlayerModelGlowToggle(parser.getChar());
         }
     }
 

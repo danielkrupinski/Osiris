@@ -13,6 +13,7 @@ struct PlayerPawnPatterns {
             .template addPattern<OffsetToIsDefusing, CodePattern{"78 ? 00 75 ? 80 BB ? ? ? ?"}.add(7).read()>()
             .template addPattern<OffsetToIsPickingUpHostage, CodePattern{"45 0F B6 AE ? ? ? ? 45 84 ED 0F"}.add(4).read()>()
             .template addPattern<OffsetToHostageServices, CodePattern{"C6 4C 89 C7 E8 ? ? ? ? 49 8B ? ? ? ? ?"}.add(12).read()>()
-            .template addPattern<OffsetToFlashBangEndTime, CodePattern{"F3 0F 10 83 ? ? ? ? 48 8B 18"}.add(4).read()>();
+            .template addPattern<OffsetToFlashBangEndTime, CodePattern{"F3 0F 10 83 ? ? ? ? 48 8B 18"}.add(4).read()>()
+            .template addPattern<OffsetToPlayerPawnSceneObjectUpdaterHandle, CodePattern{"89 83 ? ? ? ? 48 8B BB ? ? ? ? 48 8B"}.add(2).read()>();
     }
 };

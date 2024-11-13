@@ -146,7 +146,23 @@ public:
         return weaponServices().getActiveWeapon();
     }
 
+    [[nodiscard]] auto getSceneObjectUpdater() const noexcept
+    {
+        return reinterpret_cast<std::uint64_t(*)(cs2::C_CSPlayerPawn*)>(sceneObjectUpdaterHandle() ? sceneObjectUpdaterHandle()->updaterFunction : nullptr);
+    }
+
+    void setSceneObjectUpdater(auto x) const noexcept
+    {
+        if (sceneObjectUpdaterHandle())
+            sceneObjectUpdaterHandle()->updaterFunction = reinterpret_cast<std::uint64_t(*)(void*)>(x);
+    }
+
 private:
+    [[nodiscard]] auto sceneObjectUpdaterHandle() const noexcept
+    {
+        return hookContext.clientPatternSearchResults().template get<OffsetToPlayerPawnSceneObjectUpdaterHandle>().of(playerPawn).valueOr(nullptr);
+    }
+
     [[nodiscard]] decltype(auto) hostageServices() const noexcept
     {
         return hookContext.template make<HostageServices>(hookContext.clientPatternSearchResults().template get<OffsetToHostageServices>().of(playerPawn).valueOr(nullptr));
