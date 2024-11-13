@@ -77,12 +77,12 @@ private:
 
     [[nodiscard]] bool hasSceneObjectUpdaterHooked(auto&& playerPawn) const noexcept
     {
-        return playerPawn.getSceneObjectUpdater() == &PlayerPawn_sceneObjectUpdater_cpp;
+        return playerPawn.getSceneObjectUpdater() == &WIN64_LINUX(PlayerPawn_sceneObjectUpdater_asm, PlayerPawn_sceneObjectUpdater_cpp);
     }
 
     void hookSceneObjectUpdater(auto&& playerPawn) const noexcept
     {
-        playerPawn.setSceneObjectUpdater(&PlayerPawn_sceneObjectUpdater_cpp);
+        playerPawn.setSceneObjectUpdater(&WIN64_LINUX(PlayerPawn_sceneObjectUpdater_asm, PlayerPawn_sceneObjectUpdater_cpp));
     }
 
     [[nodiscard]] bool shouldGlowPlayerModel(auto&& playerPawn) const noexcept

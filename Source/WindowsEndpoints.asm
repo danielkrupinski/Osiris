@@ -1,6 +1,7 @@
 EXTERN DllMain_cpp:PROC
 EXTERN SDLHook_PeepEvents_cpp:PROC
 EXTERN ViewRenderHook_onRenderStart_cpp:PROC
+EXTERN PlayerPawn_sceneObjectUpdater_cpp:PROC
 
 EXTERNDEF textSectionStartMarker:DWORD
 EXTERNDEF textSectionEndMarker:DWORD
@@ -115,5 +116,16 @@ ViewRenderHook_onRenderStart_asm PROC
     add rsp, 40
     ret
 ViewRenderHook_onRenderStart_asm ENDP
+
+PlayerPawn_sceneObjectUpdater_asm PROC
+    push rcx ; backup volatile rcx
+    sub rsp, 32 ; allocate shadow space for function call
+    call makeTextSectionExecutable
+    mov rcx, [rsp + 32]
+    call PlayerPawn_sceneObjectUpdater_cpp
+    call makeTextSectionNotExecutable
+    add rsp, 40
+    ret
+PlayerPawn_sceneObjectUpdater_asm ENDP
 
 END
