@@ -5,8 +5,8 @@
 
 #include "ModelGlowState.h"
 
-extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_asm(cs2::C_CSPlayerPawn* playerPawn) noexcept;
-extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_cpp(cs2::C_CSPlayerPawn* playerPawn) noexcept;
+extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_asm(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept;
+extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_cpp(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept;
 
 template <typename HookContext>
 class ModelGlow {

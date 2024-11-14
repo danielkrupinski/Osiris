@@ -14,5 +14,5 @@ struct ModelGlowState {
     State playerModelGlow{State::Enabled};
     bool showOnlyEnemies{true};
 
-    std::uint64_t(*originalPlayerPawnSceneObjectUpdater)(cs2::C_CSPlayerPawn* playerPawn){nullptr};
+    std::uint64_t(*originalPlayerPawnSceneObjectUpdater)(cs2::C_CSPlayerPawn* playerPawn, void*, bool){nullptr};
 };

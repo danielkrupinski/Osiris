@@ -84,7 +84,7 @@ public:
                 auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(&entity));
                 const auto entityTypeInfo = dependencies.entityClassifier().classifyEntity(dependencies.gameDependencies().entitiesVMTs, entity.vmt);
 
-                if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
+                if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>())
                     dependencies.make<ModelGlow>().onUnload(baseEntity.as<PlayerPawn>());
             });
         }
@@ -92,10 +92,10 @@ public:
         return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original, static_cast<bool>(unloadFlag)};
     }
 
-    [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn) noexcept
+    [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
     {
         HookDependencies hookContext{fullContext()};
-        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn);
+        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
         hookContext.make<ModelGlow>().applyModelGlow(hookContext.make<PlayerPawn>(playerPawn));
         return originalReturnValue;
     }
