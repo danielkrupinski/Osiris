@@ -6,7 +6,6 @@
 #include "ModelGlowState.h"
 
 extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_asm(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept;
-extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_cpp(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept;
 
 template <typename HookContext>
 class ModelGlow {
@@ -83,12 +82,12 @@ private:
 
     [[nodiscard]] bool hasSceneObjectUpdaterHooked(auto&& playerPawn) const noexcept
     {
-        return playerPawn.getSceneObjectUpdater() == &WIN64_LINUX(PlayerPawn_sceneObjectUpdater_asm, PlayerPawn_sceneObjectUpdater_cpp);
+        return playerPawn.getSceneObjectUpdater() == &PlayerPawn_sceneObjectUpdater_asm;
     }
 
     void hookSceneObjectUpdater(auto&& playerPawn) const noexcept
     {
-        playerPawn.setSceneObjectUpdater(&WIN64_LINUX(PlayerPawn_sceneObjectUpdater_asm, PlayerPawn_sceneObjectUpdater_cpp));
+        playerPawn.setSceneObjectUpdater(&PlayerPawn_sceneObjectUpdater_asm);
     }
 
     [[nodiscard]] bool shouldGlowPlayerModel(auto&& playerPawn) const noexcept
