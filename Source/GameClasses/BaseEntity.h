@@ -76,11 +76,7 @@ public:
     void applySpawnProtectionEffect(cs2::Color color) const noexcept
     {
         renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color](auto&& sceneObject) {
-#if IS_WIN64()
-            const auto unknownEntityAttribute = getAttributeInt(0x8AD232BC, 0); // todo: find out the attribute name
-#else
-            const auto unknownEntityAttribute = 0;
-#endif
+            const auto unknownEntityAttribute = getAttributeInt(0x8AD232BC, 0); // probably checks if entity is a charm being currently applied, most likely redundant
             if (unknownEntityAttribute == 0) {
                 auto&& sceneObjectAttributes = sceneObject.attributes();
                 sceneObjectAttributes.setAttributeFloat(0x244EC9B0, 1.0f); // "SpawnInvulnerability"
@@ -129,10 +125,12 @@ public:
     }
 
 private:
-    [[nodiscard]] int getAttributeInt(unsigned int attributeNameHash, int defaultValue) const noexcept
+    [[nodiscard]] int getAttributeInt([[maybe_unused]] unsigned int attributeNameHash, int defaultValue) const noexcept
     {
+#if IS_WIN64()
         if (entity)
             return hookContext.clientPatternSearchResults().template get<GetEntityAttributeInt>()(entity, attributeNameHash, defaultValue, nullptr);
+#endif
         return defaultValue;
     }
 
