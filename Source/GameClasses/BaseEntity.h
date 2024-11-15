@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/C_BaseEntity.h>
+#include <CS2/Constants/SceneObjectAttributeNames.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
 #include "GameSceneNode.h"
@@ -79,8 +80,8 @@ public:
             const auto unknownEntityAttribute = getAttributeInt(0x8AD232BC, 0); // probably checks if entity is a charm being currently applied, most likely redundant
             if (unknownEntityAttribute == 0) {
                 auto&& sceneObjectAttributes = sceneObject.attributes();
-                sceneObjectAttributes.setAttributeFloat(0x244EC9B0, 1.0f); // "SpawnInvulnerability"
-                sceneObjectAttributes.setAttributeColor3(0xB2CAF4DF, color); // "InvulnerabilityColor"
+                sceneObjectAttributes.setAttributeFloat(cs2::scene_object_attribute::kSpawnInvulnerabilityHash, 1.0f);
+                sceneObjectAttributes.setAttributeColor3(cs2::scene_object_attribute::kInvulnerabilityColorHash, color);
             }
         });
     }

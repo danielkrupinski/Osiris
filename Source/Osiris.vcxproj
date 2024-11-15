@@ -69,6 +69,7 @@
     <ClInclude Include="CS2\Constants\IconURLs.h" />
     <ClInclude Include="CS2\Constants\LifeStateConstants.h" />
     <ClInclude Include="CS2\Constants\PanelIDs.h" />
+    <ClInclude Include="CS2\Constants\SceneObjectAttributeNames.h" />
     <ClInclude Include="CS2\Constants\SoundNames.h" />
     <ClInclude Include="CS2\Constants\StylePropertySymbolNames.h" />
     <ClInclude Include="CS2\Constants\StylePropertyTypeNames.h" />
@@ -170,6 +171,9 @@
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlow.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowParams.h" />
