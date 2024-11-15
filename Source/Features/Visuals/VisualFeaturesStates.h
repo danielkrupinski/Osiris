@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ModelGlow/ModelGlowState.h"
 #include "PlayerInfoInWorld/PlayerInfoInWorldState.h"
 #include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowState.h"
 #include "OutlineGlow/DroppedBombOutlineGlow/DroppedBombOutlineGlowState.h"
@@ -20,4 +21,5 @@ struct VisualFeaturesStates {
     DroppedBombOutlineGlowState droppedBombOutlineGlowState;
     TickingBombOutlineGlowState tickingBombOutlineGlowState;
     HostageOutlineGlowState hostageOutlineGlowState;
+    ModelGlowState modelGlowState;
 };

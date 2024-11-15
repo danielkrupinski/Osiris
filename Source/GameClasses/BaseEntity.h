@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/C_BaseEntity.h>
+#include <CS2/Constants/SceneObjectAttributeNames.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
 #include "GameSceneNode.h"
@@ -66,11 +67,29 @@ public:
 
     void applyGlow(cs2::Color color, int glowRange = 0) const noexcept
     {
-        renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color, glowRange](auto&& sceneObject){
+        renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color, glowRange](auto&& sceneObject) {
             auto&& glowSceneObject = hookContext.template make<GlowSceneObjects>().getGlowSceneObject(sceneObject);
             glowSceneObject.apply(sceneObject, color, glowRange);
             glowSceneObject.setGlowEntity(*this);
         });
+    }
+
+    void applySpawnProtectionEffect(cs2::Color color) const noexcept
+    {
+        renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color](auto&& sceneObject) {
+            const auto unknownEntityAttribute = getAttributeInt(0x8AD232BC, 0); // probably checks if entity is a charm being currently applied, most likely redundant
+            if (unknownEntityAttribute == 0) {
+                auto&& sceneObjectAttributes = sceneObject.attributes();
+                sceneObjectAttributes.setAttributeFloat(cs2::scene_object_attribute::kSpawnInvulnerabilityHash, 1.0f);
+                sceneObjectAttributes.setAttributeColor3(cs2::scene_object_attribute::kInvulnerabilityColorHash, color);
+            }
+        });
+    }
+
+    void applySpawnProtectionEffectRecursively(cs2::Color color) const noexcept
+    {
+        applySpawnProtectionEffect(color);
+        forEachChild([color](auto&& entity) { entity.applySpawnProtectionEffect(color); });
     }
 
     [[nodiscard]] auto hasOwner() const noexcept
@@ -82,7 +101,7 @@ public:
     {
         return TeamNumber{hookContext.clientPatternSearchResults().template get<OffsetToTeamNumber>().of(entity).valueOr({})};
     }
-    
+
     [[nodiscard]] auto vData() const noexcept
     {
         return hookContext.clientPatternSearchResults().template get<OffsetToVData>().of(entity).toOptional();
@@ -107,6 +126,15 @@ public:
     }
 
 private:
+    [[nodiscard]] int getAttributeInt([[maybe_unused]] unsigned int attributeNameHash, int defaultValue) const noexcept
+    {
+#if IS_WIN64()
+        if (entity)
+            return hookContext.clientPatternSearchResults().template get<GetEntityAttributeInt>()(entity, attributeNameHash, defaultValue, nullptr);
+#endif
+        return defaultValue;
+    }
+
     [[nodiscard]] auto invokeWithGameSceneNodeOwner(auto& f) const noexcept
     {
         return [&f](auto&& gameSceneNode) { f(gameSceneNode.owner()); };

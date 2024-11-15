@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
+#include <CS2/Classes/SceneObjectUpdaterHandle_t.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
 #include "C_BaseModelEntity.h"
@@ -19,6 +20,7 @@ struct C_CSPlayerPawn : C_BaseModelEntity {
     using m_bIsGrabbingHostage = bool;
     using m_pHostageServices = CCSPlayer_HostageServices*;
     using m_flFlashBangTime = float;
+    using sceneObjectUpdaterHandle = SceneObjectUpdaterHandle_t*;
 };
 
 }

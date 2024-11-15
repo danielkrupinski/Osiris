@@ -1,6 +1,7 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureHelpers.h>
+#include "ModelGlow/ModelGlowToggle.h"
 #include "PlayerInfoInWorld/PlayerInfoInWorld.h"
 #include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowToggle.h"
 #include "OutlineGlow/DroppedBombOutlineGlow/DroppedBombOutlineGlowToggle.h"
@@ -126,6 +127,11 @@ struct VisualFeatures {
     [[nodiscard]] decltype(auto) hostageOutlineGlowToggle() const noexcept
     {
         return hookContext.template make<HostageOutlineGlowToggle>();
+    }
+
+    [[nodiscard]] decltype(auto) modelGlowToggle() const noexcept
+    {
+        return hookContext.template make<ModelGlowToggle>();
     }
 
     HookContext& hookContext;

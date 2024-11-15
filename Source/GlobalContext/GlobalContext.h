@@ -79,9 +79,25 @@ public:
             InWorldPanelContainerUnloadHandler{dependencies}.handleUnload();
             PanoramaGuiUnloadHandler{dependencies}.handleUnload();
             fullCtx.hooks.forceUninstall();
+
+            dependencies.make<EntitySystem>().iterateEntities([&dependencies](auto& entity) {
+                auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(&entity));
+                const auto entityTypeInfo = dependencies.entityClassifier().classifyEntity(dependencies.gameDependencies().entitiesVMTs, entity.vmt);
+
+                if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>())
+                    dependencies.make<ModelGlow>().onUnload(baseEntity.as<PlayerPawn>());
+            });
         }
 
         return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original, static_cast<bool>(unloadFlag)};
+    }
+
+    [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
+    {
+        HookDependencies hookContext{fullContext()};
+        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
+        hookContext.make<ModelGlow>().applyModelGlow(hookContext.make<PlayerPawn>(playerPawn));
+        return originalReturnValue;
     }
 
 private:

@@ -16,3 +16,4 @@ STRONG_TYPE_ALIAS(OffsetToIsDefusing, PlayerPawnOffset<cs2::C_CSPlayerPawn::m_bI
 STRONG_TYPE_ALIAS(OffsetToIsPickingUpHostage, PlayerPawnOffset<cs2::C_CSPlayerPawn::m_bIsGrabbingHostage, std::int32_t>);
 STRONG_TYPE_ALIAS(OffsetToHostageServices, PlayerPawnOffset<cs2::C_CSPlayerPawn::m_pHostageServices, std::int32_t>);
 STRONG_TYPE_ALIAS(OffsetToFlashBangEndTime, PlayerPawnOffset<cs2::C_CSPlayerPawn::m_flFlashBangTime, std::int32_t>);
+STRONG_TYPE_ALIAS(OffsetToPlayerPawnSceneObjectUpdaterHandle, PlayerPawnOffset<cs2::C_CSPlayerPawn::sceneObjectUpdaterHandle, std::int32_t>);

@@ -193,6 +193,9 @@
     <Filter Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon">
       <UniqueIdentifier>{de68756a-3078-4f12-a335-d650318aa7da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\ModelGlow">
+      <UniqueIdentifier>{47384024-831e-4229-8068-9acea325ff0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1672,6 +1675,18 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelContext.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\SceneObjectAttributeNames.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlow.h">
+      <Filter>Features\Visuals\ModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h">
+      <Filter>Features\Visuals\ModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h">
+      <Filter>Features\Visuals\ModelGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@
 #include <CS2/Classes/CLoopModeGame.h>
 #include <CS2/Classes/GlobalVars.h>
 #include <CS2/Classes/ClientModeCSNormal.h>
+#include <CS2/Classes/CSceneObject.h>
 #include <CS2/Classes/CViewRender.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/Glow.h>
@@ -20,3 +21,10 @@ STRONG_TYPE_ALIAS(ViewToProjectionMatrixPointer, cs2::VMatrix*);
 STRONG_TYPE_ALIAS(ViewRenderPointer, cs2::CViewRender**);
 STRONG_TYPE_ALIAS(LocalPlayerControllerPointer, cs2::CCSPlayerController**);
 STRONG_TYPE_ALIAS(ManageGlowSceneObjectPointer, cs2::ManageGlowSceneObject*);
+STRONG_TYPE_ALIAS(GetEntityAttributeInt, int(*)(cs2::C_BaseEntity* entity, int attributeNameHash, int defaultValue, bool* success));
+
+#if IS_WIN64()
+STRONG_TYPE_ALIAS(SetSceneObjectAttributeFloat4, void(*)(cs2::SceneObjectAttributes::FloatAttributes* attributes, unsigned int attributeNameHash, float value[4]));
+#else
+STRONG_TYPE_ALIAS(SetSceneObjectAttributeFloat4, void(*)(cs2::SceneObjectAttributes::FloatAttributes* attributes, unsigned int attributeNameHash, double value1, double value2));
+#endif
