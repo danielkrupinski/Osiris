@@ -36,6 +36,14 @@ public:
         }
     }
 
+    void updatePlayerModelGlowColor(char option) noexcept
+    {
+        switch (option) {
+        case '0': state().playerModelGlowColorType = PlayerModelGlowColorType::PlayerOrTeamColor; break;
+        case '1': state().playerModelGlowColorType = PlayerModelGlowColorType::TeamColor; break;
+        }
+    }
+
 private:
     [[nodiscard]] auto& state() const noexcept
     {

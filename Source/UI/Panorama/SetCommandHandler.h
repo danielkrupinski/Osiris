@@ -104,6 +104,8 @@ private:
             features.visualFeatures().modelGlowToggle().updateMasterSwitch(parser.getChar());
         } else if (feature == "player_model_glow") {
             features.visualFeatures().modelGlowToggle().updatePlayerModelGlowToggle(parser.getChar());
+        } else if (feature == "player_model_glow_color") {
+            features.visualFeatures().modelGlowToggle().updatePlayerModelGlowColor(parser.getChar());
         }
     }
 
