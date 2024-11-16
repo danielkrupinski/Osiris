@@ -39,13 +39,28 @@ public:
 
     [[nodiscard]] std::optional<cs2::Color> getPlayerColor() const noexcept
     {
-        const auto playerColorIndex = hookContext.clientPatternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).get();
-        if (playerColorIndex && *playerColorIndex >= 0 && std::cmp_less(*playerColorIndex, cs2::kPlayerColors.size()))
-            return cs2::kPlayerColors[*playerColorIndex];
-        return {};
+        return getPlayerColor(cs2::kPlayerColors);
+    }
+
+    [[nodiscard]] std::optional<cs2::Color> getPlayerColorSaturated() const noexcept
+    {
+        return getPlayerColor(cs2::kPlayerColorsSaturated);
+    }
+
+    [[nodiscard]] std::optional<cs2::Color> getPlayerColorHalfSaturated() const noexcept
+    {
+        return getPlayerColor(cs2::kPlayerColorsHalfSaturated);
     }
 
 private:
+    [[nodiscard]] std::optional<cs2::Color> getPlayerColor(std::span<const cs2::Color> playerColors) const noexcept
+    {
+        const auto playerColorIndex = hookContext.clientPatternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).get();
+        if (playerColorIndex && *playerColorIndex >= 0 && std::cmp_less(*playerColorIndex, playerColors.size()))
+            return playerColors[*playerColorIndex];
+        return {};
+    }
+
     HookContext& hookContext;
     cs2::CCSPlayerController* playerControllerPointer;
 };

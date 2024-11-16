@@ -106,17 +106,35 @@ private:
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
-        if (playerPawn.hasImmunity().valueOr(false)) {
-            switch (playerPawn.teamNumber()) {
-            case TeamNumber::TT: return cs2::Color{255, 217, 128};
-            case TeamNumber::CT: return cs2::Color{128, 191, 255};
-            default: return cs2::kColorWhite;
-            }
+        if (playerPawn.hasImmunity().valueOr(false))
+            return getColorHalfSaturated(playerPawn);
+        return getColorSaturated(playerPawn);
+    }
+
+    [[nodiscard]] cs2::Color getColorSaturated(auto&& playerPawn) const noexcept
+    {
+        if (state().playerModelGlowColorType == PlayerModelGlowColorType::PlayerOrTeamColor) {
+            if (const auto playerColor = playerPawn.playerController().getPlayerColorSaturated(); playerColor.has_value())
+                return *playerColor;
         }
 
         switch (playerPawn.teamNumber()) {
         case TeamNumber::TT: return cs2::Color{255, 179, 0};
         case TeamNumber::CT: return cs2::Color{0, 127, 255};
+        default: return cs2::kColorWhite;
+        }
+    }
+
+    [[nodiscard]] cs2::Color getColorHalfSaturated(auto&& playerPawn) const noexcept
+    {
+        if (state().playerModelGlowColorType == PlayerModelGlowColorType::PlayerOrTeamColor) {
+            if (const auto playerColor = playerPawn.playerController().getPlayerColorHalfSaturated(); playerColor.has_value())
+                return *playerColor;
+        }
+
+        switch (playerPawn.teamNumber()) {
+        case TeamNumber::TT: return cs2::Color{255, 217, 128};
+        case TeamNumber::CT: return cs2::Color{128, 191, 255};
         default: return cs2::kColorWhite;
         }
     }
