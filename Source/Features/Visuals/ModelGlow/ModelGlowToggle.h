@@ -14,11 +14,15 @@ public:
     {
         switch (option) {
         case '0':
-            state().masterSwitch = ModelGlowState::State::Enabled;
-            hookContext.hooks().viewRenderHook.incrementReferenceCount();
+            if (state().masterSwitch != ModelGlowState::State::Enabled) {
+                if (state().masterSwitch == ModelGlowState::State::Disabled)
+                    hookContext.hooks().viewRenderHook.incrementReferenceCount();
+                state().masterSwitch = ModelGlowState::State::Enabled;
+            }
             break;
         case '1':
-            state().masterSwitch = ModelGlowState::State::Disabling;
+            if (state().masterSwitch == ModelGlowState::State::Enabled)
+                state().masterSwitch = ModelGlowState::State::Disabling;
             break;
         }
     }
