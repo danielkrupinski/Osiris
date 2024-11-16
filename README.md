@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 16 November 2024
+    * Player model glow can now use player color
+
+    ![Player model glow using player color](https://github.com/user-attachments/assets/d5832888-1520-49fe-8deb-b3312749d466)
+
 * 15 November 2024
     * Added player model glow feature
 
@@ -26,11 +31,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added bomb carrier icon to "Player Info in World" feature
 
     ![Bomb carrier icon](https://github.com/user-attachments/assets/ef903af4-20e7-4fa8-805f-fd825c672e66)
-
-* 26 September 2024
-    * Added outline glow for hostages
-
-    ![Hostage glow](https://github.com/user-attachments/assets/e78fbebe-55df-42e2-bfc4-fb0cba3dbd30)
 
 ## Technical features
 
