@@ -127,8 +127,10 @@ PlayerPawn_sceneObjectUpdater_asm PROC
     mov rdx, [rsp + 40]
     mov rcx, [rsp + 48]
     call PlayerPawn_sceneObjectUpdater_cpp
+    mov [rsp + 48], rax ; backup rax as the next call will destroy it
     call makeTextSectionNotExecutable
-    add rsp, 56
+    add rsp, 48
+    pop rax
     ret
 PlayerPawn_sceneObjectUpdater_asm ENDP
 
