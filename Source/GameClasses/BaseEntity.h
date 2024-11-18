@@ -76,13 +76,10 @@ public:
 
     void applySpawnProtectionEffect(cs2::Color color) const noexcept
     {
-        renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color](auto&& sceneObject) {
-            const auto unknownEntityAttribute = getAttributeInt(0x8AD232BC, 0); // probably checks if entity is a charm being currently applied, most likely redundant
-            if (unknownEntityAttribute == 0) {
-                auto&& sceneObjectAttributes = sceneObject.attributes();
-                sceneObjectAttributes.setAttributeFloat(cs2::scene_object_attribute::kSpawnInvulnerabilityHash, 1.0f);
-                sceneObjectAttributes.setAttributeColor3(cs2::scene_object_attribute::kInvulnerabilityColorHash, color);
-            }
+        renderComponent().sceneObjectUpdaters().forEachSceneObject([color](auto&& sceneObject) {
+            auto&& sceneObjectAttributes = sceneObject.attributes();
+            sceneObjectAttributes.setAttributeFloat(cs2::scene_object_attribute::kSpawnInvulnerabilityHash, 1.0f);
+            sceneObjectAttributes.setAttributeColor3(cs2::scene_object_attribute::kInvulnerabilityColorHash, color);
         });
     }
 
@@ -126,15 +123,6 @@ public:
     }
 
 private:
-    [[nodiscard]] int getAttributeInt([[maybe_unused]] unsigned int attributeNameHash, int defaultValue) const noexcept
-    {
-#if IS_WIN64()
-        if (entity)
-            return hookContext.clientPatternSearchResults().template get<GetEntityAttributeInt>()(entity, attributeNameHash, defaultValue, nullptr);
-#endif
-        return defaultValue;
-    }
-
     [[nodiscard]] auto invokeWithGameSceneNodeOwner(auto& f) const noexcept
     {
         return [&f](auto&& gameSceneNode) { f(gameSceneNode.owner()); };

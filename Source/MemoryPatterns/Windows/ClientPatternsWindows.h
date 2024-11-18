@@ -17,7 +17,6 @@ struct ClientPatterns {
             .template addPattern<ViewRenderPointer, CodePattern{"48 89 05 ? ? ? ? 48 8B C8 48 85 C0"}.add(3).abs()>()
             .template addPattern<LocalPlayerControllerPointer, CodePattern{"48 63 C1 48 8D 0D ? ? ? ? 48 8B 0C"}.add(6).abs()>()
             .template addPattern<ManageGlowSceneObjectPointer, CodePattern{"C8 E8 ? ? ? ? 49 83 C7"}.add(2).abs()>()
-            .template addPattern<GetEntityAttributeInt, CodePattern{"CE E8 ? ? ? ? 85 C0 0F 85 ? ? ? ? 48 83 BF"}.add(2).abs()>()
             .template addPattern<SetSceneObjectAttributeFloat4, CodePattern{"29 45 ? E8 ? ? ? ? 45 33 C9"}.add(4).abs()>();
     }
 };
