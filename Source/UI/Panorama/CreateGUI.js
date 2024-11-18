@@ -350,7 +350,7 @@ $.Osiris = (function () {
   var playerModelGlow = createSection(modelGlowTab, 'Players');
   createDropDown(playerModelGlow, "Glow Player Models", 'visuals', 'player_model_glow', ['Enemies', 'All Players', 'Off'], 0);
   separator(playerModelGlow);
-  createDropDown(playerModelGlow, "Player Model Glow Color", 'visuals', 'player_model_glow_color', ['Player / Team Color', 'Team Color'], 0);
+  createDropDown(playerModelGlow, "Player Model Glow Color", 'visuals', 'player_model_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 

@@ -41,6 +41,7 @@ public:
         switch (option) {
         case '0': state().playerModelGlowColorType = PlayerModelGlowColorType::PlayerOrTeamColor; break;
         case '1': state().playerModelGlowColorType = PlayerModelGlowColorType::TeamColor; break;
+        case '2': state().playerModelGlowColorType = PlayerModelGlowColorType::HealthBased; break;
         }
     }
 

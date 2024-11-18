@@ -70,10 +70,10 @@ public:
         return baseEntity().health();
     }
 
-    [[nodiscard]] std::optional<cs2::Color> healthColor() const noexcept
+    [[nodiscard]] std::optional<cs2::Color> healthColor(float saturation = 0.7f) const noexcept
     {
         if (const auto healthValue = health(); healthValue.hasValue())
-            return getColorOfHealthFraction(std::clamp(healthValue.value(), 0, 100) / 100.0f);
+            return getColorOfHealthFraction(saturation, std::clamp(healthValue.value(), 0, 100) / 100.0f);
         return {};
     }
 
@@ -168,9 +168,9 @@ private:
         return hookContext.template make<HostageServices>(hookContext.clientPatternSearchResults().template get<OffsetToHostageServices>().of(playerPawn).valueOr(nullptr));
     }
 
-    [[nodiscard]] static cs2::Color getColorOfHealthFraction(float healthFraction) noexcept
+    [[nodiscard]] static cs2::Color getColorOfHealthFraction(float saturation, float healthFraction) noexcept
     {
-        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, 0.7f, 1.0f);
+        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, saturation, 1.0f);
     }
 
     [[nodiscard]] bool teammatesAreEnemies() const noexcept

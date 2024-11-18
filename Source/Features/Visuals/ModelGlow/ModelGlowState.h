@@ -6,6 +6,7 @@
 enum class PlayerModelGlowColorType : std::uint8_t {
     PlayerOrTeamColor,
     TeamColor,
+    HealthBased
 };
 
 struct ModelGlowState {
