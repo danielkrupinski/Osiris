@@ -113,6 +113,9 @@ private:
 
     [[nodiscard]] cs2::Color getColorSaturated(auto&& playerPawn) const noexcept
     {
+        if (state().playerModelGlowColorType == PlayerModelGlowColorType::HealthBased)
+            return playerPawn.healthColor(1.0f).value_or(cs2::kColorWhite);
+
         if (state().playerModelGlowColorType == PlayerModelGlowColorType::PlayerOrTeamColor) {
             if (const auto playerColor = playerPawn.playerController().getPlayerColorSaturated(); playerColor.has_value())
                 return *playerColor;
@@ -127,6 +130,9 @@ private:
 
     [[nodiscard]] cs2::Color getColorHalfSaturated(auto&& playerPawn) const noexcept
     {
+        if (state().playerModelGlowColorType == PlayerModelGlowColorType::HealthBased)
+            return playerPawn.healthColor(0.5f).value_or(cs2::kColorWhite);
+
         if (state().playerModelGlowColorType == PlayerModelGlowColorType::PlayerOrTeamColor) {
             if (const auto playerColor = playerPawn.playerController().getPlayerColorHalfSaturated(); playerColor.has_value())
                 return *playerColor;
