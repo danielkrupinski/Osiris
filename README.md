@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 18 November 2024
+    * Player model glow can now use color based on player health
+
+    ![Player model glow health color](https://github.com/user-attachments/assets/9e2d6218-3ac3-46e4-8b76-38ff0f4cf77a)
+
 * 16 November 2024
     * Player model glow can now use player color
 
@@ -26,11 +31,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added bomb planting icon to "Player Info in World" feature
 
     ![Bomb planting icon](https://github.com/user-attachments/assets/c7aa4e3f-4ae2-4897-8cf8-b62e3eb17b3a)
-
-* 2 October 2024
-    * Added bomb carrier icon to "Player Info in World" feature
-
-    ![Bomb carrier icon](https://github.com/user-attachments/assets/ef903af4-20e7-4fa8-805f-fd825c672e66)
 
 ## Technical features
 
