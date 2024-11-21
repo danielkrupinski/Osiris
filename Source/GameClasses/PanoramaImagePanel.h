@@ -11,7 +11,7 @@
 struct SvgImageParams {
     const char* imageUrl;
     int textureHeight{-1};
-    std::optional<cs2::Color> fillColor;
+    std::optional<cs2::Color> fillColor{};
 };
 
 template <typename Context>
