@@ -1,7 +1,5 @@
 #pragma once
 
-#include <FeatureHelpers/FeatureHelpers.h>
-
 #include "BombTimer/BombTimer.h"
 #include "BombTimer/BombTimerContext.h"
 #include "BombTimer/BombTimerToggle.h"

@@ -4,7 +4,7 @@
 #include <GameDependencies/GameDependencies.h>
 #include <GameDLLs/Tier0Dll.h>
 #include <FeatureHelpers/EntityClassifier.h>
-#include <FeatureHelpers/FeatureHelpers.h>
+#include <FeatureHelpers/HudInWorldPanelContainer.h>
 #include <FeatureHelpers/RenderingHookEntityLoop.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <Features/Features.h>
@@ -55,7 +55,7 @@ struct FullGlobalContext {
 
     [[nodiscard]] auto features(auto& dependencies) noexcept
     {
-        return Features{featuresStates, featureHelpers, hooks, dependencies};
+        return Features{featuresStates, hooks, dependencies};
     }
 
     PatternSearchResults<decltype(kClientPatterns)> clientPatternSearchResults;
@@ -66,7 +66,7 @@ struct FullGlobalContext {
     PatternSearchResults<decltype(kPanoramaPatterns)> panoramaPatternSearchResults;
     GameDependencies gameDependencies;
     Hooks hooks;
-    FeatureHelpers featureHelpers;
+    SoundWatcherState soundWatcherState;
     FeaturesStates featuresStates;
     PanoramaGuiState panoramaGuiState;
     BombStatusPanelState bombStatusPanelState;

@@ -10,9 +10,8 @@
 
 template <typename HookContext>
 struct Features {
-    Features(FeaturesStates& states, FeatureHelpers& helpers, Hooks& hooks, HookContext& hookContext) noexcept
+    Features(FeaturesStates& states, Hooks& hooks, HookContext& hookContext) noexcept
         : states{states}
-        , helpers{helpers}
         , hooks{hooks}
         , hookContext{hookContext}
     {
@@ -25,7 +24,7 @@ struct Features {
 
     [[nodiscard]] auto soundFeatures() const noexcept
     {
-        return SoundFeatures{states.soundFeaturesStates, helpers, hooks.viewRenderHook, hookContext};
+        return SoundFeatures{states.soundFeaturesStates, hookContext.soundWatcherState(), hooks.viewRenderHook, hookContext};
     }
 
     [[nodiscard]] auto visualFeatures() const noexcept
@@ -34,7 +33,6 @@ struct Features {
     }
 
     FeaturesStates& states;
-    FeatureHelpers& helpers;
     Hooks& hooks;
     HookContext& hookContext;
 };

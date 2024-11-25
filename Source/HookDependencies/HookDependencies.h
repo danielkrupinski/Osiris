@@ -11,6 +11,7 @@
 #include <GameClasses/PlayerController.h>
 #include <GameClasses/GlobalVars.h>
 #include <GameClasses/GameRules.h>
+#include <Helpers/PanoramaTransformFactory.h>
 
 struct BombStatusPanelState;
 struct FeaturesStates;
@@ -61,9 +62,9 @@ struct HookDependencies {
         return fullGlobalContext.gameDependencies;
     }
 
-    [[nodiscard]] FeatureHelpers& getFeatureHelpers() const noexcept
+    [[nodiscard]] SoundWatcherState& soundWatcherState() const noexcept
     {
-        return fullGlobalContext.featureHelpers;
+        return fullGlobalContext.soundWatcherState;
     }
 
     [[nodiscard]] BombStatusPanelState& bombStatusPanelState() const noexcept

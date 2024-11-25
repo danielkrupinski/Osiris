@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GameClasses/SceneSystem.h>
+#include <MemoryAllocation/MemoryAllocator.h>
 #include "GlowSceneObject.h"
 #include "GlowSceneObjectsState.h"
 

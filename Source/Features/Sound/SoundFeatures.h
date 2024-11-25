@@ -7,13 +7,14 @@
 #include "SoundFeaturesStates.h"
 #include "WeaponReloadVisualizer.h"
 #include "WeaponScopeVisualizer.h"
+#include <FeatureHelpers/Sound/SoundWatcherState.h>
 #include <Hooks/ViewRenderHook.h>
 
 template <typename HookContext>
 struct SoundFeatures {
-    SoundFeatures(SoundFeaturesStates& states, FeatureHelpers& helpers, ViewRenderHook& viewRenderHook, HookContext& hookContext) noexcept
+    SoundFeatures(SoundFeaturesStates& states, SoundWatcherState& soundWatcherState, ViewRenderHook& viewRenderHook, HookContext& hookContext) noexcept
         : states{states}
-        , helpers{helpers}
+        , soundWatcherState{soundWatcherState}
         , viewRenderHook{viewRenderHook}
         , hookContext{hookContext}
     {
@@ -90,7 +91,7 @@ struct SoundFeatures {
     }
 
     SoundFeaturesStates& states;
-    FeatureHelpers& helpers;
+    SoundWatcherState& soundWatcherState;
     ViewRenderHook& viewRenderHook;
     HookContext& hookContext;
 
@@ -102,7 +103,7 @@ private:
             state,
             hookContext,
             viewRenderHook,
-            SoundWatcher<HookContext>{helpers.soundWatcherState, hookContext},
+            SoundWatcher<HookContext>{soundWatcherState, hookContext},
         };
     }
 
@@ -112,7 +113,7 @@ private:
         return SoundVisualizationFeatureToggle<HookContext, SoundType>{
             state,
             hookContext,
-            SoundWatcher<HookContext>{helpers.soundWatcherState, hookContext},
+            SoundWatcher<HookContext>{soundWatcherState, hookContext},
             viewRenderHook,
         };
     }

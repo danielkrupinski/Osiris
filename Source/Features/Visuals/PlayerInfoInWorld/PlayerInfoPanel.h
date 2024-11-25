@@ -1,6 +1,8 @@
 #pragma once
 
 #include <CS2/Panorama/CUIPanel.h>
+#include <FeatureHelpers/ViewToProjectionMatrix.h>
+#include <FeatureHelpers/WorldToClipSpaceConverter.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include "PlayerInfoInWorldState.h"
 #include "PlayerInfoPanelTypes.h"

@@ -22,7 +22,7 @@ void ViewRenderHook_onRenderStart_cpp(cs2::CViewRender* thisptr) noexcept
     fullContext.hooks.viewRenderHook.getOriginalOnRenderStart()(thisptr);
 
     HookDependencies dependencies{fullContext};
-    SoundWatcher<decltype(dependencies)> soundWatcher{fullContext.featureHelpers.soundWatcherState, dependencies};
+    SoundWatcher<decltype(dependencies)> soundWatcher{fullContext.soundWatcherState, dependencies};
     soundWatcher.update();
     fullContext.features(dependencies).soundFeatures().runOnViewMatrixUpdate();
 

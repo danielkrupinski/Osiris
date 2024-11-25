@@ -557,9 +557,6 @@
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\FeatureHelpers.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\TypeBitFlags.h">
       <Filter>Utils</Filter>
     </ClInclude>

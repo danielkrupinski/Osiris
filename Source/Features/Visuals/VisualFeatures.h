@@ -1,6 +1,5 @@
 #pragma once
 
-#include <FeatureHelpers/FeatureHelpers.h>
 #include "ModelGlow/ModelGlowToggle.h"
 #include "PlayerInfoInWorld/PlayerInfoInWorld.h"
 #include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowToggle.h"
