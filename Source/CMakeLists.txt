@@ -26,7 +26,7 @@ endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   if(NOT CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
     target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wall>)
-    target_link_options(Osiris PRIVATE LINKER:--no-undefined)
+    target_link_options(Osiris PRIVATE LINKER:--no-undefined -z noexecstack)
   endif()
 
   target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wno-missing-braces>)
