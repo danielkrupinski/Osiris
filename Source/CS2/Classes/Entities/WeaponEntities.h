@@ -121,4 +121,7 @@ struct C_C4 : C_CSWeaponBase {
     using m_bStartedArming = bool;
 };
 
+struct C_Item_Healthshot : C_CSWeaponBase {
+};
+
 }

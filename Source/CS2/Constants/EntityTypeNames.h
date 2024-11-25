@@ -56,6 +56,7 @@ constexpr auto kEntityTypeNames = TypedStaticStringPool{}
     .add<C_FlashbangProjectile>(WIN64_LINUX(".?AVC_FlashbangProjectile@@", "21C_FlashbangProjectile"))
     .add<C_C4>(WIN64_LINUX(".?AVC_C4@@", "4C_C4"))
     .add<CPlantedC4>(WIN64_LINUX(".?AVC_PlantedC4@@", "11C_PlantedC4"))
-    .add<C_Hostage>(WIN64_LINUX(".?AVC_Hostage@@", "9C_Hostage"));
+    .add<C_Hostage>(WIN64_LINUX(".?AVC_Hostage@@", "9C_Hostage"))
+    .add<C_Item_Healthshot>(WIN64_LINUX(".?AVC_Item_Healthshot@@", "17C_Item_Healthshot"));
 
 }
