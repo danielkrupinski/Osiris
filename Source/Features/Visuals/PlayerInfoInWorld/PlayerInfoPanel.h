@@ -24,7 +24,7 @@ public:
 
     void updatePosition(const cs2::Vector& origin) const noexcept
     {
-        const auto positionInClipSpace = hookContext.template getDependency<WorldToClipSpaceConverter>().toClipSpace(origin);
+        const auto positionInClipSpace = hookContext.template make<WorldToClipSpaceConverter>().toClipSpace(origin);
         getPanel().setZIndex(-positionInClipSpace.z);
 
         constexpr auto kMaxScale{1.0f};

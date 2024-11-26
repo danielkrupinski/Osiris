@@ -84,10 +84,6 @@ public:
         if (!state.enabled)
             return;
 
-        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<WorldToClipSpaceConverter>()};
-        if (!hookContext.requestDependencies(kCrucialDependencies))
-            return;
-
         const auto curtime = hookContext.globalVars().curtime();
         if (!curtime.hasValue())
             return;
@@ -109,7 +105,7 @@ public:
 
         std::size_t currentIndex = 0;
         std::as_const(soundWatcher).template getSoundsOfType<SoundType>().forEach([this, &currentIndex, containerPanel, panels, curtime](const PlayedSound& sound) {
-            const auto soundInClipSpace = hookContext.template getDependency<WorldToClipSpaceConverter>().toClipSpace(sound.origin);
+            const auto soundInClipSpace = hookContext.template make<WorldToClipSpaceConverter>().toClipSpace(sound.origin);
             if (!soundInClipSpace.onScreen())
                 return;
 

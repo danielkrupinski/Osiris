@@ -25,8 +25,6 @@ struct HookDependencies {
     HookDependencies(FullGlobalContext& fullGlobalContext) noexcept
         : fullGlobalContext{fullGlobalContext}
     {
-        if (fullGlobalContext.clientPatternSearchResults.template get<WorldToProjectionMatrixPointer>())
-            presentDependencies |= HookDependenciesMask{}.set<WorldToClipSpaceConverter>();
     }
 
     [[nodiscard]] bool requestDependencies(HookDependenciesMask requiredDependencies) noexcept
@@ -48,9 +46,7 @@ struct HookDependencies {
     {
         assert(hasDependency<Dependency>());
 
-        if constexpr (std::is_same_v<Dependency, WorldToClipSpaceConverter>) {
-            return WorldToClipSpaceConverter{fullGlobalContext.clientPatternSearchResults.template get<WorldToProjectionMatrixPointer>()};
-        } else if constexpr (std::is_same_v<Dependency, SoundChannels>) {
+        if constexpr (std::is_same_v<Dependency, SoundChannels>) {
             return (*soundChannels);
         } else {
             static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
