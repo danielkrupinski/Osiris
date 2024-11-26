@@ -48,17 +48,16 @@ public:
 
     void update() noexcept
     {
-        constexpr auto kCrucialDependencies{HookDependenciesMask{}.set<SoundChannels>()};
-        if (!hookContext.requestDependencies(kCrucialDependencies))
-            return;
-
         const auto curtime = hookContext.globalVars().curtime();
         if (!curtime.hasValue())
             return;
 
-        auto& soundChannels = hookContext.template getDependency<SoundChannels>();
-        (removeExpiredSounds<Sounds>(soundChannels, curtime.value()), ...);
-        collectNewSounds(soundChannels, curtime.value());
+        auto soundChannels = hookContext.soundSystemPatternSearchResults().template get<SoundChannelsPointer>();
+        if (!soundChannels || !*soundChannels)
+            return;
+
+        (removeExpiredSounds<Sounds>(**soundChannels, curtime.value()), ...);
+        collectNewSounds(**soundChannels, curtime.value());
     }
 
     template <typename Sound>

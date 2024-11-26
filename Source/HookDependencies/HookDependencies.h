@@ -1,11 +1,10 @@
 #pragma once
 
-#include "HookDependenciesBuilder.h"
-#include "HookDependenciesMask.h"
 #include <Entities/GameRules.h>
 #include <Entities/PlantedC4.h>
 #include <Entities/PlayerController.h>
 #include <FeatureHelpers/ConVarAccessor.h>
+#include <FeatureHelpers/ConVarFinder.h>
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Hud/HudContext.h>
@@ -25,32 +24,6 @@ struct HookDependencies {
     HookDependencies(FullGlobalContext& fullGlobalContext) noexcept
         : fullGlobalContext{fullGlobalContext}
     {
-    }
-
-    [[nodiscard]] bool requestDependencies(HookDependenciesMask requiredDependencies) noexcept
-    {
-        prepareDependencies(requiredDependencies.difference(presentDependencies));
-        return presentDependencies.contains(requiredDependencies);
-    }
-
-    template <typename Dependency>
-    [[nodiscard]] bool requestDependency() noexcept
-    {
-        if (!hasDependency<Dependency>())
-            prepareDependencies(HookDependenciesMask{}.set<Dependency>());
-        return hasDependency<Dependency>();
-    }
-
-    template <typename Dependency>
-    [[nodiscard]] decltype(auto) getDependency() noexcept
-    {
-        assert(hasDependency<Dependency>());
-
-        if constexpr (std::is_same_v<Dependency, SoundChannels>) {
-            return (*soundChannels);
-        } else {
-            static_assert(!std::is_same_v<Dependency, Dependency>, "Unknown dependency");
-        }
     }
 
     [[nodiscard]] GameDependencies& gameDependencies() const noexcept
@@ -209,23 +182,6 @@ private:
         return nullptr;
     }
 
-    template <typename Dependency>
-    [[nodiscard]] bool hasDependency() const noexcept
-    {
-        return presentDependencies.has<Dependency>();
-    }
-
-    void prepareDependencies(HookDependenciesMask requiredDependencies) noexcept
-    {
-        const HookDependenciesBuilder<HookDependencies> builder{requiredDependencies, *this};
-
-        presentDependencies |= builder.getSoundChannels(&soundChannels);
-    }
-
     FullGlobalContext& fullGlobalContext;
-
-    cs2::SoundChannels* soundChannels;
-    cs2::CBaseFileSystem* fileSystem;
     ConVarAccessorState conVarAccessorState;
-    HookDependenciesMask presentDependencies;
 };

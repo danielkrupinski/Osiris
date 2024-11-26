@@ -318,8 +318,6 @@
     <ClInclude Include="Helpers\PatternNotFoundLogger.h" />
     <ClInclude Include="Helpers\UnloadFlag.h" />
     <ClInclude Include="HookDependencies\HookDependencies.h" />
-    <ClInclude Include="HookDependencies\HookDependenciesBuilder.h" />
-    <ClInclude Include="HookDependencies\HookDependenciesMask.h" />
     <ClInclude Include="Hooks\Hooks.h" />
     <ClInclude Include="Hooks\PeepEventsHook.h" />
     <ClInclude Include="Hooks\ViewRenderHook.h" />

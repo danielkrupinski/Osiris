@@ -22,8 +22,6 @@
 #include "PlayerInfoInWorldPanelFactory.h"
 #include "PlayerInfoInWorldState.h"
 
-#include <HookDependencies/HookDependenciesMask.h>
-
 struct PlayerPositionToggle : public FeatureToggle<PlayerPositionToggle> {
     explicit PlayerPositionToggle(PlayerInfoInWorldState& state) noexcept
         : state{state}
