@@ -169,7 +169,7 @@ using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
 using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
 
 template <typename HookContext>
-struct PlayerInfoInWorldToggle : FeatureToggleOnOff<PlayerInfoInWorldToggle<HookContext>> {
+struct PlayerInfoInWorldToggle : FeatureToggleOff<PlayerInfoInWorldToggle<HookContext>> {
     PlayerInfoInWorldToggle(PlayerInfoInWorldState& state, HookContext& hookContext, ViewRenderHook& viewRenderHook) noexcept
         : state{state}
         , hookContext{hookContext}
@@ -191,15 +191,8 @@ struct PlayerInfoInWorldToggle : FeatureToggleOnOff<PlayerInfoInWorldToggle<Hook
         return state.enabled;
     }
 
-    void onEnable(typename PlayerInfoInWorldToggle::ToggleMethod) noexcept
-    {
-        viewRenderHook.incrementReferenceCount();
-    }
-
     void onDisable(typename PlayerInfoInWorldToggle::ToggleMethod) noexcept
     {
-        viewRenderHook.decrementReferenceCount();
-
         if (const auto containerPanel{hookContext.template make<InWorldPanelContainer>().get()}) {
             if (const auto containerPanelChildren{containerPanel.children().vector})
                 hideRemainingPanels(HudInWorldPanels{*containerPanelChildren}, 0);

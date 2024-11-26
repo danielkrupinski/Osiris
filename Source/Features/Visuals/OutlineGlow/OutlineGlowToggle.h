@@ -4,7 +4,7 @@
 #include "OutlineGlowContext.h"
 
 template <typename Context>
-class OutlineGlowToggle : public FeatureToggleOnOff<OutlineGlowToggle<Context>> {
+class OutlineGlowToggle : public FeatureToggleOff<OutlineGlowToggle<Context>> {
 public:
     template <typename... Args>
     OutlineGlowToggle(Args&&... args) noexcept
@@ -17,14 +17,8 @@ public:
         return context.state().enabled;
     }
 
-    void onEnable(typename OutlineGlowToggle::ToggleMethod) noexcept
-    {
-        context.viewRenderHook().incrementReferenceCount();
-    }
-
     void onDisable(typename OutlineGlowToggle::ToggleMethod) noexcept
     {
-        context.viewRenderHook().decrementReferenceCount();
         context.clearGlowSceneObjects();
     }
 

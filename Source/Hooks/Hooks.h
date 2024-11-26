@@ -12,17 +12,6 @@ struct Hooks {
     {
     }
 
-    void update() noexcept
-    {
-        viewRenderHook.update();
-    }
-
-    void forceUninstall() noexcept
-    {
-        peepEventsHook.disable();
-        viewRenderHook.forceUninstall();
-    }
-
     PeepEventsHook peepEventsHook;
     ViewRenderHook viewRenderHook;
 };

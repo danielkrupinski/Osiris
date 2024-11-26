@@ -45,13 +45,11 @@ struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFe
 
     void onEnable(typename SoundVisualizationFeatureToggle::ToggleMethod) noexcept
     {
-        viewRenderHook.incrementReferenceCount();
         soundWatcher.template startWatching<SoundType>();
     }
 
     void onDisable(typename SoundVisualizationFeatureToggle::ToggleMethod) noexcept
     {
-        viewRenderHook.decrementReferenceCount();
         soundWatcher.template stopWatching<SoundType>();
         if (const auto containerPanel{hookContext.template make<InWorldPanelContainer>().get()}) {
             if (const auto containerPanelChildren{containerPanel.children().vector})

@@ -4,5 +4,4 @@
 
 struct PeepEventsHookResult {
     sdl3::SDL_PeepEvents* original;
-    bool shouldUnload;
 };

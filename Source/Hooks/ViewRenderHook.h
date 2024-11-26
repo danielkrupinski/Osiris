@@ -6,7 +6,7 @@
 
 extern "C" void ViewRenderHook_onRenderStart_asm(cs2::CViewRender* thisptr) noexcept;
 
-class ViewRenderHook : public RefCountedHook<ViewRenderHook> {
+class ViewRenderHook {
 public:
     ViewRenderHook(cs2::CViewRender** viewRender, const VmtLengthCalculator& vmtLengthCalculator) noexcept
         : viewRender{viewRender}
@@ -19,7 +19,6 @@ public:
         return originalOnRenderStart;
     }
 
-private:
     void uninstall() const noexcept
     {
         if (viewRender && *viewRender)
@@ -37,8 +36,6 @@ private:
             originalOnRenderStart = hook.hook(4, &ViewRenderHook_onRenderStart_asm);
         }
     }
-
-    friend class RefCountedHook;
 
     cs2::CViewRender** viewRender;
     VmtLengthCalculator vmtLengthCalculator;

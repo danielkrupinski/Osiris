@@ -14,11 +14,7 @@ public:
     {
         switch (option) {
         case '0':
-            if (state().masterSwitch != ModelGlowState::State::Enabled) {
-                if (state().masterSwitch == ModelGlowState::State::Disabled)
-                    hookContext.hooks().viewRenderHook.incrementReferenceCount();
-                state().masterSwitch = ModelGlowState::State::Enabled;
-            }
+            state().masterSwitch = ModelGlowState::State::Enabled;
             break;
         case '1':
             if (state().masterSwitch == ModelGlowState::State::Enabled)

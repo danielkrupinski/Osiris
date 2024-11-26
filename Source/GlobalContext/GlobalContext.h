@@ -63,22 +63,46 @@ public:
         if (justInitialized) {
             if (const auto mainMenu{fullCtx.clientPatternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
                 dependencies.make<PanoramaGUI>().init(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, (*mainMenu)->uiPanel}});
+            fullCtx.hooks.peepEventsHook.disable();
+            fullCtx.hooks.viewRenderHook.install();
         }
+        return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original};
+    }
 
-        fullCtx.features(dependencies).hudFeatures().defusingAlert().run();
-        fullCtx.features(dependencies).hudFeatures().killfeedPreserver().run();
+    [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
+    {
+        HookDependencies hookContext{fullContext()};
+        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
+        hookContext.make<ModelGlow>().applyModelGlow(hookContext.make<PlayerPawn>(playerPawn));
+        return originalReturnValue;
+    }
+
+    [[nodiscard]] UnloadFlag onRenderStartHook(cs2::CViewRender* viewRender) noexcept
+    {
+        HookDependencies dependencies{fullContext()};
+        fullContext().hooks.viewRenderHook.getOriginalOnRenderStart()(viewRender);
+        SoundWatcher<decltype(dependencies)> soundWatcher{fullContext().soundWatcherState, dependencies};
+        soundWatcher.update();
+        fullContext().features(dependencies).soundFeatures().runOnViewMatrixUpdate();
+
+        auto&& playerInfoInWorld = dependencies.make<PlayerInfoInWorld>();
+        RenderingHookEntityLoop{dependencies, playerInfoInWorld}.run();
+        playerInfoInWorld.hideUnusedPanels();
+        dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
+
+        fullContext().features(dependencies).hudFeatures().defusingAlert().run();
+        fullContext().features(dependencies).hudFeatures().killfeedPreserver().run();
         BombStatusPanelManager{BombStatusPanelManagerContext{dependencies}}.run();
 
         UnloadFlag unloadFlag;
-        dependencies.make<PanoramaGUI>().run(fullCtx.features(dependencies), unloadFlag);
-        fullCtx.hooks.update();
+        dependencies.make<PanoramaGUI>().run(fullContext().features(dependencies), unloadFlag);
 
         if (unloadFlag) {
-            FeaturesUnloadHandler{dependencies, fullCtx.featuresStates}.handleUnload();
+            FeaturesUnloadHandler{dependencies, fullContext().featuresStates}.handleUnload();
             BombStatusPanelUnloadHandler{dependencies}.handleUnload();
             InWorldPanelContainerUnloadHandler{dependencies}.handleUnload();
             PanoramaGuiUnloadHandler{dependencies}.handleUnload();
-            fullCtx.hooks.forceUninstall();
+            fullContext().hooks.viewRenderHook.uninstall();
 
             dependencies.make<EntitySystem>().iterateEntities([&dependencies](auto& entity) {
                 auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(&entity));
@@ -88,16 +112,7 @@ public:
                     dependencies.make<ModelGlow>().onUnload(baseEntity.as<PlayerPawn>());
             });
         }
-
-        return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original, static_cast<bool>(unloadFlag)};
-    }
-
-    [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
-    {
-        HookDependencies hookContext{fullContext()};
-        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
-        hookContext.make<ModelGlow>().applyModelGlow(hookContext.make<PlayerPawn>(playerPawn));
-        return originalReturnValue;
+        return unloadFlag;
     }
 
 private:

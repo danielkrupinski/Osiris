@@ -34,10 +34,8 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        if (state().masterSwitch == ModelGlowState::State::Disabling) {
+        if (state().masterSwitch == ModelGlowState::State::Disabling)
             state().masterSwitch = ModelGlowState::State::Disabled;
-            hookContext.hooks().viewRenderHook.decrementReferenceCount();
-        }
 
         if (state().playerModelGlow == ModelGlowState::State::Disabling)
             state().playerModelGlow = ModelGlowState::State::Disabled;
