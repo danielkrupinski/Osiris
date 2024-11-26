@@ -2,8 +2,8 @@
 
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <FeatureHelpers/TeamNumber.h>
+#include <GameClasses/EntitySystem.h>
 #include "PlayerPawn.h"
-#include "EntitySystem.h"
 
 template <typename HookContext>
 class PlayerController {

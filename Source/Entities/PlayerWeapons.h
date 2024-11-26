@@ -2,9 +2,9 @@
 
 #include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
+#include <GameClasses/EntitySystem.h>
 
 #include "BaseEntity.h"
-#include "EntitySystem.h"
 
 class EntityFromHandleFinder;
 

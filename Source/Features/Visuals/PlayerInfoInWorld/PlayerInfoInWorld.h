@@ -5,6 +5,7 @@
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Constants/ColorConstants.h>
+#include <Entities/PlayerPawn.h>
 #include <FeatureHelpers/HudInWorldPanels.h>
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
@@ -12,7 +13,6 @@
 #include <FeatureHelpers/TeamNumber.h>
 #include <GameClasses/PanoramaLabel.h>
 #include <GameClasses/PanoramaImagePanel.h>
-#include <GameClasses/PlayerPawn.h>
 #include <Hooks/ViewRenderHook.h>
 #include <Utils/ColorUtils.h>
 #include <Utils/CString.h>

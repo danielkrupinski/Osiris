@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/CCSPlayer_HostageServices.h>
-#include "EntitySystem.h"
+#include <GameClasses/EntitySystem.h>
 
 template <typename HookContext>
 class HostageServices {

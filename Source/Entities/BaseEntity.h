@@ -4,7 +4,7 @@
 #include <CS2/Constants/SceneObjectAttributeNames.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
-#include "GameSceneNode.h"
+#include <GameClasses/GameSceneNode.h>
 #include "RenderComponent.h"
 
 template <typename HookContext>

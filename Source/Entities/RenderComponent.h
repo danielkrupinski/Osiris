@@ -1,8 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/CRenderComponent.h>
-
-#include "SceneObjectUpdaters.h"
+#include <GameClasses/SceneObjectUpdaters.h>
 
 template <typename HookContext>
 class RenderComponent {

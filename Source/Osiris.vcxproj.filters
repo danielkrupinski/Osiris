@@ -196,6 +196,9 @@
     <Filter Include="Features\Visuals\ModelGlow">
       <UniqueIdentifier>{47384024-831e-4229-8068-9acea325ff0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{86690f48-0082-46a5-82f7-9fcc1ea24af0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -250,9 +253,6 @@
       <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\PanoramaUiPanel.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PlantedC4.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\Bits.h">
@@ -992,9 +992,6 @@
     <ClInclude Include="Features\Hud\HudFeaturesStates.h">
       <Filter>Features\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\GameRules.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GameClasses\GlobalVars.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
@@ -1056,9 +1053,6 @@
       <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\PanelMarginParams.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PlayerController.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\Hud\HudContext.h">
@@ -1163,9 +1157,6 @@
     <ClInclude Include="UI\Panorama\PanoramaGuiUnloadHandler.h">
       <Filter>UI\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\PlayerPawn.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="OutlineGlow\GlowSceneObject.h">
       <Filter>OutlineGlow</Filter>
     </ClInclude>
@@ -1179,9 +1170,6 @@
       <Filter>OutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\SceneSystem.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\RenderComponent.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\RenderComponentPatternsWindows.h">
@@ -1201,9 +1189,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\SceneObjectUpdaterHandle_t.h">
       <Filter>CS2\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\BaseEntity.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\SceneObjectUpdater.h">
       <Filter>GameClasses</Filter>
@@ -1225,9 +1210,6 @@
     </ClInclude>
     <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h">
       <Filter>OutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PlayerWeapons.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Optional.h">
       <Filter>Utils</Filter>
@@ -1340,9 +1322,6 @@
     <ClInclude Include="MemoryPatterns\Windows\SmokeGrenadeProjectilePatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\SmokeGrenadeProjectile.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowCondition.h">
       <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
     </ClInclude>
@@ -1375,12 +1354,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Constants\StylePropertyTypeNames.h">
       <Filter>CS2\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\WeaponServices.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\BaseWeapon.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlow.h">
       <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
@@ -1483,12 +1456,6 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelTypes.h">
       <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\HostageServices.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\C4.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\PatternTypes\ClientPatternTypes.h">
       <Filter>MemoryPatterns\PatternTypes</Filter>
@@ -1640,12 +1607,6 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\GlowPropertyPatternTypes.h">
       <Filter>MemoryPatterns\PatternTypes</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\BaseModelEntity.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\GlowProperty.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon\ActiveWeaponIconPanelParams.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon</Filter>
     </ClInclude>
@@ -1684,6 +1645,48 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h">
       <Filter>Features\Visuals\ModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\BaseEntity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\BaseModelEntity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\BaseWeapon.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\C4.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\GameRules.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\GlowProperty.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\HostageServices.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\PlantedC4.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\PlayerController.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\PlayerPawn.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\PlayerWeapons.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\RenderComponent.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\SmokeGrenadeProjectile.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\WeaponServices.h">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

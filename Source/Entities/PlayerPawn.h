@@ -6,12 +6,12 @@
 #include <CS2/Constants/EntityHandle.h>
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/TeamNumber.h>
+#include <GameClasses/GameSceneNode.h>
 #include <Utils/ColorUtils.h>
 
 #include "BaseEntity.h"
 #include "BaseModelEntity.h"
 #include "C4.h"
-#include "GameSceneNode.h"
 #include "HostageServices.h"
 #include "PlayerWeapons.h"
 #include "WeaponServices.h"

@@ -2,15 +2,15 @@
 
 #include "HookDependenciesBuilder.h"
 #include "HookDependenciesMask.h"
+#include <Entities/GameRules.h>
+#include <Entities/PlantedC4.h>
+#include <Entities/PlayerController.h>
 #include <FeatureHelpers/ConVarAccessor.h>
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Hud/HudContext.h>
 #include <GameClasses/PanelFactory.h>
-#include <GameClasses/PlantedC4.h>
-#include <GameClasses/PlayerController.h>
 #include <GameClasses/GlobalVars.h>
-#include <GameClasses/GameRules.h>
 #include <Helpers/PanoramaTransformFactory.h>
 
 struct BombStatusPanelState;

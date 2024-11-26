@@ -1,7 +1,7 @@
 #pragma once
 
-#include <GameClasses/PlayerPawn.h>
-#include <GameClasses/PlantedC4.h>
+#include <Entities/PlayerPawn.h>
+#include <Entities/PlantedC4.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
 #include "DefuseKitOutlineGlow/DefuseKitOutlineGlow.h"
