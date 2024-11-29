@@ -5,7 +5,7 @@
 #include "DefuseKitOutlineGlowContext.h"
 #include "DefuseKitOutlineGlowParams.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = DefuseKitOutlineGlowContext<HookContext>>
 class DefuseKitOutlineGlow {
 public:
     template <typename... Args>
@@ -25,6 +25,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-DefuseKitOutlineGlow(HookContext&) -> DefuseKitOutlineGlow<DefuseKitOutlineGlowContext<HookContext>>;

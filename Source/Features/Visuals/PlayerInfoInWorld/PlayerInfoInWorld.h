@@ -293,7 +293,7 @@ private:
         return hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState;
     }
 
-    [[nodiscard]] PanoramaUiPanel<PanoramaUiPanelContext<HookContext>> getPanel(auto&& containerPanel, HudInWorldPanels inWorldPanels) const noexcept
+    [[nodiscard]] auto getPanel(auto&& containerPanel, HudInWorldPanels inWorldPanels) const noexcept
     {
         if (currentIndex < state().panelIndices.getSize()) {
             if (const auto panel{inWorldPanels.getPanel(state().panelIndices[currentIndex], hookContext)})
@@ -304,7 +304,7 @@ private:
             state().panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }
-        return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, nullptr}};
+        return hookContext.template make<PanoramaUiPanel>(nullptr);
     }
 
     [[nodiscard]] decltype(auto) createPlayerInfoPanel(auto&& parent) const noexcept

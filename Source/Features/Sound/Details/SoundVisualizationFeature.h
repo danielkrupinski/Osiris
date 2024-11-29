@@ -146,7 +146,7 @@ private:
             state.panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
             return panel;
         }
-        return PanoramaUiPanel{PanoramaUiPanelContext{hookContext, nullptr}};
+        return hookContext.template make<PanoramaUiPanel>(nullptr);
     }
 
     SoundVisualizationFeatureState& state;

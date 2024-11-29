@@ -2,7 +2,7 @@
 
 #include <CS2/Panorama/CPanel2D.h>
 
-template <typename Context>
+template <typename HookContext, typename Context>
 struct PanoramaUiPanel;
 
 template <typename HookContext>
@@ -18,10 +18,10 @@ struct ClientPanel {
         return hookContext.template make<PanoramaUiPanel>(uiPanelPointer());
     }
 
-    template <template <typename> typename T>
+    template <template <typename...> typename T>
     [[nodiscard]] decltype(auto) as() const noexcept
     {
-        return hookContext.template make<T>(panel);
+        return hookContext.template make<T>(static_cast<T<HookContext>::RawType*>(panel));
     }
 
 private:

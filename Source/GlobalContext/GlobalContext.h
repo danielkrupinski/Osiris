@@ -62,7 +62,7 @@ public:
 
         if (justInitialized) {
             if (const auto mainMenu{fullCtx.clientPatternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
-                dependencies.make<PanoramaGUI>().init(PanoramaUiPanel{PanoramaUiPanelContext{dependencies, (*mainMenu)->uiPanel}});
+                dependencies.make<PanoramaGUI>().init(dependencies.make<PanoramaUiPanel>((*mainMenu)->uiPanel));
             fullCtx.hooks.peepEventsHook.disable();
             fullCtx.hooks.viewRenderHook.install();
         }

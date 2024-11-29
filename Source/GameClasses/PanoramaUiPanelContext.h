@@ -23,7 +23,7 @@ struct PanoramaUiPanelContext {
         return hookContext.template make<ClientPanel>(clientPanelPointer());
     }
 
-    template <template <typename> typename T>
+    template <template <typename...> typename T>
     [[nodiscard]] decltype(auto) as() const noexcept
     {
         return hookContext.template make<T>(panel);

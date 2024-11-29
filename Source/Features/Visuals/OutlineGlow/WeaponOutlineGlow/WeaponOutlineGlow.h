@@ -3,7 +3,7 @@
 #include "WeaponOutlineGlowContext.h"
 #include "WeaponOutlineGlowParams.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = WeaponOutlineGlowContext<HookContext>>
 class WeaponOutlineGlow {
 public:
     template <typename... Args>
@@ -41,6 +41,3 @@ private:
 
     Context context;
 };
-
-template <typename HookContext>
-WeaponOutlineGlow(HookContext&) -> WeaponOutlineGlow<WeaponOutlineGlowContext<HookContext>>;

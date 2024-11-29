@@ -7,7 +7,7 @@
 #include "GrenadeProjectileOutlineGlowContext.h"
 #include "GrenadeProjectileOutlineGlowParams.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = GrenadeProjectileOutlineGlowContext<HookContext>>
 class GrenadeProjectileOutlineGlow {
 public:
     template <typename... Args>
@@ -42,6 +42,3 @@ private:
 
     Context context;
 };
-
-template <typename HookContext>
-GrenadeProjectileOutlineGlow(HookContext&) -> GrenadeProjectileOutlineGlow<GrenadeProjectileOutlineGlowContext<HookContext>>;

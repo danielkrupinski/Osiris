@@ -3,8 +3,8 @@
 #include <FeatureHelpers/FeatureToggle.h>
 #include "OutlineGlowContext.h"
 
-template <typename Context>
-class OutlineGlowToggle : public FeatureToggleOff<OutlineGlowToggle<Context>> {
+template <typename HookContext, typename Context = OutlineGlowContext<HookContext>>
+class OutlineGlowToggle : public FeatureToggleOff<OutlineGlowToggle<HookContext, Context>> {
 public:
     template <typename... Args>
     OutlineGlowToggle(Args&&... args) noexcept
@@ -25,6 +25,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-OutlineGlowToggle(HookContext&) -> OutlineGlowToggle<OutlineGlowContext<HookContext>>;

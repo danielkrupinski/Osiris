@@ -11,20 +11,16 @@
 struct PanelAlignmentParams;
 struct PanelMarginParams;
 
-template <typename Context>
+template <typename HookContext, typename Context = PanoramaUiPanelContext<HookContext>>
 struct PanoramaUiPanel {
-    explicit PanoramaUiPanel(Context context) noexcept
-        : context{context}
+    template <typename... Args>
+        requires std::is_constructible_v<Context, Args...>
+    explicit PanoramaUiPanel(Args&&... args) noexcept
+        : context{std::forward<Args>(args)...}
     {
     }
 
-    template <typename HookContext>
-    PanoramaUiPanel(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
-        : context{hookContext, panel}
-    {
-    }
-
-    template <template <typename> typename T>
+    template <template <typename...> typename T>
     [[nodiscard]] decltype(auto) as() const noexcept
     {
         return context.template as<T>();
@@ -232,6 +228,3 @@ struct PanoramaUiPanel {
 private:
     Context context;
 };
-
-template <typename HookContext>
-PanoramaUiPanel(HookContext&, cs2::CUIPanel*) -> PanoramaUiPanel<PanoramaUiPanelContext<HookContext>>;

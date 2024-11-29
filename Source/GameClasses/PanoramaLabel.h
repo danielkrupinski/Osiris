@@ -5,6 +5,8 @@
 
 template <typename HookContext>
 struct PanoramaLabel {
+    using RawType = cs2::CLabel;
+
     PanoramaLabel(HookContext& hookContext, cs2::CPanel2D* panel) noexcept
         : hookContext{hookContext}
         , panel{static_cast<cs2::CLabel*>(panel)}

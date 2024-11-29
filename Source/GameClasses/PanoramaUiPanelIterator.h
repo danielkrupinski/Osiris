@@ -2,7 +2,7 @@
 
 #include <CS2/Panorama/CUIPanel.h>
 
-template <typename Context>
+template <typename HookContext, typename Context>
 struct PanoramaUiPanel;
 
 template <typename HookContext>

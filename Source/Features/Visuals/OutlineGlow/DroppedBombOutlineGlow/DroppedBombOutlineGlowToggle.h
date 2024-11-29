@@ -5,8 +5,8 @@
 #include <FeatureHelpers/FeatureToggle.h>
 #include "DroppedBombOutlineGlowContext.h"
 
-template <typename Context>
-class DroppedBombOutlineGlowToggle : public FeatureToggle<DroppedBombOutlineGlowToggle<Context>> {
+template <typename HookContext, typename Context = DroppedBombOutlineGlowContext<HookContext>>
+class DroppedBombOutlineGlowToggle : public FeatureToggle<DroppedBombOutlineGlowToggle<HookContext, Context>> {
 public:
     template <typename... Args>
     DroppedBombOutlineGlowToggle(Args&&... args) noexcept
@@ -22,6 +22,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-DroppedBombOutlineGlowToggle(HookContext&) -> DroppedBombOutlineGlowToggle<DroppedBombOutlineGlowContext<HookContext>>;

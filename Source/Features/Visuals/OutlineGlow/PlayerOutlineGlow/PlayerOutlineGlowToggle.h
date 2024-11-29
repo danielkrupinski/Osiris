@@ -3,8 +3,11 @@
 #include <FeatureHelpers/FeatureToggle.h>
 #include "PlayerOutlineGlowColorType.h"
 
-template <typename Context>
-struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<Context>> {
+template <typename HookContext>
+class PlayerOutlineGlowContext;
+
+template <typename HookContext, typename Context = PlayerOutlineGlowContext<HookContext>>
+struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<HookContext, Context>> {
     template <typename... Args>
     PlayerOutlineGlowToggle(Args&&... args) noexcept
         : context{std::forward<Args>(args)...}
@@ -37,9 +40,3 @@ struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<Context>>
 private:
     Context context;
 };
-
-template <typename HookContext>
-class PlayerOutlineGlowContext;
-
-template <typename HookContext>
-PlayerOutlineGlowToggle(HookContext&) -> PlayerOutlineGlowToggle<PlayerOutlineGlowContext<HookContext>>;

@@ -119,10 +119,10 @@ struct HookDependencies {
         return T{*this, std::forward<Args>(args)...};
     }
 
-    template <template <typename> typename T, typename... Args>
+    template <template <typename...> typename T, typename... Args>
     [[nodiscard]] auto make(Args&&... args) noexcept
     {
-        return T{*this, std::forward<Args>(args)...};
+        return T<HookDependencies>{*this, std::forward<Args>(args)...};
     }
 
     [[nodiscard]] auto panelFactory() noexcept

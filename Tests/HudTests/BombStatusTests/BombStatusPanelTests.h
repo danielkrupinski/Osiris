@@ -4,6 +4,7 @@
 
 #include <Hud/BombStatus/BombStatusPanel.h>
 #include <Mocks/HudMocks/MockBombStatusPanelContext.h>
+#include <Mocks/MockHookContext.h>
 #include <Mocks/MockPanel.h>
 
 class BombStatusPanelTest : public testing::Test {
@@ -18,7 +19,7 @@ protected:
     testing::StrictMock<MockPanel> mockInvisiblePanel;
     testing::StrictMock<MockPanel> mockScoreAndTimeAndBombPanel;
 
-    BombStatusPanel<MockBombStatusPanelContext&> bombStatusPanel{mockContext};
+    BombStatusPanel<MockHookContext, MockBombStatusPanelContext&> bombStatusPanel{mockContext};
     Visibility visibility{};
 };
 

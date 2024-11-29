@@ -3,7 +3,7 @@
 #include <utility>
 #include "OutlineGlowContext.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = OutlineGlowContext<HookContext>>
 class OutlineGlow {
 public:
     template <typename... Args>
@@ -39,6 +39,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-OutlineGlow(HookContext&) -> OutlineGlow<OutlineGlowContext<HookContext>>;

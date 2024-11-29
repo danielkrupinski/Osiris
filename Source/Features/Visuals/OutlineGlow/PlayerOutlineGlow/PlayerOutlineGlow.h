@@ -7,7 +7,7 @@
 #include "PlayerOutlineGlowContext.h"
 #include "PlayerOutlineGlowColorType.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = PlayerOutlineGlowContext<HookContext>>
 class PlayerOutlineGlow {
 public:
     template <typename... Args>
@@ -54,6 +54,3 @@ private:
 
     Context context;
 };
-
-template <typename HookContext>
-PlayerOutlineGlow(HookContext&) -> PlayerOutlineGlow<PlayerOutlineGlowContext<HookContext>>;

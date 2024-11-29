@@ -3,8 +3,8 @@
 #include <FeatureHelpers/FeatureToggle.h>
 #include "DefuseKitOutlineGlowContext.h"
 
-template <typename Context>
-class DefuseKitOutlineGlowToggle : public FeatureToggle<DefuseKitOutlineGlowToggle<Context>> {
+template <typename HookContext, typename Context = DefuseKitOutlineGlowContext<HookContext>>
+class DefuseKitOutlineGlowToggle : public FeatureToggle<DefuseKitOutlineGlowToggle<HookContext, Context>> {
 public:
     template <typename... Args>
      DefuseKitOutlineGlowToggle(Args&&... args) noexcept
@@ -20,6 +20,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-DefuseKitOutlineGlowToggle(HookContext&) -> DefuseKitOutlineGlowToggle<DefuseKitOutlineGlowContext<HookContext>>;

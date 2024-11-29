@@ -6,6 +6,7 @@
 #include <Common/Visibility.h>
 #include <Features/Hud/PostRoundTimer/PostRoundTimer.h>
 
+#include <Mocks/MockHookContext.h>
 #include <Mocks/PostRoundTimer/MockPostRoundTimerCondition.h>
 #include <Mocks/PostRoundTimer/MockPostRoundTimerContext.h>
 #include <Mocks/PostRoundTimer/MockPostRoundTimerPanel.h>
@@ -31,7 +32,7 @@ protected:
     testing::StrictMock<MockPostRoundTimerCondition> mockCondition;
     testing::StrictMock<MockPostRoundTimerPanel> mockPostRoundTimerPanel;
 
-    PostRoundTimer<MockPostRoundTimerContext&> postRoundTimer{mockContext};
+    PostRoundTimer<MockHookContext, MockPostRoundTimerContext&> postRoundTimer{mockContext};
 };
 
 TEST_F(PostRoundTimerTest, IsHiddenIfShouldNotRun) {

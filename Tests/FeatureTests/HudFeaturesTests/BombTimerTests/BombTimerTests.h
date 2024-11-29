@@ -7,6 +7,7 @@
 #include <Mocks/BombTimerMocks/MockBombTimerCondition.h>
 #include <Mocks/BombTimerMocks/MockBombTimerContext.h>
 #include <Mocks/BombTimerMocks/MockBombTimerPanel.h>
+#include <Mocks/MockHookContext.h>
 
 class BombTimerTest : public testing::Test {
 protected:
@@ -29,7 +30,7 @@ protected:
     testing::StrictMock<MockBombTimerCondition> mockBombTimerCondition;
     testing::StrictMock<MockBombTimerPanel> mockBombTimerPanel;
 
-    BombTimer<MockBombTimerContext&> bombTimer{mockBombTimerContext};
+    BombTimer<MockHookContext, MockBombTimerContext&> bombTimer{mockBombTimerContext};
 };
 
 TEST_F(BombTimerTest, DoesNotRunIfShouldNotRun) {

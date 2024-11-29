@@ -4,7 +4,7 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <MemoryPatterns/PatternTypes/UiEnginePatternTypes.h>
 
-template <typename Context>
+template <typename HookContext, typename Context>
 struct PanoramaUiPanel;
 
 template <typename HookContext>

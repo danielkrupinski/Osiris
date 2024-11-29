@@ -5,8 +5,8 @@
 #include <FeatureHelpers/FeatureToggle.h>
 #include "PostRoundTimerContext.h"
 
-template <typename Context>
-struct PostRoundTimerToggle : FeatureToggleOff<PostRoundTimerToggle<Context>> {
+template <typename HookContext, typename Context = PostRoundTimerContext<HookContext>>
+struct PostRoundTimerToggle : FeatureToggleOff<PostRoundTimerToggle<HookContext, Context>> {
     template <typename... Args>
     PostRoundTimerToggle(Args&&... args) noexcept
         : context{std::forward<Args>(args)...}
@@ -26,6 +26,3 @@ struct PostRoundTimerToggle : FeatureToggleOff<PostRoundTimerToggle<Context>> {
 private:
     Context context;
 };
-
-template <typename HookContext>
-PostRoundTimerToggle(HookContext&) -> PostRoundTimerToggle<PostRoundTimerContext<HookContext>>;

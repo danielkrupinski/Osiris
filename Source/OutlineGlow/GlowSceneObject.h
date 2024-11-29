@@ -4,7 +4,7 @@
 
 #include "GlowSceneObjectContext.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = GlowSceneObjectContext<HookContext>>
 class GlowSceneObject {
 public:
     template <typename... Args>
@@ -50,6 +50,3 @@ private:
 
     Context context;
 };
-
-template <typename HookContext>
-GlowSceneObject(HookContext&, GlowSceneObjectPointer*) -> GlowSceneObject<GlowSceneObjectContext<HookContext>>;

@@ -2,7 +2,10 @@
 
 #include <utility>
 
-template <typename Context>
+template <typename HookContext>
+class PlayerOutlineGlowContext;
+
+template <typename HookContext, typename Context = PlayerOutlineGlowContext<HookContext>>
 class PlayerOutlineGlowCondition {
 public:
     template <typename... Args>
@@ -29,9 +32,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-class PlayerOutlineGlowContext;
-
-template <typename HookContext>
-PlayerOutlineGlowCondition(HookContext&) -> PlayerOutlineGlowCondition<PlayerOutlineGlowContext<HookContext>>;

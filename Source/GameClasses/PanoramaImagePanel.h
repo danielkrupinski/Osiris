@@ -14,16 +14,14 @@ struct SvgImageParams {
     std::optional<cs2::Color> fillColor{};
 };
 
-template <typename Context>
+template <typename HookContext, typename Context = PanoramaImagePanelContext<HookContext>>
 struct PanoramaImagePanel {
-    explicit PanoramaImagePanel(Context context) noexcept
-        : context{context}
-    {
-    }
+    using RawType = cs2::CImagePanel;
 
-    template <typename HookContext>
-    PanoramaImagePanel(HookContext& hookContext, cs2::CPanel2D* panel) noexcept
-        :  context{hookContext, static_cast<cs2::CImagePanel*>(panel)}
+    template <typename... Args>
+        requires std::is_constructible_v<Context, Args...>
+    PanoramaImagePanel(Args&&... args) noexcept
+        : context{std::forward<Args>(args)...}
     {
     }
 
@@ -73,6 +71,3 @@ struct PanoramaImagePanel {
 private:
     Context context;
 };
-
-template <typename HookContext>
-PanoramaImagePanel(HookContext&, cs2::CPanel2D*) -> PanoramaImagePanel<PanoramaImagePanelContext<HookContext>>;

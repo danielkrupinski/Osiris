@@ -5,7 +5,7 @@
 #include "TickingBombOutlineGlowContext.h"
 #include "TickingBombOutlineGlowParams.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = TickingBombOutlineGlowContext<HookContext>>
 class TickingBombOutlineGlow {
 public:
     template <typename... Args>
@@ -27,6 +27,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-TickingBombOutlineGlow(HookContext&) -> TickingBombOutlineGlow<TickingBombOutlineGlowContext<HookContext>>;

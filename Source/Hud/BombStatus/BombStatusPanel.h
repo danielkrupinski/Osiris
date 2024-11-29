@@ -5,7 +5,7 @@
 #include <Common/Visibility.h>
 #include "BombStatusPanelContext.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = BombStatusPanelContext<HookContext>>
 struct BombStatusPanel {
     template <typename... Args>
     explicit BombStatusPanel(Args&&... args) noexcept
@@ -34,6 +34,3 @@ private:
     
     Context context;
 };
-
-template <typename HookContext>
-BombStatusPanel(HookContext&) -> BombStatusPanel<BombStatusPanelContext<HookContext>>;

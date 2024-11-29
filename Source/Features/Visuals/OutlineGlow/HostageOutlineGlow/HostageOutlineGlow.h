@@ -5,8 +5,7 @@
 #include "HostageOutlineGlowContext.h"
 #include "HostageOutlineGlowParams.h"
 
-
-template <typename Context>
+template <typename HookContext, typename Context = HostageOutlineGlowContext<HookContext>>
 class HostageOutlineGlow {
 public:
     template <typename... Args>
@@ -26,6 +25,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-HostageOutlineGlow(HookContext&) -> HostageOutlineGlow<HostageOutlineGlowContext<HookContext>>;

@@ -4,17 +4,12 @@
 
 #include "DeathNoticeContext.h"
 
-template <typename Context>
+template <typename HookContext, typename Context = DeathNoticeContext<HookContext>>
 class DeathNotice {
 public:
-    explicit DeathNotice(Context context) noexcept
-        : context{context}
-    {
-    }
-
-    template <typename HookContext>
-    DeathNotice(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
-        : context{hookContext, panel}
+    template <typename... Args>
+    explicit DeathNotice(Args&&... args) noexcept
+        : context{std::forward<Args>(args)...}
     {
     }
 
@@ -51,6 +46,3 @@ public:
 private:
     Context context;
 };
-
-template <typename HookContext>
-DeathNotice(HookContext&, cs2::CUIPanel*) -> DeathNotice<DeathNoticeContext<HookContext>>;
