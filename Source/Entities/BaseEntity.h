@@ -68,9 +68,13 @@ public:
     void applyGlow(cs2::Color color, int glowRange = 0) const noexcept
     {
         renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color, glowRange](auto&& sceneObject) {
-            auto&& glowSceneObject = hookContext.template make<GlowSceneObjects>().getGlowSceneObject(sceneObject);
-            glowSceneObject.apply(sceneObject, color, glowRange);
-            glowSceneObject.setGlowEntity(*this);
+            // this will still show glow for 1 frame when switching spectators as the flags aren't updated yet
+            // todo: do player glow in player scene object updater hook to fix it
+            if (!sceneObject.isCulledByFirstPersonView().valueOr(false)) {
+                auto&& glowSceneObject = hookContext.template make<GlowSceneObjects>().getGlowSceneObject(sceneObject);
+                glowSceneObject.apply(sceneObject, color, glowRange);
+                glowSceneObject.setGlowEntity(*this);
+            }
         });
     }
 

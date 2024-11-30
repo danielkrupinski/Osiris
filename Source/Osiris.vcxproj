@@ -393,6 +393,7 @@
     <ClInclude Include="MemoryPatterns\Windows\PlayerControllerPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\RenderComponentPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\SceneObjectPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SceneObjectUpdaterPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SceneSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />

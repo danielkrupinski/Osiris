@@ -25,11 +25,6 @@ public:
         return sceneObject;
     }
 
-    [[nodiscard]] auto isDeleted() const noexcept
-    {
-        return (hookContext.sceneSystemPatternSearchResults().template get<OffsetToSceneObjectFlags>().toOptional() & cs2::SceneObjectFlag_IsDeleted).notEqual(0);
-    }
-
     [[nodiscard]] auto objectClass() const noexcept
     {
         return hookContext.sceneSystemPatternSearchResults().template get<OffsetToSceneObjectClass>().of(sceneObject).toOptional();
@@ -41,7 +36,18 @@ public:
         return hookContext.template make<SceneObjectAttributes>(hookContext.sceneSystemPatternSearchResults().template get<OffsetToSceneObjectAttributes>().of(sceneObject).valueOr(nullptr));
     }
 
+    [[nodiscard]] auto isCulledByFirstPersonView() const noexcept
+    {
+        // set when camera is inside the upper body e.g. when spectating in first person
+        return (renderableFlags() & cs2::SCENEOBJECTFLAG_PIPELINE_SPECIFIC_2).notEqual(0);
+    }
+
 private:
+    [[nodiscard]] auto renderableFlags() const noexcept
+    {
+        return hookContext.sceneSystemPatternSearchResults().template get<OffsetToSceneObjectRenderableFlags>().of(sceneObject).toOptional();
+    }
+
     HookContext& hookContext;
     cs2::CSceneObject* sceneObject;
 };

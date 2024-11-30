@@ -785,12 +785,6 @@
     <ClInclude Include="HookDependencies\HookDependencies.h">
       <Filter>HookDependencies</Filter>
     </ClInclude>
-    <ClInclude Include="HookDependencies\HookDependenciesMask.h">
-      <Filter>HookDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="HookDependencies\HookDependenciesBuilder.h">
-      <Filter>HookDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
@@ -1687,6 +1681,9 @@
     </ClInclude>
     <ClInclude Include="Entities\WeaponServices.h">
       <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\SceneObjectPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
