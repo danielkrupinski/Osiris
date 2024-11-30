@@ -7,6 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 30 November 2024
+    * Player outline glow now works also when the local player is dead
+
 * 18 November 2024
     * Player model glow can now use color based on player health
 
@@ -26,11 +29,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Moved player bomb carrying/planting icon next to the active weapon icon
 
     ![Player bomb icon next to the active weapon icon](https://github.com/user-attachments/assets/f3d88714-825a-4649-b7ba-31fadb1fe3b9)
-
-* 30 October 2024
-    * Added bomb planting icon to "Player Info in World" feature
-
-    ![Bomb planting icon](https://github.com/user-attachments/assets/c7aa4e3f-4ae2-4897-8cf8-b62e3eb17b3a)
 
 ## Technical features
 
