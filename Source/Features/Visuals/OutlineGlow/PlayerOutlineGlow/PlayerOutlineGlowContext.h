@@ -21,11 +21,6 @@ public:
         return hookContext.template make<PlayerOutlineGlowCondition>();
     }
 
-    [[nodiscard]] bool isLocalPlayerAlive() const noexcept
-    {
-        return hookContext.localPlayerController().playerPawn().isAlive().value_or(true);
-    }
-
 private:
     HookContext& hookContext;
 };

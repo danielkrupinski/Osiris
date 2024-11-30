@@ -21,8 +21,7 @@ public:
 
     [[nodiscard]] bool shouldGlowPlayer(auto&& playerPawn) const noexcept
     {
-        return context.isLocalPlayerAlive()
-            && playerPawn.isAlive().value_or(true)
+        return playerPawn.isAlive().value_or(true)
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
