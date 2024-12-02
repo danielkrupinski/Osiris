@@ -24,4 +24,9 @@ std::uint64_t PlayerPawn_sceneObjectUpdater_cpp(cs2::C_CSPlayerPawn* playerPawn,
     return GlobalContext::instance().playerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
 }
 
+std::uint64_t Weapon_sceneObjectUpdater_cpp(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept
+{
+    return GlobalContext::instance().weaponSceneObjectUpdater(weapon, unknown, unknownBool);
+}
+
 }

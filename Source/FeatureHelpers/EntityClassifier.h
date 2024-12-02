@@ -9,7 +9,7 @@
 #include <Utils/TypeIndex.h>
 
 struct EntityTypeInfo {
-    std::uint8_t typeIndex;
+    std::uint8_t typeIndex{static_cast<std::uint8_t>(-1)};
 
     [[nodiscard]] constexpr bool isWeapon() const noexcept
     {
@@ -75,12 +75,12 @@ public:
     [[nodiscard]] EntityTypeInfo classifyEntity(const EntitiesVMTs& entitiesVMTs, const void* vmt) noexcept
     {
         if (vmt == nullptr)
-            return EntityTypeInfo{static_cast<std::uint8_t>(-1)};
+            return {};
 
         const auto it = std::ranges::lower_bound(sortedVmtIndices, vmt, {}, [&entitiesVMTs](const auto index) { return entitiesVMTs.vmts[index]; });
         if (it != sortedVmtIndices.end() && entitiesVMTs.vmts[*it] == vmt)
             return EntityTypeInfo{*it};
-        return EntityTypeInfo{static_cast<std::uint8_t>(-1)};
+        return {};
     }
 
 private:

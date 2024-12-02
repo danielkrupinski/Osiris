@@ -41,6 +41,19 @@ public:
         }
     }
 
+    void updateWeaponModelGlowToggle(char option) noexcept
+    {
+        switch (option) {
+        case '0':
+            state().weaponModelGlow = ModelGlowState::State::Enabled;
+            break;
+        case '1':
+            if (state().weaponModelGlow == ModelGlowState::State::Enabled)
+                state().weaponModelGlow = ModelGlowState::State::Disabling;
+            break;
+        }
+    }
+
 private:
     [[nodiscard]] auto& state() const noexcept
     {

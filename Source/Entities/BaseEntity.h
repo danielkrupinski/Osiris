@@ -16,6 +16,13 @@ public:
     {
     }
 
+    [[nodiscard]] EntityTypeInfo classify() const noexcept
+    {
+        if (entity)
+            return hookContext.entityClassifier().classifyEntity(hookContext.gameDependencies().entitiesVMTs, entity->vmt);
+        return {};
+    }
+
     template <template <typename> typename T>
     [[nodiscard]] decltype(auto) as() const noexcept
     {

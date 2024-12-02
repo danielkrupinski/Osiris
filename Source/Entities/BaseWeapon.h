@@ -12,6 +12,8 @@ public:
     {
     }
 
+    using RawType = cs2::C_CSWeaponBase;
+
     template <template <typename...> typename EntityType>
     [[nodiscard]] bool is() const noexcept
     {
@@ -34,7 +36,23 @@ public:
         return hookContext.clientPatternSearchResults().template get<OffsetToClipAmmo>().of(baseWeapon).toOptional();
     }
 
+    [[nodiscard]] auto getSceneObjectUpdater() const noexcept
+    {
+        return reinterpret_cast<std::uint64_t(*)(cs2::C_CSWeaponBase*, void*, bool)>(sceneObjectUpdaterHandle() ? sceneObjectUpdaterHandle()->updaterFunction : nullptr);
+    }
+
+    void setSceneObjectUpdater(auto x) const noexcept
+    {
+        if (sceneObjectUpdaterHandle())
+            sceneObjectUpdaterHandle()->updaterFunction = reinterpret_cast<std::uint64_t(*)(void*, void*, bool)>(x);
+    }
+
 private:
+    [[nodiscard]] auto sceneObjectUpdaterHandle() const noexcept
+    {
+        return hookContext.clientPatternSearchResults().template get<OffsetToWeaponSceneObjectUpdaterHandle>().of(baseWeapon).valueOr(nullptr);
+    }
+
     HookContext& hookContext;
     cs2::C_CSWeaponBase* baseWeapon;
 };
