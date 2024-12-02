@@ -199,6 +199,12 @@
     <Filter Include="Entities">
       <UniqueIdentifier>{86690f48-0082-46a5-82f7-9fcc1ea24af0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\ModelGlow\PlayerModelGlow">
+      <UniqueIdentifier>{a681c408-258d-4c5d-be1d-6b1d0202f9cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\ModelGlow\WeaponModelGlow">
+      <UniqueIdentifier>{2b885594-9008-4ffe-940f-f39deae620bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1684,6 +1690,15 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\SceneObjectPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\PlayerModelGlow\PlayerModelGlow.h">
+      <Filter>Features\Visuals\ModelGlow\PlayerModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlow.h">
+      <Filter>Features\Visuals\ModelGlow\WeaponModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlowParams.h">
+      <Filter>Features\Visuals\ModelGlow\WeaponModelGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

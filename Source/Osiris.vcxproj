@@ -187,6 +187,9 @@
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\PlayerModelGlow\PlayerModelGlow.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlow.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlowParams.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowParams.h" />

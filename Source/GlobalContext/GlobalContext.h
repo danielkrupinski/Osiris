@@ -73,7 +73,15 @@ public:
     {
         HookDependencies hookContext{fullContext()};
         const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
-        hookContext.make<ModelGlow>().applyModelGlow(hookContext.make<PlayerPawn>(playerPawn));
+        hookContext.make<ModelGlow>().applyPlayerModelGlow(hookContext.make<PlayerPawn>(playerPawn));
+        return originalReturnValue;
+    }
+
+    [[nodiscard]] std::uint64_t weaponSceneObjectUpdater(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept
+    {
+        HookDependencies hookContext{fullContext()};
+        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater(weapon, unknown, unknownBool);
+        hookContext.make<ModelGlow>().applyWeaponModelGlow(hookContext.make<BaseWeapon>(weapon));
         return originalReturnValue;
     }
 
@@ -106,10 +114,7 @@ public:
 
             dependencies.make<EntitySystem>().iterateEntities([&dependencies](auto& entity) {
                 auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(&entity));
-                const auto entityTypeInfo = dependencies.entityClassifier().classifyEntity(dependencies.gameDependencies().entitiesVMTs, entity.vmt);
-
-                if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>())
-                    dependencies.make<ModelGlow>().onUnload(baseEntity.as<PlayerPawn>());
+                dependencies.make<ModelGlow>().onUnload(baseEntity.classify(), baseEntity);
             });
         }
         return unloadFlag;

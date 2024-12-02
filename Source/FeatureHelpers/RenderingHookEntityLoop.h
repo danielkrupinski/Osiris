@@ -25,16 +25,16 @@ private:
     {
         auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(&entity));
 
-        const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(hookContext.gameDependencies().entitiesVMTs, entity.vmt);
+        const auto entityTypeInfo = baseEntity.classify();
 
         if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
             auto&& playerPawn = hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity));
             playerInformationThroughWalls.drawPlayerInformation(playerPawn);
-            hookContext.template make<ModelGlow>().updateSceneObjectUpdaterHook(playerPawn);
         }
 
         if (entityTypeInfo.isModelEntity())
             hookContext.template make<OutlineGlow>().applyGlowToEntity(entityTypeInfo, baseEntity.template as<BaseModelEntity>());
+        hookContext.template make<ModelGlow>().updateSceneObjectUpdaterHook(entityTypeInfo, baseEntity);
     }
 
     HookContext& hookContext;

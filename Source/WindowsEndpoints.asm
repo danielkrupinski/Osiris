@@ -2,6 +2,7 @@ EXTERN DllMain_cpp:PROC
 EXTERN SDLHook_PeepEvents_cpp:PROC
 EXTERN ViewRenderHook_onRenderStart_cpp:PROC
 EXTERN PlayerPawn_sceneObjectUpdater_cpp:PROC
+EXTERN Weapon_sceneObjectUpdater_cpp:PROC
 
 EXTERNDEF textSectionStartMarker:DWORD
 EXTERNDEF textSectionEndMarker:DWORD
@@ -133,5 +134,22 @@ PlayerPawn_sceneObjectUpdater_asm PROC
     pop rax
     ret
 PlayerPawn_sceneObjectUpdater_asm ENDP
+
+Weapon_sceneObjectUpdater_asm PROC
+    push rcx ; backup volatile registers used in the original function
+    push rdx
+    push r8
+    sub rsp, 32 ; allocate shadow space for function call
+    call makeTextSectionExecutable
+    mov r8, [rsp + 32]
+    mov rdx, [rsp + 40]
+    mov rcx, [rsp + 48]
+    call Weapon_sceneObjectUpdater_cpp
+    mov [rsp + 48], rax ; backup rax as the next call will destroy it
+    call makeTextSectionNotExecutable
+    add rsp, 48
+    pop rax
+    ret
+Weapon_sceneObjectUpdater_asm ENDP
 
 END

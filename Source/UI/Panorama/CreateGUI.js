@@ -352,6 +352,9 @@ $.Osiris = (function () {
   separator(playerModelGlow);
   createDropDown(playerModelGlow, "Player Model Glow Color", 'visuals', 'player_model_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
 
+  var weaponModelGlow = createSection(modelGlowTab, 'Weapons');
+  createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow', 0);
+
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 
   var sound = createTab('sound');

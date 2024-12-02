@@ -106,6 +106,8 @@ private:
             features.visualFeatures().modelGlowToggle().updatePlayerModelGlowToggle(parser.getChar());
         } else if (feature == "player_model_glow_color") {
             features.visualFeatures().modelGlowToggle().updatePlayerModelGlowColor(parser.getChar());
+        } else if (feature == "weapon_model_glow") {
+            features.visualFeatures().modelGlowToggle().updateWeaponModelGlowToggle(parser.getChar());
         }
     }
 
