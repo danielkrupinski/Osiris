@@ -108,6 +108,8 @@ private:
             features.visualFeatures().modelGlowToggle().updatePlayerModelGlowColor(parser.getChar());
         } else if (feature == "weapon_model_glow") {
             features.visualFeatures().modelGlowToggle().updateWeaponModelGlowToggle(parser.getChar());
+        } else if (feature == "dropped_bomb_model_glow") {
+            features.visualFeatures().modelGlowToggle().updateDroppedBombModelGlowToggle(parser.getChar());
         }
     }
 

@@ -20,6 +20,12 @@ public:
         return baseEntity().template is<EntityType>();
     }
 
+    template <template <typename...> typename EntityType>
+    [[nodiscard]] decltype(auto) cast() const noexcept
+    {
+        return baseEntity().template cast<EntityType>();
+    }
+
     [[nodiscard]] decltype(auto) baseEntity() const noexcept
     {
         return hookContext.template make<BaseEntity>(baseWeapon);

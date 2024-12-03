@@ -54,6 +54,19 @@ public:
         }
     }
 
+    void updateDroppedBombModelGlowToggle(char option) noexcept
+    {
+        switch (option) {
+        case '0':
+            state().droppedBombModelGlow = ModelGlowState::State::Enabled;
+            break;
+        case '1':
+            if (state().droppedBombModelGlow == ModelGlowState::State::Enabled)
+                state().droppedBombModelGlow = ModelGlowState::State::Disabling;
+            break;
+        }
+    }
+
 private:
     [[nodiscard]] auto& state() const noexcept
     {

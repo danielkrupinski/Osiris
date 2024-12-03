@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/WeaponEntities.h>
+#include "BaseWeapon.h"
 
 template <typename HookContext>
 class C4 {
@@ -9,6 +10,11 @@ public:
         : hookContext{hookContext}
         , c4{c4}
     {
+    }
+
+    [[nodiscard]] decltype(auto) baseWeapon() const noexcept
+    {
+        return hookContext.template make<BaseWeapon>(c4);
     }
 
     [[nodiscard]] explicit operator bool() const noexcept
