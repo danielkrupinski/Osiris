@@ -205,6 +205,9 @@
     <Filter Include="Features\Visuals\ModelGlow\WeaponModelGlow">
       <UniqueIdentifier>{2b885594-9008-4ffe-940f-f39deae620bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\ModelGlow\DroppedBombModelGlow">
+      <UniqueIdentifier>{ab1b2ea3-e7a3-485d-820c-1a4985799676}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1699,6 +1702,12 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlowParams.h">
       <Filter>Features\Visuals\ModelGlow\WeaponModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlow.h">
+      <Filter>Features\Visuals\ModelGlow\DroppedBombModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlowParams.h">
+      <Filter>Features\Visuals\ModelGlow\DroppedBombModelGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

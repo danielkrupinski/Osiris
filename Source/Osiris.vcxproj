@@ -184,6 +184,8 @@
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlow.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlowParams.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h" />
