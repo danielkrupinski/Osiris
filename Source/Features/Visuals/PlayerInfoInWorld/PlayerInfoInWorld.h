@@ -6,7 +6,7 @@
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <Entities/PlayerPawn.h>
-#include <FeatureHelpers/HudInWorldPanels.h>
+#include <Features/Common/InWorldPanels.h>
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/PanoramaTransformations.h>
 #include <FeatureHelpers/FeatureToggle.h>
@@ -167,7 +167,7 @@ using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
 using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
 
 template <typename HookContext>
-struct PlayerInfoInWorldToggle : FeatureToggleOff<PlayerInfoInWorldToggle<HookContext>> {
+struct PlayerInfoInWorldToggle : FeatureToggle<PlayerInfoInWorldToggle<HookContext>> {
     PlayerInfoInWorldToggle(PlayerInfoInWorldState& state, HookContext& hookContext, ViewRenderHook& viewRenderHook) noexcept
         : state{state}
         , hookContext{hookContext}
@@ -189,24 +189,7 @@ struct PlayerInfoInWorldToggle : FeatureToggleOff<PlayerInfoInWorldToggle<HookCo
         return state.enabled;
     }
 
-    void onDisable(typename PlayerInfoInWorldToggle::ToggleMethod) noexcept
-    {
-        if (const auto containerPanel{hookContext.template make<InWorldPanelContainer>().get()}) {
-            if (const auto containerPanelChildren{containerPanel.children().vector})
-                hideRemainingPanels(HudInWorldPanels{*containerPanelChildren}, 0);
-        }
-    }
-
 private:
-    void hideRemainingPanels(HudInWorldPanels inWorldPanels, std::size_t firstIndexToHide) const noexcept
-    {
-        for (std::size_t i = firstIndexToHide; i < state.panelIndices.getSize(); ++i) {
-            if (const auto panel{inWorldPanels.getPanel(state.panelIndices[i], hookContext)}) {
-                panel.setOpacity(0.0f);
-            }
-        }
-    }
-
     PlayerInfoInWorldState& state;
     HookContext& hookContext;
     ViewRenderHook& viewRenderHook;
@@ -237,49 +220,9 @@ public:
         if (!positionInClipSpace.onScreen())
             return;
 
-        const auto containerPanel{hookContext.template make<InWorldPanelContainer>().get()};
-        if (!containerPanel)
-            return;
-
-        const auto containerPanelChildren{containerPanel.children().vector};
-        if (!containerPanelChildren)
-            return;
-
-        const HudInWorldPanels panels{*containerPanelChildren};
-
-        if (state().containerPanelHandle != hookContext.template make<PanoramaUiEngine>().getPanelHandle(containerPanel)) {
-            state().panelIndices.clear();
-            state().containerPanelHandle = hookContext.template make<PanoramaUiEngine>().getPanelHandle(containerPanel);
-        }
-
-        const auto panel = getPanel(containerPanel, panels);
-        if (!panel)
-            return;
-
-        PlayerInfoPanel playerInformationPanel{hookContext, panel};
+        auto&& playerInformationPanel = hookContext.template make<InWorldPanels>().getNextPlayerInfoPanel();
         playerInformationPanel.drawPlayerInfo(playerPawn);
         playerInformationPanel.updatePosition(absOrigin.value());
-
-        ++currentIndex;
-    }
-
-    void hideUnusedPanels() const noexcept
-    {
-        const auto containerPanel{hookContext.template make<InWorldPanelContainer>().get()};
-        if (!containerPanel)
-            return;
-
-        const auto containerPanelChildren{containerPanel.children().vector};
-        if (!containerPanelChildren)
-            return;
-
-        const HudInWorldPanels panels{*containerPanelChildren};
-
-        for (std::size_t i = currentIndex; i < state().panelIndices.getSize(); ++i) {
-            if (const auto panel{panels.getPanel(state().panelIndices[i], hookContext)}) {
-                panel.setOpacity(0.0f);
-            }
-        }
     }
 
 private:
@@ -293,34 +236,5 @@ private:
         return hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState;
     }
 
-    [[nodiscard]] auto getPanel(auto&& containerPanel, HudInWorldPanels inWorldPanels) const noexcept
-    {
-        if (currentIndex < state().panelIndices.getSize()) {
-            if (const auto panel{inWorldPanels.getPanel(state().panelIndices[currentIndex], hookContext)})
-                return panel;
-            state().panelIndices.fastRemoveAt(currentIndex);
-        }
-        if (const auto panel{createPlayerInfoPanel(containerPanel)}) {
-            state().panelIndices.pushBack(inWorldPanels.getIndexOfLastPanel());
-            return panel;
-        }
-        return hookContext.template make<PanoramaUiPanel>(nullptr);
-    }
-
-    [[nodiscard]] decltype(auto) createPlayerInfoPanel(auto&& parent) const noexcept
-    {
-        auto&& factory = hookContext.template make<PlayerInfoInWorldPanelFactory>();
-        auto&& containerPanel = factory.createContainerPanel(parent);
-        createPanels(std::type_identity<PlayerInfoPanelTypes<HookContext>>{}, factory, containerPanel);
-        return utils::lvalue<decltype(containerPanel)>(containerPanel);
-    }
-
-    template <typename... PanelTypes>
-    void createPanels(std::type_identity<std::tuple<PanelTypes...>>, auto&& factory, auto&& containerPanel) const noexcept
-    {
-        (factory.createPanel(std::type_identity<PanelTypes>{}, containerPanel), ...);
-    }
-
     HookContext& hookContext;
-    std::size_t currentIndex{0};
 };

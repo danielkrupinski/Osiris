@@ -1,7 +1,9 @@
 #pragma once
 
 #include <CS2/Classes/Entities/C_BaseEntity.h>
+#include <CS2/Constants/EntityHandle.h>
 #include <CS2/Constants/SceneObjectAttributeNames.h>
+#include <FeatureHelpers/LifeState.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
 #include <GameClasses/GameSceneNode.h>

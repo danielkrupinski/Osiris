@@ -108,9 +108,6 @@
     <ClInclude Include="FeatureHelpers\ConVarFinder.h" />
     <ClInclude Include="FeatureHelpers\EntityClassifier.h" />
     <ClInclude Include="FeatureHelpers\FeatureToggle.h" />
-    <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h" />
-    <ClInclude Include="FeatureHelpers\HudInWorldPanelIndex.h" />
-    <ClInclude Include="FeatureHelpers\HudInWorldPanels.h" />
     <ClInclude Include="FeatureHelpers\LifeState.h" />
     <ClInclude Include="FeatureHelpers\PanelShadowParams.h" />
     <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
@@ -129,6 +126,12 @@
     <ClInclude Include="FeatureHelpers\TeamNumber.h" />
     <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
     <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
+    <ClInclude Include="Features\Common\InWorldPanelIndex.h" />
+    <ClInclude Include="Features\Common\InWorldPanelListEntry.h" />
+    <ClInclude Include="Features\Common\InWorldPanels.h" />
+    <ClInclude Include="Features\Common\InWorldPanelsPerHookState.h" />
+    <ClInclude Include="Features\Common\InWorldPanelsState.h" />
+    <ClInclude Include="Features\Common\InWorldPanelsUnloadHandler.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\FeaturesStates.h" />
     <ClInclude Include="Features\FeaturesUnloadHandler.h" />
@@ -182,6 +185,7 @@
     <ClInclude Include="Features\Sound\FootstepVisualizer.h" />
     <ClInclude Include="Features\Sound\SoundFeatures.h" />
     <ClInclude Include="Features\Sound\SoundFeaturesStates.h" />
+    <ClInclude Include="Features\Sound\SoundVisualizationPanelTypes.h" />
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h" />
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlow.h" />

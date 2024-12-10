@@ -208,6 +208,9 @@
     <Filter Include="Features\Visuals\ModelGlow\DroppedBombModelGlow">
       <UniqueIdentifier>{ab1b2ea3-e7a3-485d-820c-1a4985799676}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Common">
+      <UniqueIdentifier>{514d588e-9075-46df-a4c7-7eab59b608ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -581,12 +584,6 @@
     <ClInclude Include="Features\Sound\BombBeepVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\HudInWorldPanelContainer.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\HudInWorldPanels.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\BombDefuseVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
@@ -763,9 +760,6 @@
     </ClInclude>
     <ClInclude Include="Features\Sound\WeaponReloadVisualizer.h">
       <Filter>Features\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\HudInWorldPanelIndex.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\CCSPlayerController.h">
       <Filter>CS2\Classes\Entities</Filter>
@@ -1708,6 +1702,27 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlowParams.h">
       <Filter>Features\Visuals\ModelGlow\DroppedBombModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Common\InWorldPanelIndex.h">
+      <Filter>Features\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Common\InWorldPanelListEntry.h">
+      <Filter>Features\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Common\InWorldPanels.h">
+      <Filter>Features\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Common\InWorldPanelsPerHookState.h">
+      <Filter>Features\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Common\InWorldPanelsState.h">
+      <Filter>Features\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Common\InWorldPanelsUnloadHandler.h">
+      <Filter>Features\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\SoundVisualizationPanelTypes.h">
+      <Filter>Features\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

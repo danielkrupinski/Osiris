@@ -5,6 +5,7 @@
 #include <CS2/Classes/CUtlString.h>
 #include <CS2/Classes/CUtlVector.h>
 
+#include "CPanel2D.h"
 #include "CPanoramaSymbol.h"
 
 namespace cs2

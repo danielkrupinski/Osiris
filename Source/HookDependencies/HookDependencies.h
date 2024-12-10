@@ -3,6 +3,7 @@
 #include <Entities/GameRules.h>
 #include <Entities/PlantedC4.h>
 #include <Entities/PlayerController.h>
+#include <Features/Common/InWorldPanelsPerHookState.h>
 #include <FeatureHelpers/ConVarAccessor.h>
 #include <FeatureHelpers/ConVarFinder.h>
 #include <GameClasses/FileSystem.h>
@@ -41,9 +42,14 @@ struct HookDependencies {
         return fullGlobalContext.bombStatusPanelState;
     }
 
-    [[nodiscard]] InWorldPanelContainerState& inWorldPanelContainerState() const noexcept
+    [[nodiscard]] InWorldPanelsState& inWorldPanelsState() const noexcept
     {
-        return fullGlobalContext.inWorldPanelContainerState;
+        return fullGlobalContext.inWorldPanelsState;
+    }
+
+    [[nodiscard]] InWorldPanelsPerHookState& inWorldPanelsPerHookState() noexcept
+    {
+        return _inWorldPanelsPerHookState;
     }
 
     [[nodiscard]] PanoramaGuiState& panoramaGuiState() const noexcept
@@ -184,4 +190,5 @@ private:
 
     FullGlobalContext& fullGlobalContext;
     ConVarAccessorState conVarAccessorState;
+    InWorldPanelsPerHookState _inWorldPanelsPerHookState;
 };

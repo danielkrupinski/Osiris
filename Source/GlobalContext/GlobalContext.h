@@ -5,6 +5,7 @@
 
 #include <BuildConfig.h>
 #include <CS2/Constants/DllNames.h>
+#include <Features/Common/InWorldPanelsUnloadHandler.h>
 #include <Helpers/PatternNotFoundLogger.h>
 #include <MemoryAllocation/FreeMemoryRegionList.h>
 #include <MemorySearch/PatternFinder.h>
@@ -95,12 +96,13 @@ public:
 
         auto&& playerInfoInWorld = dependencies.make<PlayerInfoInWorld>();
         RenderingHookEntityLoop{dependencies, playerInfoInWorld}.run();
-        playerInfoInWorld.hideUnusedPanels();
         dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
 
         fullContext().features(dependencies).hudFeatures().defusingAlert().run();
         fullContext().features(dependencies).hudFeatures().killfeedPreserver().run();
         BombStatusPanelManager{BombStatusPanelManagerContext{dependencies}}.run();
+
+        dependencies.make<InWorldPanels>().hideUnusedPanels();
 
         UnloadFlag unloadFlag;
         dependencies.make<PanoramaGUI>().run(fullContext().features(dependencies), unloadFlag);
@@ -108,7 +110,7 @@ public:
         if (unloadFlag) {
             FeaturesUnloadHandler{dependencies, fullContext().featuresStates}.handleUnload();
             BombStatusPanelUnloadHandler{dependencies}.handleUnload();
-            InWorldPanelContainerUnloadHandler{dependencies}.handleUnload();
+            InWorldPanelsUnloadHandler{dependencies}.handleUnload();
             PanoramaGuiUnloadHandler{dependencies}.handleUnload();
             fullContext().hooks.viewRenderHook.uninstall();
 

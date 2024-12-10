@@ -1,5 +1,8 @@
 #pragma once
 
+#include <CS2/Constants/ColorConstants.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldState.h>
+
 #include "PlayerHealthPanelContext.h"
 
 template <typename HookContext, typename Context = PlayerHealthPanelContext<HookContext>>

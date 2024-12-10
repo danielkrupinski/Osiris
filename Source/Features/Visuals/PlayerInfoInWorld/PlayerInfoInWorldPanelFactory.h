@@ -1,15 +1,21 @@
 #pragma once
 
 #include <CS2/Constants/ColorConstants.h>
+#include <FeatureHelpers/PanoramaTransformations.h>
 #include <GameClasses/PanelFactory.h>
 
 #include "ActiveWeaponAmmo/ActiveWeaponAmmoPanelParams.h"
+#include "ActiveWeaponAmmo/PlayerActiveWeaponAmmoPanel.h"
+#include "PlayerHealth/PlayerHealthPanel.h"
 #include "PlayerHealth/PlayerHealthPanelParams.h"
 #include "PlayerInfoContainerPanelParams.h"
+#include "PlayerPositionArrow/PlayerPositionArrowPanel.h"
 #include "PlayerPositionArrow/PlayerPositionArrowPanelParams.h"
+#include "PlayerStateIcons/PlayerStateIconsPanel.h"
 #include "PlayerStateIcons/PlayerStateIconsPanelParams.h"
 #include "PlayerWeaponIcon/ActiveWeaponIcon/ActiveWeaponIconPanelParams.h"
 #include "PlayerWeaponIcon/BombIcon/PlayerBombIconPanelParams.h"
+#include "PlayerWeaponIcon/PlayerWeaponIconPanel.h"
 #include "PlayerWeaponIcon/PlayerWeaponIconPanelParams.h"
 
 template <typename HookContext>

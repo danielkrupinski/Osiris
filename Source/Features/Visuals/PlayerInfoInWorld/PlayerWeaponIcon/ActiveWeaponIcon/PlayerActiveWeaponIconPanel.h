@@ -1,6 +1,9 @@
 #pragma once
 
 #include <Common/Visibility.h>
+#include <Entities/C4.h>
+#include <GameClasses/PanoramaImagePanel.h>
+#include <Utils/CString.h>
 #include "PlayerActiveWeaponIconPanelContext.h"
 
 template <typename HookContext, typename Context = PlayerActiveWeaponIconPanelContext<HookContext>>

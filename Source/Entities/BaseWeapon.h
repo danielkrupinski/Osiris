@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
 #include <CS2/Classes/CCSWeaponBaseVData.h>
+#include "BaseEntity.h"
 
 template <typename HookContext>
 class BaseWeapon {

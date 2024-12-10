@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PlayerStateIconsPanelContext.h"
+#include "PlayerStateIconsToShow.h"
 
 template <typename HookContext, typename Context = PlayerStateIconsPanelContext<HookContext>>
 class PlayerStateIconsPanel {

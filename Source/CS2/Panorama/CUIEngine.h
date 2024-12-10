@@ -2,6 +2,8 @@
 
 #include <Platform/Macros/IsPlatform.h>
 #include "CPanoramaSymbol.h"
+#include "CUIPanel.h"
+#include "PanelHandle.h"
 
 namespace cs2
 {

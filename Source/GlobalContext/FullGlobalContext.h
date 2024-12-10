@@ -4,9 +4,9 @@
 #include <GameDependencies/GameDependencies.h>
 #include <GameDLLs/Tier0Dll.h>
 #include <FeatureHelpers/EntityClassifier.h>
-#include <FeatureHelpers/HudInWorldPanelContainer.h>
 #include <FeatureHelpers/RenderingHookEntityLoop.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
+#include <Features/Common/InWorldPanelsState.h>
 #include <Features/Features.h>
 #include <Features/FeaturesStates.h>
 #include <Features/FeaturesUnloadHandler.h>
@@ -70,7 +70,7 @@ struct FullGlobalContext {
     FeaturesStates featuresStates;
     PanoramaGuiState panoramaGuiState;
     BombStatusPanelState bombStatusPanelState;
-    InWorldPanelContainerState inWorldPanelContainerState;
+    InWorldPanelsState inWorldPanelsState;
     GlowSceneObjectsState glowSceneObjectsState;
     EntityClassifier entityClassifier;
 };

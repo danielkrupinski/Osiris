@@ -3,7 +3,6 @@
 #include <cstdint>
 
 #include <CS2/Panorama/PanelHandle.h>
-#include <FeatureHelpers/HudInWorldPanelIndex.h>
 #include <Utils/DynamicArray.h>
 
 #include "PlayerPositionArrow/PlayerPositionArrowColorType.h"
@@ -31,7 +30,4 @@ struct PlayerInfoInWorldState {
             .set<HostagePickupPanel>()
             .set<HostageRescuePanel>()
             .set<BlindedIconPanel>()};
-
-    cs2::PanelHandle containerPanelHandle;
-    DynamicArray<HudInWorldPanelIndex> panelIndices;
 };
