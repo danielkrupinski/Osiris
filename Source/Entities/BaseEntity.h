@@ -26,10 +26,10 @@ public:
         return {};
     }
 
-    template <template <typename> typename T>
+    template <template <typename...> typename T>
     [[nodiscard]] decltype(auto) as() const noexcept
     {
-        return hookContext.template make<T>(static_cast<typename T<HookContext>::RawType*>(entity));
+        return hookContext.template make<T<HookContext>>(static_cast<typename T<HookContext>::RawType*>(entity));
     }
 
     template <template <typename...> typename EntityType>
