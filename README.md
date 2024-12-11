@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 11 December 2024
+    * Added model glow for ticking bomb
+
+    ![Ticking Bomb Model Glow](https://github.com/user-attachments/assets/6cadde5a-f999-4649-b483-9122e7b350ba)
+
 * 3 December 2024
     * Added model glow for dropped bomb
 
@@ -24,11 +29,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Player model glow can now use color based on player health
 
     ![Player model glow health color](https://github.com/user-attachments/assets/9e2d6218-3ac3-46e4-8b76-38ff0f4cf77a)
-
-* 16 November 2024
-    * Player model glow can now use player color
-
-    ![Player model glow using player color](https://github.com/user-attachments/assets/d5832888-1520-49fe-8deb-b3312749d466)
 
 ## Technical features
 
