@@ -67,6 +67,19 @@ public:
         }
     }
 
+    void updateTickingBombModelGlowToggle(char option) noexcept
+    {
+        switch (option) {
+        case '0':
+            state().tickingBombModelGlow = ModelGlowState::State::Enabled;
+            break;
+        case '1':
+            if (state().tickingBombModelGlow == ModelGlowState::State::Enabled)
+                state().tickingBombModelGlow = ModelGlowState::State::Disabling;
+            break;
+        }
+    }
+
 private:
     [[nodiscard]] auto& state() const noexcept
     {

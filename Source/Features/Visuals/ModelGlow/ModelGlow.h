@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Constants/ColorConstants.h>
+#include <Entities/PlantedC4.h>
 #include <FeatureHelpers/TeamNumber.h>
 
 #include "ModelGlowState.h"
@@ -9,6 +10,7 @@
 
 #include "DroppedBombModelGlow/DroppedBombModelGlow.h"
 #include "PlayerModelGlow/PlayerModelGlow.h"
+#include "TickingBombModelGlow/TickingBombModelGlow.h"
 #include "WeaponModelGlow/WeaponModelGlow.h"
 
 template <typename HookContext>
@@ -28,6 +30,8 @@ public:
             hookContext.template make<PlayerModelGlow>().updateSceneObjectUpdaterHook(entity.template as<PlayerPawn>());
         else if (entityTypeInfo.is<cs2::C_C4>())
             hookContext.template make<DroppedBombModelGlow>().updateSceneObjectUpdaterHook(entity.template as<C4>());
+        else if (entityTypeInfo.is<cs2::CPlantedC4>())
+            hookContext.template make<TickingBombModelGlow>().applyModelGlow(entity.template as<PlantedC4>());
         else if (entityTypeInfo.isWeapon())
             hookContext.template make<WeaponModelGlow>().updateSceneObjectUpdaterHook(entity.template as<BaseWeapon>());
     }
@@ -57,6 +61,7 @@ public:
         hookContext.template make<PlayerModelGlow>().onEntityListTraversed();
         hookContext.template make<WeaponModelGlow>().onEntityListTraversed();
         hookContext.template make<DroppedBombModelGlow>().onEntityListTraversed();
+        hookContext.template make<TickingBombModelGlow>().onEntityListTraversed();
     }
 
     void onUnload(EntityTypeInfo entityTypeInfo, auto&& entity) const noexcept
@@ -68,6 +73,8 @@ public:
             hookContext.template make<PlayerModelGlow>().onUnload(entity.template as<PlayerPawn>());
         else if (entityTypeInfo.is<cs2::C_C4>())
             hookContext.template make<DroppedBombModelGlow>().onUnload(entity.template as<C4>());
+        else if (entityTypeInfo.is<cs2::CPlantedC4>())
+            hookContext.template make<TickingBombModelGlow>().onUnload(entity.template as<PlantedC4>());
         else if (entityTypeInfo.isWeapon())
             hookContext.template make<WeaponModelGlow>().onUnload(entity.template as<BaseWeapon>());
     }

@@ -211,6 +211,9 @@
     <Filter Include="Features\Common">
       <UniqueIdentifier>{514d588e-9075-46df-a4c7-7eab59b608ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\ModelGlow\TickingBombModelGlow">
+      <UniqueIdentifier>{ea04385e-4e37-4d1d-b6ac-d6ca160ee866}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1723,6 +1726,12 @@
     </ClInclude>
     <ClInclude Include="Features\Sound\SoundVisualizationPanelTypes.h">
       <Filter>Features\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\TickingBombModelGlow\TickingBombModelGlow.h">
+      <Filter>Features\Visuals\ModelGlow\TickingBombModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\TickingBombModelGlow\TickingBombModelGlowParams.h">
+      <Filter>Features\Visuals\ModelGlow\TickingBombModelGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

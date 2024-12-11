@@ -4,6 +4,7 @@
 #include <CS2/Constants/EntityHandle.h>
 #include <CS2/Constants/SceneObjectAttributeNames.h>
 #include <FeatureHelpers/LifeState.h>
+#include <FeatureHelpers/TeamNumber.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
 #include <GameClasses/GameSceneNode.h>
@@ -25,10 +26,10 @@ public:
         return {};
     }
 
-    template <template <typename> typename T>
+    template <template <typename...> typename T>
     [[nodiscard]] decltype(auto) as() const noexcept
     {
-        return hookContext.template make<T>(static_cast<typename T<HookContext>::RawType*>(entity));
+        return hookContext.template make<T<HookContext>>(static_cast<typename T<HookContext>::RawType*>(entity));
     }
 
     template <template <typename...> typename EntityType>
@@ -96,10 +97,23 @@ public:
         });
     }
 
+    void removeSpawnProtectionEffect() const noexcept
+    {
+        renderComponent().sceneObjectUpdaters().forEachSceneObject([](auto&& sceneObject) {
+            sceneObject.attributes().setAttributeFloat(cs2::scene_object_attribute::kSpawnInvulnerabilityHash, 0.0f);
+        });
+    }
+
     void applySpawnProtectionEffectRecursively(cs2::Color color) const noexcept
     {
         applySpawnProtectionEffect(color);
         forEachChild([color](auto&& entity) { entity.applySpawnProtectionEffect(color); });
+    }
+
+    void removeSpawnProtectionEffectRecursively() const noexcept
+    {
+        removeSpawnProtectionEffect();
+        forEachChild([](auto&& entity) { entity.removeSpawnProtectionEffect(); });
     }
 
     [[nodiscard]] auto hasOwner() const noexcept

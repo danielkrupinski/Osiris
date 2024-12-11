@@ -357,6 +357,8 @@ $.Osiris = (function () {
 
   var bombModelGlow = createSection(modelGlowTab, 'Bomb');
   createYesNoDropDown(bombModelGlow, "Glow Dropped Bomb Model", 'visuals', 'dropped_bomb_model_glow', 0);
+  separator(bombModelGlow);
+  createYesNoDropDown(bombModelGlow, "Glow Ticking Bomb Model", 'visuals', 'ticking_bomb_model_glow', 0);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 

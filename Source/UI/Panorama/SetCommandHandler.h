@@ -110,6 +110,8 @@ private:
             features.visualFeatures().modelGlowToggle().updateWeaponModelGlowToggle(parser.getChar());
         } else if (feature == "dropped_bomb_model_glow") {
             features.visualFeatures().modelGlowToggle().updateDroppedBombModelGlowToggle(parser.getChar());
+        } else if (feature == "ticking_bomb_model_glow") {
+            features.visualFeatures().modelGlowToggle().updateTickingBombModelGlowToggle(parser.getChar());
         }
     }
 

@@ -7,6 +7,8 @@
 #include <CS2/Constants/IconURLs.h>
 #include <GameClasses/GlobalVars.h>
 
+#include "BaseEntity.h"
+
 template <typename HookContext>
 class PlantedC4Context {
 public:
