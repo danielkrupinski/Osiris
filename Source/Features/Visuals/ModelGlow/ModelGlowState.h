@@ -23,6 +23,7 @@ struct ModelGlowState {
     State weaponModelGlow{State::Enabled};
     State droppedBombModelGlow{State::Enabled};
     State tickingBombModelGlow{State::Enabled};
+    State defuseKitModelGlow{State::Enabled};
 
     std::uint64_t(*originalPlayerPawnSceneObjectUpdater)(cs2::C_CSPlayerPawn* playerPawn, void*, bool){nullptr};
     std::uint64_t(*originalWeaponSceneObjectUpdater)(cs2::C_CSWeaponBase* baseWeapon, void*, bool){nullptr};

@@ -19,6 +19,11 @@ public:
     {
     }
 
+    [[nodiscard]] decltype(auto) baseEntity() const noexcept
+    {
+        return *this;
+    }
+
     [[nodiscard]] EntityTypeInfo classify() const noexcept
     {
         if (entity)

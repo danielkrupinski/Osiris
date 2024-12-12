@@ -355,10 +355,12 @@ $.Osiris = (function () {
   var weaponModelGlow = createSection(modelGlowTab, 'Weapons');
   createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow', 0);
 
-  var bombModelGlow = createSection(modelGlowTab, 'Bomb');
+  var bombModelGlow = createSection(modelGlowTab, 'Bomb & Defuse Kit');
   createYesNoDropDown(bombModelGlow, "Glow Dropped Bomb Model", 'visuals', 'dropped_bomb_model_glow', 0);
   separator(bombModelGlow);
   createYesNoDropDown(bombModelGlow, "Glow Ticking Bomb Model", 'visuals', 'ticking_bomb_model_glow', 0);
+  separator(bombModelGlow);
+  createYesNoDropDown(bombModelGlow, "Glow Defuse Kit Models on Ground", 'visuals', 'defuse_kit_model_glow', 0);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 

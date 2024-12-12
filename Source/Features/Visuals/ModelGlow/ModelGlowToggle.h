@@ -80,6 +80,19 @@ public:
         }
     }
 
+    void updateDefuseKitModelGlowToggle(char option) noexcept
+    {
+        switch (option) {
+        case '0':
+            state().defuseKitModelGlow = ModelGlowState::State::Enabled;
+            break;
+        case '1':
+            if (state().defuseKitModelGlow == ModelGlowState::State::Enabled)
+                state().defuseKitModelGlow = ModelGlowState::State::Disabling;
+            break;
+        }
+    }
+
 private:
     [[nodiscard]] auto& state() const noexcept
     {

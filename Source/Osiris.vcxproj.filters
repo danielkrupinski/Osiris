@@ -214,6 +214,9 @@
     <Filter Include="Features\Visuals\ModelGlow\TickingBombModelGlow">
       <UniqueIdentifier>{ea04385e-4e37-4d1d-b6ac-d6ca160ee866}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\ModelGlow\DefuseKitModelGlow">
+      <UniqueIdentifier>{798917e9-2237-40b5-aed0-5bb6cbe417c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1732,6 +1735,12 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\TickingBombModelGlow\TickingBombModelGlowParams.h">
       <Filter>Features\Visuals\ModelGlow\TickingBombModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\DefuseKitModelGlow\DefuseKitModelGlow.h">
+      <Filter>Features\Visuals\ModelGlow\DefuseKitModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\DefuseKitModelGlow\DefuseKitModelGlowParams.h">
+      <Filter>Features\Visuals\ModelGlow\DefuseKitModelGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
