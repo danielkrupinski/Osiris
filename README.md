@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 14 December 2024
+    * Added model glow for defuse kits on the ground
+
+    ![Defuse Kit Model Glow](https://github.com/user-attachments/assets/43dc555d-8c1d-40dc-b94a-3aa8f8396c7b)
+
 * 11 December 2024
     * Added model glow for ticking bomb
 
@@ -24,11 +29,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 30 November 2024
     * Player outline glow now works also when the local player is dead
-
-* 18 November 2024
-    * Player model glow can now use color based on player health
-
-    ![Player model glow health color](https://github.com/user-attachments/assets/9e2d6218-3ac3-46e4-8b76-38ff0f4cf77a)
 
 ## Technical features
 
