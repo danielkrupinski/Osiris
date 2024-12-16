@@ -23,10 +23,10 @@ struct PanoramaUiPanelContext {
         return hookContext.template make<ClientPanel>(clientPanelPointer());
     }
 
-    template <template <typename...> typename T>
-    [[nodiscard]] decltype(auto) as() const noexcept
+    template <template <typename...> typename T, typename... Args>
+    [[nodiscard]] decltype(auto) as(Args&&... args) const noexcept
     {
-        return hookContext.template make<T>(panel);
+        return hookContext.template make<T>(panel, std::forward<Args>(args)...);
     }
 
     [[nodiscard]] decltype(auto) getHandle() const noexcept

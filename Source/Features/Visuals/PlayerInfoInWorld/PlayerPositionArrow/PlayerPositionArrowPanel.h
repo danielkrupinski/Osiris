@@ -22,7 +22,10 @@ public:
         }
 
         context.panel().setVisible(true);
-        context.panel().setWashColor(getArrowColor(playerPawn));
+
+        const auto arrowColor = getArrowColor(playerPawn);
+        if (context.cache().playerPositionArrowColor(arrowColor))
+            context.panel().setWashColor(arrowColor);
     }
 
 private:

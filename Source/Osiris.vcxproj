@@ -258,6 +258,10 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldPanelFactory.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldState.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanel.h" />
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCache.h" />
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCacheEntry.h" />
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCachePerHookState.h" />
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCacheState.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelTypes.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowColorType.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanel.h" />

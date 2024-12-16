@@ -24,8 +24,12 @@ public:
         context.panel().setVisible(true);
 
         auto&& healthValuePanel = context.panel().children()[1];
-        healthValuePanel.setColor(getColor(playerPawn));
-        healthValuePanel.clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(playerPawn.health().valueOr(0)).cstring());
+
+        if (const auto healthTextColor = getColor(playerPawn); context.cache().playerHealthTextColor(healthTextColor))
+            healthValuePanel.setColor(healthTextColor);
+
+        if (const auto playerHealth = playerPawn.health().valueOr(0); context.cache().playerHealth(playerHealth))
+            healthValuePanel.clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(playerHealth).cstring());
     }
 
 private:

@@ -1,11 +1,12 @@
 #pragma once
 
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
 #include <GameClasses/PanoramaUiPanel.h>
 
 template <typename HookContext>
 class PlayerStateIconsPanelContext {
 public:
-    PlayerStateIconsPanelContext(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
+    PlayerStateIconsPanelContext(HookContext& hookContext, cs2::CUIPanel* panel, PlayerInfoPanelCacheEntry&) noexcept
         : _hookContext{hookContext}
         , _panel{panel}
     {

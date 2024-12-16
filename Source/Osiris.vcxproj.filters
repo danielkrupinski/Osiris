@@ -1742,6 +1742,18 @@
     <ClInclude Include="Features\Visuals\ModelGlow\DefuseKitModelGlow\DefuseKitModelGlowParams.h">
       <Filter>Features\Visuals\ModelGlow\DefuseKitModelGlow</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCache.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCacheEntry.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCachePerHookState.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCacheState.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

@@ -1,12 +1,14 @@
 #pragma once
 
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
+
 #include "ActiveWeaponIcon/PlayerActiveWeaponIconPanel.h"
 #include "BombIcon/PlayerBombIconPanel.h"
 
 template <typename HookContext>
 class PlayerWeaponIconPanelContext {
 public:
-    PlayerWeaponIconPanelContext(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
+    PlayerWeaponIconPanelContext(HookContext& hookContext, cs2::CUIPanel* panel, PlayerInfoPanelCacheEntry&) noexcept
         : _hookContext{hookContext}
         , _panel{panel}
     {
@@ -14,12 +16,12 @@ public:
 
     [[nodiscard]] decltype(auto) activeWeaponIconPanel() const noexcept
     {
-        return _hookContext.template make<PlayerActiveWeaponIconPanel<HookContext>>(panel().children()[0]);
+        return _hookContext.template make<PlayerActiveWeaponIconPanel>(panel().children()[0]);
     }
 
     [[nodiscard]] decltype(auto) bombIconPanel() const noexcept
     {
-        return _hookContext.template make<PlayerBombIconPanel<HookContext>>(panel().children()[1]);
+        return _hookContext.template make<PlayerBombIconPanel>(panel().children()[1]);
     }
 
 private:

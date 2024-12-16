@@ -20,10 +20,10 @@ struct PanoramaUiPanel {
     {
     }
 
-    template <template <typename...> typename T>
-    [[nodiscard]] decltype(auto) as() const noexcept
+    template <template <typename...> typename T, typename... Args>
+    [[nodiscard]] decltype(auto) as(Args&&... args) const noexcept
     {
-        return context.template as<T>();
+        return context.template as<T>(std::forward<Args>(args)...);
     }
 
     [[nodiscard]] decltype(auto) getHandle() const noexcept
@@ -69,8 +69,10 @@ struct PanoramaUiPanel {
 
     void setVisible(bool visible) const noexcept
     {
-        if (auto&& setVisibleFn = context.setVisible())
-            setVisibleFn(visible);
+        if (isVisible() != visible) {
+            if (auto&& setVisibleFn = context.setVisible())
+                setVisibleFn(visible);
+        }
     }
 
     [[nodiscard]] decltype(auto) findChildInLayoutFile(const char* childId) const noexcept

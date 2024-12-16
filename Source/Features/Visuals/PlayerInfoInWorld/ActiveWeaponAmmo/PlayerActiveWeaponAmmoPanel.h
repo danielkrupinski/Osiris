@@ -21,7 +21,8 @@ public:
 
         context.panel().setVisible(true);
         const auto ammo = playerPawn.getActiveWeapon().clipAmmo().valueOr(-1);
-        context.panel().children()[0].clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(ammo).cstring());
+        if (context.cache().activeWeaponAmmo(ammo))
+            context.panel().children()[0].clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(ammo).cstring());
     }
 
 private:

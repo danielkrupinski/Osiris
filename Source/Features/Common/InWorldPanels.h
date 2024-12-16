@@ -4,9 +4,13 @@
 #include <Features/Sound/SoundVisualizationPanelTypes.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldPanelFactory.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanel.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCache.h>
 #include <GameClasses/PanelHandle.h>
 #include "InWorldPanelIndex.h"
 #include "InWorldPanelListEntry.h"
+
+#include <Features/Common/InWorldPanelsState.h>
+#include <Features/Common/InWorldPanelsPerHookState.h>
 
 template <typename HookContext>
 class InWorldPanels {
@@ -19,10 +23,11 @@ public:
     [[nodiscard]] decltype(auto) getNextPlayerInfoPanel() const noexcept
     {
         if (auto&& existingPanel = getNextExistingPanel(state().playerInfoPanelListHead, perHookState().lastUsedPlayerInfoPanelIndex))
-            return existingPanel.template as<PlayerInfoPanel>();
+            return existingPanel.template as<PlayerInfoPanel>(hookContext.template make<PlayerInfoPanelCache>().nextEntry());
         auto&& newPanel = createPlayerInfoPanel(containerPanel());
         registerNewPanel(state().playerInfoPanelListHead, perHookState().lastUsedPlayerInfoPanelIndex);
-        return newPanel.template as<PlayerInfoPanel>();
+        hookContext.template make<PlayerInfoPanelCache>().allocateNewEntry();
+        return newPanel.template as<PlayerInfoPanel>(hookContext.template make<PlayerInfoPanelCache>().nextEntry());
     }
 
     template <typename Type>

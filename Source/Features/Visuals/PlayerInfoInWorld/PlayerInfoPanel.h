@@ -6,21 +6,24 @@
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
 #include <GameClasses/PanoramaUiPanel.h>
 #include "PlayerInfoInWorldState.h"
+#include "PlayerInfoPanelCacheEntry.h"
 #include "PlayerInfoPanelTypes.h"
 
 template <typename HookContext>
 class PlayerInfoPanel {
 public:
-    explicit PlayerInfoPanel(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
+    explicit PlayerInfoPanel(HookContext& hookContext, cs2::CUIPanel* panel, PlayerInfoPanelCacheEntry& cache) noexcept
         : hookContext{hookContext}
         , panel{panel}
+        , cache{cache}
     {
     }
 
     void drawPlayerInfo(auto&& playerPawn) const noexcept
     {
         updatePanels(std::type_identity<PlayerInfoPanelTypes<HookContext>>{}, playerPawn);
-        getPanel().setOpacity(getOpacity(playerPawn));
+        if (const auto opacity = getOpacity(playerPawn); cache.opacity(opacity))
+            getPanel().setOpacity(opacity);
     }
 
     void updatePosition(const cs2::Vector& origin) const noexcept
@@ -53,7 +56,7 @@ private:
     void updatePanels(std::type_identity<std::tuple<PanelTypes...>>, auto&& playerPawn) const noexcept
     {
         auto&& childPanels = getPanel().children();
-        (hookContext.template make<PanelTypes>(childPanels[utils::typeIndex<PanelTypes, std::tuple<PanelTypes...>>()]).update(playerPawn), ...);
+        (hookContext.template make<PanelTypes>(childPanels[utils::typeIndex<PanelTypes, std::tuple<PanelTypes...>>()], cache).update(playerPawn), ...);
     }
 
     [[nodiscard]] decltype(auto) getPanel() const noexcept
@@ -63,4 +66,5 @@ private:
 
     HookContext& hookContext;
     cs2::CUIPanel* panel;
+    PlayerInfoPanelCacheEntry& cache;
 };

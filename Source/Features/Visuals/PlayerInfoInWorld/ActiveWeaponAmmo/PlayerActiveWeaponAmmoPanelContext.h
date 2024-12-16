@@ -1,11 +1,14 @@
 #pragma once
 
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
+
 template <typename HookContext>
 class PlayerActiveWeaponAmmoPanelContext {
 public:
-    PlayerActiveWeaponAmmoPanelContext(HookContext& hookContext, cs2::CUIPanel* panel) noexcept
+    PlayerActiveWeaponAmmoPanelContext(HookContext& hookContext, cs2::CUIPanel* panel, PlayerInfoPanelCacheEntry& cache) noexcept
         : _hookContext{hookContext}
         , _panel{panel}
+        , _cache{cache}
     {
     }
 
@@ -24,7 +27,13 @@ public:
         return _hookContext.template make<PanoramaUiPanel>(_panel);
     }
 
+    [[nodiscard]] auto& cache() const noexcept
+    {
+        return _cache;
+    }
+
 private:
     HookContext& _hookContext;
     cs2::CUIPanel* _panel;
+    PlayerInfoPanelCacheEntry& _cache;
 };
