@@ -7,6 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 27 December 2024
+    * Added model glow for grenade projectiles
+
 * 14 December 2024
     * Added model glow for defuse kits on the ground
 
@@ -26,9 +29,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added model glow for weapons on ground
 
     ![Weapon model glow](https://github.com/user-attachments/assets/ce1b8853-1644-41bd-ab65-0880ff8e4153)
-
-* 30 November 2024
-    * Player outline glow now works also when the local player is dead
 
 ## Technical features
 
