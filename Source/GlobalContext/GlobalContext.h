@@ -94,14 +94,11 @@ public:
         soundWatcher.update();
         fullContext().features(dependencies).soundFeatures().runOnViewMatrixUpdate();
 
-        auto&& playerInfoInWorld = dependencies.make<PlayerInfoInWorld>();
-        RenderingHookEntityLoop{dependencies, playerInfoInWorld}.run();
+        dependencies.make<RenderingHookEntityLoop>().run();
         dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
-
-        fullContext().features(dependencies).hudFeatures().defusingAlert().run();
-        fullContext().features(dependencies).hudFeatures().killfeedPreserver().run();
-        BombStatusPanelManager{BombStatusPanelManagerContext{dependencies}}.run();
-
+        dependencies.make<DefusingAlert>().run();
+        dependencies.make<KillfeedPreserver>().run();
+        dependencies.make<BombStatusPanelManager>().run();
         dependencies.make<InWorldPanels>().hideUnusedPanels();
 
         UnloadFlag unloadFlag;

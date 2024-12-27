@@ -1,10 +1,13 @@
 #pragma once
 
-template <typename Context>
+#include "KillfeedPreserverContext.h"
+
+template <typename HookContext, typename Context = KillfeedPreserverContext<HookContext>>
 class KillfeedPreserver {
 public:
-    explicit KillfeedPreserver(Context context) noexcept
-        : context{context}
+    template <typename... Args>
+    KillfeedPreserver(Args&&... args) noexcept
+        : context{std::forward<Args>(args)...}
     {
     }
 

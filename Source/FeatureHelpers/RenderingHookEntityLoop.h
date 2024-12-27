@@ -8,9 +8,8 @@
 template <typename HookContext>
 class RenderingHookEntityLoop {
 public:
-    explicit RenderingHookEntityLoop(HookContext& hookContext, PlayerInfoInWorld<HookContext>& playerInformationThroughWalls) noexcept
+    explicit RenderingHookEntityLoop(HookContext& hookContext) noexcept
         : hookContext{hookContext}
-        , playerInformationThroughWalls{playerInformationThroughWalls}
     {
     }
 
@@ -29,7 +28,7 @@ private:
 
         if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
             auto&& playerPawn = hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(&entity));
-            playerInformationThroughWalls.drawPlayerInformation(playerPawn);
+            hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(playerPawn);
         }
 
         if (entityTypeInfo.isModelEntity())
@@ -38,5 +37,4 @@ private:
     }
 
     HookContext& hookContext;
-    PlayerInfoInWorld<HookContext>& playerInformationThroughWalls;
 };

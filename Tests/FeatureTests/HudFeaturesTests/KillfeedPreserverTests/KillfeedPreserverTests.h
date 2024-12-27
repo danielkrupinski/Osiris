@@ -18,7 +18,7 @@ protected:
     testing::StrictMock<MockKillfeedPreserverContext> mockContext;
     testing::StrictMock<MockDeathNotices> mockDeathNotices;
 
-    KillfeedPreserver<MockKillfeedPreserverContext&> killfeedPreserver{mockContext};
+    KillfeedPreserver<MockHookContext, MockKillfeedPreserverContext&> killfeedPreserver{mockContext};
     KillfeedPreserverState state;
     std::function<void(MockDeathNotice&)> preserveDeathNoticeFunctor;
 };

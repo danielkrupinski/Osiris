@@ -24,7 +24,7 @@ protected:
     testing::StrictMock<MockBombTimer> mockBombTimer;
     testing::StrictMock<MockBombStatusPanel> mockBombStatusPanel;
 
-    BombStatusPanelManager<MockBombStatusPanelManagerContext&> bombStatusPanelManager{mockContext};
+    BombStatusPanelManager<MockHookContext, MockBombStatusPanelManagerContext&> bombStatusPanelManager{mockContext};
 };
 
 TEST_F(BombStatusPanelManagerTest, BombStatusPanelAndBombTimerAreHiddenWhenPostRoundTimerIsVisible) {

@@ -10,19 +10,18 @@
 template <typename HookContext>
 class DefusingAlertContext {
 public:
-    DefusingAlertContext(HookContext& context, DefusingAlertState& state) noexcept
+    DefusingAlertContext(HookContext& context) noexcept
         : context{context}
-        , _state{state}
     {
     }
 
     [[nodiscard]] decltype(auto) defusingAlertContainerPanel() const noexcept
     {
-        if (auto&& panel = uiEngine().getPanelFromHandle(_state.defusingAlertContainerPanelHandle))
+        if (auto&& panel = uiEngine().getPanelFromHandle(state().defusingAlertContainerPanelHandle))
             return utils::lvalue<decltype(panel)>(panel);
 
         updatePanelHandles();
-        return uiEngine().getPanelFromHandle(_state.defusingAlertContainerPanelHandle);
+        return uiEngine().getPanelFromHandle(state().defusingAlertContainerPanelHandle);
     }
 
     [[nodiscard]] auto defusingAlertCondition() const noexcept
@@ -48,12 +47,12 @@ public:
 
     [[nodiscard]] DefusingAlertState& state() const noexcept
     {
-        return _state;
+        return context.featuresStates().hudFeaturesStates.defusingAlertState;
     }
 
     [[nodiscard]] auto defusingCountdownTextPanel() const noexcept
     {
-        return DefusingCountdownTextPanel{uiEngine().getPanelFromHandle(_state.defusingTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
+        return DefusingCountdownTextPanel{uiEngine().getPanelFromHandle(state().defusingTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
     }
 
 private:
@@ -64,7 +63,7 @@ private:
 
     void updatePanelHandles() const noexcept
     {
-        if (uiEngine().getPanelFromHandle(_state.defusingTimerPanelHandle))
+        if (uiEngine().getPanelFromHandle(state().defusingTimerPanelHandle))
             return;
 
         auto&& hudTeamCounter = context.hud().hudTeamCounter();
@@ -100,10 +99,9 @@ private:
             return;
 
         defusingAlertContainer.setVisible(false);
-        _state.defusingAlertContainerPanelHandle = defusingAlertContainer.getHandle();
-        _state.defusingTimerPanelHandle = defusingTimer.getHandle();
+        state().defusingAlertContainerPanelHandle = defusingAlertContainer.getHandle();
+        state().defusingTimerPanelHandle = defusingTimer.getHandle();
     }
 
     HookContext& context;
-    DefusingAlertState& _state;
 };

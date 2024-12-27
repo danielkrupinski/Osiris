@@ -28,24 +28,14 @@ struct HudFeatures {
         return BombTimerToggle{BombTimerContext{hookContext}};
     }
 
-    [[nodiscard]] auto defusingAlert() const noexcept
-    {
-        return DefusingAlert{DefusingAlertContext{hookContext, states.defusingAlertState}};
-    }
-
     [[nodiscard]] auto defusingAlertToggle() const noexcept
     {
-        return DefusingAlertToggle{DefusingAlertContext{hookContext, states.defusingAlertState}};
-    }
-    
-    [[nodiscard]] auto killfeedPreserver() const noexcept
-    {
-        return KillfeedPreserver{KillfeedPreserverContext{states.killfeedPreserverState, hookContext}};
+        return DefusingAlertToggle{DefusingAlertContext{hookContext}};
     }
 
     [[nodiscard]] auto killfeedPreserveToggle() const noexcept
     {
-        return KillfeedPreserveToggle{KillfeedPreserverContext{states.killfeedPreserverState, hookContext}};
+        return KillfeedPreserveToggle{KillfeedPreserverContext{hookContext}};
     }
 
     [[nodiscard]] decltype(auto) postRoundTimerToggle() const noexcept

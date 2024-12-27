@@ -29,7 +29,7 @@ protected:
     testing::StrictMock<MockDefusingAlertCondition> mockDefusingAlertCondition;
     testing::StrictMock<MockDefusingAlertPanel> mockDefusingAlertPanel;
 
-    DefusingAlert<MockDefusingAlertContext&> defusingAlert{mockDefusingAlertContext};
+    DefusingAlert<MockHookContext, MockDefusingAlertContext&> defusingAlert{mockDefusingAlertContext};
 };
 
 TEST_F(DefusingAlertTest, DoesNotRunIfShouldNotRun) {

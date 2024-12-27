@@ -1,12 +1,16 @@
 #pragma once
 
+#include <utility>
+
+#include "BombStatusPanelManagerContext.h"
 #include <Common/Visibility.h>
 
-template <typename Context>
+template <typename HookContext, typename Context = BombStatusPanelManagerContext<HookContext>>
 class BombStatusPanelManager {
 public:
-    explicit BombStatusPanelManager(Context context) noexcept
-        : context{context}
+    template <typename... Args>
+    BombStatusPanelManager(Args&&... args) noexcept
+        : context{std::forward<Args>(args)...}
     {
     }
 

@@ -17,12 +17,8 @@ protected:
     testing::StrictMock<MockDeathNotices> mockDeathNotices;
 
     KillfeedPreserverState state;
-    KillfeedPreserverContext<MockHookContext&> killfeedPreserverContext{state, mockHookContext};
+    KillfeedPreserverContext<MockHookContext&> killfeedPreserverContext{mockHookContext};
 };
-
-TEST_F(KillfeedPreserverContextTest, StateCanBeAccessed) {
-    EXPECT_THAT(killfeedPreserverContext.state(), testing::Ref(state));
-}
 
 TEST_F(KillfeedPreserverContextTest, DeathNoticesCanBeAccessed) {
     EXPECT_CALL(mockHookContext, hud()).WillOnce(testing::ReturnRef(mockHud));
