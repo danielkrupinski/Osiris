@@ -1,8 +1,7 @@
 #pragma once
 
+#include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
-
-#include "WeaponModelGlowParams.h"
 
 extern "C" std::uint64_t Weapon_sceneObjectUpdater_asm(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
 
@@ -96,14 +95,14 @@ private:
 
     [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
     {
-        using namespace weapon_model_glow_params;
+        using namespace model_glow_params;
         switch (entityTypeInfo.typeIndex) {
         case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
         case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return kMolotovColor;
         case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return kFlashbangColor;
         case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return kHEGrenadeColor;
         case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return kSmokeGrenadeColor;
-        default: return kWeaponColor;
+        default: return kDefaultWeaponColor;
         }
     }
 

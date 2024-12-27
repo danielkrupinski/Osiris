@@ -1703,13 +1703,7 @@
     <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlow.h">
       <Filter>Features\Visuals\ModelGlow\WeaponModelGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlowParams.h">
-      <Filter>Features\Visuals\ModelGlow\WeaponModelGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlow.h">
-      <Filter>Features\Visuals\ModelGlow\DroppedBombModelGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlowParams.h">
       <Filter>Features\Visuals\ModelGlow\DroppedBombModelGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Common\InWorldPanelIndex.h">
@@ -1736,13 +1730,7 @@
     <ClInclude Include="Features\Visuals\ModelGlow\TickingBombModelGlow\TickingBombModelGlow.h">
       <Filter>Features\Visuals\ModelGlow\TickingBombModelGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\ModelGlow\TickingBombModelGlow\TickingBombModelGlowParams.h">
-      <Filter>Features\Visuals\ModelGlow\TickingBombModelGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\DefuseKitModelGlow\DefuseKitModelGlow.h">
-      <Filter>Features\Visuals\ModelGlow\DefuseKitModelGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\ModelGlow\DefuseKitModelGlow\DefuseKitModelGlowParams.h">
       <Filter>Features\Visuals\ModelGlow\DefuseKitModelGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCache.h">
@@ -1760,8 +1748,8 @@
     <ClInclude Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow\GrenadeProjectileModelGlow.h">
       <Filter>Features\Visuals\ModelGlow\GrenadeProjectileModelGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow\GrenadeProjectileModelGlowParams.h">
-      <Filter>Features\Visuals\ModelGlow\GrenadeProjectileModelGlow</Filter>
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowParams.h">
+      <Filter>Features\Visuals\ModelGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

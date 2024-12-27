@@ -1,8 +1,7 @@
 #pragma once
 
+#include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
-
-#include "TickingBombModelGlowParams.h"
 
 template <typename HookContext>
 class TickingBombModelGlow {
@@ -23,9 +22,8 @@ public:
         if (isDisabled())
             return;
 
-        using namespace ticking_bomb_model_glow_params;
         if (shouldGlowPlantedBombModel(plantedBomb))
-            plantedBomb.baseEntity().applySpawnProtectionEffectRecursively(kTickingBombColor);
+            plantedBomb.baseEntity().applySpawnProtectionEffectRecursively(model_glow_params::kTickingBombColor);
         else
             plantedBomb.baseEntity().removeSpawnProtectionEffectRecursively();
     }

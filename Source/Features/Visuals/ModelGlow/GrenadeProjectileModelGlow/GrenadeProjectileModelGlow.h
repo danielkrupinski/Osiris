@@ -1,8 +1,8 @@
 #pragma once
 
 #include <FeatureHelpers/EntityClassifier.h>
+#include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
-#include "GrenadeProjectileModelGlowParams.h"
 
 template <typename HookContext>
 class GrenadeProjectileModelGlow {
@@ -53,14 +53,14 @@ private:
 
     [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
     {
-        using namespace grenade_projectile_model_glow_params;
+        using namespace model_glow_params;
 
         switch (entityTypeInfo.typeIndex) {
         case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return kFlashbangColor;
         case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return kHEGrenadeColor;
         case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return kMolotovColor;
         case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return kSmokeGrenadeColor;
-        default: return kFallbackColor;
+        default: return kDefaultWeaponColor;
         }
     }
 

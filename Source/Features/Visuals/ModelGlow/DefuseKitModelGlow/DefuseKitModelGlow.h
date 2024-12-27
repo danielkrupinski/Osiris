@@ -1,8 +1,7 @@
 #pragma once
 
+#include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
-
-#include "DefuseKitModelGlowParams.h"
 
 template <typename HookContext>
 class DefuseKitModelGlow {
@@ -23,7 +22,7 @@ public:
         if (isDisabled())
             return;
 
-        using namespace defuse_kit_model_glow_params;
+        using namespace model_glow_params;
         if (isEnabled())
             defuseKit.baseEntity().applySpawnProtectionEffectRecursively(kDefuseKitColor);
         else

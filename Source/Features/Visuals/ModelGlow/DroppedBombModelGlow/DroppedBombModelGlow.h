@@ -1,8 +1,7 @@
 #pragma once
 
+#include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
-
-#include "DroppedBombModelGlowParams.h"
 
 extern "C" std::uint64_t Weapon_sceneObjectUpdater_asm(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
 
@@ -34,7 +33,7 @@ public:
     void applyModelGlow(auto&& bomb) const noexcept
     {
         if (shouldRun() && shouldGlowBombModel(bomb))
-            bomb.baseWeapon().baseEntity().applySpawnProtectionEffectRecursively(dropped_bomb_model_glow_params::kDroppedBombColor);
+            bomb.baseWeapon().baseEntity().applySpawnProtectionEffectRecursively(model_glow_params::kDroppedBombColor);
     }
 
     void onUnload(auto&& bomb) const noexcept
