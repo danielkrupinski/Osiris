@@ -217,6 +217,9 @@
     <Filter Include="Features\Visuals\ModelGlow\DefuseKitModelGlow">
       <UniqueIdentifier>{798917e9-2237-40b5-aed0-5bb6cbe417c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow">
+      <UniqueIdentifier>{82eb31ee-3f3f-44ea-8c75-0f9a591f78a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1753,6 +1756,12 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanelCacheState.h">
       <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow\GrenadeProjectileModelGlow.h">
+      <Filter>Features\Visuals\ModelGlow\GrenadeProjectileModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow\GrenadeProjectileModelGlowParams.h">
+      <Filter>Features\Visuals\ModelGlow\GrenadeProjectileModelGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

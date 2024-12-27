@@ -192,6 +192,8 @@
     <ClInclude Include="Features\Visuals\ModelGlow\DefuseKitModelGlow\DefuseKitModelGlowParams.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\DroppedBombModelGlow\DroppedBombModelGlowParams.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow\GrenadeProjectileModelGlow.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow\GrenadeProjectileModelGlowParams.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h" />

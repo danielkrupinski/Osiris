@@ -354,6 +354,8 @@ $.Osiris = (function () {
 
   var weaponModelGlow = createSection(modelGlowTab, 'Weapons');
   createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow', 0);
+  separator(weaponModelGlow);
+  createYesNoDropDown(weaponModelGlow, "Glow Grenade Projectile Models", 'visuals', 'grenade_proj_model_glow', 0);
 
   var bombModelGlow = createSection(modelGlowTab, 'Bomb & Defuse Kit');
   createYesNoDropDown(bombModelGlow, "Glow Dropped Bomb Model", 'visuals', 'dropped_bomb_model_glow', 0);

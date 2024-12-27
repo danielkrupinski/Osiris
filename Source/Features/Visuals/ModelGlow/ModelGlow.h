@@ -10,6 +10,7 @@
 
 #include "DefuseKitModelGlow/DefuseKitModelGlow.h"
 #include "DroppedBombModelGlow/DroppedBombModelGlow.h"
+#include "GrenadeProjectileModelGlow/GrenadeProjectileModelGlow.h"
 #include "PlayerModelGlow/PlayerModelGlow.h"
 #include "TickingBombModelGlow/TickingBombModelGlow.h"
 #include "WeaponModelGlow/WeaponModelGlow.h"
@@ -35,6 +36,8 @@ public:
             hookContext.template make<DefuseKitModelGlow>().updateModelGlow(entity);
         else if (entityTypeInfo.is<cs2::CPlantedC4>())
             hookContext.template make<TickingBombModelGlow>().applyModelGlow(entity.template as<PlantedC4>());
+        else if (entityTypeInfo.isGrenadeProjectile())
+            hookContext.template make<GrenadeProjectileModelGlow>().updateModelGlow(entityTypeInfo, entity);
         else if (entityTypeInfo.isWeapon())
             hookContext.template make<WeaponModelGlow>().updateSceneObjectUpdaterHook(entity.template as<BaseWeapon>());
     }
@@ -66,6 +69,7 @@ public:
         hookContext.template make<DroppedBombModelGlow>().onEntityListTraversed();
         hookContext.template make<TickingBombModelGlow>().onEntityListTraversed();
         hookContext.template make<DefuseKitModelGlow>().onEntityListTraversed();
+        hookContext.template make<GrenadeProjectileModelGlow>().onEntityListTraversed();
     }
 
     void onUnload(EntityTypeInfo entityTypeInfo, auto&& entity) const noexcept
@@ -81,6 +85,8 @@ public:
             hookContext.template make<DefuseKitModelGlow>().onUnload(entity);
         else if (entityTypeInfo.is<cs2::CPlantedC4>())
             hookContext.template make<TickingBombModelGlow>().onUnload(entity.template as<PlantedC4>());
+        else if (entityTypeInfo.isGrenadeProjectile())
+            hookContext.template make<GrenadeProjectileModelGlow>().onUnload(entity);
         else if (entityTypeInfo.isWeapon())
             hookContext.template make<WeaponModelGlow>().onUnload(entity.template as<BaseWeapon>());
     }

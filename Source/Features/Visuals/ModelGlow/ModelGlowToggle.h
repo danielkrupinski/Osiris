@@ -93,6 +93,19 @@ public:
         }
     }
 
+    void updateGrenadeProjectileModelGlowToggle(char option) noexcept
+    {
+        switch (option) {
+        case '0':
+            state().grenadeProjectileModelGlow = ModelGlowState::State::Enabled;
+            break;
+        case '1':
+            if (state().grenadeProjectileModelGlow == ModelGlowState::State::Enabled)
+                state().grenadeProjectileModelGlow = ModelGlowState::State::Disabling;
+            break;
+        }
+    }
+
 private:
     [[nodiscard]] auto& state() const noexcept
     {

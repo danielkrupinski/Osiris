@@ -114,6 +114,8 @@ private:
             features.visualFeatures().modelGlowToggle().updateTickingBombModelGlowToggle(parser.getChar());
         } else if (feature == "defuse_kit_model_glow") {
             features.visualFeatures().modelGlowToggle().updateDefuseKitModelGlowToggle(parser.getChar());
+        } else if (feature == "grenade_proj_model_glow") {
+            features.visualFeatures().modelGlowToggle().updateGrenadeProjectileModelGlowToggle(parser.getChar());
         }
     }
 
