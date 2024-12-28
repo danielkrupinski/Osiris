@@ -1,7 +1,7 @@
 #pragma once
 
+#include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include "WeaponOutlineGlowContext.h"
-#include "WeaponOutlineGlowParams.h"
 
 template <typename HookContext, typename Context = WeaponOutlineGlowContext<HookContext>>
 class WeaponOutlineGlow {
@@ -18,16 +18,16 @@ public:
         if (!condition.shouldRun() || !condition.shouldGlowWeapon(weapon))
             return;
 
-        using namespace weapon_outline_glow_params;
-        const auto color = getColor(entityTypeInfo).setAlpha(kColorAlpha);
-        weapon.applyGlow(color, kRange);
-        weapon.forEachChild([color](auto&& entity) { entity.applyGlow(color, kRange); });
+        using namespace outline_glow_params;
+        const auto color = getColor(entityTypeInfo);
+        weapon.applyGlow(color, kWeaponGlowRange);
+        weapon.forEachChild([color](auto&& entity) { entity.applyGlow(color, kWeaponGlowRange); });
     }
 
 private:
     [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
     {
-        using namespace weapon_outline_glow_params;
+        using namespace outline_glow_params;
 
         switch (entityTypeInfo.typeIndex) {
         case utils::typeIndex<cs2::C_MolotovGrenade, KnownEntityTypes>():
@@ -35,7 +35,7 @@ private:
         case utils::typeIndex<cs2::C_Flashbang, KnownEntityTypes>(): return kFlashbangColor;
         case utils::typeIndex<cs2::C_HEGrenade, KnownEntityTypes>(): return kHEGrenadeColor;
         case utils::typeIndex<cs2::C_SmokeGrenade, KnownEntityTypes>(): return kSmokeGrenadeColor;
-        default: return kWeaponColor;
+        default: return kDefaultWeaponColor;
         }
     }
 

@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "DefuseKitOutlineGlowContext.h"
-#include "DefuseKitOutlineGlowParams.h"
+#include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 
 template <typename HookContext, typename Context = DefuseKitOutlineGlowContext<HookContext>>
 class DefuseKitOutlineGlow {
@@ -17,8 +17,8 @@ public:
     void applyGlowToDefuseKit(auto&& defuseKit) const noexcept
     {
         if (context.state().enabled) {
-            using namespace defuse_kit_outline_glow_params;
-            defuseKit.applyGlowRecursively(kColor, kRange);
+            using namespace outline_glow_params;
+            defuseKit.applyGlowRecursively(kDefuseKitColor, kDefuseKitGlowRange);
         }
     }
 

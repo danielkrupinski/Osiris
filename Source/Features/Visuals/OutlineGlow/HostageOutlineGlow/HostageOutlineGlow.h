@@ -2,8 +2,8 @@
 
 #include <utility>
 
+#include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include "HostageOutlineGlowContext.h"
-#include "HostageOutlineGlowParams.h"
 
 template <typename HookContext, typename Context = HostageOutlineGlowContext<HookContext>>
 class HostageOutlineGlow {
@@ -17,8 +17,7 @@ public:
     void applyGlowToHostage(auto&& hostage) const noexcept
     {
         if (context.state().enabled) {
-            using namespace hostage_outline_glow_params;
-            hostage.applyGlowRecursively(kColor);
+            hostage.applyGlowRecursively(outline_glow_params::kHostageColor);
         }
     }
 

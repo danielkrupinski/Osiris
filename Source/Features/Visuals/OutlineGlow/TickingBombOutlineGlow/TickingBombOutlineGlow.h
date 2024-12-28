@@ -2,8 +2,8 @@
 
 #include <utility>
 
+#include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include "TickingBombOutlineGlowContext.h"
-#include "TickingBombOutlineGlowParams.h"
 
 template <typename HookContext, typename Context = TickingBombOutlineGlowContext<HookContext>>
 class TickingBombOutlineGlow {
@@ -20,8 +20,7 @@ public:
         if (!condition.shouldRun() || !condition.shouldGlowPlantedBomb(plantedBomb))
             return;
 
-        using namespace ticking_bomb_outline_glow_params;
-        plantedBomb.baseEntity().applyGlowRecursively(kColor);
+        plantedBomb.baseEntity().applyGlowRecursively(outline_glow_params::kTickingBombColor);
     }
 
 private:

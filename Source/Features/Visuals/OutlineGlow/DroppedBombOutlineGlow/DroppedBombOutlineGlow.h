@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "DroppedBombOutlineGlowContext.h"
-#include "DroppedBombOutlineGlowParams.h"
+#include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 
 template <typename HookContext, typename Context = DroppedBombOutlineGlowContext<HookContext>>
 class DroppedBombOutlineGlow {
@@ -20,8 +20,7 @@ public:
         if (!condition.shouldRun() || !condition.shouldGlowBomb(bomb))
             return;
 
-        using namespace dropped_bomb_outline_glow_params;
-        bomb.applyGlowRecursively(kColor);
+        bomb.applyGlowRecursively(outline_glow_params::kDroppedBombColor);
     }
 
 private:
