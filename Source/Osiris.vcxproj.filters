@@ -1751,6 +1751,9 @@
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowParams.h">
       <Filter>Features\Visuals\ModelGlow</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\OptionalPointee.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
