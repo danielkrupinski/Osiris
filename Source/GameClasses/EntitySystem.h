@@ -28,7 +28,7 @@ public:
         const auto chunkIndex = entityIndex.value / cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
         if (const auto* const chunk = entityList->chunks[chunkIndex]) {
             const auto indexInChunk = entityIndex.value % cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
-            if (auto& entityIndentity = (*chunk)[indexInChunk]; entityIndentity.handle == handle)
+            if (const auto& entityIndentity = (*chunk)[indexInChunk]; entityIndentity.handle == handle)
                 return entityIndentity.entity;
         }
         return nullptr;
