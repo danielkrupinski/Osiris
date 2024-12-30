@@ -62,6 +62,7 @@ public:
         HookDependencies dependencies{fullCtx};
 
         if (justInitialized) {
+            fullCtx.entityClassifier.init(dependencies);
             if (const auto mainMenu{fullCtx.clientPatternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
                 dependencies.make<PanoramaGUI>().init(dependencies.make<PanoramaUiPanel>((*mainMenu)->uiPanel));
             fullCtx.hooks.peepEventsHook.disable();
@@ -111,8 +112,8 @@ public:
             PanoramaGuiUnloadHandler{dependencies}.handleUnload();
             fullContext().hooks.viewRenderHook.uninstall();
 
-            dependencies.make<EntitySystem>().iterateEntities([&dependencies](auto& entity) {
-                auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(&entity));
+            dependencies.make<EntitySystem>().forEachEntityIdentity([&dependencies](const auto& entityIdentity) {
+                auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
                 dependencies.make<ModelGlow>().onUnload(baseEntity.classify(), baseEntity);
             });
         }

@@ -27,7 +27,7 @@ public:
     [[nodiscard]] EntityTypeInfo classify() const noexcept
     {
         if (entity)
-            return hookContext.entityClassifier().classifyEntity(hookContext.gameDependencies().entitiesVMTs, entity->vmt);
+            return hookContext.entityClassifier().classifyEntity(entity->identity->entityClass);
         return {};
     }
 
@@ -40,7 +40,7 @@ public:
     template <template <typename...> typename EntityType>
     [[nodiscard]] bool is() const noexcept
     {
-        return entity && entity->vmt && entity->vmt == hookContext.gameDependencies().entitiesVMTs.vmts[utils::typeIndex<typename EntityType<HookContext>::RawType, KnownEntityTypes>()];
+        return entity && hookContext.entityClassifier().template entityIs<typename EntityType<HookContext>::RawType>(entity->identity->entityClass);
     }
 
     template <template <typename...> typename EntityType>

@@ -43,14 +43,12 @@ struct FullGlobalContext {
         , panoramaPatternSearchResults{memoryPatterns.patternFinders.panoramaPatternFinder.findPatterns(kPanoramaPatterns)}
         , gameDependencies{
             memoryPatterns,
-            VmtFinder{clientDLL.getVmtFinderParams()},
             VmtFinder{panoramaDLL.getVmtFinderParams()},
             Tier0Dll{}}
         , hooks{
             peepEventsHook,
             clientPatternSearchResults.get<ViewRenderPointer>(),
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
-        , entityClassifier{gameDependencies.entitiesVMTs}
     {
     }
 

@@ -30,11 +30,11 @@ private:
         using namespace outline_glow_params;
 
         switch (entityTypeInfo.typeIndex) {
-        case utils::typeIndex<cs2::C_MolotovGrenade, KnownEntityTypes>():
-        case utils::typeIndex<cs2::C_IncendiaryGrenade, KnownEntityTypes>(): return kMolotovColor;
-        case utils::typeIndex<cs2::C_Flashbang, KnownEntityTypes>(): return kFlashbangColor;
-        case utils::typeIndex<cs2::C_HEGrenade, KnownEntityTypes>(): return kHEGrenadeColor;
-        case utils::typeIndex<cs2::C_SmokeGrenade, KnownEntityTypes>(): return kSmokeGrenadeColor;
+        case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
+        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return kMolotovColor;
+        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return kFlashbangColor;
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return kHEGrenadeColor;
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return kSmokeGrenadeColor;
         default: return kDefaultWeaponColor;
         }
     }

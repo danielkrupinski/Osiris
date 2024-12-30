@@ -5,24 +5,24 @@
 namespace cs2
 {
 
-template <typename Key, typename Value>
+template <typename Key, typename Value, typename Index = int>
 struct Node {
-    int left;
-    int right;
-    int parent;
-    int type;
+    Index left;
+    Index right;
+    Index parent;
+    Index type;
     Key key;
     Value value;
 };
 
-template <typename Key, typename Value>
+template <typename Key, typename Value, typename Index = int>
 struct CUtlMap {
     std::uint8_t unknown;
-    Node<Key, Value>* memory;
+    Node<Key, Value, Index>* memory;
     int allocationCount;
     int growSize;
-    int root;
-    int numElements;
+    Index root;
+    Index numElements;
 };
 
 }

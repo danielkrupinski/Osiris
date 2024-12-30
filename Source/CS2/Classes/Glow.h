@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include "CSceneObject.h"
+#include "Entities/C_BaseEntity.h"
 
 #include <Platform/Macros/IsPlatform.h>
 
