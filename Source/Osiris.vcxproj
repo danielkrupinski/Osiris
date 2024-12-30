@@ -48,6 +48,7 @@
     <ClInclude Include="CS2\Classes\Entities\GrenadeProjectiles.h" />
     <ClInclude Include="CS2\Classes\Entities\WeaponEntities.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CConcreteEntityList.h" />
+    <ClInclude Include="CS2\Classes\EntitySystem\CEntityClass.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityHandle.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityIdentity.h" />
     <ClInclude Include="CS2\Classes\EntitySystem\CEntityIndex.h" />
@@ -65,7 +66,7 @@
     <ClInclude Include="CS2\Constants\ColorConstants.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
-    <ClInclude Include="CS2\Constants\EntityTypeNames.h" />
+    <ClInclude Include="CS2\Constants\EntityClasses.h" />
     <ClInclude Include="CS2\Constants\IconURLs.h" />
     <ClInclude Include="CS2\Constants\LifeStateConstants.h" />
     <ClInclude Include="CS2\Constants\PanelIDs.h" />
@@ -310,7 +311,6 @@
     <ClInclude Include="GameClasses\TopLevelWindow.h" />
     <ClInclude Include="GameDependencies\ConVars.h" />
     <ClInclude Include="GameDependencies\ConVarsBase.h" />
-    <ClInclude Include="GameDependencies\EntitiesVMTs.h" />
     <ClInclude Include="GameDependencies\FileNameSymbolTableDeps.h" />
     <ClInclude Include="GameDependencies\GameDependencies.h" />
     <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h" />
@@ -487,6 +487,7 @@
     <ClInclude Include="Utils\ColorUtils.h" />
     <ClInclude Include="Utils\CString.h" />
     <ClInclude Include="Utils\DynamicArray.h" />
+    <ClInclude Include="Utils\FieldFieldOffset.h" />
     <ClInclude Include="Utils\FieldOffset.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\GenericFunctionPointer.h" />

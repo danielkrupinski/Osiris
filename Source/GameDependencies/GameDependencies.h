@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ConVars.h"
-#include "EntitiesVMTs.h"
 #include "FileNameSymbolTableDeps.h"
 #include "GlowSceneObjectDeps.h"
 #include "HudDeps.h"
@@ -16,11 +15,10 @@
 struct GameDependencies {
     GameDependencies() = default;
 
-    GameDependencies(const MemoryPatterns& memoryPatterns, const VmtFinder& clientVmtFinder, const VmtFinder& panoramaVmtFinder, Tier0Dll tier0Dll) noexcept
+    GameDependencies(const MemoryPatterns& memoryPatterns, const VmtFinder& panoramaVmtFinder, Tier0Dll tier0Dll) noexcept
         : fileNameSymbolTableDeps{tier0Dll}
         , memAllocDeps{tier0Dll}
         , stylePropertiesSymbolsAndVMTs{StylePropertySymbolMap{memoryPatterns.panelStylePatterns().stylePropertiesSymbols()}, panoramaVmtFinder}
-        , entitiesVMTs{clientVmtFinder}
     {
     }
 
@@ -30,7 +28,6 @@ struct GameDependencies {
     MemAllocDeps memAllocDeps;
 
     StylePropertiesSymbolsAndVMTs stylePropertiesSymbolsAndVMTs;
-    EntitiesVMTs entitiesVMTs;
     std::optional<ConVars> conVars;
     std::optional<PanoramaSymbols> panoramaSymbols;
 };

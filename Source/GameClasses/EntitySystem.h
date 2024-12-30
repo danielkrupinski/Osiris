@@ -1,9 +1,11 @@
 #pragma once
 
 #include <CS2/Classes/EntitySystem/CConcreteEntityList.h>
+#include <CS2/Classes/EntitySystem/CEntityClass.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <CS2/Classes/EntitySystem/CEntityIndex.h>
 #include <CS2/Classes/EntitySystem/CGameEntitySystem.h>
+#include <MemoryPatterns/PatternTypes/EntitySystemPatternTypes.h>
 
 template <typename HookContext>
 class EntitySystem {
@@ -26,14 +28,14 @@ public:
         const auto chunkIndex = entityIndex.value / cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
         if (const auto* const chunk = entityList->chunks[chunkIndex]) {
             const auto indexInChunk = entityIndex.value % cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
-            if (const auto& entityIndentity = (*chunk)[indexInChunk]; entityIndentity.handle == handle)
+            if (auto& entityIndentity = (*chunk)[indexInChunk]; entityIndentity.handle == handle)
                 return entityIndentity.entity;
         }
         return nullptr;
     }
     
     template <typename F>
-    void iterateEntities(F&& f) const noexcept
+    void forEachEntityIdentity(F&& f) const noexcept
     {
         const auto entityList = getEntityList();
         if (!entityList)
@@ -48,8 +50,21 @@ public:
 
             const auto indexInChunk = i % cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
             if (const auto& entityIndentity = (*chunk)[indexInChunk]; entityIndentity.entity && entityIndentity.handle.index().value == i)
-                f(*entityIndentity.entity);
+                f(entityIndentity);
         }
+    }
+
+    [[nodiscard]] cs2::CEntityClass* findEntityClass(const char* className) const noexcept
+    {
+        const auto entityClasses = getEntityClasses();
+        if (!entityClasses)
+            return nullptr;
+
+        for (int i = 0; i < entityClasses->numElements; ++i) {
+            if (std::strcmp(entityClasses->memory[i].key, className) == 0)
+                return entityClasses->memory[i].value;
+        }
+        return nullptr;
     }
 
 private:
@@ -63,6 +78,11 @@ private:
     [[nodiscard]] auto getEntityList() const noexcept
     {
         return hookContext.clientPatternSearchResults().template get<EntityListOffset>().of(entitySystem()).get();
+    }
+
+    [[nodiscard]] auto getEntityClasses() const noexcept
+    {
+        return hookContext.clientPatternSearchResults().template get<OffsetToEntityClasses>().of(entitySystem()).get();
     }
 
     [[nodiscard]] auto getHighestEntityIndex() const noexcept

@@ -914,9 +914,6 @@
     <ClInclude Include="GameDependencies\ConVarsBase.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\EntitiesVMTs.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\FileNameSymbolTableDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
@@ -1340,9 +1337,6 @@
     <ClInclude Include="Utils\TypedStaticStringPool.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="CS2\Constants\EntityTypeNames.h">
-      <Filter>CS2\Constants</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Constants\StylePropertySymbolNames.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
@@ -1738,6 +1732,15 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowParams.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FieldFieldOffset.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\EntityClasses.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\EntitySystem\CEntityClass.h">
+      <Filter>CS2\Classes\EntitySystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

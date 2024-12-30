@@ -8,10 +8,11 @@ namespace cs2
 {
 
 struct CEntityInstance;
+struct CEntityClass;
 
 struct CEntityIdentity {
     CEntityInstance* entity;
-    PAD(8);
+    CEntityClass* entityClass;
     CEntityHandle handle;
     PAD(100);
 };
