@@ -43,7 +43,7 @@ private:
 
     [[nodiscard]] bool isEnabled() const noexcept
     {
-        return state().grenadeProjectileModelGlow == ModelGlowState::State::Enabled;
+        return state().masterSwitch == ModelGlowState::State::Enabled && state().grenadeProjectileModelGlow == ModelGlowState::State::Enabled;
     }
 
     [[nodiscard]] auto& state() const noexcept

@@ -42,7 +42,7 @@ private:
 
     [[nodiscard]] bool isEnabled() const noexcept
     {
-        return state().tickingBombModelGlow == ModelGlowState::State::Enabled;
+        return state().masterSwitch == ModelGlowState::State::Enabled && state().tickingBombModelGlow == ModelGlowState::State::Enabled;
     }
 
     [[nodiscard]] bool shouldGlowPlantedBombModel(auto&& plantedBomb) const noexcept

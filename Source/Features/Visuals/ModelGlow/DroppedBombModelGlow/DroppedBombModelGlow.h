@@ -85,7 +85,7 @@ private:
 
     [[nodiscard]] bool shouldGlowBombModel(auto&& bomb) const noexcept
     {
-        return !bomb.baseWeapon().baseEntity().hasOwner().valueOr(true);
+        return state().masterSwitch == ModelGlowState::State::Enabled && !bomb.baseWeapon().baseEntity().hasOwner().valueOr(true);
     }
 
     [[nodiscard]] auto& state() const noexcept

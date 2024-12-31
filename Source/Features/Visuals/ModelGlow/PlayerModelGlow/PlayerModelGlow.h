@@ -84,7 +84,8 @@ private:
 
     [[nodiscard]] bool shouldGlowPlayerModel(auto&& playerPawn) const noexcept
     {
-        return playerPawn.isAlive().value_or(true)
+        return state().masterSwitch == ModelGlowState::State::Enabled
+            && playerPawn.isAlive().value_or(true)
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()

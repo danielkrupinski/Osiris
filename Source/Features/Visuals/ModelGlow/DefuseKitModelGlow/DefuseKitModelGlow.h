@@ -43,7 +43,7 @@ private:
 
     [[nodiscard]] bool isEnabled() const noexcept
     {
-        return state().defuseKitModelGlow == ModelGlowState::State::Enabled;
+        return state().masterSwitch == ModelGlowState::State::Enabled && state().defuseKitModelGlow == ModelGlowState::State::Enabled;
     }
 
     [[nodiscard]] auto& state() const noexcept
