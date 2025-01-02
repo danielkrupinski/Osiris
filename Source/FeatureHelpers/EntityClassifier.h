@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <limits>
 #include <tuple>
 
 #include <CS2/Constants/EntityClasses.h>
@@ -10,7 +11,10 @@
 #include <Utils/TypeIndex.h>
 
 struct EntityTypeInfo {
-    std::uint8_t typeIndex{static_cast<std::uint8_t>(-1)};
+    using Index = std::uint8_t;
+    static_assert((std::numeric_limits<Index>::max)() >= std::tuple_size_v<cs2::EntityClasses>, "Index type is too small");
+
+    Index typeIndex{(std::numeric_limits<Index>::max)()};
 
     [[nodiscard]] constexpr bool isWeapon() const noexcept
     {
@@ -42,7 +46,7 @@ struct EntityTypeInfo {
 private:
     template <typename BaseEntityType>
     struct EntityBaseTypeInfo {
-        [[nodiscard]] static constexpr bool isBaseOf(std::uint8_t typeIndex) noexcept
+        [[nodiscard]] static constexpr bool isBaseOf(Index typeIndex) noexcept
         {
             if (typeIndex < kIsBase.size())
                 return kIsBase[typeIndex];
@@ -63,22 +67,27 @@ class EntityClassifier {
 public:
     void init(auto& hookContext) noexcept
     {
-        cs2::kEntityClassNames.forEach([i = 0u, &hookContext, this](const auto typeName) mutable { entityClasses[i] = hookContext.template make<EntitySystem>().findEntityClass(typeName); ++i; });
-    
-        for (std::uint8_t i = 0; i < sortedEntityClassIndices.size(); ++i) {
+        cs2::kEntityClassNames.forEach([i = 0u, &hookContext, this](const auto typeName) mutable {
+            const auto entityClass = hookContext.template make<EntitySystem>().findEntityClass(typeName);
             auto j = i;
-            while (j > 0 && std::less{}(entityClasses[i], entityClasses[sortedEntityClassIndices[j - 1]])) {
-                sortedEntityClassIndices[j] = sortedEntityClassIndices[j - 1];
+            while (j > 0 && std::less{}(entityClass, entityClasses[j - 1])) {
+                entityClasses[j] = entityClasses[j - 1];
+                entityClassIndexToTypeIndex[j] = entityClassIndexToTypeIndex[j - 1];
                 --j;
             }
-            sortedEntityClassIndices[j] = i;
-        }
+            entityClasses[j] = entityClass;
+            entityClassIndexToTypeIndex[j] = static_cast<EntityTypeInfo::Index>(i);
+            ++i;
+        });
+
+        for (std::size_t i = 0; i < std::tuple_size_v<cs2::EntityClasses>; ++i)
+            entityTypeIndexToClassIndex[entityClassIndexToTypeIndex[i]] = static_cast<EntityTypeInfo::Index>(i);
     }
 
     template <typename EntityType>
     [[nodiscard]] bool entityIs(const cs2::CEntityClass* entityClass) const noexcept
     {
-        return entityClass != nullptr && entityClass == entityClasses[utils::typeIndex<EntityType, cs2::EntityClasses>()];
+        return entityClass != nullptr && entityClass == entityClasses[entityTypeIndexToClassIndex[utils::typeIndex<EntityType, cs2::EntityClasses>()]];
     }
 
     [[nodiscard]] EntityTypeInfo classifyEntity(const cs2::CEntityClass* entityClass) const noexcept
@@ -86,13 +95,14 @@ public:
         if (entityClass == nullptr)
             return {};
 
-        const auto it = std::ranges::lower_bound(sortedEntityClassIndices, entityClass, {}, [this](const auto index) { return entityClasses[index]; });
-        if (it != sortedEntityClassIndices.end() && entityClasses[*it] == entityClass)
-            return EntityTypeInfo{*it};
+        const auto it = std::ranges::lower_bound(entityClasses, entityClass);
+        if (it != entityClasses.end() && *it == entityClass)
+            return EntityTypeInfo{entityClassIndexToTypeIndex[std::distance(entityClasses.begin(), it)]};
         return {};
     }
 
 private:
     std::array<const cs2::CEntityClass*, std::tuple_size_v<cs2::EntityClasses>> entityClasses;
-    std::array<std::uint8_t, std::tuple_size_v<cs2::EntityClasses>> sortedEntityClassIndices;
+    std::array<EntityTypeInfo::Index, std::tuple_size_v<cs2::EntityClasses>> entityTypeIndexToClassIndex;
+    std::array<EntityTypeInfo::Index, std::tuple_size_v<cs2::EntityClasses>> entityClassIndexToTypeIndex;
 };
