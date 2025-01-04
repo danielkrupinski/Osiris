@@ -13,7 +13,7 @@ public:
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabled;
+        return context.state().enabledForTickingBomb;
     }
 
     [[nodiscard]] bool shouldGlowPlantedBomb(auto&& plantedBomb) const noexcept

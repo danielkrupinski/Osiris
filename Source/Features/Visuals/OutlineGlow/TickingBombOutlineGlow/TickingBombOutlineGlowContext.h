@@ -12,7 +12,7 @@ public:
 
     [[nodiscard]] auto& state() const noexcept
     {
-        return hookContext.featuresStates().visualFeaturesStates.tickingBombOutlineGlowState;
+        return hookContext.featuresStates().visualFeaturesStates.outlineGlowState;
     }
 
     [[nodiscard]] decltype(auto) condition() const noexcept

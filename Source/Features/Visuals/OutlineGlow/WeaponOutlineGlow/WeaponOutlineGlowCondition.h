@@ -13,7 +13,7 @@ public:
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabled;
+        return context.state().enabledForWeapons;
     }
 
     [[nodiscard]] bool shouldGlowWeapon(auto&& weapon) const noexcept

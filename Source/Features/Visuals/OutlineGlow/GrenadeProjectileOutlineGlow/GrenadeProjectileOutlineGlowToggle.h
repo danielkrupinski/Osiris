@@ -14,7 +14,7 @@ public:
 
     [[nodiscard]] auto& enabledVariable(typename GrenadeProjectileOutlineGlowToggle::ToggleMethod) const noexcept
     {
-        return context.state().enabled;
+        return context.state().enabledForGrenadeProjectiles;
     }
 
 private:

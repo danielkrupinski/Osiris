@@ -10,7 +10,7 @@ public:
 
     [[nodiscard]] auto& state() const noexcept
     {
-        return hookContext.featuresStates().visualFeaturesStates.hostageOutlineGlowState;
+        return hookContext.featuresStates().visualFeaturesStates.outlineGlowState;
     }
 
 private:

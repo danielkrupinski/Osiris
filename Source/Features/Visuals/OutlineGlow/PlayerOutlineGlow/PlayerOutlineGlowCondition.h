@@ -16,7 +16,7 @@ public:
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabled;
+        return context.state().enabledForPlayers;
     }
 
     [[nodiscard]] bool shouldGlowPlayer(auto&& playerPawn) const noexcept

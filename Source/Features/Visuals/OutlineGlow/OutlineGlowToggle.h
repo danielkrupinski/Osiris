@@ -14,7 +14,7 @@ public:
 
     [[nodiscard]] auto& enabledVariable(typename OutlineGlowToggle::ToggleMethod) const noexcept
     {
-        return context.state().enabled;
+        return context.state().masterSwitch;
     }
 
     void onDisable(typename OutlineGlowToggle::ToggleMethod) noexcept

@@ -16,7 +16,7 @@ public:
     
     void applyGlowToDefuseKit(auto&& defuseKit) const noexcept
     {
-        if (context.state().enabled) {
+        if (context.state().enabledForDefuseKits) {
             using namespace outline_glow_params;
             defuseKit.applyGlowRecursively(kDefuseKitColor, kDefuseKitGlowRange);
         }

@@ -16,7 +16,7 @@ public:
 
     void applyGlowToHostage(auto&& hostage) const noexcept
     {
-        if (context.state().enabled) {
+        if (context.state().enabledForHostages) {
             hostage.applyGlowRecursively(outline_glow_params::kHostageColor);
         }
     }

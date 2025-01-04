@@ -14,7 +14,7 @@ public:
 
     [[nodiscard]] auto& enabledVariable(typename HostageOutlineGlowToggle::ToggleMethod) const noexcept
     {
-        return context.state().enabled;
+        return context.state().enabledForHostages;
     }
 
 private:

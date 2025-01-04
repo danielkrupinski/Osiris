@@ -13,7 +13,7 @@ public:
 
     [[nodiscard]] auto& state() const noexcept
     {
-        return hookContext.featuresStates().visualFeaturesStates.playerOutlineGlowState;
+        return hookContext.featuresStates().visualFeaturesStates.outlineGlowState;
     }
 
     [[nodiscard]] decltype(auto) condition() const noexcept

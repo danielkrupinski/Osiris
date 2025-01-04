@@ -37,10 +37,10 @@ private:
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
-        if (context.state().colorType == PlayerOutlineGlowColorType::HealthBased)
+        if (context.state().playerGlowColorType == PlayerOutlineGlowColorType::HealthBased)
             return playerPawn.healthColor().value_or(cs2::kColorWhite);
 
-        if (context.state().colorType == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
+        if (context.state().playerGlowColorType == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
             if (const auto playerColor = playerPawn.playerController().getPlayerColor(); playerColor.has_value())
                 return *playerColor;
         }

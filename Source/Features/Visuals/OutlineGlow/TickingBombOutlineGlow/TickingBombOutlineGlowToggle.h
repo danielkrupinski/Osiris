@@ -16,7 +16,7 @@ public:
 
     [[nodiscard]] auto& enabledVariable(typename TickingBombOutlineGlowToggle::ToggleMethod) const noexcept
     {
-        return context.state().enabled;
+        return context.state().enabledForTickingBomb;
     }
 
 private:

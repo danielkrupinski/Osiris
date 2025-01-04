@@ -14,7 +14,7 @@ public:
 
     void applyGlowToEntity(EntityTypeInfo entityTypeInfo, auto&& modelEntity) noexcept
     {
-        if (!context.state().enabled)
+        if (!context.state().masterSwitch)
             return;
 
         if (modelEntity.glowProperty().isGlowing().valueOr(false))

@@ -26,15 +26,15 @@ struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<HookConte
     void updateColor(char option) noexcept
     {
         switch (option) {
-        case '0': context.state().colorType = PlayerOutlineGlowColorType::PlayerOrTeamColor; break;
-        case '1': context.state().colorType = PlayerOutlineGlowColorType::TeamColor; break;
-        case '2': context.state().colorType = PlayerOutlineGlowColorType::HealthBased; break;
+        case '0': context.state().playerGlowColorType = PlayerOutlineGlowColorType::PlayerOrTeamColor; break;
+        case '1': context.state().playerGlowColorType = PlayerOutlineGlowColorType::TeamColor; break;
+        case '2': context.state().playerGlowColorType = PlayerOutlineGlowColorType::HealthBased; break;
         }
     }
 
     [[nodiscard]] auto& enabledVariable(typename PlayerOutlineGlowToggle::ToggleMethod) const noexcept
     {
-        return context.state().enabled;
+        return context.state().enabledForPlayers;
     }
 
 private:
