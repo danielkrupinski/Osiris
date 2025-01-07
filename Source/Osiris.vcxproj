@@ -75,6 +75,7 @@
     <ClInclude Include="CS2\Constants\StylePropertySymbolNames.h" />
     <ClInclude Include="CS2\Constants\StylePropertyTypeNames.h" />
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h" />
+    <ClInclude Include="CS2\Panorama\CDropDown.h" />
     <ClInclude Include="CS2\Panorama\CImagePanel.h" />
     <ClInclude Include="CS2\Panorama\CLabel.h" />
     <ClInclude Include="CS2\Panorama\CPanel2D.h" />
@@ -287,6 +288,7 @@
     <ClInclude Include="GameClasses\PanelFontParams.h" />
     <ClInclude Include="GameClasses\PanelHandle.h" />
     <ClInclude Include="GameClasses\PanelMarginParams.h" />
+    <ClInclude Include="GameClasses\PanoramaDropDown.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanel.h" />
     <ClInclude Include="GameClasses\PanoramaImagePanelContext.h" />
     <ClInclude Include="GameClasses\PanoramaLabel.h" />
@@ -388,6 +390,7 @@
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PanoramaDropDownPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaImagePanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaLabelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanoramaUiEnginePatternsWindows.h" />
@@ -469,11 +472,14 @@
     <ClInclude Include="SDL\SdlConstants.h" />
     <ClInclude Include="SDL\SdlDll.h" />
     <ClInclude Include="SDL\SdlFunctions.h" />
+    <ClInclude Include="UI\Panorama\HudTab.h" />
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
     <ClInclude Include="UI\Panorama\PanoramaGUI.h" />
     <ClInclude Include="UI\Panorama\PanoramaGuiState.h" />
     <ClInclude Include="UI\Panorama\PanoramaGuiUnloadHandler.h" />
     <ClInclude Include="UI\Panorama\SetCommandHandler.h" />
+    <ClInclude Include="UI\Panorama\SoundTab.h" />
+    <ClInclude Include="UI\Panorama\VisualsTab.h" />
     <ClInclude Include="Utils\Align.h" />
     <ClInclude Include="Utils\BitFlags.h" />
     <ClInclude Include="Utils\CharUtils.h" />

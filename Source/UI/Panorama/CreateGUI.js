@@ -229,7 +229,7 @@ $.Osiris = (function () {
     return content;
   };
 
-  var createDropDown = function (parent, labelText, section, feature, options, defaultIndex = 1) {
+  var createDropDown = function (parent, labelText, section, feature, options) {
     var container = $.CreatePanel('Panel', parent, '', {
       class: "SettingsMenuDropdownContainer"
     });
@@ -250,17 +250,14 @@ $.Osiris = (function () {
       text: options[i]
       }));
     }
-
-    dropdown.SetSelectedIndex(defaultIndex);
-    dropdown.RefreshDisplay();
   };
 
   var createOnOffDropDown = function (parent, labelText, section, feature) {
     createDropDown(parent, labelText, section, feature, ["On", "Off"]);
   };
 
-  var createYesNoDropDown = function (parent, labelText, section, feature, defaultIndex = 1) {
-    createDropDown(parent, labelText, section, feature, ["Yes", "No"], defaultIndex);
+  var createYesNoDropDown = function (parent, labelText, section, feature) {
+    createDropDown(parent, labelText, section, feature, ["Yes", "No"]);
   };
 
   var separator = function (parent) {
@@ -287,35 +284,35 @@ $.Osiris = (function () {
   var playerInfoTab = createSubTab(visuals, 'player_info');
 
   var playerInfo = createSection(playerInfoTab, 'Player Info In World');
-  createDropDown(playerInfo, "Master Switch", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off'], 2);
+  createDropDown(playerInfo, "Master Switch", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off']);
 
   var playerPosition = createSection(playerInfoTab, 'Player Position');
-  createYesNoDropDown(playerPosition, "Show Player Position Arrow", 'visuals', 'player_info_position', 0);
+  createYesNoDropDown(playerPosition, "Show Player Position Arrow", 'visuals', 'player_info_position');
   separator(playerPosition);
-  createDropDown(playerPosition, "Player Position Arrow Color", 'visuals', 'player_info_position_color', ['Player / Team Color', 'Team Color'], 0);
+  createDropDown(playerPosition, "Player Position Arrow Color", 'visuals', 'player_info_position_color', ['Player / Team Color', 'Team Color']);
 
   var playerHealth = createSection(playerInfoTab, 'Player Health');
-  createYesNoDropDown(playerHealth, "Show Player Health", 'visuals', 'player_info_health', 0);
+  createYesNoDropDown(playerHealth, "Show Player Health", 'visuals', 'player_info_health');
   separator(playerHealth);
-  createDropDown(playerHealth, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White'], 0);
+  createDropDown(playerHealth, "Player Health Text Color", 'visuals', 'player_info_health_color', ['Health-based', 'White']);
 
   var playerWeapon = createSection(playerInfoTab, 'Player Weapon');
-  createYesNoDropDown(playerWeapon, "Show Player Active Weapon Icon", 'visuals', 'player_info_weapon', 0);
+  createYesNoDropDown(playerWeapon, "Show Player Active Weapon Icon", 'visuals', 'player_info_weapon');
   separator(playerWeapon);
-  createYesNoDropDown(playerWeapon, "Show Player Active Weapon Ammo", 'visuals', 'player_info_weapon_clip', 0);
+  createYesNoDropDown(playerWeapon, "Show Player Active Weapon Ammo", 'visuals', 'player_info_weapon_clip');
   separator(playerWeapon);
-  createYesNoDropDown(playerWeapon, 'Show Bomb Carrier Icon', 'visuals', 'player_info_bomb_carrier', 0);
+  createYesNoDropDown(playerWeapon, 'Show Bomb Carrier Icon', 'visuals', 'player_info_bomb_carrier');
   separator(playerWeapon);
-  createYesNoDropDown(playerWeapon, 'Show Bomb Planting Icon', 'visuals', 'player_info_bomb_planting', 0);
+  createYesNoDropDown(playerWeapon, 'Show Bomb Planting Icon', 'visuals', 'player_info_bomb_planting');
 
   var playerIcons = createSection(playerInfoTab, 'Icons');
-  createYesNoDropDown(playerIcons, "Show Defuse Icon", 'visuals', 'player_info_defuse', 0);
+  createYesNoDropDown(playerIcons, "Show Defuse Icon", 'visuals', 'player_info_defuse');
   separator(playerIcons);
-  createYesNoDropDown(playerIcons, 'Show Picking Up Hostage Icon', 'visuals', 'player_info_hostage_pickup', 0);
+  createYesNoDropDown(playerIcons, 'Show Picking Up Hostage Icon', 'visuals', 'player_info_hostage_pickup');
   separator(playerIcons);
-  createYesNoDropDown(playerIcons, 'Show Rescuing Hostage Icon', 'visuals', 'player_info_hostage_rescue', 0);
+  createYesNoDropDown(playerIcons, 'Show Rescuing Hostage Icon', 'visuals', 'player_info_hostage_rescue');
   separator(playerIcons);
-  createYesNoDropDown(playerIcons, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded', 0);
+  createYesNoDropDown(playerIcons, 'Show Blinded By Flashbang Icon', 'visuals', 'player_info_blinded');
 
   var outlineGlowTab = createSubTab(visuals, 'outline_glow');
 
@@ -323,24 +320,24 @@ $.Osiris = (function () {
   createOnOffDropDown(outlineGlow, "Master Switch", 'visuals', 'outline_glow_enable');
 
   var playerOutlineGlow = createSection(outlineGlowTab, 'Players');
-  createDropDown(playerOutlineGlow, "Glow Players", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off'], 0);
+  createDropDown(playerOutlineGlow, "Glow Players", 'visuals', 'player_outline_glow', ['Enemies', 'All Players', 'Off']);
   separator(playerOutlineGlow);
-  createDropDown(playerOutlineGlow, "Player Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
+  createDropDown(playerOutlineGlow, "Player Glow Color", 'visuals', 'player_outline_glow_color', ['Player / Team Color', 'Team Color', 'Health-based']);
 
   var weaponOutlineGlow = createSection(outlineGlowTab, 'Weapons');
-  createYesNoDropDown(weaponOutlineGlow, "Glow Weapons on Ground Nearby", 'visuals', 'weapon_outline_glow', 0);
+  createYesNoDropDown(weaponOutlineGlow, "Glow Weapons on Ground Nearby", 'visuals', 'weapon_outline_glow');
   separator(weaponOutlineGlow);
-  createYesNoDropDown(weaponOutlineGlow, "Glow Grenade Projectiles", 'visuals', 'grenade_proj_outline_glow', 0);
+  createYesNoDropDown(weaponOutlineGlow, "Glow Grenade Projectiles", 'visuals', 'grenade_proj_outline_glow');
 
   var bombAndDefuseKitOutlineGlow = createSection(outlineGlowTab, 'Bomb & Defuse Kit');
-  createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Dropped Bomb", 'visuals', 'dropped_bomb_outline_glow', 0);
+  createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Dropped Bomb", 'visuals', 'dropped_bomb_outline_glow');
   separator(bombAndDefuseKitOutlineGlow);
-  createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Ticking Bomb", 'visuals', 'ticking_bomb_outline_glow', 0);
+  createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Ticking Bomb", 'visuals', 'ticking_bomb_outline_glow');
   separator(bombAndDefuseKitOutlineGlow);
-  createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Defuse Kits on Ground Nearby", 'visuals', 'defuse_kit_outline_glow', 0);
+  createYesNoDropDown(bombAndDefuseKitOutlineGlow, "Glow Defuse Kits on Ground Nearby", 'visuals', 'defuse_kit_outline_glow');
 
   var hostageOutlineGlow = createSection(outlineGlowTab, 'Hostages');
-  createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow', 0);
+  createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow');
 
   var modelGlowTab = createSubTab(visuals, 'model_glow');
 
@@ -348,21 +345,21 @@ $.Osiris = (function () {
   createOnOffDropDown(modelGlow, "Master Switch", 'visuals', 'model_glow_enable');
 
   var playerModelGlow = createSection(modelGlowTab, 'Players');
-  createDropDown(playerModelGlow, "Glow Player Models", 'visuals', 'player_model_glow', ['Enemies', 'All Players', 'Off'], 0);
+  createDropDown(playerModelGlow, "Glow Player Models", 'visuals', 'player_model_glow', ['Enemies', 'All Players', 'Off']);
   separator(playerModelGlow);
-  createDropDown(playerModelGlow, "Player Model Glow Color", 'visuals', 'player_model_glow_color', ['Player / Team Color', 'Team Color', 'Health-based'], 0);
+  createDropDown(playerModelGlow, "Player Model Glow Color", 'visuals', 'player_model_glow_color', ['Player / Team Color', 'Team Color', 'Health-based']);
 
   var weaponModelGlow = createSection(modelGlowTab, 'Weapons');
-  createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow', 0);
+  createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow');
   separator(weaponModelGlow);
-  createYesNoDropDown(weaponModelGlow, "Glow Grenade Projectile Models", 'visuals', 'grenade_proj_model_glow', 0);
+  createYesNoDropDown(weaponModelGlow, "Glow Grenade Projectile Models", 'visuals', 'grenade_proj_model_glow');
 
   var bombModelGlow = createSection(modelGlowTab, 'Bomb & Defuse Kit');
-  createYesNoDropDown(bombModelGlow, "Glow Dropped Bomb Model", 'visuals', 'dropped_bomb_model_glow', 0);
+  createYesNoDropDown(bombModelGlow, "Glow Dropped Bomb Model", 'visuals', 'dropped_bomb_model_glow');
   separator(bombModelGlow);
-  createYesNoDropDown(bombModelGlow, "Glow Ticking Bomb Model", 'visuals', 'ticking_bomb_model_glow', 0);
+  createYesNoDropDown(bombModelGlow, "Glow Ticking Bomb Model", 'visuals', 'ticking_bomb_model_glow');
   separator(bombModelGlow);
-  createYesNoDropDown(bombModelGlow, "Glow Defuse Kit Models on Ground", 'visuals', 'defuse_kit_model_glow', 0);
+  createYesNoDropDown(bombModelGlow, "Glow Defuse Kit Models on Ground", 'visuals', 'defuse_kit_model_glow');
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 

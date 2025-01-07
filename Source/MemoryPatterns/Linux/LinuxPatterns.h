@@ -16,6 +16,7 @@
 #include "MemAllocPatternsLinux.h"
 #include "PanelPatternsLinux.h"
 #include "PanelStylePatternsLinux.h"
+#include "PanoramaDropDownPatternsLinux.h"
 #include "PanoramaImagePanelPatternsLinux.h"
 #include "PanoramaLabelPatternsLinux.h"
 #include "PanoramaUiEnginePatternsLinux.h"

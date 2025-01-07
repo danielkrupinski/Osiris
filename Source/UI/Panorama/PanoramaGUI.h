@@ -6,6 +6,9 @@
 #include <FeatureHelpers/FeatureToggle.h>
 
 #include "PanoramaCommandDispatcher.h"
+#include "HudTab.h"
+#include "SoundTab.h"
+#include "VisualsTab.h"
 
 template <typename HookContext>
 class PanoramaGUI {
@@ -56,6 +59,10 @@ public:
 
         if (const auto guiPanel = mainMenu.findChildInLayoutFile("OsirisMenuTab"))
             state().guiPanelHandle = guiPanel.getHandle();
+
+        hookContext.template make<HudTab>().updateFromConfig(mainMenu);
+        hookContext.template make<VisualsTab>().updateFromConfig(mainMenu);
+        hookContext.template make<SoundTab>().updateFromConfig(mainMenu);
     }
 
     void run(Features<HookContext> features, UnloadFlag& unloadFlag) const noexcept
