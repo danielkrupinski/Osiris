@@ -3,6 +3,11 @@
 .globl PlayerPawn_sceneObjectUpdater_asm
 .globl Weapon_sceneObjectUpdater_asm
 
+.hidden SDLHook_PeepEvents_asm
+.hidden ViewRenderHook_onRenderStart_asm
+.hidden PlayerPawn_sceneObjectUpdater_asm
+.hidden Weapon_sceneObjectUpdater_asm
+
 SDLHook_PeepEvents_asm:
     push %rdi # backup volatile registers used in the original function
     push %rsi
