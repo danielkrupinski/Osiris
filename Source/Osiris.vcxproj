@@ -152,6 +152,7 @@
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertCondition.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertContext.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanel.h" />
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanelParams.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertState.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertToggle.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertUnloadHandler.h" />

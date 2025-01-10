@@ -1739,6 +1739,9 @@
     <ClInclude Include="UI\Panorama\SoundTab.h">
       <Filter>UI\Panorama</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanelParams.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

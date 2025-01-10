@@ -4,6 +4,7 @@
 
 #include "DefusingAlertCondition.h"
 #include "DefusingAlertPanel.h"
+#include "DefusingAlertPanelParams.h"
 #include "DefusingAlertState.h"
 #include "DefusingCountdownTextPanel.h"
 
@@ -73,18 +74,8 @@ private:
         uiEngine().runScript(hudTeamCounter,
             R"(
 (function() {
-  var defusingAlertContainer = $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile('ScoreAndTimeAndBomb'), 'DefusingAlertContainer', {
-    style: 'y: 100px; width: 100%; height: 35px; border-radius: 3px; world-blur: hudWorldBlur; background-image: url( "s2r://panorama/images/backgrounds/bluedots_large_png.vtex"); background-size: auto 390px; background-img-opacity: 0.04; margin: 0px 2px; background-color: #0000007f;'
-  });
-
-  $.CreatePanel('Image', defusingAlertContainer , '', {
-    src: "s2r://panorama/images/icons/equipment/defuser.vsvg",
-    style: "x: 10px; width: 25px; height: 25px; vertical-align: center; wash-color: rgb(119, 221, 255);"
-});
-  $.CreatePanel('Label', defusingAlertContainer , 'DefusingAlertTimer', {
-    class: 'additive stratum-bold-tf',
-    style: 'x: 42px; font-size: 22px; vertical-align: center; margin-top: 2px; color: white;',
-    text: '5.0'
+  $.CreatePanel('Panel', $.GetContextPanel().FindChildInLayoutFile('ScoreAndTimeAndBomb'), 'DefusingAlertContainer', {
+    style: 'border-radius: 3px; world-blur: hudWorldBlur; background-image: url( "s2r://panorama/images/backgrounds/bluedots_large_png.vtex"); background-size: auto 390px; background-img-opacity: 0.04; background-color: #0000007f;'
   });
 })();
 )");
@@ -93,13 +84,44 @@ private:
         if (!defusingAlertContainer)
             return;
 
-        const auto defusingTimer = defusingAlertContainer.findChildInLayoutFile("DefusingAlertTimer");
-        if (!defusingTimer)
-            return;
-
         defusingAlertContainer.setVisible(false);
+        defusingAlertContainer.setFlowChildren(cs2::k_EFlowRight);
+        defusingAlertContainer.setWidth(cs2::CUILength::percent(100));
+        defusingAlertContainer.setHeight(cs2::CUILength::pixels(35));
+        defusingAlertContainer.setPosition(cs2::CUILength::pixels(0), cs2::CUILength::pixels(100));
+        defusingAlertContainer.setMargin(PanelMarginParams{.marginLeft = cs2::CUILength::pixels(1), .marginRight = cs2::CUILength::pixels(1)});
+
+        createIconPanel(defusingAlertContainer);
+        auto&& defusingTimer = createTimerPanel(defusingAlertContainer);
         state().defusingAlertContainerPanelHandle = defusingAlertContainer.getHandle();
         state().defusingTimerPanelHandle = defusingTimer.getHandle();
+    }
+
+    decltype(auto) createIconPanel(auto&& containerPanel) const noexcept
+    {
+        using namespace defusing_alert_panel_params::defuse_icon_panel_params;
+
+        auto&& imagePanel = context.panelFactory().createImagePanel(containerPanel);
+        imagePanel.setImageSvg(SvgImageParams{.imageUrl = kImageUrl, .textureHeight = kTextureHeight, .fillColor = kColor});
+    
+        auto&& uiPanel = imagePanel.uiPanel();
+        uiPanel.setAlign(kAlignment);
+        uiPanel.setMargin(kMargin);
+        return utils::lvalue<decltype(uiPanel)>(uiPanel);
+    }
+
+    decltype(auto) createTimerPanel(auto&& containerPanel) const noexcept
+    {
+        using namespace defusing_alert_panel_params::timer_text_panel_params;
+
+        auto&& panel = context.panelFactory().createLabelPanel(containerPanel).uiPanel();
+        panel.setWidth(kWidth);
+        panel.setFont(kFont);
+        panel.setMixBlendMode(kMixBlendMode);
+        panel.setColor(kColor);
+        panel.setAlign(kAlignment);
+        panel.setTextAlign(kTextAlign);
+        return utils::lvalue<decltype(panel)>(panel);
     }
 
     HookContext& context;
