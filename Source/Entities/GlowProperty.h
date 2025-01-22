@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/CGlowProperty.h>
+#include <MemoryPatterns/PatternTypes/GlowPropertyPatternTypes.h>
 
 template <typename HookContext>
 class GlowProperty {

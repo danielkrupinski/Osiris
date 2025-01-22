@@ -1,6 +1,7 @@
 #pragma once
 
 #include "KillfeedPreserverContext.h"
+#include <utility>
 
 template <typename HookContext, typename Context = KillfeedPreserverContext<HookContext>>
 class KillfeedPreserver {

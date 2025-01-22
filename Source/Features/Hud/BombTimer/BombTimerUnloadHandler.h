@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BombTimerState.h"
+#include <GameClasses/PanoramaUiEngine.h>
 
 template <typename HookContext>
 struct BombTimerUnloadHandler {

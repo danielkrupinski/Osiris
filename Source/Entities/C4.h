@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Entities/WeaponEntities.h>
 #include "BaseWeapon.h"
+#include <MemoryPatterns/PatternTypes/C4PatternTypes.h>
 
 template <typename HookContext>
 class C4 {

@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/FileSystem.h>
 #include "FileNameSymbolTable.h"
+#include <MemoryPatterns/PatternTypes/FileSystemPatternTypes.h>
 
 template <typename HookContext>
 class FileSystem {

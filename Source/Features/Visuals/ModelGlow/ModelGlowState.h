@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <CS2/Classes/Entities/C_CSWeaponBase.h>
 
 enum class PlayerModelGlowColorType : std::uint8_t {
     PlayerOrTeamColor,

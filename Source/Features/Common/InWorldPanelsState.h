@@ -1,8 +1,8 @@
 #pragma once
 
-#include <array>
 #include <CS2/Panorama/PanelHandle.h>
 #include <Utils/DynamicArray.h>
+#include <Features/Sound/SoundVisualizationPanelTypes.h>
 
 #include "InWorldPanelIndex.h"
 #include "InWorldPanelListEntry.h"

@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/CCSPlayer_WeaponServices.h>
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
+#include <MemoryPatterns/PatternTypes/WeaponServicesPatternTypes.h>
 #include "BaseWeapon.h"
 #include "PlayerWeapons.h"
 

@@ -17,9 +17,6 @@
 #include <Utils/ColorUtils.h>
 #include <Utils/CString.h>
 
-#include "PlayerInfoPanel.h"
-
-#include "PlayerInfoInWorldPanelFactory.h"
 #include "PlayerInfoInWorldState.h"
 
 struct PlayerPositionToggle : public FeatureToggle<PlayerPositionToggle> {
@@ -195,7 +192,6 @@ private:
     ViewRenderHook& viewRenderHook;
 };
 
-#include "PlayerInfoInWorldCondition.h"
 #include "PlayerInfoInWorldContext.h"
 
 template <typename HookContext>

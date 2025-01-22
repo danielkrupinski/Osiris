@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
+#include <CS2/Panorama/CUIPanel.h>
+#include <GameClasses/PanoramaUiPanel.h>
 
 template <typename HookContext>
 class PlayerActiveWeaponAmmoPanelContext {

@@ -6,6 +6,8 @@
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/TeamNumber.h>
 #include <OutlineGlow/GlowSceneObjects.h>
+#include <FeatureHelpers/EntityClassifier.h>
+#include <MemoryPatterns/PatternTypes/EntityPatternTypes.h>
 
 #include <GameClasses/GameSceneNode.h>
 #include "RenderComponent.h"

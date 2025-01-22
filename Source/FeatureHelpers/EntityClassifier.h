@@ -1,6 +1,6 @@
 #pragma once
 
-#include <algorithm>
+#include <functional>
 #include <array>
 #include <cstdint>
 #include <limits>

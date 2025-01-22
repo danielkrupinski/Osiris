@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/GrenadeProjectiles.h>
+#include <MemoryPatterns/PatternTypes/SmokeGrenadeProjectilePatternTypes.h>
 
 template <typename HookContext>
 class SmokeGrenadeProjectile {

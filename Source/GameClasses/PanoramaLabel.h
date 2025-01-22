@@ -2,6 +2,8 @@
 
 #include <CS2/Panorama/CLabel.h>
 #include <MemoryPatterns/PatternTypes/PanoramaLabelPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/UiPanelPatternTypes.h>
+#include <GameClasses/PanoramaUiPanel.h>
 
 template <typename HookContext>
 struct PanoramaLabel {

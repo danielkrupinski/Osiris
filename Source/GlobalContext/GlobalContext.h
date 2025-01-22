@@ -16,6 +16,7 @@
 #include "FullGlobalContext.h"
 #include "PartialGlobalContext.h"
 #include "HookDependencies/HookDependencies.h"
+#include <Utils/ManuallyDestructible.h>
 
 class GlobalContext {
 public:

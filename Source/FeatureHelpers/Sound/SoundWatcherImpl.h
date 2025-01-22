@@ -1,12 +1,10 @@
 #pragma once
 
-#include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
 #include <string_view>
 #include <tuple>
-#include <utility>
 
 #include <CS2/Classes/Sound.h>
 #include <GameClasses/FileSystem.h>
@@ -16,6 +14,7 @@
 #include <Utils/DynamicArray.h>
 #include <Utils/TypeBitFlags.h>
 #include <Utils/TypeIndex.h>
+#include <MemoryPatterns/PatternTypes/SoundSystemPatternTypes.h>
 
 #include "SoundExpiryChecker.h"
 #include "SoundWatcherImplState.h"

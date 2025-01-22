@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <CS2/Classes/Glow.h>
 
 class GlowSceneObjectPointer {

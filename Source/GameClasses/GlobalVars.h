@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Utils/Optional.h>
+#include <CS2/Classes/GlobalVars.h>
 
 struct GlobalVars {
     [[nodiscard]] Optional<float> curtime() const noexcept

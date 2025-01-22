@@ -4,6 +4,8 @@
 #include <FeatureHelpers/TeamNumber.h>
 #include <GameClasses/EntitySystem.h>
 #include "PlayerPawn.h"
+#include <MemoryPatterns/PatternTypes/PlayerControllerPatternTypes.h>
+#include <CS2/Constants/ColorConstants.h>
 
 template <typename HookContext>
 class PlayerController {

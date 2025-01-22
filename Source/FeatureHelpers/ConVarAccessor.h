@@ -1,8 +1,11 @@
 #pragma once
 
 #include <optional>
+#include <cassert>
+#include <cstring>
 
 #include <GameDependencies/ConVars.h>
+#include <MemoryPatterns/PatternTypes/ConVarPatternTypes.h>
 
 struct ConVarAccessorState {
     std::optional<bool> mp_teammates_are_enemies;

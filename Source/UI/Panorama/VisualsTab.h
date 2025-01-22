@@ -2,6 +2,8 @@
 
 #include <GameClasses/PanoramaDropDown.h>
 #include <Platform/Macros/FunctionAttributes.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerStateIcons/PlayerStateIconsToShow.h>
+#include <Features/Visuals/ModelGlow/ModelGlowState.h>
 
 template <typename HookContext>
 class VisualsTab {

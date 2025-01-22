@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <utility>
 
 #include "PlayedSound.h"
 #include <Utils/DynamicArray.h>
@@ -21,7 +22,7 @@ public:
 
     [[nodiscard]] bool hasSound(int soundGuid) const noexcept
     {
-        // can not use std::ranges::find() because it tries to link with __std_find_trivial_4
+        // can not use std::ranges::find() because it tries to link with __std_find_trivial_4 (then why no use std::find)
         for (const auto guid : guids) {
             if (guid == soundGuid)
                 return true;

@@ -9,6 +9,9 @@
 #include "PanoramaUiPanelMethodInvoker.h"
 #include <MemoryPatterns/PatternTypes/PanelStylePatternTypes.h>
 #include <MemoryPatterns/PatternTypes/UiPanelPatternTypes.h>
+#include <CS2/Constants/ColorConstants.h>
+#include <GameClasses/TopLevelWindow.h>
+#include <FeatureHelpers/PanelStylePropertyFactory.h>
 
 template <typename HookContext>
 struct PanoramaUiPanelContext {

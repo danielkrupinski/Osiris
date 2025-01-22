@@ -5,6 +5,7 @@
 #include <GameClasses/PanoramaImagePanel.h>
 #include <Utils/CString.h>
 #include "PlayerActiveWeaponIconPanelContext.h"
+#include <Utils/StringBuilder.h>
 
 template <typename HookContext, typename Context = PlayerActiveWeaponIconPanelContext<HookContext>>
 class PlayerActiveWeaponIconPanel {

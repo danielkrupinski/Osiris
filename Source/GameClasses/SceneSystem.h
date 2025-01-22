@@ -1,5 +1,7 @@
 #pragma once
 
+#include <MemoryPatterns/PatternTypes/SceneSystemPatternTypes.h>
+
 template <typename HookContext>
 class SceneSystem {
 public:

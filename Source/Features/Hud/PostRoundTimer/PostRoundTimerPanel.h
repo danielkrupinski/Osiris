@@ -1,6 +1,8 @@
 #pragma once
 
 #include <FeatureHelpers/TeamNumber.h>
+#include <CS2/Constants/ColorConstants.h>
+#include <Utils/StringBuilder.h>
 
 template <typename Context>
 struct PostRoundTimerPanel {

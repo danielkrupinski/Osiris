@@ -2,6 +2,7 @@
 
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include "WeaponOutlineGlowContext.h"
+#include <Entities/BaseEntity.h>
 
 template <typename HookContext, typename Context = WeaponOutlineGlowContext<HookContext>>
 class WeaponOutlineGlow {
