@@ -4,6 +4,7 @@
 
 #include "Meta.h"
 #include "TypeIndex.h"
+#include <algorithm>
 
 template <typename... Types>
 struct TypeList {

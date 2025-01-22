@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <cassert>
 #include <string_view>
 #include <utility>
 

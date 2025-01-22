@@ -1,7 +1,7 @@
 #pragma once
 
 #include <FeatureHelpers/FeatureToggle.h>
-#include "HostageOutlineGlowContext.h"
+#include <Features/Visuals/OutlineGlow/GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlowContext.h>
 
 template <typename HookContext, typename Context = GrenadeProjectileOutlineGlowContext<HookContext>>
 class HostageOutlineGlowToggle : public FeatureToggle<HostageOutlineGlowToggle<HookContext, Context>> {

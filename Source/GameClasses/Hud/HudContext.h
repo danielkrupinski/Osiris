@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GameClasses/PanelHandle.h>
+#include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 
 template <typename HookContext>
 struct HudContext {

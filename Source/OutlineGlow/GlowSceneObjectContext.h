@@ -4,6 +4,8 @@
 #include <CS2/Classes/Color.h>
 #include <GameClasses/SceneObject.h>
 #include <Platform/Macros/IsPlatform.h>
+#include <MemoryPatterns/Linux/GlowSceneObjectPatternsLinux.h>
+#include <cstring>
 
 #include "GlowSceneObjectPointer.h"
 

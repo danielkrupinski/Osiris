@@ -8,6 +8,8 @@
 #include <FeatureHelpers/TeamNumber.h>
 #include <GameClasses/GameSceneNode.h>
 #include <Utils/ColorUtils.h>
+#include <MemoryPatterns/PatternTypes/PlayerPawnPatternTypes.h>
+#include <CS2/Classes/ConVarTypes.h>
 
 #include "BaseEntity.h"
 #include "BaseModelEntity.h"

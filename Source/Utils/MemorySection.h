@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cassert>
 #include <span>
 
 struct MemorySection {

@@ -6,6 +6,8 @@
 #include <Hooks/ViewRenderHook.h>
 #include "SoundVisualization.h"
 #include "SoundVisualizationPanelFactory.h"
+#include <FeatureHelpers/WorldToClipSpaceConverter.h>
+#include <Features/Common/InWorldPanels.h>
 
 struct SoundVisualizationFeatureState {
     bool enabled{false};

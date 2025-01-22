@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Entities/C_BaseModelEntity.h>
 #include <MemoryPatterns/PatternTypes/BaseModelEntityPatternTypes.h>
+#include <Entities/BaseEntity.h>
 
 #include "GlowProperty.h"
 

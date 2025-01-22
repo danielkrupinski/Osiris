@@ -2,6 +2,8 @@
 
 #include <CS2/Classes/CSceneObject.h>
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
+#include <CS2/Classes/Color.h>
+#include <cstring>
 
 template <typename HookContext>
 class SceneObjectAttributes {

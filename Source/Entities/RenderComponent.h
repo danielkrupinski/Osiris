@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/CRenderComponent.h>
 #include <GameClasses/SceneObjectUpdaters.h>
+#include <MemoryPatterns/PatternTypes/RenderComponentPatternTypes.h>
 
 template <typename HookContext>
 class RenderComponent {

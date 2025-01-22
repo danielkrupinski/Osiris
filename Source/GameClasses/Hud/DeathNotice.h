@@ -3,6 +3,7 @@
 #include <Utils/StringParser.h>
 
 #include "DeathNoticeContext.h"
+#include <Utils/StringBuilder.h>
 
 template <typename HookContext, typename Context = DeathNoticeContext<HookContext>>
 class DeathNotice {

@@ -6,6 +6,7 @@
 #include <FeatureHelpers/PanelShadowParams.h>
 #include <GameClasses/PanelAlignmentParams.h>
 #include <GameClasses/PanelMarginParams.h>
+#include <GameClasses/PanelFontParams.h>
 
 namespace player_health_panel_params::container_panel_params
 {

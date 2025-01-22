@@ -6,6 +6,7 @@
 #include "PostRoundTimerPanel.h"
 #include "PostRoundTimerPanelFactory.h"
 #include "PostRoundTimerState.h"
+#include <GameClasses/PanoramaLabel.h>
 
 template <typename HookContext>
 struct PostRoundTimerContext {

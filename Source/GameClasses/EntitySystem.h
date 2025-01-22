@@ -6,6 +6,7 @@
 #include <CS2/Classes/EntitySystem/CEntityIndex.h>
 #include <CS2/Classes/EntitySystem/CGameEntitySystem.h>
 #include <MemoryPatterns/PatternTypes/EntitySystemPatternTypes.h>
+#include <cstring>
 
 template <typename HookContext>
 class EntitySystem {

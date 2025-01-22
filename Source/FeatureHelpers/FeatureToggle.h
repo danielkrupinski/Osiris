@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <Utils/PrivateTag.h>
 
 template <typename Feature, bool HasOnEnable, bool HasOnDisable>

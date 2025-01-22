@@ -7,6 +7,8 @@
 #include "DefusingAlertPanelParams.h"
 #include "DefusingAlertState.h"
 #include "DefusingCountdownTextPanel.h"
+#include <GameClasses/PanoramaLabel.h>
+#include <GameClasses/PanoramaImagePanel.h>
 
 template <typename HookContext>
 class DefusingAlertContext {

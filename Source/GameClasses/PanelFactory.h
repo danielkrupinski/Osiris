@@ -1,6 +1,10 @@
 #pragma once
 
 #include <GameClasses/PanoramaImagePanel.h>
+#include <CS2/Panorama/CLabel.h>
+#include <MemoryPatterns/PatternTypes/PanoramaImagePanelPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/PanelPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/PanoramaLabelPatternTypes.h>
 
 template <typename HookContext>
 struct PanelFactory {

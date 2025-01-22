@@ -2,6 +2,7 @@
 
 #include <CS2/Panorama/PanelHandle.h>
 #include <Utils/Lvalue.h>
+#include <GameClasses/PanoramaUiEngine.h>
 
 #include <utility>
 

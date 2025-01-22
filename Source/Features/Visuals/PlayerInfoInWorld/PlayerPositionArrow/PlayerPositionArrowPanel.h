@@ -1,9 +1,11 @@
 #pragma once
 
+#include <utility>
 #include <FeatureHelpers/TeamNumber.h>
 
 #include "PlayerPositionArrowColorType.h"
 #include "PlayerPositionArrowPanelContext.h"
+#include <CS2/Constants/ColorConstants.h>
 
 template <typename HookContext, typename Context = PlayerPositionArrowPanelContext<HookContext>>
 class PlayerPositionArrowPanel {

@@ -6,6 +6,7 @@
 #include <GameClasses/PanelAlignmentParams.h>
 #include <GameClasses/PanelFontParams.h>
 #include <GameClasses/PanelMarginParams.h>
+#include <CS2/Constants/ColorConstants.h>
 
 namespace bomb_timer_panel_params::container_panel_params
 {

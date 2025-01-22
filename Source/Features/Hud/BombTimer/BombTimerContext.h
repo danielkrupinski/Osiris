@@ -11,7 +11,6 @@
 #include "BombTimerCondition.h"
 #include "BombTimerPanel.h"
 #include "BombTimerPanelFactory.h"
-#include "BombTimerState.h"
 #include "BombTimerTextPanel.h"
 
 template <typename HookContext>
