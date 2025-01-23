@@ -1,6 +1,13 @@
 #pragma once
 
+#include <algorithm>
+#include <optional>
+
+#include <CS2/Classes/Color.h>
+#include <CS2/Constants/ColorConstants.h>
+#include <FeatureHelpers/TeamNumber.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
+#include <Utils/ColorUtils.h>
 
 extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_asm(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept;
 
@@ -104,13 +111,46 @@ private:
         return getColorSaturated(playerPawn);
     }
 
+    [[nodiscard]] std::optional<cs2::Color> getPlayerColor(auto playerColorIndex) const noexcept
+    {
+        return getPlayerColor(playerColorIndex, cs2::kPlayerColors);
+    }
+
+    [[nodiscard]] std::optional<cs2::Color> getPlayerColorSaturated(auto playerColorIndex) const noexcept
+    {
+        return getPlayerColor(playerColorIndex, cs2::kPlayerColorsSaturated);
+    }
+
+    [[nodiscard]] std::optional<cs2::Color> getPlayerColorHalfSaturated(auto playerColorIndex) const noexcept
+    {
+        return getPlayerColor(playerColorIndex, cs2::kPlayerColorsHalfSaturated);
+    }
+
+    [[nodiscard]] std::optional<cs2::Color> getPlayerColor(auto playerColorIndex, std::span<const cs2::Color> playerColors) const noexcept
+    {
+        if (playerColorIndex.hasValue() && playerColorIndex.value() >= 0 && std::cmp_less(playerColorIndex.value(), playerColors.size()))
+            return playerColors[playerColorIndex.value()];
+        return {};
+    }
+
+    [[nodiscard]] std::optional<cs2::Color> healthColor(auto&& playerPawn, float saturation = 0.7f) const noexcept
+    {
+        if (const auto healthValue = playerPawn.health(); healthValue.hasValue())
+            return getColorOfHealthFraction(saturation, std::clamp(healthValue.value(), 0, 100) / 100.0f);
+        return {};
+    }
+    [[nodiscard]] static cs2::Color getColorOfHealthFraction(float saturation, float healthFraction) noexcept
+    {
+        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, saturation, 1.0f);
+    }
+
     [[nodiscard]] cs2::Color getColorSaturated(auto&& playerPawn) const noexcept
     {
         if (state().playerModelGlowColorType == PlayerModelGlowColorType::HealthBased)
-            return playerPawn.healthColor(1.0f).value_or(cs2::kColorWhite);
+            return healthColor(playerPawn, 1.0f).value_or(cs2::kColorWhite);
 
         if (state().playerModelGlowColorType == PlayerModelGlowColorType::PlayerOrTeamColor) {
-            if (const auto playerColor = playerPawn.playerController().getPlayerColorSaturated(); playerColor.has_value())
+            if (const auto playerColor = getPlayerColorSaturated(playerPawn.playerController().playerColorIndex()); playerColor.has_value())
                 return *playerColor;
         }
 
@@ -124,10 +164,10 @@ private:
     [[nodiscard]] cs2::Color getColorHalfSaturated(auto&& playerPawn) const noexcept
     {
         if (state().playerModelGlowColorType == PlayerModelGlowColorType::HealthBased)
-            return playerPawn.healthColor(0.5f).value_or(cs2::kColorWhite);
+            return healthColor(playerPawn, 0.5f).value_or(cs2::kColorWhite);
 
         if (state().playerModelGlowColorType == PlayerModelGlowColorType::PlayerOrTeamColor) {
-            if (const auto playerColor = playerPawn.playerController().getPlayerColorHalfSaturated(); playerColor.has_value())
+            if (const auto playerColor = getPlayerColorHalfSaturated(playerPawn.playerController().playerColorIndex()); playerColor.has_value())
                 return *playerColor;
         }
 

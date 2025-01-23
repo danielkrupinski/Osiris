@@ -6,6 +6,7 @@
 #include <CS2/Classes/EntitySystem/CEntityIndex.h>
 #include <CS2/Classes/EntitySystem/CGameEntitySystem.h>
 #include <MemoryPatterns/PatternTypes/EntitySystemPatternTypes.h>
+#include <Entities/BaseEntity.h>
 
 template <typename HookContext>
 class EntitySystem {
@@ -15,22 +16,15 @@ public:
     {
     }
 
+    [[nodiscard]] decltype(auto) getEntityIdentityFromHandle(cs2::CEntityHandle handle) const noexcept
+    {
+        return hookContext.template make<EntityIdentity>(getRawEntityIdentityFromHandle(handle));
+    }
+
     [[nodiscard]] cs2::CEntityInstance* getEntityFromHandle(cs2::CEntityHandle handle) const noexcept
     {
-        const auto entityIndex = handle.index();
-        if (!entityIndex.isValid())
-            return nullptr;
-
-        const auto entityList = getEntityList();
-        if (!entityList)
-            return nullptr;
-
-        const auto chunkIndex = entityIndex.value / cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
-        if (const auto* const chunk = entityList->chunks[chunkIndex]) {
-            const auto indexInChunk = entityIndex.value % cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
-            if (const auto& entityIndentity = (*chunk)[indexInChunk]; entityIndentity.handle == handle)
-                return entityIndentity.entity;
-        }
+        if (const auto entityIdentity = getRawEntityIdentityFromHandle(handle))
+            return entityIdentity->entity;
         return nullptr;
     }
     
@@ -68,6 +62,25 @@ public:
     }
 
 private:
+    [[nodiscard]] cs2::CEntityIdentity* getRawEntityIdentityFromHandle(cs2::CEntityHandle handle) const noexcept
+    {
+        const auto entityIndex = handle.index();
+        if (!entityIndex.isValid())
+            return nullptr;
+
+        const auto entityList = getEntityList();
+        if (!entityList)
+            return nullptr;
+
+        const auto chunkIndex = entityIndex.value / cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
+        if (auto* const chunk = entityList->chunks[chunkIndex]) {
+            const auto indexInChunk = entityIndex.value % cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
+            if (auto& entityIndentity = (*chunk)[indexInChunk]; entityIndentity.handle == handle)
+                return &entityIndentity;
+        }
+        return nullptr;
+    }
+
     [[nodiscard]] cs2::CGameEntitySystem* entitySystem() const noexcept
     {
         if (hookContext.clientPatternSearchResults().template get<EntitySystemPointer>())

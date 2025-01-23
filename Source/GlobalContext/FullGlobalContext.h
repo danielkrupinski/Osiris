@@ -10,6 +10,7 @@
 #include <Features/Features.h>
 #include <Features/FeaturesStates.h>
 #include <Features/FeaturesUnloadHandler.h>
+#include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheState.h>
 #include <Helpers/PatternNotFoundLogger.h>
 #include <Helpers/UnloadFlag.h>
@@ -73,4 +74,5 @@ struct FullGlobalContext {
     GlowSceneObjectsState glowSceneObjectsState;
     EntityClassifier entityClassifier;
     PlayerInfoPanelCacheState playerInfoPanelCacheState;
+    PlayerModelGlowPreviewState playerModelGlowPreviewState;
 };

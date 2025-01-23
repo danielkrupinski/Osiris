@@ -1,5 +1,6 @@
 #pragma once
 
+#include <CS2/Classes/GlobalVars.h>
 #include <Utils/Optional.h>
 
 struct GlobalVars {

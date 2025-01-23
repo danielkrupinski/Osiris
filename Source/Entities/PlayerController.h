@@ -52,6 +52,11 @@ public:
         return getPlayerColor(cs2::kPlayerColorsHalfSaturated);
     }
 
+    [[nodiscard]] decltype(auto) playerColorIndex() const noexcept
+    {
+        return hookContext.clientPatternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).toOptional();
+    }
+
 private:
     [[nodiscard]] std::optional<cs2::Color> getPlayerColor(std::span<const cs2::Color> playerColors) const noexcept
     {

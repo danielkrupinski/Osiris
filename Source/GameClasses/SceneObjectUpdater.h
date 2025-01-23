@@ -1,5 +1,7 @@
 #pragma once
 
+#include <MemoryPatterns/PatternTypes/SceneObjectUpdaterPatternTypes.h>
+
 template <typename HookContext>
 class SceneObjectUpdater {
 public:

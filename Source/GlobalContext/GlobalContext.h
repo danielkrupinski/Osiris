@@ -5,6 +5,7 @@
 
 #include <BuildConfig.h>
 #include <CS2/Constants/DllNames.h>
+#include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
 #include <Features/Common/InWorldPanelsUnloadHandler.h>
 #include <Helpers/PatternNotFoundLogger.h>
 #include <MemoryAllocation/FreeMemoryRegionList.h>
@@ -71,11 +72,17 @@ public:
         return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original};
     }
 
-    [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
+    [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* entity, void* unknown, bool unknownBool) noexcept
     {
         HookDependencies hookContext{fullContext()};
-        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
-        hookContext.make<ModelGlow>().applyPlayerModelGlow(hookContext.make<PlayerPawn>(playerPawn));
+        const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(entity, unknown, unknownBool);
+
+        auto&& playerPawn = hookContext.make<PlayerPawn>(entity);
+        if (auto&& previewPlayer = playerPawn.template cast<PreviewPlayer>(); !previewPlayer)
+            hookContext.make<ModelGlow>().applyPlayerModelGlow(playerPawn);
+        else
+            hookContext.make<PlayerModelGlowPreview>().applyPreviewPlayerModelGlow(previewPlayer);
+    
         return originalReturnValue;
     }
 
@@ -104,6 +111,7 @@ public:
 
         UnloadFlag unloadFlag;
         dependencies.make<PanoramaGUI>().run(fullContext().features(dependencies), unloadFlag);
+        dependencies.make<ModelGlow>().onEntityListTraversed();
 
         if (unloadFlag) {
             FeaturesUnloadHandler{dependencies, fullContext().featuresStates}.handleUnload();
@@ -111,6 +119,7 @@ public:
             InWorldPanelsUnloadHandler{dependencies}.handleUnload();
             PanoramaGuiUnloadHandler{dependencies}.handleUnload();
             fullContext().hooks.viewRenderHook.uninstall();
+            dependencies.make<PlayerModelGlowPreview>().onUnload();
 
             dependencies.make<EntitySystem>().forEachEntityIdentity([&dependencies](const auto& entityIdentity) {
                 auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));

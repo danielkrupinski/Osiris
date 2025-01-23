@@ -2,6 +2,8 @@
 
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
 #include <CS2/Classes/CCSWeaponBaseVData.h>
+#include <MemoryPatterns/PatternTypes/WeaponPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/WeaponVDataPatternTypes.h>
 #include "BaseEntity.h"
 
 template <typename HookContext>
