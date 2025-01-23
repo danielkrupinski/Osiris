@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 23 January 2025
+    * Added player model glow preview to the menu
+
+    ![Player Model Glow Preview](https://github.com/user-attachments/assets/361ff865-2a0c-4145-9fd0-5ff397f50972)
+
 * 27 December 2024
     * Added model glow for grenade projectiles
 
@@ -24,11 +29,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added model glow for dropped bomb
 
     ![Dropped Bomb Model Glow](https://github.com/user-attachments/assets/a44d2a8e-399c-4638-8aa8-b49fac732c86)
-
-* 2 December 2024
-    * Added model glow for weapons on ground
-
-    ![Weapon model glow](https://github.com/user-attachments/assets/ce1b8853-1644-41bd-ab65-0880ff8e4153)
 
 ## Technical features
 
