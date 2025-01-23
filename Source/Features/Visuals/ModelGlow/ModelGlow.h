@@ -42,6 +42,12 @@ public:
             hookContext.template make<WeaponModelGlow>().updateSceneObjectUpdaterHook(entity.template as<BaseWeapon>());
     }
 
+    void updateSceneObjectUpdaterHook(auto&& playerPawnForModelGlowPreview) const noexcept
+    {
+        if (shouldUpdateSceneObjectUpdaterHook())
+            hookContext.template make<PlayerModelGlow>().updateSceneObjectUpdaterHook(playerPawnForModelGlowPreview);
+    }
+
     void applyPlayerModelGlow(auto&& playerPawn) const noexcept
     {
         if (shouldRun())

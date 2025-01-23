@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/CCSPlayer_HostageServices.h>
 #include <GameClasses/EntitySystem.h>
+#include <MemoryPatterns/PatternTypes/HostageServicesPatternTypes.h>
 
 template <typename HookContext>
 class HostageServices {

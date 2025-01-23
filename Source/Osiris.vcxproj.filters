@@ -220,6 +220,9 @@
     <Filter Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow">
       <UniqueIdentifier>{82eb31ee-3f3f-44ea-8c75-0f9a591f78a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals\ModelGlow\Preview">
+      <UniqueIdentifier>{34c6b5fe-cc1f-4d35-97f4-fa7228496d57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1741,6 +1744,48 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanelParams.h">
       <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_CSGO_PreviewPlayer.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CUI_MapPlayerPreviewPanel.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\PreviewPlayer.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\BaseEntityForModelGlowPreview.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerControllerForModelGlowPreview.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerModelGlowPreview.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerModelGlowPreviewColorMode.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerModelGlowPreviewParams.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerModelGlowPreviewState.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerPawnForModelGlowPreview.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\EntityIdentity.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClasses\MapPlayerPreviewPanel.h">
+      <Filter>GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\MapPlayerPreviewPanelPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\MapPlayerPreviewPanelPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

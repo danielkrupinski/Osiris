@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Entities/PreviewPlayer.h>
+#include <GameClasses/MapPlayerPreviewPanel.h>
 #include <GameClasses/PanoramaUiEngine.h>
 #include <Utils/StringParser.h>
 #include <Helpers/UnloadFlag.h>
@@ -9,6 +11,69 @@
 #include "HudTab.h"
 #include "SoundTab.h"
 #include "VisualsTab.h"
+
+template <typename HookContext>
+class PlayerModelGlowPreviewPanel {
+public:
+    PlayerModelGlowPreviewPanel(HookContext& hookContext, cs2::CUIPanel* panel, TeamNumber teamNumber) noexcept
+        : hookContext{hookContext}
+        , panel{panel}
+        , teamNumber{teamNumber}
+    {
+    }
+
+    void update() const noexcept
+    {
+        if (!state().shouldUpdatePanel)
+            return;
+
+        StringBuilderStorage<100> storage;
+        auto builder = storage.builder();
+        builder.put("Preview - Player ");
+        if (teamNumber == TeamNumber::TT)
+            builder.put("TT");
+        else
+            builder.put("CT");
+        if (state().colorMode == PlayerModelGlowPreviewColorMode::PlayerOrTeamColor) {
+            if (const auto colorString = colorIndexToString()) {
+                builder.put(" - ");
+                builder.put(colorString);
+            }
+        } else if (state().colorMode == PlayerModelGlowPreviewColorMode::HealthBased) {
+            builder.put(" - ", state().previewPlayerHealth, " HP");
+        }
+
+        labelPanel().setText(builder.cstring());
+    }
+
+private:
+    [[nodiscard]] auto& state() const noexcept
+    {
+        return hookContext.playerModelGlowPreviewState();
+    }
+
+    [[nodiscard]] decltype(auto) labelPanel() const noexcept
+    {
+        return hookContext.template make<PanoramaUiPanel>(panel).clientPanel().template as<PanoramaLabel>();
+    }
+
+    [[nodiscard]] const char* colorIndexToString() const noexcept
+    {
+        // todo: add color index constants to cs2 namespace
+        switch (state().previewPlayerColorIndex) {
+        case 0: return "Blue";
+        case 1: return "Green";
+        case 2: return "Yellow";
+        case 3: return "Orange";
+        case 4: return "Purple";
+        default: return nullptr;
+        }
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* panel;
+    TeamNumber teamNumber;
+};
 
 template <typename HookContext>
 class PanoramaGUI {
@@ -57,8 +122,11 @@ public:
         if (const auto guiButtonPanel = mainMenu.findChildInLayoutFile("OsirisOpenMenuButton"))
             state().guiButtonHandle = guiButtonPanel.getHandle();
 
-        if (const auto guiPanel = mainMenu.findChildInLayoutFile("OsirisMenuTab"))
+        if (const auto guiPanel = mainMenu.findChildInLayoutFile("OsirisMenuTab")) {
             state().guiPanelHandle = guiPanel.getHandle();
+            state().modelGlowPreviewPlayerLabelHandleTT = guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerTTLabel").getHandle();
+            state().modelGlowPreviewPlayerLabelHandleCT = guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCTLabel").getHandle();
+        }
 
         hookContext.template make<HudTab>().updateFromConfig(mainMenu);
         hookContext.template make<VisualsTab>().updateFromConfig(mainMenu);
@@ -70,6 +138,18 @@ public:
         auto&& guiPanel = uiEngine().getPanelFromHandle(state().guiPanelHandle);
         if (!guiPanel)
             return;
+
+        auto&& playerModelGlowPreview = hookContext.template make<PlayerModelGlowPreview>();
+        if (!playerModelGlowPreview.isPreviewPlayerSetTT())
+            playerModelGlowPreview.setPreviewPlayerTT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerTT").clientPanel().template as<MapPlayerPreviewPanel>().findPreviewPlayer());
+        if (!playerModelGlowPreview.isPreviewPlayerSetCT())
+            playerModelGlowPreview.setPreviewPlayerCT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCT").clientPanel().template as<MapPlayerPreviewPanel>().findPreviewPlayer());
+
+        hookContext.template make<PlayerModelGlowPreview>().hookPreviewPlayersSceneObjectUpdaters();
+        hookContext.template make<PlayerModelGlowPreview>().update();
+
+        hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleTT), TeamNumber::TT).update();
+        hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleCT), TeamNumber::CT).update();
 
         const auto cmdSymbol = uiEngine().makeSymbol(0, "cmd");
         const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");

@@ -3,10 +3,12 @@
 #include <optional>
 
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <CS2/Classes/ConVarTypes.h>
 #include <CS2/Constants/EntityHandle.h>
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/TeamNumber.h>
 #include <GameClasses/GameSceneNode.h>
+#include <MemoryPatterns/PatternTypes/PlayerPawnPatternTypes.h>
 #include <Utils/ColorUtils.h>
 
 #include "BaseEntity.h"
@@ -35,6 +37,14 @@ public:
     [[nodiscard]] decltype(auto) baseEntity() const noexcept
     {
         return hookContext.template make<BaseEntity>(playerPawn);
+    }
+
+    template <template <typename...> typename EntityType>
+    [[nodiscard]] decltype(auto) cast() const noexcept
+    {
+        if (baseEntity().template is<EntityType>())
+            return hookContext.template make<EntityType<HookContext>>(static_cast<typename EntityType<HookContext>::RawType*>(playerPawn));
+        return hookContext.template make<EntityType<HookContext>>(nullptr);
     }
 
     [[nodiscard]] decltype(auto) weaponServices() const noexcept

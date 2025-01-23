@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/CGameSceneNode.h>
+#include <MemoryPatterns/PatternTypes/GameSceneNodePatternTypes.h>
 
 template <typename HookContext>
 class BaseEntity;

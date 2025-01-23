@@ -5,8 +5,10 @@
 #include <CS2/Constants/SceneObjectAttributeNames.h>
 #include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/TeamNumber.h>
+#include <MemoryPatterns/PatternTypes/EntityPatternTypes.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
+#include <GameClasses/EntityIdentity.h>
 #include <GameClasses/GameSceneNode.h>
 #include "RenderComponent.h"
 
@@ -24,17 +26,20 @@ public:
         return *this;
     }
 
-    [[nodiscard]] EntityTypeInfo classify() const noexcept
+    [[nodiscard]] decltype(auto) entityIdentity() const noexcept
     {
-        if (entity)
-            return hookContext.entityClassifier().classifyEntity(entity->identity->entityClass);
-        return {};
+        return hookContext.template make<EntityIdentity>(entity ? entity->identity : nullptr);
     }
 
-    template <template <typename...> typename T>
-    [[nodiscard]] decltype(auto) as() const noexcept
+    [[nodiscard]] decltype(auto) classify() const noexcept
     {
-        return hookContext.template make<T<HookContext>>(static_cast<typename T<HookContext>::RawType*>(entity));
+        return entityIdentity().classify();
+    }
+
+    template <template <typename...> typename T, typename... Args>
+    [[nodiscard]] decltype(auto) as(Args&&... args) const noexcept
+    {
+        return hookContext.template make<T<HookContext>>(static_cast<typename T<HookContext>::RawType*>(entity), std::forward<Args>(args)...);
     }
 
     template <template <typename...> typename EntityType>

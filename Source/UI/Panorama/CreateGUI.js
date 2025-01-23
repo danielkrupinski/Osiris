@@ -264,6 +264,33 @@ $.Osiris = (function () {
     $.CreatePanel('Panel', parent, '', { class: "horizontal-separator" });
   };
 
+  var makeFauxItemId = function (defIndex, paintKitId) {
+    return (BigInt(0xF000000000000000) | BigInt(paintKitId << 16) | BigInt(defIndex))
+  };
+
+  var createPlayerModelGlowPreview = function (parent, id, labelId, playerModel, itemId) {
+    var container = $.CreatePanel('Panel', parent, '', { style: 'width: 100%; flow-children: none;' });
+    var previewPanel = $.CreatePanel('MapPlayerPreviewPanel', container, id, {
+      map: "ui/buy_menu",
+      camera: "cam_loadoutmenu_ct",
+      "require-composition-layer": true,
+      playermodel: playerModel,
+      playername: "vanity_character",
+      animgraphcharactermode: "buy-menu",
+      player: true,
+      mouse_rotate: false,
+      sync_spawn_addons: true,
+      "transparent-background": true,
+      "pin-fov": "vertical",
+      csm_split_plane0_distance_override: "250.0",
+      style: "vertical-align: top; width: 100%; height: 400px; horizontal-align: center;"
+    });
+    previewPanel.EquipPlayerWithItem(itemId);
+    $.CreatePanel('Label', container, labelId, { style: 'vertical-align: top; horizontal-align: center;' });
+  };
+)"
+// split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
+u8R"(
   var hud = createTab('hud');
   
   var bomb = createSection(hud, 'Bomb');
@@ -339,7 +366,14 @@ $.Osiris = (function () {
   var hostageOutlineGlow = createSection(outlineGlowTab, 'Hostages');
   createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow');
 
-  var modelGlowTab = createSubTab(visuals, 'model_glow');
+  var _modelGlowTab = createSubTab(visuals, 'model_glow');
+  _modelGlowTab.style.flowChildren = 'right';
+  var leftModelGlowPanel = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'padding-left: 64px; width: fill-parent-flow(1); flow-children: down;' });
+  var modelGlowTab = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down;' });
+  var rightModelGlowPanel = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'padding-right: 64px; width: fill-parent-flow(1); flow-children: down;' });
+
+  createPlayerModelGlowPreview(leftModelGlowPanel, 'ModelGlowPreviewPlayerTT', 'ModelGlowPreviewPlayerTTLabel', 'characters/models/tm_professional/tm_professional_varf.vmdl', makeFauxItemId(7, 921));
+  createPlayerModelGlowPreview(rightModelGlowPanel, 'ModelGlowPreviewPlayerCT', 'ModelGlowPreviewPlayerCTLabel', 'characters/models/ctm_st6/ctm_st6_variante.vmdl', makeFauxItemId(9, 819));
 
   var modelGlow = createSection(modelGlowTab, 'Model Glow');
   createOnOffDropDown(modelGlow, "Master Switch", 'visuals', 'model_glow_enable');

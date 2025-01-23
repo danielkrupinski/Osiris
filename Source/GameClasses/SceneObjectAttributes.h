@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstring>
+
 #include <CS2/Classes/CSceneObject.h>
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 

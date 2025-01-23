@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/CBaseAnimGraph.h>
+#include <CS2/Classes/Entities/C_CSGO_PreviewPlayer.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/C_Hostage.h>
 #include <CS2/Classes/Entities/GrenadeProjectiles.h>
@@ -58,7 +59,8 @@ constexpr auto kEntityClassNames = TypedStaticStringPool{}
     .add<C_C4>("C_C4")
     .add<CPlantedC4>("C_PlantedC4")
     .add<C_Hostage>("C_Hostage")
-    .add<C_Item_Healthshot>("C_Item_Healthshot");
+    .add<C_Item_Healthshot>("C_Item_Healthshot")
+    .add<C_CSGO_PreviewPlayer>("C_CSGO_PreviewPlayer");
 
 using EntityClasses = decltype(kEntityClassNames)::TypeList;
 

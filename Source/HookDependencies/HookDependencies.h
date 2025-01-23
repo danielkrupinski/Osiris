@@ -83,6 +83,11 @@ struct HookDependencies {
         return fullGlobalContext.entityClassifier;
     }
 
+    [[nodiscard]] auto& playerModelGlowPreviewState() const noexcept
+    {
+        return fullGlobalContext.playerModelGlowPreviewState;
+    }
+
     [[nodiscard]] Hooks& hooks() const noexcept
     {
         return fullGlobalContext.hooks;

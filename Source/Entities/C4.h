@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/WeaponEntities.h>
+#include <MemoryPatterns/PatternTypes/C4PatternTypes.h>
 #include "BaseWeapon.h"
 
 template <typename HookContext>
