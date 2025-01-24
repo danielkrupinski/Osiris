@@ -3,7 +3,7 @@
 #include <FeatureHelpers/FeatureToggle.h>
 #include "HostageOutlineGlowContext.h"
 
-template <typename HookContext, typename Context = GrenadeProjectileOutlineGlowContext<HookContext>>
+template <typename HookContext, typename Context = HostageOutlineGlowContext<HookContext>>
 class HostageOutlineGlowToggle : public FeatureToggle<HostageOutlineGlowToggle<HookContext, Context>> {
 public:
     template <typename... Args>
