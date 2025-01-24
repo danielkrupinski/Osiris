@@ -71,11 +71,12 @@ public:
 private:
     void updateAnimationProgress() const noexcept
     {
-        constexpr auto kFrameTime{1 / 60.0f}; // todo: get real frametime from globalVars
+        constexpr auto kDefaultFrameTime{1 / 60.0f};
+        const auto frameTime = hookContext.globalVars().frametime().valueOr(kDefaultFrameTime);
 
         using namespace player_model_glow_preview_params;
-        if (kFrameTime < kAnimationCycleDuration - state().animationProgress)
-            state().animationProgress += kFrameTime;
+        if (frameTime < kAnimationCycleDuration - state().animationProgress)
+            state().animationProgress += frameTime;
         else
             state().animationProgress = 0.0f;
     }
