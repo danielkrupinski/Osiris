@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CUIEngine.h>
+#include <Platform/Macros/FunctionAttributes.h>
 #include <Platform/Macros/IsPlatform.h>
 #include <MemoryPatterns/PatternTypes/UiEnginePatternTypes.h>
 
@@ -45,7 +46,7 @@ public:
         return handle;
     }
 
-    void deletePanelByHandle(cs2::PanelHandle handle) noexcept
+    [[NOINLINE]] void deletePanelByHandle(cs2::PanelHandle handle) noexcept
     {
         if (handle.isValid())
             onDeletePanel(handle);
