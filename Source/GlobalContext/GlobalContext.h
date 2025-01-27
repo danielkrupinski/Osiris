@@ -98,6 +98,7 @@ public:
     {
         HookDependencies dependencies{fullContext()};
         fullContext().hooks.viewRenderHook.getOriginalOnRenderStart()(viewRender);
+        dependencies.make<InWorldPanels>().updateState();
         SoundWatcher<decltype(dependencies)> soundWatcher{fullContext().soundWatcherState, dependencies};
         soundWatcher.update();
         fullContext().features(dependencies).soundFeatures().runOnViewMatrixUpdate();

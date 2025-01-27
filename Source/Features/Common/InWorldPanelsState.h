@@ -13,8 +13,9 @@ struct InWorldPanelsState {
     InWorldPanelIndex playerInfoPanelListHead{};
     std::array<InWorldPanelIndex, SoundVisualizationPanelTypes::size()> soundVisualizationPanelListHeads{};
 
-    void onContainerPanelCreation() noexcept
+    void reset() noexcept
     {
+        containerPanelHandle = {};
         panelList.clear();
         playerInfoPanelListHead = {};
         soundVisualizationPanelListHeads = {};

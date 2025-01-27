@@ -20,11 +20,19 @@ public:
     {
     }
 
+    void updateState() const noexcept
+    {
+        if (!containerPanelExists()) {
+            hookContext.template make<PlayerInfoPanelCache>().clear();
+            state().reset();
+        }
+    }
+
     [[nodiscard]] decltype(auto) getNextPlayerInfoPanel() const noexcept
     {
         if (auto&& existingPanel = getNextExistingPanel(state().playerInfoPanelListHead, perHookState().lastUsedPlayerInfoPanelIndex))
             return existingPanel.template as<PlayerInfoPanel>(hookContext.template make<PlayerInfoPanelCache>().nextEntry());
-        auto&& newPanel = createPlayerInfoPanel(containerPanel());
+        auto&& newPanel = createPlayerInfoPanel(getOrCreateContainerPanel());
         registerNewPanel(state().playerInfoPanelListHead, perHookState().lastUsedPlayerInfoPanelIndex);
         hookContext.template make<PlayerInfoPanelCache>().allocateNewEntry();
         return newPanel.template as<PlayerInfoPanel>(hookContext.template make<PlayerInfoPanelCache>().nextEntry());
@@ -35,7 +43,7 @@ public:
     {
         if (auto&& existingPanel = getNextExistingPanel(state().soundVisualizationPanelListHeads[SoundVisualizationPanelTypes::indexOf<Type>()], perHookState().lastUsedSoundVisualizationPanelIndexes[SoundVisualizationPanelTypes::indexOf<Type>()]))
             return utils::lvalue<decltype(existingPanel)>(existingPanel);
-        auto&& newPanel = createSoundVisualizationPanel<Type>(containerPanel());
+        auto&& newPanel = createSoundVisualizationPanel<Type>(getOrCreateContainerPanel());
         registerNewPanel(state().soundVisualizationPanelListHeads[SoundVisualizationPanelTypes::indexOf<Type>()], perHookState().lastUsedSoundVisualizationPanelIndexes[SoundVisualizationPanelTypes::indexOf<Type>()]);
         return utils::lvalue<decltype(newPanel)>(newPanel);
     }
@@ -68,7 +76,7 @@ private:
         for (auto index = firstIndex; index.isValid(); index = state().panelList[index.value].indexOfNextPanelOfSameType()) {
             if (state().panelList[index.value].isPanelActive()) {
                 state().panelList[index.value].markPanelInactive();
-                deactivatePanel(containerPanel().children()[index.value]);
+                deactivatePanel(getContainerPanel().children()[index.value]);
             }
         }
     }
@@ -107,7 +115,7 @@ private:
         if (nextIndex.isValid()) {
             lastUsedPanelIndex = nextIndex;
             auto& nextPanelEntry = state().panelList[nextIndex.value];
-            auto&& panel = containerPanel().children()[nextIndex.value];
+            auto&& panel = getContainerPanel().children()[nextIndex.value];
             if (!nextPanelEntry.isPanelActive()) {
                 activatePanel(panel);
                 nextPanelEntry.markPanelActive();
@@ -137,20 +145,29 @@ private:
         return hookContext.inWorldPanelsState();
     }
 
-    [[nodiscard]] auto containerPanel() const noexcept
+    [[nodiscard]] decltype(auto) getOrCreateContainerPanel() const noexcept
     {
-        return handle().getOrInit(createContainerPanel());
+        return containerPanelHandle().getOrInit(createContainerPanel());
     }
 
-    [[nodiscard]] decltype(auto) handle() const noexcept
+    [[nodiscard]] decltype(auto) getContainerPanel() const noexcept
+    {
+        return containerPanelHandle().get();
+    }
+
+    [[nodiscard]] decltype(auto) containerPanelHandle() const noexcept
     {
         return hookContext.template make<PanelHandle>(state().containerPanelHandle);
+    }
+
+    [[nodiscard]] bool containerPanelExists() const noexcept
+    {
+        return containerPanelHandle().panelExists();
     }
 
     [[nodiscard]] auto createContainerPanel() const noexcept
     {
         return [this] {
-            state().onContainerPanelCreation();
             auto&& panel = hookContext.panelFactory().createPanel(hookContext.hud().getHudReticle()).uiPanel();
             panel.fitParent();
             return panel;
