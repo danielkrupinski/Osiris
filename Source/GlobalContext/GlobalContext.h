@@ -112,8 +112,7 @@ public:
 
         UnloadFlag unloadFlag;
         dependencies.make<PanoramaGUI>().run(fullContext().features(dependencies), unloadFlag);
-        dependencies.make<ModelGlow>().onEntityListTraversed();
-
+    
         if (unloadFlag) {
             FeaturesUnloadHandler{dependencies, fullContext().featuresStates}.handleUnload();
             BombStatusPanelUnloadHandler{dependencies}.handleUnload();

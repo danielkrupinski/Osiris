@@ -145,16 +145,16 @@ public:
         if (!playerModelGlowPreview.isPreviewPlayerSetCT())
             playerModelGlowPreview.setPreviewPlayerCT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCT").clientPanel().template as<MapPlayerPreviewPanel>().findPreviewPlayer());
 
+        const auto cmdSymbol = uiEngine().makeSymbol(0, "cmd");
+        const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
+        PanoramaCommandDispatcher{cmd, features, unloadFlag}();
+        guiPanel.setAttributeString(cmdSymbol, "");
+
         hookContext.template make<PlayerModelGlowPreview>().hookPreviewPlayersSceneObjectUpdaters();
         hookContext.template make<PlayerModelGlowPreview>().update();
 
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleTT), TeamNumber::TT).update();
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleCT), TeamNumber::CT).update();
-
-        const auto cmdSymbol = uiEngine().makeSymbol(0, "cmd");
-        const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
-        PanoramaCommandDispatcher{cmd, features, unloadFlag}();
-        guiPanel.setAttributeString(cmdSymbol, "");
     }
 
 private:
