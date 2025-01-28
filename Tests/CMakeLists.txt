@@ -11,16 +11,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Tests UnitTests.cpp)
-
-if(MSVC)
-  target_compile_options(Tests PRIVATE /bigobj)
-endif()
-
-add_subdirectory(MemoryAllocation)
-add_subdirectory(Platform)
-target_link_libraries(Tests gtest_main gmock Threads::Threads)
-target_include_directories(Tests PRIVATE . "${CMAKE_SOURCE_DIR}/Source")
-
 include(GoogleTest)
-gtest_discover_tests(Tests DISCOVERY_TIMEOUT 60)
+
+add_subdirectory(UnitTests)
