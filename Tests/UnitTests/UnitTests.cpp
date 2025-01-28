@@ -6,4 +6,3 @@
 
 #include "HudTests/BombStatusTests/BombStatusPanelTests.h"
 #include "HudTests/BombStatusTests/BombStatusPanelManagerTests.h"
-#include "Mocks/MockMemoryAllocator.h"

@@ -41,6 +41,6 @@ jobs:
     - name: build source
       run: cmake --build build --target Osiris -j $(nproc --all)
     - name: build unit tests
-      run: cmake --build build --target Tests -j $(nproc --all)
+      run: cmake --build build --target UnitTests -j $(nproc --all)
     - name: run unit tests
       run: ctest --test-dir build --output-on-failure --schedule-random -j $(nproc --all)

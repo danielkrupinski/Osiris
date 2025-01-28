@@ -36,6 +36,6 @@ jobs:
     - name: build source
       run: cmake --build build --target Osiris --config ${{ matrix.configuration }}
     - name: build unit tests
-      run: cmake --build build --target Tests --config ${{ matrix.configuration }}
+      run: cmake --build build --target UnitTests --config ${{ matrix.configuration }}
     - name: run unit tests
       run: ctest --test-dir build --output-on-failure --schedule-random -j $env:NUMBER_OF_PROCESSORS
