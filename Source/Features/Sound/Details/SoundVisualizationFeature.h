@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FeatureHelpers/PanoramaTransformations.h>
+#include <Panorama/PanoramaTransformations.h>
 #include <FeatureHelpers/Sound/SoundWatcher.h>
 #include <FeatureHelpers/FeatureToggle.h>
 #include <Hooks/ViewRenderHook.h>

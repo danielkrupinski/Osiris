@@ -5,9 +5,9 @@
 #include "GlowSceneObjectDeps.h"
 #include "HudDeps.h"
 #include "MemAllocDeps.h"
-#include "PanoramaSymbols.h"
 
-#include <FeatureHelpers/StylePropertiesSymbolsAndVMTs.h>
+#include <Panorama/PanoramaSymbols.h>
+#include <Panorama/StylePropertiesSymbolsAndVMTs.h>
 
 #include <MemoryPatterns/MemoryPatterns.h>
 #include <Platform/VmtFinder.h>

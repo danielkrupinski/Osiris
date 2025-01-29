@@ -2,8 +2,8 @@
 
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
-#include <GameClasses/PanelAlignmentParams.h>
-#include <GameClasses/PanelMarginParams.h>
+#include <Panorama/PanelAlignmentParams.h>
+#include <Panorama/PanelMarginParams.h>
 
 namespace player_weapon_icon_panel_params
 {

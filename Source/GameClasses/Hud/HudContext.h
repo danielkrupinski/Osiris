@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GameClasses/PanelHandle.h>
+#include <Panorama/PanelHandle.h>
 
 template <typename HookContext>
 struct HudContext {

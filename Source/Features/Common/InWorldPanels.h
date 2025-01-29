@@ -5,7 +5,7 @@
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldPanelFactory.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCache.h>
-#include <GameClasses/PanelHandle.h>
+#include <Panorama/PanelHandle.h>
 #include "InWorldPanelIndex.h"
 #include "InWorldPanelListEntry.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
-#include <GameClasses/PanoramaUiPanel.h>
+#include <Panorama/PanoramaUiPanel.h>
 
 template <typename HookContext>
 class PlayerStateIconsPanelContext {

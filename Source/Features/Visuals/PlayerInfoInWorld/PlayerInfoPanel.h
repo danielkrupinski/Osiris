@@ -1,10 +1,10 @@
 #pragma once
 
 #include <CS2/Panorama/CUIPanel.h>
-#include <FeatureHelpers/PanoramaTransformations.h>
+#include <Panorama/PanoramaTransformations.h>
 #include <FeatureHelpers/ViewToProjectionMatrix.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
-#include <GameClasses/PanoramaUiPanel.h>
+#include <Panorama/PanoramaUiPanel.h>
 #include "PlayerInfoInWorldState.h"
 #include "PlayerInfoPanelCacheEntry.h"
 #include "PlayerInfoPanelTypes.h"

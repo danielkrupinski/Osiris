@@ -2,11 +2,11 @@
 
 #include <cstring>
 
-#include <GameClasses/TopLevelWindow.h>
-#include <FeatureHelpers/PanelStylePropertyFactory.h>
 #include <Utils/Lvalue.h>
 
+#include "PanelStylePropertyFactory.h"
 #include "PanoramaUiPanelContext.h"
+#include "TopLevelWindow.h"
 
 struct PanelAlignmentParams;
 struct PanelMarginParams;

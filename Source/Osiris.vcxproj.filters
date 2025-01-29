@@ -223,6 +223,9 @@
     <Filter Include="Features\Visuals\ModelGlow\Preview">
       <UniqueIdentifier>{34c6b5fe-cc1f-4d35-97f4-fa7228496d57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Panorama">
+      <UniqueIdentifier>{29f9a026-37c7-43b3-adbb-11b20e71aa23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -266,18 +269,6 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\VisualFeatures.h">
       <Filter>Features\Visuals</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaImagePanel.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaLabel.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaUiEngine.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaUiPanel.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\Bits.h">
       <Filter>Helpers</Filter>
@@ -599,9 +590,6 @@
     <ClInclude Include="Features\Sound\BombDefuseVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\PanoramaTransformations.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
@@ -637,12 +625,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\CUtlMap.h">
       <Filter>CS2\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\PanelStylePropertyFactory.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\StylePropertySymbolMap.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="Platform\Windows\WindowsVmtFinder.h">
       <Filter>Platform\Windows</Filter>
@@ -719,9 +701,6 @@
     <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\PanelShadowParams.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="Platform\Windows\Syscalls\WindowsSyscallIndex.h">
       <Filter>Platform\Windows\Syscalls</Filter>
     </ClInclude>
@@ -757,9 +736,6 @@
     </ClInclude>
     <ClInclude Include="Utils\GenericPointer.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\TopLevelWindow.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -817,9 +793,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\StylePropertiesSymbolsAndVMTs.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="GlobalContext\DeferredCompleteObject.h">
       <Filter>GlobalContext</Filter>
@@ -1007,24 +980,6 @@
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBaseImpl.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\ClientPanel.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanelHandle.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaUiPanelChildPanels.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaUiPanelClasses.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaUiPanelContext.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaUiPanelIterator.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="Features\FeaturesUnloadHandler.h">
       <Filter>Features</Filter>
     </ClInclude>
@@ -1040,26 +995,8 @@
     <ClInclude Include="GameClasses\Hud\DeathNoticeContext.h">
       <Filter>GameClasses\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaImagePanelContext.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaUiPanelMethodInvoker.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Lvalue.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanelFactory.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanelAlignmentParams.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanelFontParams.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\PanelMarginParams.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="GameClasses\Hud\HudContext.h">
       <Filter>GameClasses\Hud</Filter>
@@ -1475,9 +1412,6 @@
     <ClInclude Include="MemorySearch\PatternPoolBuilder.h">
       <Filter>MemorySearch</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\PanoramaSymbols.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\PatternTypes\ConVarPatternTypes.h">
       <Filter>MemoryPatterns\PatternTypes</Filter>
     </ClInclude>
@@ -1733,9 +1667,6 @@
     <ClInclude Include="UI\Panorama\VisualsTab.h">
       <Filter>UI\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\PanoramaDropDown.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="UI\Panorama\HudTab.h">
       <Filter>UI\Panorama</Filter>
     </ClInclude>
@@ -1778,14 +1709,89 @@
     <ClInclude Include="GameClasses\EntityIdentity.h">
       <Filter>GameClasses</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\MapPlayerPreviewPanel.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\PatternTypes\MapPlayerPreviewPanelPatternTypes.h">
       <Filter>MemoryPatterns\PatternTypes</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\MapPlayerPreviewPanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\ClientPanel.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\MapPlayerPreviewPanel.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanelAlignmentParams.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanelFactory.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanelFontParams.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanelHandle.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanelMarginParams.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaDropDown.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaImagePanel.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaImagePanelContext.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaLabel.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaUiEngine.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaUiPanel.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaUiPanelChildPanels.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaUiPanelClasses.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaUiPanelContext.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaUiPanelIterator.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaUiPanelMethodInvoker.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\TopLevelWindow.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanelShadowParams.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanelStylePropertyFactory.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaSymbols.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaTransformations.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\PanoramaTransformFactory.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\StylePropertiesSymbolsAndVMTs.h">
+      <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Panorama\StylePropertySymbolMap.h">
+      <Filter>Panorama</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

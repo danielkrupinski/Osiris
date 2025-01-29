@@ -3,10 +3,10 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
-#include <FeatureHelpers/PanelShadowParams.h>
-#include <GameClasses/PanelAlignmentParams.h>
-#include <GameClasses/PanelFontParams.h>
-#include <GameClasses/PanelMarginParams.h>
+#include <Panorama/PanelShadowParams.h>
+#include <Panorama/PanelAlignmentParams.h>
+#include <Panorama/PanelFontParams.h>
+#include <Panorama/PanelMarginParams.h>
 
 namespace active_weapon_ammo_panel_params::container_panel_params
 {

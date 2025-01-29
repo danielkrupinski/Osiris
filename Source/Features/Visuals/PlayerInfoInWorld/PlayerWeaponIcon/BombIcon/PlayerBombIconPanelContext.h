@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CUIPanel.h>
-#include <GameClasses/PanoramaUiPanel.h>
+#include <Panorama/PanoramaUiPanel.h>
 
 template <typename HookContext>
 class PlayerBombIconPanelContext {

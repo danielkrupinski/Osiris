@@ -8,11 +8,11 @@
 #include <Entities/PlayerPawn.h>
 #include <Features/Common/InWorldPanels.h>
 #include <FeatureHelpers/LifeState.h>
-#include <FeatureHelpers/PanoramaTransformations.h>
+#include <Panorama/PanoramaTransformations.h>
 #include <FeatureHelpers/FeatureToggle.h>
 #include <FeatureHelpers/TeamNumber.h>
-#include <GameClasses/PanoramaLabel.h>
-#include <GameClasses/PanoramaImagePanel.h>
+#include <Panorama/PanoramaLabel.h>
+#include <Panorama/PanoramaImagePanel.h>
 #include <Hooks/ViewRenderHook.h>
 #include <Utils/ColorUtils.h>
 #include <Utils/CString.h>

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <CS2/Constants/ColorConstants.h>
-#include <GameClasses/PanoramaImagePanel.h>
-#include <GameClasses/PanoramaLabel.h>
-#include <GameClasses/PanoramaUiEngine.h>
-#include <GameClasses/PanoramaUiPanel.h>
+#include <Panorama/PanoramaImagePanel.h>
+#include <Panorama/PanoramaLabel.h>
+#include <Panorama/PanoramaUiEngine.h>
+#include <Panorama/PanoramaUiPanel.h>
 #include <Utils/Lvalue.h>
 
 #include "BombSiteIconPanel.h"

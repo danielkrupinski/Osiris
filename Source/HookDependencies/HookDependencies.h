@@ -10,9 +10,9 @@
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Hud/HudContext.h>
-#include <GameClasses/PanelFactory.h>
+#include <Panorama/PanelFactory.h>
 #include <GameClasses/GlobalVars.h>
-#include <Helpers/PanoramaTransformFactory.h>
+#include <Panorama/PanoramaTransformFactory.h>
 
 struct BombStatusPanelState;
 struct FeaturesStates;

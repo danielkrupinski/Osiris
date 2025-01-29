@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Entities/PreviewPlayer.h>
-#include <GameClasses/MapPlayerPreviewPanel.h>
-#include <GameClasses/PanoramaUiEngine.h>
+#include <Panorama/MapPlayerPreviewPanel.h>
+#include <Panorama/PanoramaUiEngine.h>
 #include <Utils/StringParser.h>
 #include <Helpers/UnloadFlag.h>
 #include <FeatureHelpers/FeatureToggle.h>

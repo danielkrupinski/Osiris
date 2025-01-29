@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GameClasses/PanoramaUiEngine.h>
+#include <Panorama/PanoramaUiEngine.h>
 
 template <typename HookContext>
 struct InWorldPanelsUnloadHandler {

@@ -2,7 +2,7 @@
 
 #include <Common/Visibility.h>
 #include <Entities/C4.h>
-#include <GameClasses/PanoramaImagePanel.h>
+#include <Panorama/PanoramaImagePanel.h>
 #include <Utils/CString.h>
 #include "PlayerActiveWeaponIconPanelContext.h"
 

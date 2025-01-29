@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PlayerActiveWeaponAmmoPanelContext.h"
-#include <GameClasses/PanoramaLabel.h>
+#include <Panorama/PanoramaLabel.h>
 
 template <typename HookContext, typename Context = PlayerActiveWeaponAmmoPanelContext<HookContext>>
 class PlayerActiveWeaponAmmoPanel {

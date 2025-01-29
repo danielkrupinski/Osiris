@@ -2,9 +2,9 @@
 
 #include <CS2/Panorama/StyleProperties.h>
 #include <GameClasses/MemAlloc.h>
-#include <GameClasses/PanelAlignmentParams.h>
-#include <GameClasses/PanelFontParams.h>
-#include <GameClasses/PanelMarginParams.h>
+#include <Panorama/PanelAlignmentParams.h>
+#include <Panorama/PanelFontParams.h>
+#include <Panorama/PanelMarginParams.h>
 
 #include "PanelShadowParams.h"
 #include "StylePropertiesSymbolsAndVMTs.h"

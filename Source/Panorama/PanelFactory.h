@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GameClasses/PanoramaImagePanel.h>
+#include <Panorama/PanoramaImagePanel.h>
 
 template <typename HookContext>
 struct PanelFactory {

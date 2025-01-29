@@ -2,9 +2,9 @@
 
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUILength.h>
-#include <FeatureHelpers/PanelShadowParams.h>
-#include <GameClasses/PanelAlignmentParams.h>
-#include <GameClasses/PanelMarginParams.h>
+#include <Panorama/PanelShadowParams.h>
+#include <Panorama/PanelAlignmentParams.h>
+#include <Panorama/PanelMarginParams.h>
 
 namespace player_state_icons_panel_params::container_panel_params
 {
