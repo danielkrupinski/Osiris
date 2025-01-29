@@ -6,7 +6,7 @@
 
 #include "BytePattern.h"
 #include "BytePatternView.h"
-#include <Helpers/PatternNotFoundLogger.h>
+#include "PatternNotFoundLogger.h"
 #include "HybridPatternFinder.h"
 #include "PatternPoolView.h"
 #include "PatternSearchResults.h"

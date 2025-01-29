@@ -306,10 +306,7 @@
     <ClInclude Include="GlobalContext\GlobalContext.h" />
     <ClInclude Include="GlobalContext\PartialGlobalContext.h" />
     <ClInclude Include="GlobalContext\PeepEventsHookResult.h" />
-    <ClInclude Include="Helpers\Bits.h" />
-    <ClInclude Include="Helpers\PanoramaTransformFactory.h" />
-    <ClInclude Include="Helpers\PatternNotFoundLogger.h" />
-    <ClInclude Include="Helpers\UnloadFlag.h" />
+    <ClInclude Include="GlobalContext\UnloadFlag.h" />
     <ClInclude Include="HookDependencies\HookDependencies.h" />
     <ClInclude Include="Hooks\Hooks.h" />
     <ClInclude Include="Hooks\PeepEventsHook.h" />
@@ -410,6 +407,7 @@
     <ClInclude Include="MemorySearch\PatternFinder.h" />
     <ClInclude Include="MemorySearch\PatternFinderScalar.h" />
     <ClInclude Include="MemorySearch\PatternFinderSIMD.h" />
+    <ClInclude Include="MemorySearch\PatternNotFoundLogger.h" />
     <ClInclude Include="MemorySearch\PatternPool.h" />
     <ClInclude Include="MemorySearch\PatternPoolBuilder.h" />
     <ClInclude Include="MemorySearch\PatternPoolView.h" />
@@ -498,6 +496,7 @@
     <ClInclude Include="UI\Panorama\VisualsTab.h" />
     <ClInclude Include="Utils\Align.h" />
     <ClInclude Include="Utils\BitFlags.h" />
+    <ClInclude Include="Utils\Bits.h" />
     <ClInclude Include="Utils\CharUtils.h" />
     <ClInclude Include="Utils\ColorUtils.h" />
     <ClInclude Include="Utils\CString.h" />

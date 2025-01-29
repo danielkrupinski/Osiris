@@ -4,7 +4,7 @@
 #include <Panorama/MapPlayerPreviewPanel.h>
 #include <Panorama/PanoramaUiEngine.h>
 #include <Utils/StringParser.h>
-#include <Helpers/UnloadFlag.h>
+#include <GlobalContext/UnloadFlag.h>
 #include <FeatureHelpers/FeatureToggle.h>
 
 #include "PanoramaCommandDispatcher.h"

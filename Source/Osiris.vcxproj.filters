@@ -22,9 +22,6 @@
     <Filter Include="GameClasses">
       <UniqueIdentifier>{8f279e18-4344-42fb-8c01-6c773341568d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helpers">
-      <UniqueIdentifier>{eaf12914-2d12-4935-aab3-1491b8021bd6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Hooks">
       <UniqueIdentifier>{1ee84f1c-3411-4068-816f-186260cb390d}</UniqueIdentifier>
     </Filter>
@@ -270,15 +267,6 @@
     <ClInclude Include="Features\Visuals\VisualFeatures.h">
       <Filter>Features\Visuals</Filter>
     </ClInclude>
-    <ClInclude Include="Helpers\Bits.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\PatternNotFoundLogger.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\UnloadFlag.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Hooks\PeepEventsHook.h">
       <Filter>Hooks</Filter>
     </ClInclude>
@@ -487,9 +475,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\PanoramaTransformFactory.h">
-      <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\CViewRender.h">
       <Filter>CS2\Classes</Filter>
@@ -1792,6 +1777,15 @@
     </ClInclude>
     <ClInclude Include="Panorama\StylePropertySymbolMap.h">
       <Filter>Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalContext\UnloadFlag.h">
+      <Filter>GlobalContext</Filter>
+    </ClInclude>
+    <ClInclude Include="MemorySearch\PatternNotFoundLogger.h">
+      <Filter>MemorySearch</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Bits.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

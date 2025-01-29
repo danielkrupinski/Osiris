@@ -1,7 +1,7 @@
 #pragma once
 
 #include <MemorySearch/PatternFinder.h>
-#include <Helpers/PatternNotFoundLogger.h>
+#include <MemorySearch/PatternNotFoundLogger.h>
 
 struct PatternFinders {
     PatternFinder<PatternNotFoundLogger> clientPatternFinder;
