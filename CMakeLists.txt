@@ -11,11 +11,7 @@ elseif(UNIX)
   enable_language(ASM-ATT)
 endif()
 
+set(ENABLE_TESTS CACHE STRING "List of test types to enable e.g. \"unit\"")
+
 add_subdirectory(Source)
-
-option(BUILD_TESTS "Build unit tests" OFF)
-
-if (BUILD_TESTS)
-  enable_testing()
-  add_subdirectory(Tests)
-endif()
+add_subdirectory(Tests)

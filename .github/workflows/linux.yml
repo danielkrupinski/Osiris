@@ -37,7 +37,7 @@ jobs:
         sudo ./llvm.sh 19
         echo "CXXFLAGS=\"--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13\"" >> "$GITHUB_ENV"
     - name: configure
-      run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D BUILD_TESTS=1 -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -B build
+      run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D ENABLE_TESTS="unit" -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -B build
     - name: build source
       run: cmake --build build --target Osiris -j $(nproc --all)
     - name: build unit tests
