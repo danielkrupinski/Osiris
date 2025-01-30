@@ -19,6 +19,6 @@ jobs:
         cmake -DCMAKE_PREFIX_PATH=/usr/lib/llvm-18 -B build
         cmake --build build
     - name: configure
-      run: CXX=clang++-18 cmake -Werror=dev -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_INCLUDE_WHAT_YOU_USE="include-what-you-use/build/bin/include-what-you-use" -B build
+      run: CXX=clang++-18 cmake -Werror=dev -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_INCLUDE_WHAT_YOU_USE="$PWD/include-what-you-use/build/bin/include-what-you-use" -B build
     - name: run include-what-you-use
       run: cmake --build build
