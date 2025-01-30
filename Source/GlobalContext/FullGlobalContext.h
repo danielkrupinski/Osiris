@@ -12,8 +12,8 @@
 #include <Features/FeaturesUnloadHandler.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheState.h>
-#include <Helpers/PatternNotFoundLogger.h>
-#include <Helpers/UnloadFlag.h>
+#include <MemorySearch/PatternNotFoundLogger.h>
+#include "UnloadFlag.h"
 #include <Hooks/Hooks.h>
 #include <Hooks/PeepEventsHook.h>
 #include <Hud/BombStatus/BombStatusPanelManager.h>

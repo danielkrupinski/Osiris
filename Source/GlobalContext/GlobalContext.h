@@ -7,7 +7,7 @@
 #include <CS2/Constants/DllNames.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
 #include <Features/Common/InWorldPanelsUnloadHandler.h>
-#include <Helpers/PatternNotFoundLogger.h>
+#include <MemorySearch/PatternNotFoundLogger.h>
 #include <MemoryAllocation/FreeMemoryRegionList.h>
 #include <MemorySearch/PatternFinder.h>
 #include <Platform/DynamicLibrary.h>

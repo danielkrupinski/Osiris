@@ -3,7 +3,7 @@
 #include <string_view>
 
 #include <Features/Features.h>
-#include <Helpers/UnloadFlag.h>
+#include <GlobalContext/UnloadFlag.h>
 #include <Utils/StringParser.h>
 
 #include "SetCommandHandler.h"

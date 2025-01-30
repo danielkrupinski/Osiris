@@ -1,5 +1,6 @@
 #pragma once
 
+#include "BitsTests.h"
 #include "FlagsBuilderTests.h"
 #include "OptionalTests.h"
 #include "PatternFinderTests.h"

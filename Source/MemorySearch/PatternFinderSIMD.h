@@ -8,7 +8,7 @@
 #include "BytePattern.h"
 #include <emmintrin.h>
 
-#include <Helpers/Bits.h>
+#include <Utils/Bits.h>
 
 class PatternFinderSIMD {
 public:
