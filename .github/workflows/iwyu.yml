@@ -8,6 +8,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: install libclang-18-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install libclang-18-dev
     - name: build include-what-you-use
       run: |
         git clone --depth=1 --single-branch --branch clang_18 https://github.com/include-what-you-use/include-what-you-use.git
