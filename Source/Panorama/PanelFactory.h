@@ -12,7 +12,7 @@ struct PanelFactory {
     [[nodiscard]] decltype(auto) createPanel(cs2::CUIPanel* parentPanel, const char* id = "") noexcept
     {
         if (parentPanel && panelConstructor())
-            return hookContext.template make<ClientPanel>(panelConstructor()(id, parentPanel));
+            return hookContext.template make<ClientPanel>(panelConstructor()(id, parentPanel->clientPanel));
         return hookContext.template make<ClientPanel>(nullptr);
     }
 

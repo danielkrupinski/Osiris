@@ -11,7 +11,7 @@ struct PanoramaUiPanelPatterns {
         return clientPatterns
             .template addPattern<SetParentFunctionOffset, CodePattern{"48 8B B8 ? ? ? ? 48 85 D2"}.add(3).read()>()
             .template addPattern<SetVisibleFunctionOffset, CodePattern{"01 FF 90 ? ? ? ? 45 33 C0 33 D2 ? 8B ? E8"}.add(3).read()>()
-            .template addPattern<GetAttributeStringFunctionOffset, CodePattern{"12 48 8B 01 FF 90 ? ? ? ? 48 8B ? 48 85 C0 74 ? 80 38 00 74 ? 48"}.add(6).read()>()
+            .template addPattern<GetAttributeStringFunctionOffset, CodePattern{"12 48 8B 01 FF 90 ? ? ? ? 48 8B ? 48 85 C0 74 ? 80 38 00 74 ? 48 8D 4C"}.add(6).read()>()
             .template addPattern<SetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 48 83 C6 ? 48 3B ? 75 ? 4C"}.add(2).read()>();
     }
 

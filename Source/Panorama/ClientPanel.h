@@ -13,6 +13,11 @@ struct ClientPanel {
     {
     }
 
+    [[nodiscard]] operator cs2::CPanel2D*() const noexcept
+    {
+        return panel;
+    }
+
     [[nodiscard]] decltype(auto) uiPanel() const noexcept
     {
         return hookContext.template make<PanoramaUiPanel>(uiPanelPointer());

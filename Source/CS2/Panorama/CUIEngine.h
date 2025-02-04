@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Platform/Macros/IsPlatform.h>
+#include "CPanel2D.h"
 #include "CPanoramaSymbol.h"
 #include "CUIPanel.h"
 #include "PanelHandle.h"
@@ -21,7 +22,7 @@ struct CUIEngine {
 #elif IS_LINUX()
     using makeSymbol = CPanoramaSymbol(*)(CUIEngine* thisptr, int type, const char* text);
 #endif
-    using onDeletePanel = void (*)(CUIEngine* thisptr, PanelHandle* panelHandle);
+    using onDeletePanel = void (*)(CUIEngine* thisptr, CPanel2D* panel);
 };
 
 }

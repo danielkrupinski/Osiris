@@ -71,8 +71,9 @@ private:
 
     void onDeletePanel(cs2::PanelHandle panelHandle) noexcept
     {
-        if (hookContext.panoramaPatternSearchResults().template get<OnDeletePanelFunctionPointer>() && thisptr())
-            hookContext.panoramaPatternSearchResults().template get<OnDeletePanelFunctionPointer>()(*thisptr(), &panelHandle);
+        cs2::CPanel2D* clientPanel = getPanelFromHandle(panelHandle).clientPanel();
+        if (clientPanel && hookContext.panoramaPatternSearchResults().template get<OnDeletePanelFunctionPointer>() && thisptr())
+            hookContext.panoramaPatternSearchResults().template get<OnDeletePanelFunctionPointer>()(*thisptr(), clientPanel);
     }
 
     HookContext& hookContext;
