@@ -8,9 +8,9 @@ struct PanoramaUiPanelPatterns {
     {
         return clientPatterns
             .template addPattern<SetParentFunctionOffset, CodePattern{"48 8B 90 ? ? ? ? 48 85 F6 74 16"}.add(3).read()>()
-            .template addPattern<SetVisibleFunctionOffset, CodePattern{"F6 48 8B 78 ? 48 8B 07 FF 90 ? ? ? ? E9 ? ? ? ? ? 8D"}.add(10).read()>()
+            .template addPattern<SetVisibleFunctionOffset, CodePattern{"F6 48 8B 78 ? 48 8B 07 FF 90 ? ? ? ? E9 ? ? ? ? FF"}.add(10).read()>()
             .template addPattern<GetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 41 80 BC 24 ? ? ? ? ? 48 89 C2"}.add(2).read()>()
-            .template addPattern<SetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 8B 05 ? ? ? ? 39 85 ? ? ? ? 0F 84 ? ? ? ? 48 8B 3B"}.add(2).read()>();
+            .template addPattern<SetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 8B BD ? ? ? ? 85"}.add(2).read()>();
     }
 
     [[nodiscard]] static consteval auto addPanoramaPatterns(auto panoramaPatterns) noexcept
