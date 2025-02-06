@@ -1,6 +1,7 @@
 #pragma once
 
-#include <optional>
+#include <CS2/Classes/C_CSGameRules.h>
+#include <MemoryPatterns/PatternTypes/GameRulesPatternTypes.h>
 
 template <typename HookContext>
 class GameRules {

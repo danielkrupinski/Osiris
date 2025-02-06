@@ -1,15 +1,22 @@
 #pragma once
 
-#include <cstring>
+#include <string_view>
+#include <utility>
 
+#include <CS2/Classes/Color.h>
+#include <CS2/Classes/CUtlVector.h>
+#include <CS2/Panorama/CPanoramaSymbol.h>
+#include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/CUIPanel.h>
+#include <CS2/Panorama/StyleEnums.h>
+#include <CS2/Panorama/Transform3D.h>
+#include <Panorama/PanelAlignmentParams.h>
+#include <Panorama/PanelFontParams.h>
+#include <Panorama/PanelMarginParams.h>
+#include <Panorama/PanelShadowParams.h>
 #include <Utils/Lvalue.h>
 
-#include "PanelStylePropertyFactory.h"
 #include "PanoramaUiPanelContext.h"
-#include "TopLevelWindow.h"
-
-struct PanelAlignmentParams;
-struct PanelMarginParams;
 
 template <typename HookContext, typename Context = PanoramaUiPanelContext<HookContext>>
 struct PanoramaUiPanel {

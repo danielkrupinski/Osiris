@@ -2,7 +2,6 @@
 
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <CS2/Classes/SceneObjectUpdaterHandle_t.h>
-#include <Platform/Macros/PlatformSpecific.h>
 
 #include "C_BaseModelEntity.h"
 

@@ -1,11 +1,6 @@
 #pragma once
 
-#include "BombBeepVisualizer.h"
-#include "BombDefuseVisualizer.h"
-#include "BombPlantVisualizer.h"
-#include "FootstepVisualizer.h"
-#include "WeaponReloadVisualizer.h"
-#include "WeaponScopeVisualizer.h"
+#include "Details/SoundVisualizationFeature.h"
 
 struct SoundFeaturesStates {
     SoundVisualizationFeatureState footstepVisualizerState;

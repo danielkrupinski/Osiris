@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <CS2/Classes/CUtlString.h>
 #include <Utils/Pad.h>

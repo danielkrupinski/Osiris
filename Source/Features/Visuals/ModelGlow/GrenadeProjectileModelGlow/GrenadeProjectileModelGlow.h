@@ -1,5 +1,7 @@
 #pragma once
 
+#include <CS2/Classes/Color.h>
+#include <CS2/Classes/Entities/GrenadeProjectiles.h>
 #include <FeatureHelpers/EntityClassifier.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>

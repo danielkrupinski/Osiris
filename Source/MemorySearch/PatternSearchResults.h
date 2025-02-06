@@ -1,11 +1,12 @@
 #pragma once
 
+#include <array>
 #include <bit>
+#include <cstddef>
 
 #include <Utils/Meta.h>
 #include <Utils/StrongTypeAlias.h>
 
-#include "PatternPool.h"
 #include "PatternSearchResultsView.h"
 
 template <typename PatternPool>

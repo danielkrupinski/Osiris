@@ -1,8 +1,10 @@
 #pragma once
 
 #include <CS2/Constants/ColorConstants.h>
+#include <CS2/Panorama/CUIPanel.h>
+#include <Panorama/PanoramaImagePanel.h>
 #include <Panorama/PanoramaTransformations.h>
-#include <Panorama/PanelFactory.h>
+#include <Utils/Lvalue.h>
 
 #include "ActiveWeaponAmmo/ActiveWeaponAmmoPanelParams.h"
 #include "ActiveWeaponAmmo/PlayerActiveWeaponAmmoPanel.h"

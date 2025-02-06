@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include <CS2/Classes/CCvar.h>
 #include <Utils/FieldOffset.h>
 #include <Utils/StrongTypeAlias.h>

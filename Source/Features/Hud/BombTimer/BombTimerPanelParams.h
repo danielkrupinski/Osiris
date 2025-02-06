@@ -1,5 +1,6 @@
 #pragma once
 
+#include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
 

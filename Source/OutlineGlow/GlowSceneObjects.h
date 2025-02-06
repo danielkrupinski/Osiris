@@ -1,8 +1,13 @@
 #pragma once
 
+#include <cstring>
+
+#include <CS2/Classes/CSceneObject.h>
 #include <GameClasses/SceneSystem.h>
 #include <MemoryAllocation/MemoryAllocator.h>
+
 #include "GlowSceneObject.h"
+#include "GlowSceneObjectPointer.h"
 #include "GlowSceneObjectsState.h"
 
 template <typename HookContext>

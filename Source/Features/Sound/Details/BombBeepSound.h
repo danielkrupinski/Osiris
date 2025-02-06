@@ -1,7 +1,5 @@
 #pragma once
 
-#include <algorithm>
-#include <cassert>
 #include <string_view>
 
 #include <CS2/Constants/SoundNames.h>

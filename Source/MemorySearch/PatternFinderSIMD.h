@@ -1,12 +1,12 @@
 #pragma once
 
-#include <cassert>
+#include <cstddef>
+#include <cstdint>
 #include <emmintrin.h>
 #include <span>
 #include <string_view>
 
 #include "BytePattern.h"
-#include <emmintrin.h>
 
 #include <Utils/Bits.h>
 

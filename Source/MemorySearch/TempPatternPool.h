@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <limits>
 
+#include "CodePattern.h"
 #include "CodePatternOperation.h"
 
 template <std::size_t BufferCapacity, std::size_t MaxNumberOfPatterns>

@@ -1,5 +1,11 @@
 #pragma once
 
+#include <optional>
+#include <utility>
+
+#include <CS2/Classes/Color.h>
+#include <CS2/Classes/EntitySystem/CEntityHandle.h>
+#include <CS2/Classes/EntitySystem/CEntityIdentity.h>
 #include <CS2/Classes/Entities/C_BaseEntity.h>
 #include <CS2/Constants/EntityHandle.h>
 #include <CS2/Constants/SceneObjectAttributeNames.h>

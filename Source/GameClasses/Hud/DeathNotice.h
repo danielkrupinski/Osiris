@@ -1,5 +1,9 @@
 #pragma once
 
+#include <cstdint>
+#include <utility>
+
+#include <Utils/StringBuilder.h>
 #include <Utils/StringParser.h>
 
 #include "DeathNoticeContext.h"

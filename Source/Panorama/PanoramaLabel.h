@@ -1,7 +1,10 @@
 #pragma once
 
 #include <CS2/Panorama/CLabel.h>
+#include <CS2/Panorama/CPanel2D.h>
 #include <MemoryPatterns/PatternTypes/PanoramaLabelPatternTypes.h>
+
+#include "PanoramaUiPanel.h"
 
 template <typename HookContext>
 struct PanoramaLabel {

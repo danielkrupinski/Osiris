@@ -1,16 +1,22 @@
 #pragma once
 
+#include <cstddef>
+#include <tuple>
+#include <type_traits>
+
+#include <CS2/Panorama/CUIPanel.h>
 #include <Features/Sound/Details/SoundVisualizationPanelFactory.h>
 #include <Features/Sound/SoundVisualizationPanelTypes.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldPanelFactory.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCache.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelTypes.h>
 #include <Panorama/PanelHandle.h>
+#include <Panorama/PanoramaUiPanel.h>
+#include <Utils/Lvalue.h>
+
 #include "InWorldPanelIndex.h"
 #include "InWorldPanelListEntry.h"
-
-#include <Features/Common/InWorldPanelsState.h>
-#include <Features/Common/InWorldPanelsPerHookState.h>
 
 template <typename HookContext>
 class InWorldPanels {

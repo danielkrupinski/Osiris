@@ -1,15 +1,25 @@
 #pragma once
 
+#include <utility>
+
+#include <CS2/Classes/CUtlVector.h>
+#include <CS2/Classes/Color.h>
+#include <CS2/Panorama/CPanel2D.h>
+#include <CS2/Panorama/CPanelStyle.h>
+#include <CS2/Panorama/CUIPanel.h>
+#include <CS2/Panorama/StyleProperties.h>
 #include <CS2/Panorama/Transform3D.h>
+#include <MemoryPatterns/PatternTypes/PanelStylePatternTypes.h>
+#include <MemoryPatterns/PatternTypes/UiPanelPatternTypes.h>
+#include <Utils/Optional.h>
 
 #include "ClientPanel.h"
+#include "PanelStylePropertyFactory.h"
 #include "PanoramaUiEngine.h"
 #include "PanoramaUiPanelChildPanels.h"
 #include "PanoramaUiPanelClasses.h"
 #include "PanoramaUiPanelMethodInvoker.h"
 #include "TopLevelWindow.h"
-#include <MemoryPatterns/PatternTypes/PanelStylePatternTypes.h>
-#include <MemoryPatterns/PatternTypes/UiPanelPatternTypes.h>
 
 template <typename HookContext>
 struct PanoramaUiPanelContext {

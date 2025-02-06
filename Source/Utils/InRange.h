@@ -4,6 +4,7 @@
 #include <bit>
 #include <cassert>
 #include <cstddef>
+#include <type_traits>
 
 // workaround for clang < 18 not supporting float non-type template parameters
 template <typename T>

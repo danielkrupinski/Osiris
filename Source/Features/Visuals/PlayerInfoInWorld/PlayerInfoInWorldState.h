@@ -2,9 +2,6 @@
 
 #include <cstdint>
 
-#include <CS2/Panorama/PanelHandle.h>
-#include <Utils/DynamicArray.h>
-
 #include "PlayerPositionArrow/PlayerPositionArrowColorType.h"
 #include "PlayerStateIcons/PlayerStateIconsToShow.h"
 

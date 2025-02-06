@@ -1,11 +1,17 @@
 #pragma once
 
+#include <CS2/Panorama/CUIPanel.h>
 #include <Entities/PreviewPlayer.h>
-#include <Panorama/MapPlayerPreviewPanel.h>
-#include <Panorama/PanoramaUiEngine.h>
-#include <Utils/StringParser.h>
+#include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
+#include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
+#include <Features/Features.h>
+#include <FeatureHelpers/TeamNumber.h>
 #include <GlobalContext/UnloadFlag.h>
-#include <FeatureHelpers/FeatureToggle.h>
+#include <Panorama/MapPlayerPreviewPanel.h>
+#include <Panorama/PanoramaLabel.h>
+#include <Panorama/PanoramaUiEngine.h>
+#include <Panorama/PanoramaUiPanel.h>
+#include <Utils/StringBuilder.h>
 
 #include "PanoramaCommandDispatcher.h"
 #include "HudTab.h"

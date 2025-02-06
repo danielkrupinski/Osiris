@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Features/Features.h>
-#include <FeatureHelpers/FeatureToggle.h>
 #include <Utils/StringParser.h>
 
 template <typename HookContext>

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <CS2/Panorama/CUILength.h>
-#include <CS2/Panorama/StyleEnums.h>
 #include <Utils/Lvalue.h>
 
 #include "BombTimerPanelParams.h"

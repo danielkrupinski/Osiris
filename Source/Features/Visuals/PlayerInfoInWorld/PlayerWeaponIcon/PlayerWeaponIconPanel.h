@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "PlayerWeaponIconPanelContext.h"
 
 template <typename HookContext, typename Context = PlayerWeaponIconPanelContext<HookContext>>

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "KillfeedPreserverState.h"
-
 template <typename HookContext>
 struct KillfeedPreserverContext {
     KillfeedPreserverContext(HookContext& hookContext) noexcept

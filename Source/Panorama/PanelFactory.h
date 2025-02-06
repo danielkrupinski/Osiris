@@ -1,5 +1,13 @@
 #pragma once
 
+#include <CS2/Panorama/CImagePanel.h>
+#include <CS2/Panorama/CLabel.h>
+#include <CS2/Panorama/CUIPanel.h>
+#include <GameClasses/MemAlloc.h>
+#include <MemoryPatterns/PatternTypes/PanelPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/PanoramaImagePanelPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/PanoramaLabelPatternTypes.h>
+#include <Panorama/ClientPanel.h>
 #include <Panorama/PanoramaImagePanel.h>
 
 template <typename HookContext>

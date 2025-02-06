@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CPanel2D.h>
+#include <CS2/Panorama/CUIPanel.h>
 
 template <typename HookContext, typename Context>
 struct PanoramaUiPanel;

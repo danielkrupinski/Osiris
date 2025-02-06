@@ -1,5 +1,13 @@
 #pragma once
 
+#include <cstring>
+#include <utility>
+
+#include <CS2/Classes/CUtlString.h>
+#include <CS2/Classes/Color.h>
+#include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/StyleEnums.h>
+
 #include <CS2/Panorama/StyleProperties.h>
 #include <GameClasses/MemAlloc.h>
 #include <Panorama/PanelAlignmentParams.h>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include <CS2/Classes/Entities/C_BaseEntity.h>
 #include <Entities/BaseEntity.h>
 

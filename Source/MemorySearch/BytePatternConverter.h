@@ -2,7 +2,9 @@
 
 #include <algorithm>
 #include <array>
-#include <cstdint>
+#include <cassert>
+#include <cstddef>
+#include <optional>
 #include <string_view>
 #include <utility>
 

@@ -1,6 +1,16 @@
 #pragma once
 
 #include <utility>
+
+#include <CS2/Classes/CPlantedC4.h>
+#include <CS2/Classes/Entities/CBaseAnimGraph.h>
+#include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <CS2/Classes/Entities/C_Hostage.h>
+#include <CS2/Classes/Entities/WeaponEntities.h>
+#include <Entities/PlantedC4.h>
+#include <Entities/PlayerPawn.h>
+#include <FeatureHelpers/EntityClassifier.h>
+
 #include "OutlineGlowContext.h"
 
 template <typename HookContext, typename Context = OutlineGlowContext<HookContext>>

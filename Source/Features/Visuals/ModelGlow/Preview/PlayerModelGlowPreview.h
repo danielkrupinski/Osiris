@@ -1,13 +1,15 @@
 #pragma once
 
-#include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <CS2/Classes/Entities/CCSPlayerController.h>
+#include <FeatureHelpers/TeamNumber.h>
 #include <Features/Visuals/ModelGlow/ModelGlow.h>
+#include <Features/Visuals/ModelGlow/ModelGlowState.h>
 #include <Features/Visuals/ModelGlow/PlayerModelGlow/PlayerModelGlow.h>
+#include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
 #include <GameClasses/EntitySystem.h>
 
 #include "PlayerPawnForModelGlowPreview.h"
 #include "PlayerModelGlowPreviewParams.h"
-#include "PlayerModelGlowPreviewState.h"
 
 template <typename HookContext>
 class PlayerModelGlowPreview {

@@ -1,9 +1,13 @@
 #pragma once
 
 #include <algorithm>
+#include <cstdint>
 #include <optional>
+#include <span>
+#include <utility>
 
 #include <CS2/Classes/Color.h>
+#include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <FeatureHelpers/TeamNumber.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>

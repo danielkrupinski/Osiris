@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-#include <span>
+#include <cstdint>
 
 #include "VmtLength.h"
 #include <Utils/MemorySection.h>

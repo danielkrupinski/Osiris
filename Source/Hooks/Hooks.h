@@ -3,6 +3,7 @@
 #include "PeepEventsHook.h"
 #include "ViewRenderHook.h"
 
+#include <CS2/Classes/CViewRender.h>
 #include <Vmt/VmtLengthCalculator.h>
 
 struct Hooks {

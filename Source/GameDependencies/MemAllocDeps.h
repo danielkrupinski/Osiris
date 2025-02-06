@@ -1,11 +1,7 @@
 #pragma once
 
-#include <cstdint>
-
 #include <CS2/Classes/IMemAlloc.h>
 #include <GameDLLs/Tier0Dll.h>
-#include <Platform/DynamicLibrary.h>
-#include <Utils/FieldOffset.h>
 
 struct MemAllocDeps {
     MemAllocDeps() = default;

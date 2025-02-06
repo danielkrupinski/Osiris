@@ -1,7 +1,9 @@
 #pragma once
 
+#include <CS2/Classes/Entities/C_CSGO_PreviewPlayer.h>
 #include <CS2/Panorama/CUI_MapPlayerPreviewPanel.h>
 #include <Entities/PreviewPlayer.h>
+#include <GameClasses/EntitySystem.h>
 #include <MemoryPatterns/PatternTypes/MapPlayerPreviewPanelPatternTypes.h>
 
 template <typename HookContext>

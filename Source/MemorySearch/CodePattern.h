@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstddef>
+#include <cstdint>
+
 #include "BytePatternStorage.h"
 #include "CodePatternOperation.h"
 

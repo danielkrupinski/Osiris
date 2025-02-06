@@ -1,17 +1,14 @@
 #pragma once
 
-#include <CS2/Constants/ColorConstants.h>
 #include <Panorama/PanoramaImagePanel.h>
 #include <Panorama/PanoramaLabel.h>
 #include <Panorama/PanoramaUiEngine.h>
-#include <Panorama/PanoramaUiPanel.h>
 #include <Utils/Lvalue.h>
 
 #include "BombSiteIconPanel.h"
 #include "BombTimerCondition.h"
 #include "BombTimerPanel.h"
 #include "BombTimerPanelFactory.h"
-#include "BombTimerState.h"
 #include "BombTimerTextPanel.h"
 
 template <typename HookContext>

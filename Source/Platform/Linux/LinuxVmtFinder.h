@@ -1,10 +1,16 @@
 #pragma once
 
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
 #include <cstring>
 #include <string_view>
 
+#include <MemorySearch/BytePattern.h>
+#include <MemorySearch/HybridPatternFinder.h>
 #include <Utils/MemorySection.h>
 
+#include "RTTI/LinuxRttiTypeDescriptor.h"
 #include "RTTI/LinuxRttiTypeDescriptorFinder.h"
 
 #include "LinuxVmt.h"

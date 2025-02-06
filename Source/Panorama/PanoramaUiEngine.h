@@ -1,6 +1,5 @@
 #pragma once
 
-#include <CS2/Panorama/CUIEngine.h>
 #include <Platform/Macros/FunctionAttributes.h>
 #include <Platform/Macros/IsPlatform.h>
 #include <MemoryPatterns/PatternTypes/UiEnginePatternTypes.h>

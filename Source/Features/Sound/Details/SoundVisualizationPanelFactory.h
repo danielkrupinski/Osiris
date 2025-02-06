@@ -5,7 +5,9 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/CUIPanel.h>
-#include <Panorama/PanoramaUiPanel.h>
+#include <CS2/Panorama/StyleEnums.h>
+#include <Panorama/PanelAlignmentParams.h>
+#include <Panorama/PanelShadowParams.h>
 #include <Utils/Lvalue.h>
 
 #include "SoundVisualizationPanelProperties.h"

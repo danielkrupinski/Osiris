@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <new>
 #include <utility>
 
 template <typename Partial, typename Complete>

@@ -2,6 +2,7 @@
 
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/StyleEnums.h>
 #include <Panorama/PanelShadowParams.h>
 #include <Panorama/PanelAlignmentParams.h>
 #include <Panorama/PanelMarginParams.h>

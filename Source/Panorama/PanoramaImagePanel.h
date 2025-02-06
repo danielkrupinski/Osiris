@@ -1,8 +1,12 @@
 #pragma once
 
 #include <bit>
+#include <cstddef>
 #include <optional>
+#include <string_view>
+#include <utility>
 
+#include <CS2/Classes/Color.h>
 #include <CS2/Panorama/CImagePanel.h>
 #include <MemoryPatterns/PatternTypes/PanoramaImagePanelPatternTypes.h>
 

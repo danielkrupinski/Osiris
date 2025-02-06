@@ -1,10 +1,8 @@
 #pragma once
 
-#include <CS2/Constants/DllNames.h>
 #include <SDL/SdlConstants.h>
 #include <SDL/SdlDll.h>
 #include <SDL/SdlFunctions.h>
-#include "LinuxDynamicLibrary.h"
 
 class LinuxMessageBox {
 public:

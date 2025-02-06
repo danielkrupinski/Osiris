@@ -1,9 +1,8 @@
 #pragma once
 
-#include <cassert>
 #include <cstddef>
-#include <cstdint>
 #include <functional>
+#include <new>
 #include <span>
 
 class FreeMemoryRegion {

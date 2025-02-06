@@ -2,10 +2,18 @@
 
 #include <algorithm>
 #include <array>
+#include <cstddef>
 #include <cstdint>
+#include <functional>
+#include <iterator>
 #include <limits>
 #include <tuple>
+#include <type_traits>
 
+#include <CS2/Classes/Entities/C_BaseCSGrenadeProjectile.h>
+#include <CS2/Classes/Entities/C_BaseModelEntity.h>
+#include <CS2/Classes/Entities/C_CSWeaponBase.h>
+#include <CS2/Classes/EntitySystem/CEntityClass.h>
 #include <CS2/Constants/EntityClasses.h>
 #include <GameClasses/EntitySystem.h>
 #include <Utils/TypeIndex.h>

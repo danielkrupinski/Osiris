@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstdint>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <CS2/Constants/EntityHandle.h>

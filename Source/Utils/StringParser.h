@@ -1,5 +1,8 @@
 #pragma once
 
+#include <concepts>
+#include <cstddef>
+#include <limits>
 #include <string_view>
 
 class StringParser {

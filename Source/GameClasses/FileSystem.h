@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/FileSystem.h>
+#include <MemoryPatterns/PatternTypes/FileSystemPatternTypes.h>
 #include "FileNameSymbolTable.h"
 
 template <typename HookContext>

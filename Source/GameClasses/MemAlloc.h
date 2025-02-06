@@ -1,6 +1,7 @@
 #pragma once
 
-#include <CS2/Classes/IMemAlloc.h>
+#include <cstddef>
+
 #include <MemoryPatterns/PatternTypes/MemAllocPatternTypes.h>
 #include <Platform/Macros/FunctionAttributes.h>
 

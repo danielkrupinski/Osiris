@@ -1,8 +1,11 @@
 #pragma once
 
 #include <algorithm>
+#include <cstddef>
+#include <utility>
 
 #include "PlayedSound.h"
+#include <CS2/Classes/Vector.h>
 #include <Utils/DynamicArray.h>
 
 class WatchedSounds {

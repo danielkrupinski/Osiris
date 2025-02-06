@@ -1,5 +1,8 @@
 #pragma once
 
+#include <utility>
+
+#include <CS2/Constants/ColorConstants.h>
 #include <FeatureHelpers/TeamNumber.h>
 
 #include "PlayerPositionArrowColorType.h"

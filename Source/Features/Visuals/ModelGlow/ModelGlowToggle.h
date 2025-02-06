@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FeatureHelpers/FeatureToggle.h>
+#include "ModelGlowState.h"
 
 template <typename HookContext>
 class ModelGlowToggle {

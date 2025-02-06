@@ -3,7 +3,6 @@
 #include <span>
 
 #include <CS2/Classes/CUtlFilenameSymbolTable.h>
-#include <GameDependencies/FileNameSymbolTableDeps.h>
 
 template <typename HookContext>
 class FileNameSymbolTable {

@@ -1,7 +1,11 @@
 #pragma once
 
+#include <cassert>
+#include <cstring>
 #include <optional>
 
+#include <CS2/Classes/ConVar.h>
+#include <CS2/Classes/ConVarTypes.h>
 #include <GameDependencies/ConVars.h>
 
 struct ConVarAccessorState {

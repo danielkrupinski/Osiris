@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CEntityIdentity.h"
-#include "CEntityIndex.h"
 
 namespace cs2
 {

@@ -1,12 +1,11 @@
 #pragma once
 
-#include <optional>
+#include <utility>
 
 #include <CS2/Classes/CPlantedC4.h>
 #include <CS2/Constants/BombSiteIndex.h>
 #include <CS2/Constants/EntityHandle.h>
 #include <CS2/Constants/IconURLs.h>
-#include <GameClasses/GlobalVars.h>
 #include <MemoryPatterns/PatternTypes/PlantedC4PatternTypes.h>
 
 #include "BaseEntity.h"

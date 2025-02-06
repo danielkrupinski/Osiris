@@ -1,14 +1,18 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
+#include <cstddef>
+#include <cstdint>
 #include <numeric>
-#include <limits>
 
 #include <Utils/Meta.h>
 #include <Utils/StrongTypeAlias.h>
 #include <Utils/TypeList.h>
 
+#include "CodePatternOperation.h"
 #include "PatternPoolBuilder.h"
+#include "PatternPoolView.h"
 
 template <std::size_t BufferSize = 0, std::size_t NumberOfPatterns = 0, typename PatternTypesList = TypeList<>>
 class PatternPool {

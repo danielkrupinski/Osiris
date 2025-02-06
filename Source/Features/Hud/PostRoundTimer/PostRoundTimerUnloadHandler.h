@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PostRoundTimerState.h"
+#include <Panorama/PanoramaUiEngine.h>
 
 template <typename HookContext>
 struct PostRoundTimerUnloadHandler {

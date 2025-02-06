@@ -1,6 +1,8 @@
 #pragma once
 
+#include <CS2/Panorama/CUIPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
+#include <Panorama/PanoramaUiPanel.h>
 
 #include "ActiveWeaponIcon/PlayerActiveWeaponIconPanel.h"
 #include "BombIcon/PlayerBombIconPanel.h"

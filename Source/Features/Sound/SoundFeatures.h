@@ -1,5 +1,15 @@
 #pragma once
 
+#include <FeatureHelpers/Sound/SoundWatcher.h>
+#include <FeatureHelpers/Sound/SoundWatcherState.h>
+#include <Hooks/ViewRenderHook.h>
+
+#include "Details/BombBeepSound.h"
+#include "Details/BombDefuseSound.h"
+#include "Details/BombPlantSound.h"
+#include "Details/FootstepSound.h"
+#include "Details/WeaponReloadSound.h"
+#include "Details/WeaponScopeSound.h"
 #include "BombBeepVisualizer.h"
 #include "BombDefuseVisualizer.h"
 #include "BombPlantVisualizer.h"
@@ -7,8 +17,6 @@
 #include "SoundFeaturesStates.h"
 #include "WeaponReloadVisualizer.h"
 #include "WeaponScopeVisualizer.h"
-#include <FeatureHelpers/Sound/SoundWatcherState.h>
-#include <Hooks/ViewRenderHook.h>
 
 template <typename HookContext>
 struct SoundFeatures {

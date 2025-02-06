@@ -1,11 +1,17 @@
 #pragma once
 
+#include <algorithm>
+#include <tuple>
+#include <type_traits>
+
+#include <CS2/Classes/Vector.h>
 #include <CS2/Panorama/CUIPanel.h>
-#include <Panorama/PanoramaTransformations.h>
 #include <FeatureHelpers/ViewToProjectionMatrix.h>
 #include <FeatureHelpers/WorldToClipSpaceConverter.h>
+#include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
+#include <Panorama/PanoramaTransformations.h>
 #include <Panorama/PanoramaUiPanel.h>
-#include "PlayerInfoInWorldState.h"
+#include <Utils/TypeIndex.h>
 #include "PlayerInfoPanelCacheEntry.h"
 #include "PlayerInfoPanelTypes.h"
 

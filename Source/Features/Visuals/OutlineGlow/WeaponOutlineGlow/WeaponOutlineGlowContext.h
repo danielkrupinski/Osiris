@@ -1,6 +1,5 @@
 #pragma once
 
-#include <OutlineGlow/GlowSceneObjects.h>
 #include "WeaponOutlineGlowCondition.h"
 
 template <typename HookContext>

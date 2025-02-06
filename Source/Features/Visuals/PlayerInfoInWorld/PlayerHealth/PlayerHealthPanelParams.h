@@ -5,6 +5,7 @@
 #include <CS2/Panorama/StyleEnums.h>
 #include <Panorama/PanelShadowParams.h>
 #include <Panorama/PanelAlignmentParams.h>
+#include <Panorama/PanelFontParams.h>
 #include <Panorama/PanelMarginParams.h>
 
 namespace player_health_panel_params::container_panel_params

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/PanelHandle.h>
+#include <Panorama/PanoramaUiEngine.h>
 #include <Utils/Lvalue.h>
 
 #include <utility>

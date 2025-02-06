@@ -1,5 +1,7 @@
 #pragma once
 
+#include <CS2/Panorama/CUIPanel.h>
+#include <Panorama/PanoramaUiPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
 
 template <typename HookContext>

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <CS2/Panorama/CUIPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
 #include <Panorama/PanoramaUiPanel.h>
 

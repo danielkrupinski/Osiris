@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <cstddef>
+#include <new>
 #include <utility>
 
 template <typename T>

@@ -1,8 +1,17 @@
 #pragma once
 
+#include <optional>
+#include <span>
+#include <utility>
+
+#include <CS2/Classes/Color.h>
+#include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
+#include <CS2/Constants/ColorConstants.h>
+#include <Entities/BaseEntity.h>
 #include <FeatureHelpers/TeamNumber.h>
 #include <GameClasses/EntitySystem.h>
+#include <MemoryPatterns/PatternTypes/PlayerControllerPatternTypes.h>
 #include "PlayerPawn.h"
 
 template <typename HookContext>

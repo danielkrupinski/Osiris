@@ -1,9 +1,14 @@
 #pragma once
 
-#include <CS2/Classes/Entities/CEntityInstance.h>
+#include <CS2/Classes/Entities/C_BaseEntity.h>
+#include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <Entities/BaseEntity.h>
+#include <Entities/BaseModelEntity.h>
+#include <Entities/PlayerPawn.h>
 #include <Features/Visuals/ModelGlow/ModelGlow.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlow.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
+#include <GameClasses/EntitySystem.h>
 
 template <typename HookContext>
 class RenderingHookEntityLoop {

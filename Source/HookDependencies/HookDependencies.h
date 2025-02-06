@@ -10,6 +10,10 @@
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Hud/HudContext.h>
+#include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/CvarPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/GameRulesPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/PlantedC4PatternTypes.h>
 #include <Panorama/PanelFactory.h>
 #include <GameClasses/GlobalVars.h>
 #include <Panorama/PanoramaTransformFactory.h>

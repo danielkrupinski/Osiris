@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
 #include "C_BaseEntity.h"
 
 namespace cs2

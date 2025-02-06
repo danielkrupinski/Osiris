@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #include <Platform/Macros/IsPlatform.h>
 #include "CPanel2D.h"
 #include "CPanoramaSymbol.h"

@@ -4,6 +4,7 @@
 #include <Utils/TypeList.h>
 
 #include "CodePattern.h"
+#include "CodePatternOperation.h"
 
 template <typename TempPatternPool, typename PatternTypesList = TypeList<>>
 class PatternPoolBuilder {

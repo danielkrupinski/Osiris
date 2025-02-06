@@ -1,6 +1,8 @@
 #pragma once
 
 #include <CS2/Classes/CCSPlayer_HostageServices.h>
+#include <CS2/Classes/EntitySystem/CEntityHandle.h>
+#include <CS2/Constants/EntityHandle.h>
 #include <GameClasses/EntitySystem.h>
 #include <MemoryPatterns/PatternTypes/HostageServicesPatternTypes.h>
 

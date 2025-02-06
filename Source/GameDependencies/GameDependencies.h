@@ -1,15 +1,18 @@
 #pragma once
 
+#include <optional>
+
 #include "ConVars.h"
 #include "FileNameSymbolTableDeps.h"
 #include "GlowSceneObjectDeps.h"
 #include "HudDeps.h"
 #include "MemAllocDeps.h"
 
+#include <GameDLLs/Tier0Dll.h>
+#include <MemoryPatterns/MemoryPatterns.h>
 #include <Panorama/PanoramaSymbols.h>
 #include <Panorama/StylePropertiesSymbolsAndVMTs.h>
-
-#include <MemoryPatterns/MemoryPatterns.h>
+#include <Panorama/StylePropertySymbolMap.h>
 #include <Platform/VmtFinder.h>
 
 struct GameDependencies {

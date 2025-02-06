@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <CS2/Classes/CUtlMap.h>
 #include "CEntityClass.h"
 

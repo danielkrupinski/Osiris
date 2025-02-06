@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cstdint>
+
 #include <CS2/Classes/CViewRender.h>
-#include <Utils/RefCountedHook.h>
+#include <Vmt/VmtLengthCalculator.h>
 #include <Vmt/VmtSwapper.h>
 
 extern "C" void ViewRenderHook_onRenderStart_asm(cs2::CViewRender* thisptr) noexcept;

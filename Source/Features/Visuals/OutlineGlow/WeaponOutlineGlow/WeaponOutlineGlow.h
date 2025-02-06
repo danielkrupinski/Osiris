@@ -1,5 +1,9 @@
 #pragma once
 
+#include <utility>
+
+#include <CS2/Classes/Entities/WeaponEntities.h>
+#include <FeatureHelpers/EntityClassifier.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include "WeaponOutlineGlowContext.h"
 

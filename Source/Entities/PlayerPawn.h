@@ -1,21 +1,21 @@
 #pragma once
 
+#include <algorithm>
+#include <cstdint>
 #include <optional>
 
+#include <CS2/Classes/Color.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/ConVarTypes.h>
-#include <CS2/Constants/EntityHandle.h>
-#include <FeatureHelpers/LifeState.h>
 #include <FeatureHelpers/TeamNumber.h>
-#include <GameClasses/GameSceneNode.h>
+#include <GameClasses/EntitySystem.h>
 #include <MemoryPatterns/PatternTypes/PlayerPawnPatternTypes.h>
 #include <Utils/ColorUtils.h>
 
 #include "BaseEntity.h"
-#include "BaseModelEntity.h"
 #include "C4.h"
 #include "HostageServices.h"
-#include "PlayerWeapons.h"
 #include "WeaponServices.h"
 
 class EntityFromHandleFinder;

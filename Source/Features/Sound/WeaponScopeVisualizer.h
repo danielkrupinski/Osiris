@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Details/WeaponScopeSound.h"
 #include "Details/SoundVisualizationFeature.h"
 #include "Details/SoundVisualizationPanelProperties.h"
 

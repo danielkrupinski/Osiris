@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include <CS2/Classes/Color.h>
 #include "GlowSceneObjectContext.h"
 
 template <typename HookContext, typename Context = GlowSceneObjectContext<HookContext>>

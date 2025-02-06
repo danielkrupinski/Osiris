@@ -1,6 +1,8 @@
 #pragma once
 
+#include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 #include <Panorama/PanelHandle.h>
+#include <Panorama/PanoramaUiPanel.h>
 
 template <typename HookContext>
 struct HudContext {

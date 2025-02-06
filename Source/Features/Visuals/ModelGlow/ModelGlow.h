@@ -1,16 +1,19 @@
 #pragma once
 
-#include <CS2/Constants/ColorConstants.h>
+#include <CS2/Classes/CPlantedC4.h>
+#include <CS2/Classes/Entities/CBaseAnimGraph.h>
+#include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <CS2/Classes/Entities/WeaponEntities.h>
+#include <Entities/BaseWeapon.h>
+#include <Entities/C4.h>
 #include <Entities/PlantedC4.h>
-#include <FeatureHelpers/TeamNumber.h>
-
-#include "ModelGlowState.h"
-
 #include <Entities/PlayerPawn.h>
+#include <FeatureHelpers/EntityClassifier.h>
 
 #include "DefuseKitModelGlow/DefuseKitModelGlow.h"
 #include "DroppedBombModelGlow/DroppedBombModelGlow.h"
 #include "GrenadeProjectileModelGlow/GrenadeProjectileModelGlow.h"
+#include "ModelGlowState.h"
 #include "PlayerModelGlow/PlayerModelGlow.h"
 #include "TickingBombModelGlow/TickingBombModelGlow.h"
 #include "WeaponModelGlow/WeaponModelGlow.h"

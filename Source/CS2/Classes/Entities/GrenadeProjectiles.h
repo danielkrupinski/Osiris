@@ -1,7 +1,6 @@
 #pragma once
 
 #include "C_BaseCSGrenadeProjectile.h"
-#include <Platform/Macros/PlatformSpecific.h>
 
 namespace cs2
 {

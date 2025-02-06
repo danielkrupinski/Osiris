@@ -1,10 +1,11 @@
 #pragma once
 
 #include <array>
+#include <tuple>
 
 #include <CS2/Constants/StylePropertySymbolNames.h>
 #include <CS2/Constants/StylePropertyTypeNames.h>
-#include <CS2/Panorama/StyleProperties.h>
+#include <CS2/Panorama/CStyleSymbol.h>
 #include <Platform/VmtFinder.h>
 #include <Utils/TypeIndex.h>
 

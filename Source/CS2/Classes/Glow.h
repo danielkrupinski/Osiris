@@ -1,11 +1,9 @@
 #pragma once
 
-#include <cstdint>
+#include <Platform/Macros/IsPlatform.h>
 
 #include "CSceneObject.h"
 #include "Entities/C_BaseEntity.h"
-
-#include <Platform/Macros/IsPlatform.h>
 
 namespace cs2
 {

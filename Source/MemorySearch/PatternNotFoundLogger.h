@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 #include <MemorySearch/BytePattern.h>
 #include <Utils/StringBuilder.h>
 #include <Platform/SimpleMessageBox.h>

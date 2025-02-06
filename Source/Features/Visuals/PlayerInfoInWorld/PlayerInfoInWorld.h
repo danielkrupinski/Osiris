@@ -1,26 +1,14 @@
 #pragma once
 
-#include <CS2/Classes/CGameSceneNode.h>
-#include <CS2/Classes/ConVarTypes.h>
-#include <CS2/Classes/Entities/C_CSPlayerPawn.h>
-#include <CS2/Classes/Entities/CCSPlayerController.h>
-#include <CS2/Constants/ColorConstants.h>
-#include <Entities/PlayerPawn.h>
 #include <Features/Common/InWorldPanels.h>
-#include <FeatureHelpers/LifeState.h>
-#include <Panorama/PanoramaTransformations.h>
 #include <FeatureHelpers/FeatureToggle.h>
-#include <FeatureHelpers/TeamNumber.h>
-#include <Panorama/PanoramaLabel.h>
-#include <Panorama/PanoramaImagePanel.h>
+#include <FeatureHelpers/WorldToClipSpaceConverter.h>
 #include <Hooks/ViewRenderHook.h>
-#include <Utils/ColorUtils.h>
-#include <Utils/CString.h>
 
-#include "PlayerInfoPanel.h"
-
-#include "PlayerInfoInWorldPanelFactory.h"
+#include "PlayerInfoInWorldContext.h"
 #include "PlayerInfoInWorldState.h"
+#include "PlayerPositionArrow/PlayerPositionArrowColorType.h"
+#include "PlayerStateIcons/PlayerStateIconsToShow.h"
 
 struct PlayerPositionToggle : public FeatureToggle<PlayerPositionToggle> {
     explicit PlayerPositionToggle(PlayerInfoInWorldState& state) noexcept
@@ -194,9 +182,6 @@ private:
     HookContext& hookContext;
     ViewRenderHook& viewRenderHook;
 };
-
-#include "PlayerInfoInWorldCondition.h"
-#include "PlayerInfoInWorldContext.h"
 
 template <typename HookContext>
 class PlayerInfoInWorld {

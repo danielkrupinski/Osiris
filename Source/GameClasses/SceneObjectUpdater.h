@@ -1,6 +1,9 @@
 #pragma once
 
+#include <CS2/Classes/SceneObjectUpdaterHandle_t.h>
 #include <MemoryPatterns/PatternTypes/SceneObjectUpdaterPatternTypes.h>
+
+#include "SceneObject.h"
 
 template <typename HookContext>
 class SceneObjectUpdater {

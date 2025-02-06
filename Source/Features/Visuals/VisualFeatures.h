@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Hooks/ViewRenderHook.h>
 #include "ModelGlow/ModelGlowToggle.h"
 #include "PlayerInfoInWorld/PlayerInfoInWorld.h"
 #include "OutlineGlow/DefuseKitOutlineGlow/DefuseKitOutlineGlowToggle.h"
@@ -11,8 +12,6 @@
 #include "OutlineGlow/WeaponOutlineGlow/WeaponOutlineGlowToggle.h"
 #include "OutlineGlow/OutlineGlowToggle.h"
 #include "VisualFeaturesStates.h"
-
-class LoopModeGameHook;
 
 template <typename HookContext>
 struct VisualFeatures {

@@ -1,14 +1,13 @@
 #pragma once
 
-#include <CS2/Classes/CLoopModeGame.h>
 #include <CS2/Classes/GlobalVars.h>
-#include <CS2/Classes/ClientModeCSNormal.h>
 #include <CS2/Classes/CSceneObject.h>
 #include <CS2/Classes/CViewRender.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/Glow.h>
 #include <CS2/Classes/VMatrix.h>
 #include <CS2/Panorama/CPanel2D.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <Utils/StrongTypeAlias.h>
 
 STRONG_TYPE_ALIAS(MainMenuPanelPointer, cs2::CPanel2D**);

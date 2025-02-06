@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <limits>
+#include <tuple>
+#include <type_traits>
 
 #include "TypeIndex.h"
 

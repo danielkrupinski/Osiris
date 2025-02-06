@@ -1,11 +1,11 @@
 #pragma once
 
+#include <Panorama/PanoramaLabel.h>
 #include <Panorama/PanelHandle.h>
 
 #include "PostRoundTimerCondition.h"
 #include "PostRoundTimerPanel.h"
 #include "PostRoundTimerPanelFactory.h"
-#include "PostRoundTimerState.h"
 
 template <typename HookContext>
 struct PostRoundTimerContext {

@@ -1,24 +1,26 @@
 #pragma once
 
+#include <array>
+#include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <span>
-#include <string_view>
+#include <type_traits>
+
+#include <MemorySearch/PatternSearchResult.h>
+#include <Platform/Macros/FunctionAttributes.h>
+#include <Utils/MemorySection.h>
+#include <Utils/GenericPointer.h>
+#include <Utils/SpanSlice.h>
 
 #include "BytePattern.h"
 #include "BytePatternView.h"
-#include "PatternNotFoundLogger.h"
+#include "CodePatternOperation.h"
 #include "HybridPatternFinder.h"
 #include "PatternPoolView.h"
 #include "PatternSearchResults.h"
 #include "PatternSearchResultsView.h"
-
-#include <MemorySearch/PatternSearchResult.h>
-#include <Utils/GenericPointer.h>
-#include <Utils/SpanSlice.h>
-
-#include <Platform/Macros/FunctionAttributes.h>
 #include "PatternStringWildcard.h"
-#include "CodePatternOperation.h"
 
 enum class OffsetHint : std::size_t {};
 

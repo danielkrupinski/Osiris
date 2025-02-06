@@ -1,12 +1,16 @@
 #pragma once
 
+#include <cstring>
+
+#include <CS2/Classes/Entities/CEntityInstance.h>
 #include <CS2/Classes/EntitySystem/CConcreteEntityList.h>
 #include <CS2/Classes/EntitySystem/CEntityClass.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
+#include <CS2/Classes/EntitySystem/CEntityIdentity.h>
 #include <CS2/Classes/EntitySystem/CEntityIndex.h>
 #include <CS2/Classes/EntitySystem/CGameEntitySystem.h>
+#include <GameClasses/EntityIdentity.h>
 #include <MemoryPatterns/PatternTypes/EntitySystemPatternTypes.h>
-#include <Entities/BaseEntity.h>
 
 template <typename HookContext>
 class EntitySystem {

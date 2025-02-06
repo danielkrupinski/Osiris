@@ -1,8 +1,11 @@
 #pragma once
 
-#include <CS2/Classes/Entities/C_BaseEntity.h>
+#include <cstring>
+
 #include <CS2/Classes/Color.h>
+#include <CS2/Classes/Glow.h>
 #include <GameClasses/SceneObject.h>
+#include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/GlowSceneObjectPatternTypes.h>
 #include <Platform/Macros/IsPlatform.h>
 

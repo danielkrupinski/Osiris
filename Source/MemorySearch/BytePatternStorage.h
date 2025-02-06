@@ -3,11 +3,8 @@
 #include <algorithm>
 #include <array>
 #include <cstddef>
-#include <string_view>
 
 #include "BytePatternConverter.h"
-#include "BytePattern.h"
-#include "PatternStringWildcard.h"
 
 template <std::size_t Capacity>
 struct BytePatternStorage {

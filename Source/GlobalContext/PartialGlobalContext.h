@@ -4,8 +4,9 @@
 #include <Hooks/PeepEventsHook.h>
 #include <MemoryPatterns/MemoryPatterns.h>
 #include <MemoryPatterns/PatternFinders.h>
+#include <MemorySearch/PatternFinder.h>
+#include <MemorySearch/PatternNotFoundLogger.h>
 #include <Platform/DynamicLibrary.h>
-#include <Platform/Macros/PlatformSpecific.h>
 #include <SDL/SdlDll.h>
 
 struct PartialGlobalContext {

@@ -1,8 +1,10 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 #include <string_view>
 
+#include <MemorySearch/BytePattern.h>
 #include <MemorySearch/HybridPatternFinder.h>
 #include <Utils/MemorySection.h>
 

@@ -1,10 +1,8 @@
 #pragma once
 
-#include <cassert>
-
 #include "ClipSpaceCoordinates.h"
 #include <CS2/Classes/Vector.h>
-#include <CS2/Classes/VMatrix.h>
+#include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 
 template <typename HookContext>
 struct WorldToClipSpaceConverter {

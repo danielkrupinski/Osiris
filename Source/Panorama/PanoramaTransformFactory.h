@@ -3,6 +3,7 @@
 #include <utility>
 #include <type_traits>
 
+#include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/Transform3D.h>
 #include <GameClasses/MemAlloc.h>
 

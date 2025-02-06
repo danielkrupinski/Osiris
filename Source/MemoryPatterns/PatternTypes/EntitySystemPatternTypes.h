@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 
 #include <CS2/Classes/EntitySystem/CEntityIndex.h>

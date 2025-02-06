@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Details/BombDefuseSound.h"
 #include "Details/SoundVisualizationFeature.h"
 #include "Details/SoundVisualizationPanelProperties.h"
 

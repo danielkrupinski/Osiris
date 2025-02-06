@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <FeatureHelpers/TeamNumber.h>
 #include "PlayerOutlineGlowContext.h"
