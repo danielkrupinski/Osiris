@@ -4,15 +4,21 @@ on: workflow_dispatch
 
 jobs:
   linux:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    - name: install libclang-18-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install libclang-18-dev
+    - name: build include-what-you-use
+      run: |
+        git clone --depth=1 --single-branch --branch clang_18 https://github.com/include-what-you-use/include-what-you-use.git
+        cd include-what-you-use
+        cmake -DCMAKE_PREFIX_PATH=/usr/lib/llvm-18 -B build
+        cmake --build build
     - name: configure
-      run: cmake -Werror=dev -D CMAKE_BUILD_TYPE=Release -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -B build
-    - name: include what you use
-      uses: danielkrupinski/include-what-you-use-action@master
-      with:
-        compilation-database-path: './build/'
-        no-error: 'true'
+      run: CXX=clang++-18 cmake -Werror=dev -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_INCLUDE_WHAT_YOU_USE="$PWD/include-what-you-use/build/bin/include-what-you-use;-Xiwyu;--no_fwd_decls;-Xiwyu;--check_also=$PWD/Source/**/*.h" -B build
+    - name: run include-what-you-use
+      run: cmake --build build
