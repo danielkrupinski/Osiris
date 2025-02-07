@@ -272,7 +272,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelParams.h" />
     <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
-    <ClInclude Include="FileUtils\FileSlice.h" />
     <ClInclude Include="GameClasses\EntityIdentity.h" />
     <ClInclude Include="GameClasses\EntitySystem.h" />
     <ClInclude Include="GameClasses\GameSceneNode.h" />
@@ -499,6 +498,7 @@
     <ClInclude Include="Utils\DynamicArray.h" />
     <ClInclude Include="Utils\FieldFieldOffset.h" />
     <ClInclude Include="Utils\FieldOffset.h" />
+    <ClInclude Include="Utils\FileSlice.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\GenericFunctionPointer.h" />
     <ClInclude Include="Utils\GenericPointer.h" />
