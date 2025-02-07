@@ -1,6 +1,6 @@
 #pragma once
 
-#include <FeatureHelpers/FeatureToggle.h>
+#include <Features/Common/FeatureToggle.h>
 
 template <typename Context>
 struct BombTimerToggle : FeatureToggleOff<BombTimerToggle<Context>> {

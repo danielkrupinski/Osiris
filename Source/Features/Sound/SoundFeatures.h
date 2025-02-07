@@ -1,7 +1,7 @@
 #pragma once
 
-#include <FeatureHelpers/Sound/SoundWatcher.h>
-#include <FeatureHelpers/Sound/SoundWatcherState.h>
+#include <Features/Sound/Details/SoundWatcher.h>
+#include <Features/Sound/Details/SoundWatcherState.h>
 #include <Hooks/ViewRenderHook.h>
 
 #include "Details/BombBeepSound.h"

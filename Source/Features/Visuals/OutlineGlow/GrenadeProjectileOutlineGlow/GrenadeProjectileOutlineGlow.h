@@ -4,7 +4,7 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Classes/Entities/GrenadeProjectiles.h>
-#include <FeatureHelpers/EntityClassifier.h>
+#include <Entities/EntityClassifier.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include "GrenadeProjectileOutlineGlowContext.h"
 

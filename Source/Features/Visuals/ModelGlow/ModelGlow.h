@@ -8,7 +8,7 @@
 #include <Entities/C4.h>
 #include <Entities/PlantedC4.h>
 #include <Entities/PlayerPawn.h>
-#include <FeatureHelpers/EntityClassifier.h>
+#include <Entities/EntityClassifier.h>
 
 #include "DefuseKitModelGlow/DefuseKitModelGlow.h"
 #include "DroppedBombModelGlow/DroppedBombModelGlow.h"

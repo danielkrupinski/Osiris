@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Features/Common/InWorldPanels.h>
-#include <FeatureHelpers/FeatureToggle.h>
-#include <FeatureHelpers/WorldToClipSpaceConverter.h>
+#include <Features/Common/FeatureToggle.h>
+#include <WorldToScreen/WorldToClipSpaceConverter.h>
 #include <Hooks/ViewRenderHook.h>
 
 #include "PlayerInfoInWorldContext.h"

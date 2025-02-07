@@ -6,8 +6,8 @@
 
 #include <CS2/Classes/Vector.h>
 #include <CS2/Panorama/CUIPanel.h>
-#include <FeatureHelpers/ViewToProjectionMatrix.h>
-#include <FeatureHelpers/WorldToClipSpaceConverter.h>
+#include <WorldToScreen/ViewToProjectionMatrix.h>
+#include <WorldToScreen/WorldToClipSpaceConverter.h>
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 #include <Panorama/PanoramaTransformations.h>
 #include <Panorama/PanoramaUiPanel.h>

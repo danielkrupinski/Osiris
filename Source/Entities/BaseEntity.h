@@ -9,8 +9,8 @@
 #include <CS2/Classes/Entities/C_BaseEntity.h>
 #include <CS2/Constants/EntityHandle.h>
 #include <CS2/Constants/SceneObjectAttributeNames.h>
-#include <FeatureHelpers/LifeState.h>
-#include <FeatureHelpers/TeamNumber.h>
+#include <Entities/LifeState.h>
+#include <Entities/TeamNumber.h>
 #include <MemoryPatterns/PatternTypes/EntityPatternTypes.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 

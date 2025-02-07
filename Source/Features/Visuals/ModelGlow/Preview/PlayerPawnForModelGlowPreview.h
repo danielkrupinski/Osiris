@@ -6,7 +6,7 @@
 #include <CS2/Classes/Entities/C_CSGO_PreviewPlayer.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <Entities/PlayerPawn.h>
-#include <FeatureHelpers/TeamNumber.h>
+#include <Entities/TeamNumber.h>
 #include <Utils/Optional.h>
 
 #include "BaseEntityForModelGlowPreview.h"

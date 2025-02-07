@@ -5,7 +5,7 @@
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
 #include <Features/Features.h>
-#include <FeatureHelpers/TeamNumber.h>
+#include <Entities/TeamNumber.h>
 #include <GlobalContext/UnloadFlag.h>
 #include <Panorama/MapPlayerPreviewPanel.h>
 #include <Panorama/PanoramaLabel.h>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utility>
-#include <FeatureHelpers/FeatureToggle.h>
+#include <Features/Common/FeatureToggle.h>
 #include "DefuseKitOutlineGlowContext.h"
 
 template <typename HookContext, typename Context = DefuseKitOutlineGlowContext<HookContext>>

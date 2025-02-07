@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/CCSPlayerController.h>
-#include <FeatureHelpers/TeamNumber.h>
+#include <Entities/TeamNumber.h>
 #include <Features/Visuals/ModelGlow/ModelGlow.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 #include <Features/Visuals/ModelGlow/PlayerModelGlow/PlayerModelGlow.h>

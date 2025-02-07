@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utility>
-#include <FeatureHelpers/FeatureToggle.h>
+#include <Features/Common/FeatureToggle.h>
 #include "PlayerOutlineGlowColorType.h"
 
 template <typename HookContext>

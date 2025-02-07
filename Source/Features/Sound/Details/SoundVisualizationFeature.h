@@ -3,11 +3,11 @@
 #include <utility>
 
 #include <Panorama/PanoramaTransformations.h>
-#include <FeatureHelpers/Sound/PlayedSound.h>
-#include <FeatureHelpers/Sound/SoundWatcher.h>
-#include <FeatureHelpers/FeatureToggle.h>
-#include <FeatureHelpers/ViewToProjectionMatrix.h>
-#include <FeatureHelpers/WorldToClipSpaceConverter.h>
+#include <Features/Sound/Details/PlayedSound.h>
+#include <Features/Sound/Details/SoundWatcher.h>
+#include <Features/Common/FeatureToggle.h>
+#include <WorldToScreen/ViewToProjectionMatrix.h>
+#include <WorldToScreen/WorldToClipSpaceConverter.h>
 #include <Features/Common/InWorldPanels.h>
 #include <Hooks/ViewRenderHook.h>
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>

@@ -67,14 +67,8 @@
     <Filter Include="GameDLLs">
       <UniqueIdentifier>{b8552b92-9c5f-4168-bd92-43404a4af17e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FeatureHelpers">
-      <UniqueIdentifier>{60a8534c-f923-48e7-a211-854c06b1456e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Features\Sound">
       <UniqueIdentifier>{432df53f-506f-470e-af2c-7155e3d4f03c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="FeatureHelpers\Sound">
-      <UniqueIdentifier>{19a86d00-8a7b-4184-9119-96ec0b26c501}</UniqueIdentifier>
     </Filter>
     <Filter Include="Platform\Windows\RTTI">
       <UniqueIdentifier>{3908a784-03e1-437a-97b7-7479673278cc}</UniqueIdentifier>
@@ -222,6 +216,12 @@
     </Filter>
     <Filter Include="Panorama">
       <UniqueIdentifier>{29f9a026-37c7-43b3-adbb-11b20e71aa23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WorldToScreen">
+      <UniqueIdentifier>{75b3a57c-8756-4357-a582-e2fb07ee808f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ConVars">
+      <UniqueIdentifier>{611671ec-895c-4a6d-8afd-0a26212553b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -512,15 +512,6 @@
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Constants\SoundNames.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
@@ -542,17 +533,8 @@
     <ClInclude Include="Utils\BitFlags.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\BombPlantVisualizer.h">
       <Filter>Features\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h">
-      <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -560,14 +542,8 @@
     <ClInclude Include="Utils\TypeBitFlags.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImpl.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\TypeIndex.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\SoundExpiryChecker.h">
-      <Filter>FeatureHelpers\Sound</Filter>
     </ClInclude>
     <ClInclude Include="Features\Sound\BombBeepVisualizer.h">
       <Filter>Features\Sound</Filter>
@@ -577,9 +553,6 @@
     </ClInclude>
     <ClInclude Include="Features\Sound\WeaponScopeVisualizer.h">
       <Filter>Features\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\AspectRatio.h">
       <Filter>CS2\Constants</Filter>
@@ -764,18 +737,6 @@
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\RenderingHookEntityLoop.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\TeamNumber.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImplState.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherState.h">
-      <Filter>FeatureHelpers\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PlayerPawnPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -824,20 +785,11 @@
     <ClInclude Include="CS2\Classes\ConVarTypes.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="FeatureHelpers\ConVarAccessor.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\ConVarFinder.h">
-      <Filter>FeatureHelpers</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\ConVarPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\LifeStateConstants.h">
       <Filter>CS2\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\LifeState.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\ColorConstants.h">
       <Filter>CS2\Constants</Filter>
@@ -865,9 +817,6 @@
     </ClInclude>
     <ClInclude Include="Utils\PrivateTag.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\FeatureToggle.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="GameDependencies\ConVars.h">
       <Filter>GameDependencies</Filter>
@@ -1147,9 +1096,6 @@
     </ClInclude>
     <ClInclude Include="GameClasses\GameSceneNode.h">
       <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="FeatureHelpers\EntityClassifier.h">
-      <Filter>FeatureHelpers</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlow.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
@@ -1786,6 +1732,60 @@
     </ClInclude>
     <ClInclude Include="Utils\Bits.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldToScreen\ClipSpaceCoordinates.h">
+      <Filter>WorldToScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldToScreen\NormalizedDeviceCoordinates.h">
+      <Filter>WorldToScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldToScreen\ViewToProjectionMatrix.h">
+      <Filter>WorldToScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldToScreen\WorldToClipSpaceConverter.h">
+      <Filter>WorldToScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\EntityClassifier.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\LifeState.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\TeamNumber.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ConVars\ConVarAccessor.h">
+      <Filter>ConVars</Filter>
+    </ClInclude>
+    <ClInclude Include="ConVars\ConVarFinder.h">
+      <Filter>ConVars</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Common\FeatureToggle.h">
+      <Filter>Features\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Common\RenderingHookEntityLoop.h">
+      <Filter>Features\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\PlayedSound.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundExpiryChecker.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundWatcher.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundWatcherImpl.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundWatcherImplState.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\SoundWatcherState.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\WatchedSounds.h">
+      <Filter>Features\Sound\Details</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

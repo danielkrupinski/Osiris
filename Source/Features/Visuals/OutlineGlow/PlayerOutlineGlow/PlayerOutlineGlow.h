@@ -4,7 +4,7 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
-#include <FeatureHelpers/TeamNumber.h>
+#include <Entities/TeamNumber.h>
 #include "PlayerOutlineGlowContext.h"
 #include "PlayerOutlineGlowColorType.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utility>
-#include <FeatureHelpers/FeatureToggle.h>
+#include <Features/Common/FeatureToggle.h>
 #include "GrenadeProjectileOutlineGlowContext.h"
 
 template <typename HookContext, typename Context = GrenadeProjectileOutlineGlowContext<HookContext>>

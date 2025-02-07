@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include <FeatureHelpers/FeatureToggle.h>
+#include <Features/Common/FeatureToggle.h>
 #include "WeaponOutlineGlowContext.h"
 
 template <typename HookContext, typename Context = WeaponOutlineGlowContext<HookContext>>

@@ -13,6 +13,8 @@
   <ItemGroup>
     <ClInclude Include="BuildConfig.h" />
     <ClInclude Include="Common\Visibility.h" />
+    <ClInclude Include="ConVars\ConVarAccessor.h" />
+    <ClInclude Include="ConVars\ConVarFinder.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h" />
     <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h" />
@@ -97,9 +99,11 @@
     <ClInclude Include="Entities\BaseModelEntity.h" />
     <ClInclude Include="Entities\BaseWeapon.h" />
     <ClInclude Include="Entities\C4.h" />
+    <ClInclude Include="Entities\EntityClassifier.h" />
     <ClInclude Include="Entities\GameRules.h" />
     <ClInclude Include="Entities\GlowProperty.h" />
     <ClInclude Include="Entities\HostageServices.h" />
+    <ClInclude Include="Entities\LifeState.h" />
     <ClInclude Include="Entities\PlantedC4.h" />
     <ClInclude Include="Entities\PlayerController.h" />
     <ClInclude Include="Entities\PlayerPawn.h" />
@@ -107,31 +111,16 @@
     <ClInclude Include="Entities\PreviewPlayer.h" />
     <ClInclude Include="Entities\RenderComponent.h" />
     <ClInclude Include="Entities\SmokeGrenadeProjectile.h" />
+    <ClInclude Include="Entities\TeamNumber.h" />
     <ClInclude Include="Entities\WeaponServices.h" />
-    <ClInclude Include="FeatureHelpers\ClipSpaceCoordinates.h" />
-    <ClInclude Include="FeatureHelpers\ConVarAccessor.h" />
-    <ClInclude Include="FeatureHelpers\ConVarFinder.h" />
-    <ClInclude Include="FeatureHelpers\EntityClassifier.h" />
-    <ClInclude Include="FeatureHelpers\FeatureToggle.h" />
-    <ClInclude Include="FeatureHelpers\LifeState.h" />
-    <ClInclude Include="FeatureHelpers\NormalizedDeviceCoordinates.h" />
-    <ClInclude Include="FeatureHelpers\RenderingHookEntityLoop.h" />
-    <ClInclude Include="FeatureHelpers\Sound\PlayedSound.h" />
-    <ClInclude Include="FeatureHelpers\Sound\SoundExpiryChecker.h" />
-    <ClInclude Include="FeatureHelpers\Sound\SoundWatcher.h" />
-    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImpl.h" />
-    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherImplState.h" />
-    <ClInclude Include="FeatureHelpers\Sound\SoundWatcherState.h" />
-    <ClInclude Include="FeatureHelpers\Sound\WatchedSounds.h" />
-    <ClInclude Include="FeatureHelpers\TeamNumber.h" />
-    <ClInclude Include="FeatureHelpers\ViewToProjectionMatrix.h" />
-    <ClInclude Include="FeatureHelpers\WorldToClipSpaceConverter.h" />
+    <ClInclude Include="Features\Common\FeatureToggle.h" />
     <ClInclude Include="Features\Common\InWorldPanelIndex.h" />
     <ClInclude Include="Features\Common\InWorldPanelListEntry.h" />
     <ClInclude Include="Features\Common\InWorldPanels.h" />
     <ClInclude Include="Features\Common\InWorldPanelsPerHookState.h" />
     <ClInclude Include="Features\Common\InWorldPanelsState.h" />
     <ClInclude Include="Features\Common\InWorldPanelsUnloadHandler.h" />
+    <ClInclude Include="Features\Common\RenderingHookEntityLoop.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\FeaturesStates.h" />
     <ClInclude Include="Features\FeaturesUnloadHandler.h" />
@@ -177,10 +166,17 @@
     <ClInclude Include="Features\Sound\Details\BombDefuseSound.h" />
     <ClInclude Include="Features\Sound\Details\BombPlantSound.h" />
     <ClInclude Include="Features\Sound\Details\FootstepSound.h" />
+    <ClInclude Include="Features\Sound\Details\PlayedSound.h" />
+    <ClInclude Include="Features\Sound\Details\SoundExpiryChecker.h" />
     <ClInclude Include="Features\Sound\Details\SoundVisualization.h" />
     <ClInclude Include="Features\Sound\Details\SoundVisualizationFeature.h" />
     <ClInclude Include="Features\Sound\Details\SoundVisualizationPanelFactory.h" />
     <ClInclude Include="Features\Sound\Details\SoundVisualizationPanelProperties.h" />
+    <ClInclude Include="Features\Sound\Details\SoundWatcher.h" />
+    <ClInclude Include="Features\Sound\Details\SoundWatcherImpl.h" />
+    <ClInclude Include="Features\Sound\Details\SoundWatcherImplState.h" />
+    <ClInclude Include="Features\Sound\Details\SoundWatcherState.h" />
+    <ClInclude Include="Features\Sound\Details\WatchedSounds.h" />
     <ClInclude Include="Features\Sound\Details\WeaponReloadSound.h" />
     <ClInclude Include="Features\Sound\Details\WeaponScopeSound.h" />
     <ClInclude Include="Features\Sound\FootstepVisualizer.h" />
@@ -533,6 +529,10 @@
     <ClInclude Include="Vmt\VmtLength.h" />
     <ClInclude Include="Vmt\VmtLengthCalculator.h" />
     <ClInclude Include="Vmt\VmtSwapper.h" />
+    <ClInclude Include="WorldToScreen\ClipSpaceCoordinates.h" />
+    <ClInclude Include="WorldToScreen\NormalizedDeviceCoordinates.h" />
+    <ClInclude Include="WorldToScreen\ViewToProjectionMatrix.h" />
+    <ClInclude Include="WorldToScreen\WorldToClipSpaceConverter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js" />

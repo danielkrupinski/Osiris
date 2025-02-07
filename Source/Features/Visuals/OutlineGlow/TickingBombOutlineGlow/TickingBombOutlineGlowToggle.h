@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include <FeatureHelpers/FeatureToggle.h>
+#include <Features/Common/FeatureToggle.h>
 #include "TickingBombOutlineGlowContext.h"
 
 template <typename HookContext, typename Context = TickingBombOutlineGlowContext<HookContext>>

@@ -9,7 +9,7 @@
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <Entities/BaseEntity.h>
-#include <FeatureHelpers/TeamNumber.h>
+#include <Entities/TeamNumber.h>
 #include <GameClasses/EntitySystem.h>
 #include <MemoryPatterns/PatternTypes/PlayerControllerPatternTypes.h>
 #include "PlayerPawn.h"

@@ -3,9 +3,9 @@
 #include <CS2/Classes/CLoopModeGame.h>
 #include <GameDependencies/GameDependencies.h>
 #include <GameDLLs/Tier0Dll.h>
-#include <FeatureHelpers/EntityClassifier.h>
-#include <FeatureHelpers/RenderingHookEntityLoop.h>
-#include <FeatureHelpers/Sound/SoundWatcher.h>
+#include <Entities/EntityClassifier.h>
+#include <Features/Common/RenderingHookEntityLoop.h>
+#include <Features/Sound/Details/SoundWatcher.h>
 #include <Features/Common/InWorldPanelsState.h>
 #include <Features/Features.h>
 #include <Features/FeaturesStates.h>

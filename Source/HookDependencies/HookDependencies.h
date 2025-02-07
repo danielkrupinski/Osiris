@@ -5,8 +5,8 @@
 #include <Entities/PlayerController.h>
 #include <Features/Common/InWorldPanelsPerHookState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCachePerHookState.h>
-#include <FeatureHelpers/ConVarAccessor.h>
-#include <FeatureHelpers/ConVarFinder.h>
+#include <ConVars/ConVarAccessor.h>
+#include <ConVars/ConVarFinder.h>
 #include <GameClasses/FileSystem.h>
 #include <GameClasses/Hud/Hud.h>
 #include <GameClasses/Hud/HudContext.h>

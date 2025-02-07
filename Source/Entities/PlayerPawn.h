@@ -8,7 +8,7 @@
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/ConVarTypes.h>
-#include <FeatureHelpers/TeamNumber.h>
+#include <Entities/TeamNumber.h>
 #include <GameClasses/EntitySystem.h>
 #include <MemoryPatterns/PatternTypes/PlayerPawnPatternTypes.h>
 #include <Utils/ColorUtils.h>

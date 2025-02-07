@@ -9,7 +9,7 @@
 #include <CS2/Classes/Entities/WeaponEntities.h>
 #include <Entities/PlantedC4.h>
 #include <Entities/PlayerPawn.h>
-#include <FeatureHelpers/EntityClassifier.h>
+#include <Entities/EntityClassifier.h>
 
 #include "OutlineGlowContext.h"
 
