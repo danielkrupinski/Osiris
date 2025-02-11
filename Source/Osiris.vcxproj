@@ -256,6 +256,7 @@
     <ClInclude Include="GameClient\ConVars\ConVarFinder.h" />
     <ClInclude Include="GameClient\ConVars\ConVars.h" />
     <ClInclude Include="GameClient\ConVars\ConVarsBase.h" />
+    <ClInclude Include="GameClient\DLLs\Tier0Dll.h" />
     <ClInclude Include="GameClient\Entities\BaseEntity.h" />
     <ClInclude Include="GameClient\Entities\BaseModelEntity.h" />
     <ClInclude Include="GameClient\Entities\BaseWeapon.h" />
@@ -332,7 +333,6 @@
     <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h" />
     <ClInclude Include="GameDependencies\HudDeps.h" />
     <ClInclude Include="GameDependencies\MemAllocDeps.h" />
-    <ClInclude Include="GameDLLs\Tier0Dll.h" />
     <ClInclude Include="GlobalContext\DeferredCompleteObject.h" />
     <ClInclude Include="GlobalContext\FullGlobalContext.h" />
     <ClInclude Include="GlobalContext\GlobalContext.h" />

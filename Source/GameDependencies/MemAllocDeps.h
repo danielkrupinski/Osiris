@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/IMemAlloc.h>
-#include <GameDLLs/Tier0Dll.h>
+#include <GameClient/DLLs/Tier0Dll.h>
 
 struct MemAllocDeps {
     MemAllocDeps() = default;

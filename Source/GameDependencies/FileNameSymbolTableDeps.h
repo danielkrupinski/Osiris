@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/CUtlFilenameSymbolTable.h>
-#include <GameDLLs/Tier0Dll.h>
+#include <GameClient/DLLs/Tier0Dll.h>
 
 struct FileNameSymbolTableDeps {
     FileNameSymbolTableDeps() = default;

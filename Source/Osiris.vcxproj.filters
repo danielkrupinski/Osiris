@@ -61,9 +61,6 @@
     <Filter Include="MemorySearch">
       <UniqueIdentifier>{28ecac3b-05f9-44d1-86cb-50d8fe91ff36}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameDLLs">
-      <UniqueIdentifier>{b8552b92-9c5f-4168-bd92-43404a4af17e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Features\Sound">
       <UniqueIdentifier>{432df53f-506f-470e-af2c-7155e3d4f03c}</UniqueIdentifier>
     </Filter>
@@ -222,6 +219,9 @@
     </Filter>
     <Filter Include="GameClient\WorldToScreen">
       <UniqueIdentifier>{d5b0dc97-9711-4ee8-95d8-8aa49b006817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\DLLs">
+      <UniqueIdentifier>{7257d8ed-91d1-47d9-a078-063c2664dfb3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -490,9 +490,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\CUtlFilenameSymbolTable.h">
       <Filter>CS2\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDLLs\Tier0Dll.h">
-      <Filter>GameDLLs</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\FileSystem.h">
       <Filter>CS2\Classes</Filter>
@@ -1789,6 +1786,9 @@
     </ClInclude>
     <ClInclude Include="GameClient\MemAlloc.h">
       <Filter>GameClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\DLLs\Tier0Dll.h">
+      <Filter>GameClient\DLLs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

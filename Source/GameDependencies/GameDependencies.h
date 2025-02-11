@@ -8,7 +8,7 @@
 #include "HudDeps.h"
 #include "MemAllocDeps.h"
 
-#include <GameDLLs/Tier0Dll.h>
+#include <GameClient/DLLs/Tier0Dll.h>
 #include <MemoryPatterns/MemoryPatterns.h>
 #include <GameClient/Panorama/PanoramaSymbols.h>
 #include <GameClient/Panorama/StylePropertiesSymbolsAndVMTs.h>

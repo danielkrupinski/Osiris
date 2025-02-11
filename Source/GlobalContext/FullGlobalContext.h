@@ -2,7 +2,7 @@
 
 #include <CS2/Classes/CLoopModeGame.h>
 #include <GameDependencies/GameDependencies.h>
-#include <GameDLLs/Tier0Dll.h>
+#include <GameClient/DLLs/Tier0Dll.h>
 #include <GameClient/Entities/EntityClassifier.h>
 #include <Features/Common/RenderingHookEntityLoop.h>
 #include <Features/Sound/Details/SoundWatcher.h>
