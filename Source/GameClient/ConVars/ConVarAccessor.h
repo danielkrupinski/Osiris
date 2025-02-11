@@ -6,7 +6,7 @@
 
 #include <CS2/Classes/ConVar.h>
 #include <CS2/Classes/ConVarTypes.h>
-#include <GameDependencies/ConVars.h>
+#include <GameClient/ConVars/ConVars.h>
 
 struct ConVarAccessorState {
     std::optional<bool> mp_teammates_are_enemies;

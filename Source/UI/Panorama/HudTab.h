@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Panorama/PanoramaDropDown.h>
+#include <GameClient/Panorama/PanoramaDropDown.h>
 #include <Platform/Macros/FunctionAttributes.h>
 
 template <typename HookContext>

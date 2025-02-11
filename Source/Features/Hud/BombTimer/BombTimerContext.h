@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Panorama/PanoramaImagePanel.h>
-#include <Panorama/PanoramaLabel.h>
-#include <Panorama/PanoramaUiEngine.h>
+#include <GameClient/Panorama/PanoramaImagePanel.h>
+#include <GameClient/Panorama/PanoramaLabel.h>
+#include <GameClient/Panorama/PanoramaUiEngine.h>
 #include <Utils/Lvalue.h>
 
 #include "BombSiteIconPanel.h"

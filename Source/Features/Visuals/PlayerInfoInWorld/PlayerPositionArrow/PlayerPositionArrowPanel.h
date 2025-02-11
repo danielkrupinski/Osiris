@@ -3,7 +3,7 @@
 #include <utility>
 
 #include <CS2/Constants/ColorConstants.h>
-#include <Entities/TeamNumber.h>
+#include <GameClient/Entities/TeamNumber.h>
 
 #include "PlayerPositionArrowColorType.h"
 #include "PlayerPositionArrowPanelContext.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DefusingAlertState.h"
-#include <Panorama/PanoramaUiEngine.h>
+#include <GameClient/Panorama/PanoramaUiEngine.h>
 
 template <typename HookContext>
 struct DefusingAlertUnloadHandler {

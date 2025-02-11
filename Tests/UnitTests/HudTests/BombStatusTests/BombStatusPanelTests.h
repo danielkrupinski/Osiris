@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <Hud/BombStatus/BombStatusPanel.h>
+#include <GameClient/Hud/BombStatus/BombStatusPanel.h>
 #include <Mocks/HudMocks/MockBombStatusPanelContext.h>
 #include <Mocks/MockHookContext.h>
 #include <Mocks/MockPanel.h>

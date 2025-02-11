@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Entities/EntityClassifier.h>
+#include <GameClient/Entities/EntityClassifier.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
 #include "DefuseKitOutlineGlow/DefuseKitOutlineGlow.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CPanoramaSymbol.h>
-#include <Panorama/PanoramaUiEngine.h>
+#include <GameClient/Panorama/PanoramaUiEngine.h>
 
 struct PanoramaSymbols {
     template <typename HookContext>

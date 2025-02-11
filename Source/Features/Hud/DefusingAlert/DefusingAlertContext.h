@@ -2,10 +2,10 @@
 
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
-#include <Panorama/PanelMarginParams.h>
-#include <Panorama/PanoramaImagePanel.h>
-#include <Panorama/PanoramaLabel.h>
-#include <Panorama/PanoramaUiEngine.h>
+#include <GameClient/Panorama/PanelMarginParams.h>
+#include <GameClient/Panorama/PanoramaImagePanel.h>
+#include <GameClient/Panorama/PanoramaLabel.h>
+#include <GameClient/Panorama/PanoramaUiEngine.h>
 #include <Utils/Lvalue.h>
 
 #include "DefusingAlertCondition.h"

@@ -1,12 +1,12 @@
 #pragma once
 
 #include <CS2/Classes/Entities/CCSPlayerController.h>
-#include <Entities/TeamNumber.h>
+#include <GameClient/Entities/TeamNumber.h>
 #include <Features/Visuals/ModelGlow/ModelGlow.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 #include <Features/Visuals/ModelGlow/PlayerModelGlow/PlayerModelGlow.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
-#include <GameClasses/EntitySystem.h>
+#include <GameClient/EntitySystem/EntitySystem.h>
 
 #include "PlayerPawnForModelGlowPreview.h"
 #include "PlayerModelGlowPreviewParams.h"

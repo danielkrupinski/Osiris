@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Panorama/PanelHandle.h>
+#include <GameClient/Panorama/PanelHandle.h>
 
 template <typename HookContext>
 struct BombStatusPanelContext {

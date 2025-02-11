@@ -9,13 +9,13 @@
 #include <CS2/Classes/Entities/C_BaseEntity.h>
 #include <CS2/Constants/EntityHandle.h>
 #include <CS2/Constants/SceneObjectAttributeNames.h>
-#include <Entities/LifeState.h>
-#include <Entities/TeamNumber.h>
+#include <GameClient/Entities/LifeState.h>
+#include <GameClient/Entities/TeamNumber.h>
 #include <MemoryPatterns/PatternTypes/EntityPatternTypes.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
-#include <GameClasses/EntityIdentity.h>
-#include <GameClasses/GameSceneNode.h>
+#include <GameClient/EntitySystem/EntityIdentity.h>
+#include <GameClient/GameSceneNode.h>
 #include "RenderComponent.h"
 
 template <typename HookContext>

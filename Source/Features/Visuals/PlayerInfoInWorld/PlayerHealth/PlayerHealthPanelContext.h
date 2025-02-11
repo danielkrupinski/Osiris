@@ -2,7 +2,7 @@
 
 #include <CS2/Panorama/CUIPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
-#include <Panorama/PanoramaUiPanel.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
 
 template <typename HookContext>
 class PlayerHealthPanelContext {

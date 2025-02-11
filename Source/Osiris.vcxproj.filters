@@ -19,9 +19,6 @@
     <Filter Include="Features\Visuals">
       <UniqueIdentifier>{3ee30a31-8dbf-4608-8064-4c996ce05980}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameClasses">
-      <UniqueIdentifier>{8f279e18-4344-42fb-8c01-6c773341568d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Hooks">
       <UniqueIdentifier>{1ee84f1c-3411-4068-816f-186260cb390d}</UniqueIdentifier>
     </Filter>
@@ -100,9 +97,6 @@
     <Filter Include="GameDependencies">
       <UniqueIdentifier>{901e83f2-b3da-4331-b723-3d4f22923b21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameClasses\Hud">
-      <UniqueIdentifier>{2e222bab-92a1-4491-8c17-1d29525d2a51}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Features\Hud\BombTimer">
       <UniqueIdentifier>{bbb4bb7f-d544-416a-96ea-1699bcd868de}</UniqueIdentifier>
     </Filter>
@@ -111,12 +105,6 @@
     </Filter>
     <Filter Include="Features\Hud\KillfeedPreserver">
       <UniqueIdentifier>{f7a2da12-9a16-4ded-af46-6bfc1d06d05a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Hud">
-      <UniqueIdentifier>{a8c17a78-a87c-41b1-92c7-fe7d9e31dffd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Hud\BombStatus">
-      <UniqueIdentifier>{afa1001a-8b4d-4392-881c-834b37ced23a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{deb809e0-b2a4-445d-a8a8-bc33739388a6}</UniqueIdentifier>
@@ -184,9 +172,6 @@
     <Filter Include="Features\Visuals\ModelGlow">
       <UniqueIdentifier>{47384024-831e-4229-8068-9acea325ff0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entities">
-      <UniqueIdentifier>{86690f48-0082-46a5-82f7-9fcc1ea24af0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Features\Visuals\ModelGlow\PlayerModelGlow">
       <UniqueIdentifier>{a681c408-258d-4c5d-be1d-6b1d0202f9cf}</UniqueIdentifier>
     </Filter>
@@ -211,14 +196,32 @@
     <Filter Include="Features\Visuals\ModelGlow\Preview">
       <UniqueIdentifier>{34c6b5fe-cc1f-4d35-97f4-fa7228496d57}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Panorama">
-      <UniqueIdentifier>{29f9a026-37c7-43b3-adbb-11b20e71aa23}</UniqueIdentifier>
+    <Filter Include="GameClient">
+      <UniqueIdentifier>{6c819c21-9a6b-4492-bca3-e8e3128123ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WorldToScreen">
-      <UniqueIdentifier>{75b3a57c-8756-4357-a582-e2fb07ee808f}</UniqueIdentifier>
+    <Filter Include="GameClient\ConVars">
+      <UniqueIdentifier>{5aed48bb-e1d1-4d60-815a-3ae885c1d1ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ConVars">
-      <UniqueIdentifier>{611671ec-895c-4a6d-8afd-0a26212553b5}</UniqueIdentifier>
+    <Filter Include="GameClient\Entities">
+      <UniqueIdentifier>{574b797e-f5ef-47fe-9747-b268a82ec727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\EntitySystem">
+      <UniqueIdentifier>{f962b6df-d7ad-4ade-b2b8-80d1609e9985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\Hud">
+      <UniqueIdentifier>{a4991d7e-dbb1-4827-a7ab-0162141377af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\Hud\BombStatus">
+      <UniqueIdentifier>{46a02b7d-493f-4369-a52a-f62790248b13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\Panorama">
+      <UniqueIdentifier>{e249f930-0688-4e10-ab0e-39849dd73dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\SceneSystem">
+      <UniqueIdentifier>{49e92197-ff69-4f53-a239-082b2970ef81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\WorldToScreen">
+      <UniqueIdentifier>{d5b0dc97-9711-4ee8-95d8-8aa49b006817}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -464,9 +467,6 @@
       <Filter>MemorySearch</Filter>
     </ClInclude>
     <ClInclude Include="BuildConfig.h" />
-    <ClInclude Include="GameClasses\MemAlloc.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\IMemAlloc.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
@@ -500,9 +500,6 @@
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\FileSystem.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\Sound.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
@@ -511,9 +508,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Constants\SoundNames.h">
       <Filter>CS2\Constants</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\FileNameSymbolTable.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="Features\Sound\FootstepVisualizer.h">
       <Filter>Features\Sound</Filter>
@@ -812,12 +806,6 @@
     <ClInclude Include="Utils\PrivateTag.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\ConVars.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\ConVarsBase.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\FileNameSymbolTableDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
@@ -826,9 +814,6 @@
     </ClInclude>
     <ClInclude Include="GameDependencies\MemAllocDeps.h">
       <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Hud\Hud.h">
-      <Filter>GameClasses\Hud</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h">
       <Filter>Features\Hud\BombTimer</Filter>
@@ -850,12 +835,6 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimer.h">
       <Filter>Features\Hud\BombTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Hud\DeathNotice.h">
-      <Filter>GameClasses\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\Hud\DeathNotices.h">
-      <Filter>GameClasses\Hud</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlert.h">
       <Filter>Features\Hud\DefusingAlert</Filter>
@@ -899,9 +878,6 @@
     <ClInclude Include="Features\Hud\HudFeaturesStates.h">
       <Filter>Features\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\GlobalVars.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\HudDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
@@ -920,35 +896,11 @@
     <ClInclude Include="Features\Hud\HudFeaturesUnloadHandler.h">
       <Filter>Features\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Hud\DeathNoticeContext.h">
-      <Filter>GameClasses\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Lvalue.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\Hud\HudContext.h">
-      <Filter>GameClasses\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="Hud\BombStatus\BombStatusPanelUnloadHandler.h">
-      <Filter>Hud\BombStatus</Filter>
-    </ClInclude>
-    <ClInclude Include="Hud\BombStatus\BombStatusPanel.h">
-      <Filter>Hud\BombStatus</Filter>
-    </ClInclude>
-    <ClInclude Include="Hud\BombStatus\BombStatusPanelContext.h">
-      <Filter>Hud\BombStatus</Filter>
-    </ClInclude>
-    <ClInclude Include="Hud\BombStatus\BombStatusPanelState.h">
-      <Filter>Hud\BombStatus</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Visibility.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Hud\BombStatus\BombStatusPanelManager.h">
-      <Filter>Hud\BombStatus</Filter>
-    </ClInclude>
-    <ClInclude Include="Hud\BombStatus\BombStatusPanelManagerContext.h">
-      <Filter>Hud\BombStatus</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h">
       <Filter>Features\Hud\PostRoundTimer</Filter>
@@ -1040,9 +992,6 @@
     <ClInclude Include="OutlineGlow\GlowSceneObjectsState.h">
       <Filter>OutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\SceneSystem.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\RenderComponentPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -1061,12 +1010,6 @@
     <ClInclude Include="CS2\Classes\SceneObjectUpdaterHandle_t.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\SceneObjectUpdater.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\SceneObjectUpdaters.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h">
       <Filter>GameDependencies</Filter>
     </ClInclude>
@@ -1084,12 +1027,6 @@
     </ClInclude>
     <ClInclude Include="Utils\Optional.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\EntitySystem.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\GameSceneNode.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlow.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
@@ -1147,9 +1084,6 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClasses\SceneObject.h">
-      <Filter>GameClasses</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\C_BaseCSGrenadeProjectile.h">
       <Filter>CS2\Classes\Entities</Filter>
@@ -1469,48 +1403,6 @@
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h">
       <Filter>Features\Visuals\ModelGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\BaseEntity.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\BaseModelEntity.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\BaseWeapon.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\C4.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\GameRules.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\GlowProperty.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\HostageServices.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\PlantedC4.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\PlayerController.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\PlayerPawn.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\PlayerWeapons.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\RenderComponent.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\SmokeGrenadeProjectile.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\WeaponServices.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\SceneObjectPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
@@ -1607,9 +1499,6 @@
     <ClInclude Include="CS2\Panorama\CUI_MapPlayerPreviewPanel.h">
       <Filter>CS2\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\PreviewPlayer.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\BaseEntityForModelGlowPreview.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
@@ -1631,92 +1520,11 @@
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerPawnForModelGlowPreview.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
-    <ClInclude Include="GameClasses\EntityIdentity.h">
-      <Filter>GameClasses</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\PatternTypes\MapPlayerPreviewPanelPatternTypes.h">
       <Filter>MemoryPatterns\PatternTypes</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\MapPlayerPreviewPanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\ClientPanel.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\MapPlayerPreviewPanel.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanelAlignmentParams.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanelFactory.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanelFontParams.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanelHandle.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanelMarginParams.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaDropDown.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaImagePanel.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaImagePanelContext.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaLabel.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaUiEngine.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaUiPanel.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaUiPanelChildPanels.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaUiPanelClasses.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaUiPanelContext.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaUiPanelIterator.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaUiPanelMethodInvoker.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\TopLevelWindow.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanelShadowParams.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanelStylePropertyFactory.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaSymbols.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaTransformations.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\PanoramaTransformFactory.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\StylePropertiesSymbolsAndVMTs.h">
-      <Filter>Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="Panorama\StylePropertySymbolMap.h">
-      <Filter>Panorama</Filter>
     </ClInclude>
     <ClInclude Include="GlobalContext\UnloadFlag.h">
       <Filter>GlobalContext</Filter>
@@ -1726,33 +1534,6 @@
     </ClInclude>
     <ClInclude Include="Utils\Bits.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldToScreen\ClipSpaceCoordinates.h">
-      <Filter>WorldToScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldToScreen\NormalizedDeviceCoordinates.h">
-      <Filter>WorldToScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldToScreen\ViewToProjectionMatrix.h">
-      <Filter>WorldToScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldToScreen\WorldToClipSpaceConverter.h">
-      <Filter>WorldToScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\EntityClassifier.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\LifeState.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\TeamNumber.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="ConVars\ConVarAccessor.h">
-      <Filter>ConVars</Filter>
-    </ClInclude>
-    <ClInclude Include="ConVars\ConVarFinder.h">
-      <Filter>ConVars</Filter>
     </ClInclude>
     <ClInclude Include="Features\Common\FeatureToggle.h">
       <Filter>Features\Common</Filter>
@@ -1783,6 +1564,231 @@
     </ClInclude>
     <ClInclude Include="Utils\FileSlice.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\ConVars\ConVarAccessor.h">
+      <Filter>GameClient\ConVars</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\ConVars\ConVarFinder.h">
+      <Filter>GameClient\ConVars</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\ConVars\ConVars.h">
+      <Filter>GameClient\ConVars</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\ConVars\ConVarsBase.h">
+      <Filter>GameClient\ConVars</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\BaseEntity.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\BaseModelEntity.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\BaseWeapon.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\C4.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\EntityClassifier.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\GameRules.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\GlowProperty.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\HostageServices.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\LifeState.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\PlantedC4.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\PlayerController.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\PlayerPawn.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\PlayerWeapons.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\PreviewPlayer.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\RenderComponent.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\SmokeGrenadeProjectile.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\TeamNumber.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\WeaponServices.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\EntitySystem\EntityIdentity.h">
+      <Filter>GameClient\EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\EntitySystem\EntitySystem.h">
+      <Filter>GameClient\EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\DeathNotice.h">
+      <Filter>GameClient\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\DeathNoticeContext.h">
+      <Filter>GameClient\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\DeathNotices.h">
+      <Filter>GameClient\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\Hud.h">
+      <Filter>GameClient\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\HudContext.h">
+      <Filter>GameClient\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanel.h">
+      <Filter>GameClient\Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelContext.h">
+      <Filter>GameClient\Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManager.h">
+      <Filter>GameClient\Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManagerContext.h">
+      <Filter>GameClient\Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelState.h">
+      <Filter>GameClient\Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelUnloadHandler.h">
+      <Filter>GameClient\Hud\BombStatus</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\ClientPanel.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\MapPlayerPreviewPanel.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanelAlignmentParams.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanelFactory.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanelFontParams.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanelHandle.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanelMarginParams.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanelShadowParams.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanelStylePropertyFactory.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaDropDown.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaImagePanel.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaImagePanelContext.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaLabel.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaSymbols.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaTransformations.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaTransformFactory.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaUiEngine.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaUiPanel.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelChildPanels.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelClasses.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelContext.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelIterator.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelMethodInvoker.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\StylePropertiesSymbolsAndVMTs.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\StylePropertySymbolMap.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\TopLevelWindow.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\SceneSystem\SceneObject.h">
+      <Filter>GameClient\SceneSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\SceneSystem\SceneObjectAttributes.h">
+      <Filter>GameClient\SceneSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\SceneSystem\SceneObjectUpdater.h">
+      <Filter>GameClient\SceneSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\SceneSystem\SceneObjectUpdaters.h">
+      <Filter>GameClient\SceneSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\SceneSystem\SceneSystem.h">
+      <Filter>GameClient\SceneSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\WorldToScreen\ClipSpaceCoordinates.h">
+      <Filter>GameClient\WorldToScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\WorldToScreen\NormalizedDeviceCoordinates.h">
+      <Filter>GameClient\WorldToScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\WorldToScreen\ViewToProjectionMatrix.h">
+      <Filter>GameClient\WorldToScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\WorldToScreen\WorldToClipSpaceConverter.h">
+      <Filter>GameClient\WorldToScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\FileNameSymbolTable.h">
+      <Filter>GameClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\FileSystem.h">
+      <Filter>GameClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\GameSceneNode.h">
+      <Filter>GameClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\GlobalVars.h">
+      <Filter>GameClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\MemAlloc.h">
+      <Filter>GameClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

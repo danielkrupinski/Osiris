@@ -3,8 +3,8 @@
 #include <utility>
 
 #include <Common/Visibility.h>
-#include <Entities/C4.h>
-#include <Panorama/PanoramaImagePanel.h>
+#include <GameClient/Entities/C4.h>
+#include <GameClient/Panorama/PanoramaImagePanel.h>
 #include <Utils/CString.h>
 #include <Utils/StringBuilder.h>
 #include "PlayerActiveWeaponIconPanelContext.h"

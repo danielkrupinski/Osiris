@@ -15,7 +15,7 @@
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
 #include <CS2/Classes/EntitySystem/CEntityClass.h>
 #include <CS2/Constants/EntityClasses.h>
-#include <GameClasses/EntitySystem.h>
+#include <GameClient/EntitySystem/EntitySystem.h>
 #include <Utils/TypeIndex.h>
 
 struct EntityTypeInfo {

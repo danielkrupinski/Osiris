@@ -2,12 +2,12 @@
 
 #include <utility>
 
-#include <Panorama/PanoramaTransformations.h>
+#include <GameClient/Panorama/PanoramaTransformations.h>
 #include <Features/Sound/Details/PlayedSound.h>
 #include <Features/Sound/Details/SoundWatcher.h>
 #include <Features/Common/FeatureToggle.h>
-#include <WorldToScreen/ViewToProjectionMatrix.h>
-#include <WorldToScreen/WorldToClipSpaceConverter.h>
+#include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
+#include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
 #include <Features/Common/InWorldPanels.h>
 #include <Hooks/ViewRenderHook.h>
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>

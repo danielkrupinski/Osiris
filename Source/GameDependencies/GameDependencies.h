@@ -2,7 +2,7 @@
 
 #include <optional>
 
-#include "ConVars.h"
+#include <GameClient/ConVars/ConVars.h>
 #include "FileNameSymbolTableDeps.h"
 #include "GlowSceneObjectDeps.h"
 #include "HudDeps.h"
@@ -10,9 +10,9 @@
 
 #include <GameDLLs/Tier0Dll.h>
 #include <MemoryPatterns/MemoryPatterns.h>
-#include <Panorama/PanoramaSymbols.h>
-#include <Panorama/StylePropertiesSymbolsAndVMTs.h>
-#include <Panorama/StylePropertySymbolMap.h>
+#include <GameClient/Panorama/PanoramaSymbols.h>
+#include <GameClient/Panorama/StylePropertiesSymbolsAndVMTs.h>
+#include <GameClient/Panorama/StylePropertySymbolMap.h>
 #include <Platform/VmtFinder.h>
 
 struct GameDependencies {

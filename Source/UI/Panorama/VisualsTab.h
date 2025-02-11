@@ -2,7 +2,7 @@
 
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerStateIcons/PlayerStateIconsToShow.h>
-#include <Panorama/PanoramaDropDown.h>
+#include <GameClient/Panorama/PanoramaDropDown.h>
 #include <Platform/Macros/FunctionAttributes.h>
 
 template <typename HookContext>

@@ -3,8 +3,8 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
-#include <Panorama/PanelShadowParams.h>
-#include <Panorama/PanelAlignmentParams.h>
+#include <GameClient/Panorama/PanelShadowParams.h>
+#include <GameClient/Panorama/PanelAlignmentParams.h>
 
 namespace player_position_arrow_panel_params
 {

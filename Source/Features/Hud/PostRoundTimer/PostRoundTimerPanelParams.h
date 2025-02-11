@@ -2,7 +2,7 @@
 
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
-#include <Panorama/PanelFontParams.h>
+#include <GameClient/Panorama/PanelFontParams.h>
 
 namespace post_round_timer_panel_params::container_panel_params
 {

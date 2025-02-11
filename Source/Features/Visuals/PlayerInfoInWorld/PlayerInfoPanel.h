@@ -6,11 +6,11 @@
 
 #include <CS2/Classes/Vector.h>
 #include <CS2/Panorama/CUIPanel.h>
-#include <WorldToScreen/ViewToProjectionMatrix.h>
-#include <WorldToScreen/WorldToClipSpaceConverter.h>
+#include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
+#include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
-#include <Panorama/PanoramaTransformations.h>
-#include <Panorama/PanoramaUiPanel.h>
+#include <GameClient/Panorama/PanoramaTransformations.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
 #include <Utils/TypeIndex.h>
 #include "PlayerInfoPanelCacheEntry.h"
 #include "PlayerInfoPanelTypes.h"

@@ -3,7 +3,7 @@
 #include <CS2/Classes/CLoopModeGame.h>
 #include <GameDependencies/GameDependencies.h>
 #include <GameDLLs/Tier0Dll.h>
-#include <Entities/EntityClassifier.h>
+#include <GameClient/Entities/EntityClassifier.h>
 #include <Features/Common/RenderingHookEntityLoop.h>
 #include <Features/Sound/Details/SoundWatcher.h>
 #include <Features/Common/InWorldPanelsState.h>
@@ -16,10 +16,10 @@
 #include "UnloadFlag.h"
 #include <Hooks/Hooks.h>
 #include <Hooks/PeepEventsHook.h>
-#include <Hud/BombStatus/BombStatusPanelManager.h>
-#include <Hud/BombStatus/BombStatusPanelManagerContext.h>
-#include <Hud/BombStatus/BombStatusPanelState.h>
-#include <Hud/BombStatus/BombStatusPanelUnloadHandler.h>
+#include <GameClient/Hud/BombStatus/BombStatusPanelManager.h>
+#include <GameClient/Hud/BombStatus/BombStatusPanelManagerContext.h>
+#include <GameClient/Hud/BombStatus/BombStatusPanelState.h>
+#include <GameClient/Hud/BombStatus/BombStatusPanelUnloadHandler.h>
 #include <MemorySearch/PatternFinder.h>
 #include <MemorySearch/PatternSearchResults.h>
 #include <UI/Panorama/PanoramaGUI.h>

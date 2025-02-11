@@ -2,7 +2,7 @@
 
 #include <CS2/Panorama/CImagePanel.h>
 #include <MemoryPatterns/PatternTypes/PanoramaImagePanelPatternTypes.h>
-#include <Panorama/PanoramaUiPanel.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
 
 template <typename HookContext>
 struct PanoramaImagePanelContext {

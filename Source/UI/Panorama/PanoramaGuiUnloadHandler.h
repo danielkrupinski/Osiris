@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Panorama/PanoramaUiEngine.h>
+#include <GameClient/Panorama/PanoramaUiEngine.h>
 
 template <typename HookContext>
 struct PanoramaGuiUnloadHandler {

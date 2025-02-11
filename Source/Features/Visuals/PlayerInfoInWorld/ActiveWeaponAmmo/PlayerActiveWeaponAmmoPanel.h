@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "PlayerActiveWeaponAmmoPanelContext.h"
-#include <Panorama/PanoramaLabel.h>
+#include <GameClient/Panorama/PanoramaLabel.h>
 #include <Utils/StringBuilder.h>
 
 template <typename HookContext, typename Context = PlayerActiveWeaponAmmoPanelContext<HookContext>>

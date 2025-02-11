@@ -5,7 +5,7 @@
 #include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldState.h>
-#include <Panorama/PanoramaLabel.h>
+#include <GameClient/Panorama/PanoramaLabel.h>
 #include <Utils/StringBuilder.h>
 
 #include "PlayerHealthPanelContext.h"

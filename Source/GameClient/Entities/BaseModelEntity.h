@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/C_BaseModelEntity.h>
-#include <Entities/BaseEntity.h>
+#include <GameClient/Entities/BaseEntity.h>
 #include <MemoryPatterns/PatternTypes/BaseModelEntityPatternTypes.h>
 
 #include "GlowProperty.h"

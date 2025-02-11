@@ -1,22 +1,22 @@
 #pragma once
 
-#include <Entities/GameRules.h>
-#include <Entities/PlantedC4.h>
-#include <Entities/PlayerController.h>
+#include <GameClient/Entities/GameRules.h>
+#include <GameClient/Entities/PlantedC4.h>
+#include <GameClient/Entities/PlayerController.h>
 #include <Features/Common/InWorldPanelsPerHookState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCachePerHookState.h>
-#include <ConVars/ConVarAccessor.h>
-#include <ConVars/ConVarFinder.h>
-#include <GameClasses/FileSystem.h>
-#include <GameClasses/Hud/Hud.h>
-#include <GameClasses/Hud/HudContext.h>
+#include <GameClient/ConVars/ConVarAccessor.h>
+#include <GameClient/ConVars/ConVarFinder.h>
+#include <GameClient/FileSystem.h>
+#include <GameClient/Hud/Hud.h>
+#include <GameClient/Hud/HudContext.h>
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/CvarPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/GameRulesPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/PlantedC4PatternTypes.h>
-#include <Panorama/PanelFactory.h>
-#include <GameClasses/GlobalVars.h>
-#include <Panorama/PanoramaTransformFactory.h>
+#include <GameClient/Panorama/PanelFactory.h>
+#include <GameClient/GlobalVars.h>
+#include <GameClient/Panorama/PanoramaTransformFactory.h>
 
 struct BombStatusPanelState;
 struct FeaturesStates;

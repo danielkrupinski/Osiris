@@ -3,7 +3,7 @@
 #include <utility>
 
 #include <CS2/Classes/Entities/WeaponEntities.h>
-#include <Entities/EntityClassifier.h>
+#include <GameClient/Entities/EntityClassifier.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include "WeaponOutlineGlowContext.h"
 

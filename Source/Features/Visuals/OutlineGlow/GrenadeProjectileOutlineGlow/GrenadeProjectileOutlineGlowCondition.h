@@ -3,8 +3,8 @@
 #include <utility>
 
 #include <CS2/Classes/Entities/GrenadeProjectiles.h>
-#include <Entities/SmokeGrenadeProjectile.h>
-#include <Entities/EntityClassifier.h>
+#include <GameClient/Entities/SmokeGrenadeProjectile.h>
+#include <GameClient/Entities/EntityClassifier.h>
 
 template <typename Context>
 class GrenadeProjectileOutlineGlowCondition {

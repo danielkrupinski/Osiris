@@ -2,8 +2,8 @@
 
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUIPanel.h>
-#include <Panorama/PanoramaImagePanel.h>
-#include <Panorama/PanoramaTransformations.h>
+#include <GameClient/Panorama/PanoramaImagePanel.h>
+#include <GameClient/Panorama/PanoramaTransformations.h>
 #include <Utils/Lvalue.h>
 
 #include "ActiveWeaponAmmo/ActiveWeaponAmmoPanelParams.h"

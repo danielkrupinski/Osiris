@@ -3,7 +3,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <Hud/BombStatus/BombStatusPanelManager.h>
+#include <GameClient/Hud/BombStatus/BombStatusPanelManager.h>
 
 #include <Mocks/BombTimerMocks/MockBombTimer.h>
 #include <Mocks/HudMocks/MockBombStatusPanel.h>

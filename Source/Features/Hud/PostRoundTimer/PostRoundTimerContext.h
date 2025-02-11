@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Panorama/PanoramaLabel.h>
-#include <Panorama/PanelHandle.h>
+#include <GameClient/Panorama/PanoramaLabel.h>
+#include <GameClient/Panorama/PanelHandle.h>
 
 #include "PostRoundTimerCondition.h"
 #include "PostRoundTimerPanel.h"

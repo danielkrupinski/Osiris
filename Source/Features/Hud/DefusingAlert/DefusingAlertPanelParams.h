@@ -3,9 +3,9 @@
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/StyleEnums.h>
-#include <Panorama/PanelAlignmentParams.h>
-#include <Panorama/PanelFontParams.h>
-#include <Panorama/PanelMarginParams.h>
+#include <GameClient/Panorama/PanelAlignmentParams.h>
+#include <GameClient/Panorama/PanelFontParams.h>
+#include <GameClient/Panorama/PanelMarginParams.h>
 
 namespace defusing_alert_panel_params::timer_text_panel_params
 {

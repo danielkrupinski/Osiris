@@ -9,10 +9,10 @@
 #include <CS2/Panorama/StyleEnums.h>
 
 #include <CS2/Panorama/StyleProperties.h>
-#include <GameClasses/MemAlloc.h>
-#include <Panorama/PanelAlignmentParams.h>
-#include <Panorama/PanelFontParams.h>
-#include <Panorama/PanelMarginParams.h>
+#include <GameClient/MemAlloc.h>
+#include <GameClient/Panorama/PanelAlignmentParams.h>
+#include <GameClient/Panorama/PanelFontParams.h>
+#include <GameClient/Panorama/PanelMarginParams.h>
 
 #include "PanelShadowParams.h"
 #include "StylePropertiesSymbolsAndVMTs.h"

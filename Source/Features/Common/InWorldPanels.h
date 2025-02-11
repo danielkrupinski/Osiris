@@ -11,8 +11,8 @@
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCache.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelTypes.h>
-#include <Panorama/PanelHandle.h>
-#include <Panorama/PanoramaUiPanel.h>
+#include <GameClient/Panorama/PanelHandle.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
 #include <Utils/Lvalue.h>
 
 #include "InWorldPanelIndex.h"

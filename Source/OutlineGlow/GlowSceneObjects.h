@@ -3,7 +3,7 @@
 #include <cstring>
 
 #include <CS2/Classes/CSceneObject.h>
-#include <GameClasses/SceneSystem.h>
+#include <GameClient/SceneSystem/SceneSystem.h>
 #include <MemoryAllocation/MemoryAllocator.h>
 
 #include "GlowSceneObject.h"

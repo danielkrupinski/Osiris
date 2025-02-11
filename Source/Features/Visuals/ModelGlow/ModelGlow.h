@@ -4,11 +4,11 @@
 #include <CS2/Classes/Entities/CBaseAnimGraph.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/WeaponEntities.h>
-#include <Entities/BaseWeapon.h>
-#include <Entities/C4.h>
-#include <Entities/PlantedC4.h>
-#include <Entities/PlayerPawn.h>
-#include <Entities/EntityClassifier.h>
+#include <GameClient/Entities/BaseWeapon.h>
+#include <GameClient/Entities/C4.h>
+#include <GameClient/Entities/PlantedC4.h>
+#include <GameClient/Entities/PlayerPawn.h>
+#include <GameClient/Entities/EntityClassifier.h>
 
 #include "DefuseKitModelGlow/DefuseKitModelGlow.h"
 #include "DroppedBombModelGlow/DroppedBombModelGlow.h"

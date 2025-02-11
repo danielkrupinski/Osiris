@@ -10,10 +10,10 @@
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
 #include <CS2/Constants/DllNames.h>
-#include <Entities/BaseEntity.h>
-#include <Entities/BaseWeapon.h>
-#include <Entities/PlayerPawn.h>
-#include <Entities/PreviewPlayer.h>
+#include <GameClient/Entities/BaseEntity.h>
+#include <GameClient/Entities/BaseWeapon.h>
+#include <GameClient/Entities/PlayerPawn.h>
+#include <GameClient/Entities/PreviewPlayer.h>
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserver.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>

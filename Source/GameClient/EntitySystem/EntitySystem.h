@@ -9,7 +9,7 @@
 #include <CS2/Classes/EntitySystem/CEntityIdentity.h>
 #include <CS2/Classes/EntitySystem/CEntityIndex.h>
 #include <CS2/Classes/EntitySystem/CGameEntitySystem.h>
-#include <GameClasses/EntityIdentity.h>
+#include <GameClient/EntitySystem/EntityIdentity.h>
 #include <MemoryPatterns/PatternTypes/EntitySystemPatternTypes.h>
 
 template <typename HookContext>

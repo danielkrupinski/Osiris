@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CS2/Constants/ColorConstants.h>
-#include <Entities/TeamNumber.h>
+#include <GameClient/Entities/TeamNumber.h>
 #include <Utils/StringBuilder.h>
 
 template <typename Context>

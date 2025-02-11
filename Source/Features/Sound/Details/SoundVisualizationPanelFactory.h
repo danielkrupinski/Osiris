@@ -6,8 +6,8 @@
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/CUIPanel.h>
 #include <CS2/Panorama/StyleEnums.h>
-#include <Panorama/PanelAlignmentParams.h>
-#include <Panorama/PanelShadowParams.h>
+#include <GameClient/Panorama/PanelAlignmentParams.h>
+#include <GameClient/Panorama/PanelShadowParams.h>
 #include <Utils/Lvalue.h>
 
 #include "SoundVisualizationPanelProperties.h"

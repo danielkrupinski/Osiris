@@ -3,7 +3,7 @@
 #include <CS2/Classes/CUtlVector.h>
 #include <CS2/Classes/Entities/C_BaseEntity.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
-#include <GameClasses/EntitySystem.h>
+#include <GameClient/EntitySystem/EntitySystem.h>
 #include <Utils/Lvalue.h>
 
 #include "BaseEntity.h"

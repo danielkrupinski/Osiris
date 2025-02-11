@@ -10,10 +10,10 @@
 #include <CS2/Panorama/CUIPanel.h>
 #include <CS2/Panorama/StyleEnums.h>
 #include <CS2/Panorama/Transform3D.h>
-#include <Panorama/PanelAlignmentParams.h>
-#include <Panorama/PanelFontParams.h>
-#include <Panorama/PanelMarginParams.h>
-#include <Panorama/PanelShadowParams.h>
+#include <GameClient/Panorama/PanelAlignmentParams.h>
+#include <GameClient/Panorama/PanelFontParams.h>
+#include <GameClient/Panorama/PanelMarginParams.h>
+#include <GameClient/Panorama/PanelShadowParams.h>
 #include <Utils/Lvalue.h>
 
 #include "PanoramaUiPanelContext.h"

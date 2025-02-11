@@ -3,9 +3,9 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
-#include <Panorama/PanelShadowParams.h>
-#include <Panorama/PanelAlignmentParams.h>
-#include <Panorama/PanelMarginParams.h>
+#include <GameClient/Panorama/PanelShadowParams.h>
+#include <GameClient/Panorama/PanelAlignmentParams.h>
+#include <GameClient/Panorama/PanelMarginParams.h>
 
 namespace player_state_icons_panel_params::container_panel_params
 {

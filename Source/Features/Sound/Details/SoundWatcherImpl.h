@@ -8,7 +8,7 @@
 
 #include <CS2/Classes/Sound.h>
 #include <CS2/Classes/Vector.h>
-#include <GameClasses/FileSystem.h>
+#include <GameClient/FileSystem.h>
 #include <MemoryPatterns/PatternTypes/SoundSystemPatternTypes.h>
 #include "PlayedSound.h"
 #include "WatchedSounds.h"

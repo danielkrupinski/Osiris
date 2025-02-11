@@ -5,7 +5,7 @@
 
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/Transform3D.h>
-#include <GameClasses/MemAlloc.h>
+#include <GameClient/MemAlloc.h>
 
 template <typename HookContext>
 struct PanoramaTransformFactory {

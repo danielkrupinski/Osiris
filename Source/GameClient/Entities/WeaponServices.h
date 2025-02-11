@@ -4,7 +4,7 @@
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <CS2/Constants/EntityHandle.h>
-#include <GameClasses/EntitySystem.h>
+#include <GameClient/EntitySystem/EntitySystem.h>
 #include <MemoryPatterns/PatternTypes/WeaponServicesPatternTypes.h>
 #include "BaseWeapon.h"
 #include "PlayerWeapons.h"
