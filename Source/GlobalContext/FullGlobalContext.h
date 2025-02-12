@@ -1,7 +1,12 @@
 #pragma once
 
 #include <CS2/Classes/CLoopModeGame.h>
-#include <GameDependencies/GameDependencies.h>
+#include <GameClient/ConVars/ConVars.h>
+#include <GameClient/FileNameSymbolTableState.h>
+#include <GameClient/Hud/HudState.h>
+#include <GameClient/MemAllocState.h>
+#include <GameClient/Panorama/PanoramaSymbols.h>
+#include <OutlineGlow/GlowSceneObjectState.h>
 #include <GameClient/DLLs/Tier0Dll.h>
 #include <GameClient/Entities/EntityClassifier.h>
 #include <Features/Common/RenderingHookEntityLoop.h>
@@ -12,6 +17,7 @@
 #include <Features/FeaturesUnloadHandler.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheState.h>
+#include <MemoryPatterns/MemoryPatterns.h>
 #include <MemorySearch/PatternNotFoundLogger.h>
 #include "UnloadFlag.h"
 #include <Hooks/Hooks.h>
@@ -35,17 +41,16 @@
 #include <CS2/Classes/ConVarTypes.h>
 
 struct FullGlobalContext {
-    FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns) noexcept
+    FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns, Tier0Dll tier0Dll) noexcept
         : clientPatternSearchResults{memoryPatterns.patternFinders.clientPatternFinder.findPatterns(kClientPatterns)}
         , sceneSystemPatternSearchResults{memoryPatterns.patternFinders.sceneSystemPatternFinder.findPatterns(kSceneSystemPatterns)}
         , tier0PatternSearchResults{memoryPatterns.patternFinders.tier0PatternFinder.findPatterns(kTier0Patterns)}
         , fileSystemPatternSearchResults{memoryPatterns.patternFinders.fileSystemPatternFinder.findPatterns(kFileSystemPatterns)}
         , soundSystemPatternSearchResults{memoryPatterns.patternFinders.soundSystemPatternFinder.findPatterns(kSoundSystemPatterns)}
         , panoramaPatternSearchResults{memoryPatterns.patternFinders.panoramaPatternFinder.findPatterns(kPanoramaPatterns)}
-        , gameDependencies{
-            memoryPatterns,
-            VmtFinder{panoramaDLL.getVmtFinderParams()},
-            Tier0Dll{}}
+        , fileNameSymbolTableState{tier0Dll}
+        , memAllocState{tier0Dll}
+        , stylePropertySymbolsAndVMTs{StylePropertySymbolMap{memoryPatterns.panelStylePatterns().stylePropertiesSymbols()}, VmtFinder{panoramaDLL.getVmtFinderParams()}}
         , hooks{
             peepEventsHook,
             clientPatternSearchResults.get<ViewRenderPointer>(),
@@ -64,7 +69,13 @@ struct FullGlobalContext {
     PatternSearchResults<decltype(kFileSystemPatterns)> fileSystemPatternSearchResults;
     PatternSearchResults<decltype(kSoundSystemPatterns)> soundSystemPatternSearchResults;
     PatternSearchResults<decltype(kPanoramaPatterns)> panoramaPatternSearchResults;
-    GameDependencies gameDependencies;
+    FileNameSymbolTableState fileNameSymbolTableState;
+    GlowSceneObjectState glowSceneObjectState;
+    HudState hudState;
+    MemAllocState memAllocState;
+    StylePropertiesSymbolsAndVMTs stylePropertySymbolsAndVMTs;
+    std::optional<ConVars> conVars;
+    std::optional<PanoramaSymbols> panoramaSymbols;
     Hooks hooks;
     SoundWatcherState soundWatcherState;
     FeaturesStates featuresStates;

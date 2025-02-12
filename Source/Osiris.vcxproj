@@ -278,6 +278,7 @@
     <ClInclude Include="GameClient\EntitySystem\EntityIdentity.h" />
     <ClInclude Include="GameClient\EntitySystem\EntitySystem.h" />
     <ClInclude Include="GameClient\FileNameSymbolTable.h" />
+    <ClInclude Include="GameClient\FileNameSymbolTableState.h" />
     <ClInclude Include="GameClient\FileSystem.h" />
     <ClInclude Include="GameClient\GameSceneNode.h" />
     <ClInclude Include="GameClient\GlobalVars.h" />
@@ -292,7 +293,9 @@
     <ClInclude Include="GameClient\Hud\DeathNotices.h" />
     <ClInclude Include="GameClient\Hud\Hud.h" />
     <ClInclude Include="GameClient\Hud\HudContext.h" />
+    <ClInclude Include="GameClient\Hud\HudState.h" />
     <ClInclude Include="GameClient\MemAlloc.h" />
+    <ClInclude Include="GameClient\MemAllocState.h" />
     <ClInclude Include="GameClient\Panorama\ClientPanel.h" />
     <ClInclude Include="GameClient\Panorama\MapPlayerPreviewPanel.h" />
     <ClInclude Include="GameClient\Panorama\PanelAlignmentParams.h" />
@@ -328,11 +331,6 @@
     <ClInclude Include="GameClient\WorldToScreen\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="GameClient\WorldToScreen\ViewToProjectionMatrix.h" />
     <ClInclude Include="GameClient\WorldToScreen\WorldToClipSpaceConverter.h" />
-    <ClInclude Include="GameDependencies\FileNameSymbolTableDeps.h" />
-    <ClInclude Include="GameDependencies\GameDependencies.h" />
-    <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h" />
-    <ClInclude Include="GameDependencies\HudDeps.h" />
-    <ClInclude Include="GameDependencies\MemAllocDeps.h" />
     <ClInclude Include="GlobalContext\DeferredCompleteObject.h" />
     <ClInclude Include="GlobalContext\FullGlobalContext.h" />
     <ClInclude Include="GlobalContext\GlobalContext.h" />
@@ -448,6 +446,7 @@
     <ClInclude Include="OutlineGlow\GlowSceneObjectPointer.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjects.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectsState.h" />
+    <ClInclude Include="OutlineGlow\GlowSceneObjectState.h" />
     <ClInclude Include="Platform\DynamicLibrary.h" />
     <ClInclude Include="Platform\Macros\CallingConventions.h" />
     <ClInclude Include="Platform\Macros\CallStack.h" />

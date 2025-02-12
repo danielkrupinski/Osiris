@@ -32,11 +32,6 @@ struct HookDependencies {
     {
     }
 
-    [[nodiscard]] GameDependencies& gameDependencies() const noexcept
-    {
-        return fullGlobalContext.gameDependencies;
-    }
-
     [[nodiscard]] SoundWatcherState& soundWatcherState() const noexcept
     {
         return fullGlobalContext.soundWatcherState;
@@ -130,13 +125,13 @@ struct HookDependencies {
 
     [[nodiscard]] auto getConVarAccessor() noexcept
     {
-        if (!fullGlobalContext.gameDependencies.conVars.has_value()) {
+        if (!fullGlobalContext.conVars.has_value()) {
             const auto cvar = fullGlobalContext.clientPatternSearchResults.template get<CvarPointer>();
             if (cvar && *cvar && fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>()) {
-                fullGlobalContext.gameDependencies.conVars.emplace(ConVarFinder{*fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>().of(*cvar).get()});
+                fullGlobalContext.conVars.emplace(ConVarFinder{*fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>().of(*cvar).get()});
             }
         }
-        return ConVarAccessor{*this, *fullGlobalContext.gameDependencies.conVars, conVarAccessorState};
+        return ConVarAccessor{*this, *fullGlobalContext.conVars, conVarAccessorState};
     }
 
     template <typename T, typename... Args>
@@ -163,7 +158,7 @@ struct HookDependencies {
 
     [[nodiscard]] const auto& panoramaSymbols() noexcept
     {
-        auto& symbols = fullGlobalContext.gameDependencies.panoramaSymbols;
+        auto& symbols = fullGlobalContext.panoramaSymbols;
         if (!symbols.has_value())
             symbols.emplace(*this);
         return *symbols;
@@ -197,6 +192,31 @@ struct HookDependencies {
     [[nodiscard]] const auto& panoramaPatternSearchResults() noexcept
     {
         return fullGlobalContext.panoramaPatternSearchResults;
+    }
+
+    [[nodiscard]] auto& hudState() noexcept
+    {
+        return fullGlobalContext.hudState;
+    }
+
+    [[nodiscard]] auto& fileNameSymbolTableState() noexcept
+    {
+        return fullGlobalContext.fileNameSymbolTableState;
+    }
+
+    [[nodiscard]] auto& memAllocState() noexcept
+    {
+        return fullGlobalContext.memAllocState;
+    }
+
+    [[nodiscard]] auto& glowSceneObjectState() noexcept
+    {
+        return fullGlobalContext.glowSceneObjectState;
+    }
+
+    [[nodiscard]] auto& stylePropertySymbolsAndVMTs() noexcept
+    {
+        return fullGlobalContext.stylePropertySymbolsAndVMTs;
     }
 
 private:

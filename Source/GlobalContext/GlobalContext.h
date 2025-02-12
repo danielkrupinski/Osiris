@@ -152,7 +152,8 @@ private:
             partialContext.peepEventsHook,
             partialContext.clientDLL,
             partialContext.panoramaDLL,
-            MemoryPatterns{partialContext.patternFinders}
+            MemoryPatterns{partialContext.patternFinders},
+            Tier0Dll{}
         );
 
         return true;

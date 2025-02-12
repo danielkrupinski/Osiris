@@ -123,7 +123,7 @@ struct PanoramaUiPanelContext {
 
     [[nodiscard]] auto propertyFactory() const noexcept
     {
-        return hookContext.template make<PanelStylePropertyFactory>(hookContext.gameDependencies().stylePropertiesSymbolsAndVMTs);
+        return hookContext.template make<PanelStylePropertyFactory>(hookContext.stylePropertySymbolsAndVMTs());
     }
 
     [[nodiscard]] decltype(auto) nullPanel() const noexcept

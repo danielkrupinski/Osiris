@@ -27,7 +27,7 @@ public:
 private:
     [[nodiscard]] const auto& deps() const noexcept
     {
-        return hookContext.gameDependencies().fileNameSymbolTableDeps;
+        return hookContext.fileNameSymbolTableState();
     }
 
     HookContext& hookContext;

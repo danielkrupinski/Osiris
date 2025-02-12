@@ -27,7 +27,7 @@ public:
 private:
     [[nodiscard]] const auto& deps() const noexcept
     {
-        return hookContext.gameDependencies().memAllocDeps;
+        return hookContext.memAllocState();
     }
 
     HookContext& hookContext;

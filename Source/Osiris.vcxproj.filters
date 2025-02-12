@@ -91,9 +91,6 @@
     <Filter Include="HookDependencies">
       <UniqueIdentifier>{29bbfcc9-029d-4d7d-947f-8bd7bee5b36a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameDependencies">
-      <UniqueIdentifier>{901e83f2-b3da-4331-b723-3d4f22923b21}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Features\Hud\BombTimer">
       <UniqueIdentifier>{bbb4bb7f-d544-416a-96ea-1699bcd868de}</UniqueIdentifier>
     </Filter>
@@ -803,15 +800,6 @@
     <ClInclude Include="Utils\PrivateTag.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="GameDependencies\FileNameSymbolTableDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\GameDependencies.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\MemAllocDeps.h">
-      <Filter>GameDependencies</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
@@ -874,9 +862,6 @@
     </ClInclude>
     <ClInclude Include="Features\Hud\HudFeaturesStates.h">
       <Filter>Features\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\HudDeps.h">
-      <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBaseImpl.h">
       <Filter>MemoryAllocation</Filter>
@@ -1006,9 +991,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\SceneObjectUpdaterHandle_t.h">
       <Filter>CS2\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameDependencies\GlowSceneObjectDeps.h">
-      <Filter>GameDependencies</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
@@ -1789,6 +1771,18 @@
     </ClInclude>
     <ClInclude Include="GameClient\DLLs\Tier0Dll.h">
       <Filter>GameClient\DLLs</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineGlow\GlowSceneObjectState.h">
+      <Filter>OutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Hud\HudState.h">
+      <Filter>GameClient\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\MemAllocState.h">
+      <Filter>GameClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\FileNameSymbolTableState.h">
+      <Filter>GameClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

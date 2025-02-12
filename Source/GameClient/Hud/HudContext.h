@@ -21,27 +21,27 @@ struct HudContext {
 
     [[nodiscard]] auto deathNoticesPanelHandle() noexcept
     {
-        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.deathNoticesPanelHandle);
+        return hookContext.template make<PanelHandle>(hookContext.hudState().deathNoticesPanelHandle);
     }
 
     [[nodiscard]] auto scoreAndTimeAndBombPanelHandle() noexcept
     {
-        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.scoreAndTimeAndBombPanelHandle);
+        return hookContext.template make<PanelHandle>(hookContext.hudState().scoreAndTimeAndBombPanelHandle);
     }
 
     [[nodiscard]] auto bombStatusPanelHandle() noexcept
     {
-        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.bombStatusPanelHandle);
+        return hookContext.template make<PanelHandle>(hookContext.hudState().bombStatusPanelHandle);
     }
 
     [[nodiscard]] auto bombPlantedPanelHandle() noexcept
     {
-        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.bombPlantedPanelHandle);
+        return hookContext.template make<PanelHandle>(hookContext.hudState().bombPlantedPanelHandle);
     }
 
     [[nodiscard]] auto timerTextPanelHandle() noexcept
     {
-        return hookContext.template make<PanelHandle>(hookContext.gameDependencies().hudDeps.timerTextPanelHandle);
+        return hookContext.template make<PanelHandle>(hookContext.hudState().timerTextPanelHandle);
     }
 
     void resetBombStatusVisibility() noexcept

@@ -59,7 +59,7 @@ public:
 
     [[nodiscard]] auto& storedGlowSceneObjectClass() const noexcept
     {
-        return hookContext.gameDependencies().glowSceneObjectDeps.glowSceneObjectClass;
+        return hookContext.glowSceneObjectState().glowSceneObjectClass;
     }
 
 private:
