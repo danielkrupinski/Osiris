@@ -5,22 +5,19 @@
 #include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <GameClient/Entities/TeamNumber.h>
-#include "PlayerOutlineGlowContext.h"
 #include "PlayerOutlineGlowColorType.h"
 
-template <typename HookContext, typename Context = PlayerOutlineGlowContext<HookContext>>
+template <typename HookContext>
 class PlayerOutlineGlow {
 public:
-    template <typename... Args>
-    PlayerOutlineGlow(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit PlayerOutlineGlow(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     void applyGlowToPlayer(auto&& playerPawn) const noexcept
     {
-        auto&& condition = context.condition();
-        if (!condition.shouldRun() || !condition.shouldGlowPlayer(playerPawn))
+        if (!shouldRun() || !shouldGlowPlayer(playerPawn))
             return;
 
         const auto color = correctAlpha(playerPawn, getColor(playerPawn));
@@ -29,6 +26,25 @@ public:
     }
 
 private:
+    [[nodiscard]] auto& state() const noexcept
+    {
+        return hookContext.featuresStates().visualFeaturesStates.outlineGlowState;
+    }
+
+    [[nodiscard]] bool shouldRun() const noexcept
+    {
+        return state().enabledForPlayers;
+    }
+
+    [[nodiscard]] bool shouldGlowPlayer(auto&& playerPawn) const noexcept
+    {
+        return playerPawn.isAlive().value_or(true)
+            && playerPawn.health().greaterThan(0).valueOr(true)
+            && !playerPawn.isControlledByLocalPlayer()
+            && playerPawn.isTTorCT()
+            && (!state().showOnlyEnemies || playerPawn.isEnemy().value_or(true));
+    }
+
     [[nodiscard]] cs2::Color correctAlpha(auto&& playerPawn, cs2::Color color) const noexcept
     {
         constexpr auto kNormalAlpha = 102;
@@ -38,10 +54,10 @@ private:
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
-        if (context.state().playerGlowColorType == PlayerOutlineGlowColorType::HealthBased)
+        if (state().playerGlowColorType == PlayerOutlineGlowColorType::HealthBased)
             return playerPawn.healthColor().value_or(cs2::kColorWhite);
 
-        if (context.state().playerGlowColorType == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
+        if (state().playerGlowColorType == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
             if (const auto playerColor = playerPawn.playerController().getPlayerColor(); playerColor.has_value())
                 return *playerColor;
         }
@@ -53,5 +69,5 @@ private:
         }
     }
 
-    Context context;
+    HookContext& hookContext;
 };

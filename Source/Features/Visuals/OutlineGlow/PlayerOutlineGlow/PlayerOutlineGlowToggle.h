@@ -5,21 +5,17 @@
 #include "PlayerOutlineGlowColorType.h"
 
 template <typename HookContext>
-class PlayerOutlineGlowContext;
-
-template <typename HookContext, typename Context = PlayerOutlineGlowContext<HookContext>>
-struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<HookContext, Context>> {
-    template <typename... Args>
-    PlayerOutlineGlowToggle(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<HookContext>> {
+    explicit PlayerOutlineGlowToggle(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     void update(char option) noexcept
     {
         switch (option) {
-        case '0': this->enable(); context.state().showOnlyEnemies = true; break;
-        case '1': this->enable(); context.state().showOnlyEnemies = false; break;
+        case '0': this->enable(); state().showOnlyEnemies = true; break;
+        case '1': this->enable(); state().showOnlyEnemies = false; break;
         case '2': this->disable(); break;
         }
     }
@@ -27,17 +23,22 @@ struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<HookConte
     void updateColor(char option) noexcept
     {
         switch (option) {
-        case '0': context.state().playerGlowColorType = PlayerOutlineGlowColorType::PlayerOrTeamColor; break;
-        case '1': context.state().playerGlowColorType = PlayerOutlineGlowColorType::TeamColor; break;
-        case '2': context.state().playerGlowColorType = PlayerOutlineGlowColorType::HealthBased; break;
+        case '0': state().playerGlowColorType = PlayerOutlineGlowColorType::PlayerOrTeamColor; break;
+        case '1': state().playerGlowColorType = PlayerOutlineGlowColorType::TeamColor; break;
+        case '2': state().playerGlowColorType = PlayerOutlineGlowColorType::HealthBased; break;
         }
     }
 
     [[nodiscard]] auto& enabledVariable(typename PlayerOutlineGlowToggle::ToggleMethod) const noexcept
     {
-        return context.state().enabledForPlayers;
+        return state().enabledForPlayers;
     }
 
 private:
-    Context context;
+    [[nodiscard]] auto& state() const noexcept
+    {
+        return hookContext.featuresStates().visualFeaturesStates.outlineGlowState;
+    }
+
+    HookContext& hookContext;
 };

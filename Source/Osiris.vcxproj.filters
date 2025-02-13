@@ -1040,12 +1040,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowColorType.h">
       <Filter>Features\Visuals\OutlineGlow\PlayerOutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowCondition.h">
-      <Filter>Features\Visuals\OutlineGlow\PlayerOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowContext.h">
-      <Filter>Features\Visuals\OutlineGlow\PlayerOutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\PlayerOutlineGlow</Filter>
     </ClInclude>
