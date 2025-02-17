@@ -88,9 +88,6 @@
     <Filter Include="CS2\Classes\Entities">
       <UniqueIdentifier>{ac0c1599-a345-44a2-8521-ea4eb53655df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="HookDependencies">
-      <UniqueIdentifier>{29bbfcc9-029d-4d7d-947f-8bd7bee5b36a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Features\Hud\BombTimer">
       <UniqueIdentifier>{bbb4bb7f-d544-416a-96ea-1699bcd868de}</UniqueIdentifier>
     </Filter>
@@ -219,6 +216,9 @@
     </Filter>
     <Filter Include="GameClient\DLLs">
       <UniqueIdentifier>{7257d8ed-91d1-47d9-a078-063c2664dfb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HookContext">
+      <UniqueIdentifier>{64e2a5d8-cdec-4e92-88c3-d2be92a01410}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -712,9 +712,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\CEntityInstance.h">
       <Filter>CS2\Classes\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="HookDependencies\HookDependencies.h">
-      <Filter>HookDependencies</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h">
       <Filter>CS2\Constants</Filter>
@@ -1777,6 +1774,9 @@
     </ClInclude>
     <ClInclude Include="GameClient\FileNameSymbolTableState.h">
       <Filter>GameClient</Filter>
+    </ClInclude>
+    <ClInclude Include="HookContext\HookContext.h">
+      <Filter>HookContext</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

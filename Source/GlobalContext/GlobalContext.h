@@ -27,7 +27,7 @@
 #include "DeferredCompleteObject.h"
 #include "FullGlobalContext.h"
 #include "PartialGlobalContext.h"
-#include "HookDependencies/HookDependencies.h"
+#include "HookContext/HookContext.h"
 
 class GlobalContext {
 public:
@@ -71,12 +71,12 @@ public:
         const auto justInitialized = initializeCompleteContextFromGameThread();
 
         auto& fullCtx = fullContext();
-        HookDependencies dependencies{fullCtx};
+        HookContext hookContext{fullCtx};
 
         if (justInitialized) {
-            fullCtx.entityClassifier.init(dependencies);
+            fullCtx.entityClassifier.init(hookContext);
             if (const auto mainMenu{fullCtx.clientPatternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
-                dependencies.make<PanoramaGUI>().init(dependencies.make<PanoramaUiPanel>((*mainMenu)->uiPanel));
+                hookContext.make<PanoramaGUI>().init(hookContext.make<PanoramaUiPanel>((*mainMenu)->uiPanel));
             fullCtx.hooks.peepEventsHook.disable();
             fullCtx.hooks.viewRenderHook.install();
         }
@@ -85,7 +85,7 @@ public:
 
     [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* entity, void* unknown, bool unknownBool) noexcept
     {
-        HookDependencies hookContext{fullContext()};
+        HookContext hookContext{fullContext()};
         const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(entity, unknown, unknownBool);
 
         auto&& playerPawn = hookContext.make<PlayerPawn>(entity);
@@ -99,7 +99,7 @@ public:
 
     [[nodiscard]] std::uint64_t weaponSceneObjectUpdater(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept
     {
-        HookDependencies hookContext{fullContext()};
+        HookContext hookContext{fullContext()};
         const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater(weapon, unknown, unknownBool);
         hookContext.make<ModelGlow>().applyWeaponModelGlow(hookContext.make<BaseWeapon>(weapon));
         return originalReturnValue;
@@ -107,34 +107,34 @@ public:
 
     [[nodiscard]] UnloadFlag onRenderStartHook(cs2::CViewRender* viewRender) noexcept
     {
-        HookDependencies dependencies{fullContext()};
+        HookContext hookContext{fullContext()};
         fullContext().hooks.viewRenderHook.getOriginalOnRenderStart()(viewRender);
-        dependencies.make<InWorldPanels>().updateState();
-        SoundWatcher<decltype(dependencies)> soundWatcher{fullContext().soundWatcherState, dependencies};
+        hookContext.make<InWorldPanels>().updateState();
+        SoundWatcher<decltype(hookContext)> soundWatcher{fullContext().soundWatcherState, hookContext};
         soundWatcher.update();
-        fullContext().features(dependencies).soundFeatures().runOnViewMatrixUpdate();
+        fullContext().features(hookContext).soundFeatures().runOnViewMatrixUpdate();
 
-        dependencies.make<RenderingHookEntityLoop>().run();
-        dependencies.make<GlowSceneObjects>().removeUnreferencedObjects();
-        dependencies.make<DefusingAlert>().run();
-        dependencies.make<KillfeedPreserver>().run();
-        dependencies.make<BombStatusPanelManager>().run();
-        dependencies.make<InWorldPanels>().hideUnusedPanels();
+        hookContext.make<RenderingHookEntityLoop>().run();
+        hookContext.make<GlowSceneObjects>().removeUnreferencedObjects();
+        hookContext.make<DefusingAlert>().run();
+        hookContext.make<KillfeedPreserver>().run();
+        hookContext.make<BombStatusPanelManager>().run();
+        hookContext.make<InWorldPanels>().hideUnusedPanels();
 
         UnloadFlag unloadFlag;
-        dependencies.make<PanoramaGUI>().run(fullContext().features(dependencies), unloadFlag);
+        hookContext.make<PanoramaGUI>().run(fullContext().features(hookContext), unloadFlag);
     
         if (unloadFlag) {
-            FeaturesUnloadHandler{dependencies, fullContext().featuresStates}.handleUnload();
-            BombStatusPanelUnloadHandler{dependencies}.handleUnload();
-            InWorldPanelsUnloadHandler{dependencies}.handleUnload();
-            PanoramaGuiUnloadHandler{dependencies}.handleUnload();
+            FeaturesUnloadHandler{hookContext, fullContext().featuresStates}.handleUnload();
+            BombStatusPanelUnloadHandler{hookContext}.handleUnload();
+            InWorldPanelsUnloadHandler{hookContext}.handleUnload();
+            PanoramaGuiUnloadHandler{hookContext}.handleUnload();
             fullContext().hooks.viewRenderHook.uninstall();
-            dependencies.make<PlayerModelGlowPreview>().onUnload();
+            hookContext.make<PlayerModelGlowPreview>().onUnload();
 
-            dependencies.make<EntitySystem>().forEachEntityIdentity([&dependencies](const auto& entityIdentity) {
-                auto&& baseEntity = dependencies.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
-                dependencies.make<ModelGlow>().onUnload(baseEntity.classify(), baseEntity);
+            hookContext.make<EntitySystem>().forEachEntityIdentity([&hookContext](const auto& entityIdentity) {
+                auto&& baseEntity = hookContext.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
+                hookContext.make<ModelGlow>().onUnload(baseEntity.classify(), baseEntity);
             });
         }
         return unloadFlag;

@@ -26,8 +26,8 @@ struct Hooks;
 class EntityClassifier;
 
 template <typename FullGlobalContext>
-struct HookDependencies {
-    HookDependencies(FullGlobalContext& fullGlobalContext) noexcept
+struct HookContext {
+    HookContext(FullGlobalContext& fullGlobalContext) noexcept
         : fullGlobalContext{fullGlobalContext}
     {
     }
@@ -120,7 +120,7 @@ struct HookDependencies {
 
     [[nodiscard]] auto plantedC4() noexcept
     {
-        return std::optional{make<PlantedC4<HookDependencies>>(getPlantedC4())};
+        return std::optional{make<PlantedC4<HookContext>>(getPlantedC4())};
     }
 
     [[nodiscard]] auto getConVarAccessor() noexcept
@@ -143,7 +143,7 @@ struct HookDependencies {
     template <template <typename...> typename T, typename... Args>
     [[nodiscard]] auto make(Args&&... args) noexcept
     {
-        return T<HookDependencies>{*this, std::forward<Args>(args)...};
+        return T<HookContext>{*this, std::forward<Args>(args)...};
     }
 
     [[nodiscard]] auto panelFactory() noexcept

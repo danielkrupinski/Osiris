@@ -335,7 +335,7 @@
     <ClInclude Include="GlobalContext\PartialGlobalContext.h" />
     <ClInclude Include="GlobalContext\PeepEventsHookResult.h" />
     <ClInclude Include="GlobalContext\UnloadFlag.h" />
-    <ClInclude Include="HookDependencies\HookDependencies.h" />
+    <ClInclude Include="HookContext\HookContext.h" />
     <ClInclude Include="Hooks\Hooks.h" />
     <ClInclude Include="Hooks\PeepEventsHook.h" />
     <ClInclude Include="Hooks\ViewRenderHook.h" />
