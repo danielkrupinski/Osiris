@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-24.04]
-        compiler: [g++-11, g++-12, g++-13, g++-14, clang++-17, clang++-18, clang++-19]
+        compiler: [g++-11, g++-12, g++-13, g++-14, clang++-17, clang++-18, clang++-19, clang++-20]
         configuration: [Debug, Release]
         exclude:
           - os: ubuntu-22.04
@@ -21,6 +21,8 @@ jobs:
             compiler: clang++-18
           - os: ubuntu-22.04
             compiler: clang++-19
+          - os: ubuntu-22.04
+            compiler: clang++-20
 
           - os: ubuntu-24.04
             compiler: g++-11
@@ -36,6 +38,12 @@ jobs:
         chmod +x llvm.sh
         sudo ./llvm.sh 19
         echo "CXXFLAGS=\"--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/13\"" >> "$GITHUB_ENV"
+    - name: prepare clang++-20
+      if: matrix.compiler == 'clang++-20'
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh 20
     - name: configure
       run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D ENABLE_TESTS="unit" -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -B build
     - name: build source
