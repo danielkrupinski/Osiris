@@ -45,6 +45,17 @@ public:
             unhookWeaponSceneObjectUpdater(bomb);
     }
 
+    void enable() const noexcept
+    {
+        state().droppedBombModelGlow = ModelGlowState::State::Enabled;
+    }
+
+    void disable() const noexcept
+    {
+        if (state().droppedBombModelGlow == ModelGlowState::State::Enabled)
+            state().droppedBombModelGlow = ModelGlowState::State::Disabling;
+    }
+
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {

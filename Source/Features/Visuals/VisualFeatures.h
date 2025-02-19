@@ -10,7 +10,6 @@
 #include "OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowToggle.h"
 #include "OutlineGlow/TickingBombOutlineGlow/TickingBombOutlineGlowToggle.h"
 #include "OutlineGlow/WeaponOutlineGlow/WeaponOutlineGlowToggle.h"
-#include "OutlineGlow/OutlineGlowToggle.h"
 #include "VisualFeaturesStates.h"
 
 template <typename HookContext>
@@ -94,7 +93,7 @@ struct VisualFeatures {
 
     [[nodiscard]] decltype(auto) outlineGlowToggle() const noexcept
     {
-        return hookContext.template make<OutlineGlowToggle>();
+        return hookContext.template make<OutlineGlow>();
     }
 
     [[nodiscard]] decltype(auto) weaponOutlineGlowToggle() const noexcept

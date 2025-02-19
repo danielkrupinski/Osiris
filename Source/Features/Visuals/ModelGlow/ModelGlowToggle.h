@@ -2,6 +2,7 @@
 
 #include "ModelGlowState.h"
 
+// todo: Move to GUI
 template <typename HookContext>
 class ModelGlowToggle {
 public:
@@ -13,22 +14,17 @@ public:
     void updateMasterSwitch(char option) noexcept
     {
         switch (option) {
-        case '0':
-            state().masterSwitch = ModelGlowState::State::Enabled;
-            break;
-        case '1':
-            if (state().masterSwitch == ModelGlowState::State::Enabled)
-                state().masterSwitch = ModelGlowState::State::Disabling;
-            break;
+        case '0': hookContext.template make<ModelGlow>().enable(); break;
+        case '1': hookContext.template make<ModelGlow>().disable(); break;
         }
     }
 
     void updatePlayerModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': state().playerModelGlow = ModelGlowState::State::Enabled; state().showOnlyEnemies = true; break;
-        case '1': state().playerModelGlow = ModelGlowState::State::Enabled; state().showOnlyEnemies = false; break;
-        case '2': state().playerModelGlow = ModelGlowState::State::Disabling; break;
+        case '0': hookContext.template make<PlayerModelGlow>().enable(); state().showOnlyEnemies = true; break;
+        case '1': hookContext.template make<PlayerModelGlow>().enable(); state().showOnlyEnemies = false; break;
+        case '2': hookContext.template make<PlayerModelGlow>().disable(); break;
         }
     }
 
@@ -44,65 +40,40 @@ public:
     void updateWeaponModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0':
-            state().weaponModelGlow = ModelGlowState::State::Enabled;
-            break;
-        case '1':
-            if (state().weaponModelGlow == ModelGlowState::State::Enabled)
-                state().weaponModelGlow = ModelGlowState::State::Disabling;
-            break;
+        case '0': hookContext.template make<WeaponModelGlow>().enable(); break;
+        case '1': hookContext.template make<WeaponModelGlow>().disable(); break;
         }
     }
 
     void updateDroppedBombModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0':
-            state().droppedBombModelGlow = ModelGlowState::State::Enabled;
-            break;
-        case '1':
-            if (state().droppedBombModelGlow == ModelGlowState::State::Enabled)
-                state().droppedBombModelGlow = ModelGlowState::State::Disabling;
-            break;
+        case '0': hookContext.template make<DroppedBombModelGlow>().enable(); break;
+        case '1': hookContext.template make<DroppedBombModelGlow>().disable(); break;
         }
     }
 
     void updateTickingBombModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0':
-            state().tickingBombModelGlow = ModelGlowState::State::Enabled;
-            break;
-        case '1':
-            if (state().tickingBombModelGlow == ModelGlowState::State::Enabled)
-                state().tickingBombModelGlow = ModelGlowState::State::Disabling;
-            break;
+        case '0': hookContext.template make<TickingBombModelGlow>().enable(); break;
+        case '1': hookContext.template make<TickingBombModelGlow>().disable(); break;
         }
     }
 
     void updateDefuseKitModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0':
-            state().defuseKitModelGlow = ModelGlowState::State::Enabled;
-            break;
-        case '1':
-            if (state().defuseKitModelGlow == ModelGlowState::State::Enabled)
-                state().defuseKitModelGlow = ModelGlowState::State::Disabling;
-            break;
+        case '0': hookContext.template make<DefuseKitModelGlow>().enable(); break;
+        case '1': hookContext.template make<DefuseKitModelGlow>().disable(); break;
         }
     }
 
     void updateGrenadeProjectileModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0':
-            state().grenadeProjectileModelGlow = ModelGlowState::State::Enabled;
-            break;
-        case '1':
-            if (state().grenadeProjectileModelGlow == ModelGlowState::State::Enabled)
-                state().grenadeProjectileModelGlow = ModelGlowState::State::Disabling;
-            break;
+        case '0': hookContext.template make<GrenadeProjectileModelGlow>().enable(); break;
+        case '1': hookContext.template make<GrenadeProjectileModelGlow>().disable(); break;
         }
     }
 

@@ -37,6 +37,17 @@ public:
             grenadeProjectile.baseEntity().removeSpawnProtectionEffectRecursively();
     }
 
+    void enable() const noexcept
+    {
+        state().grenadeProjectileModelGlow = ModelGlowState::State::Enabled;
+    }
+
+    void disable() const noexcept
+    {
+        if (state().grenadeProjectileModelGlow == ModelGlowState::State::Enabled)
+            state().grenadeProjectileModelGlow = ModelGlowState::State::Disabling;
+    }
+
 private:
     [[nodiscard]] bool isDisabled() const noexcept
     {

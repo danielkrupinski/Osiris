@@ -34,6 +34,17 @@ public:
             plantedBomb.baseEntity().removeSpawnProtectionEffectRecursively();
     }
 
+    void enable() const noexcept
+    {
+        state().tickingBombModelGlow = ModelGlowState::State::Enabled;
+    }
+
+    void disable() const noexcept
+    {
+        if (state().tickingBombModelGlow == ModelGlowState::State::Enabled)
+            state().tickingBombModelGlow = ModelGlowState::State::Disabling;
+    }
+
 private:
     [[nodiscard]] bool isDisabled() const noexcept
     {

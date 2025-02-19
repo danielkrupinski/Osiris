@@ -52,6 +52,17 @@ public:
             unhookPlayerSceneObjectUpdater(playerPawn);
     }
 
+    void enable() const noexcept
+    {
+        state().playerModelGlow = ModelGlowState::State::Enabled;
+    }
+
+    void disable() const noexcept
+    {
+        if (state().playerModelGlow == ModelGlowState::State::Enabled)
+            state().playerModelGlow = ModelGlowState::State::Disabling;
+    }
+
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {

@@ -46,6 +46,19 @@ public:
             context.applyGlowToWeapon(entityTypeInfo, modelEntity.baseEntity());
     }
 
+    void enable() const noexcept
+    {
+        context.state().masterSwitch = true;
+    }
+
+    void disable() const noexcept
+    {
+        if (context.state().masterSwitch) {
+            context.state().masterSwitch = false;
+            context.clearGlowSceneObjects();
+        }
+    }
+
 private:
     Context context;
 };

@@ -35,6 +35,17 @@ public:
             defuseKit.baseEntity().removeSpawnProtectionEffectRecursively();
     }
 
+    void enable() const noexcept
+    {
+        state().defuseKitModelGlow = ModelGlowState::State::Enabled;
+    }
+
+    void disable() const noexcept
+    {
+        if (state().defuseKitModelGlow == ModelGlowState::State::Enabled)
+            state().defuseKitModelGlow = ModelGlowState::State::Disabling;
+    }
+
 private:
     [[nodiscard]] bool isDisabled() const noexcept
     {

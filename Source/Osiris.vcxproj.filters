@@ -1013,9 +1013,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowState.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowToggle.h">
-      <Filter>Features\Visuals\OutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowUnloadHandler.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>

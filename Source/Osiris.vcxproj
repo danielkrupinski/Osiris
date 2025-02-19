@@ -200,7 +200,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowParams.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowState.h" />
-    <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowToggle.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowUnloadHandler.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowColorType.h" />

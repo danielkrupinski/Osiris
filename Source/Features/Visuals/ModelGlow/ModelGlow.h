@@ -100,6 +100,17 @@ public:
             hookContext.template make<WeaponModelGlow>().onUnload(entity.template as<BaseWeapon>());
     }
 
+    void enable() const noexcept
+    {
+        state().masterSwitch = ModelGlowState::State::Enabled;
+    }
+
+    void disable() const noexcept
+    {
+        if (state().masterSwitch == ModelGlowState::State::Enabled)
+            state().masterSwitch = ModelGlowState::State::Disabling;
+    }
+
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
