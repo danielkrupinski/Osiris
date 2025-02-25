@@ -14,4 +14,8 @@ endif()
 set(ENABLE_TESTS CACHE STRING "List of test types to enable e.g. \"unit\"")
 
 add_subdirectory(Source)
-add_subdirectory(Tests)
+
+if(ENABLE_TESTS)
+  enable_testing()
+  add_subdirectory(Tests)
+endif()

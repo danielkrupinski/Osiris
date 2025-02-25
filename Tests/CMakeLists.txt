@@ -1,5 +1,4 @@
 if("unit" IN_LIST ENABLE_TESTS)
-  enable_testing()
   set(THREADS_PREFER_PTHREAD_FLAG ON)
   find_package(Threads REQUIRED)
 
