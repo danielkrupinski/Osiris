@@ -7,6 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 06 March 2025
+    * Settings are now automatically saved to the config file (`default.cfg`) inside `%appdata%\OsirisCS2\configs` directory on Windows and `$HOME/OsirisCS2/configs` on Linux. `default.cfg` file is loaded automatically when starting Osiris.
+
 * 23 January 2025
     * Added player model glow preview to the menu
 
@@ -24,11 +27,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added model glow for ticking bomb
 
     ![Ticking Bomb Model Glow](https://github.com/user-attachments/assets/6cadde5a-f999-4649-b483-9122e7b350ba)
-
-* 3 December 2024
-    * Added model glow for dropped bomb
-
-    ![Dropped Bomb Model Glow](https://github.com/user-attachments/assets/a44d2a8e-399c-4638-8aa8-b49fac732c86)
 
 ## Technical features
 
