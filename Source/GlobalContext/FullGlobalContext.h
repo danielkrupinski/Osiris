@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Config/ConfigState.h>
 #include <CS2/Classes/CLoopModeGame.h>
 #include <GameClient/ConVars/ConVars.h>
 #include <GameClient/FileNameSymbolTableState.h>
@@ -36,6 +37,7 @@
 #include <Platform/VmtFinder.h>
 #include <Vmt/VmtLengthCalculator.h>
 
+#include "OsirisDirectoryPath.h"
 #include "PeepEventsHookResult.h"
 
 #include <CS2/Classes/ConVarTypes.h>
@@ -63,6 +65,8 @@ struct FullGlobalContext {
         return Features{featuresStates, hooks, dependencies};
     }
 
+    OsirisDirectoryPath osirisDirectoryPath;
+    ConfigState configState;
     PatternSearchResults<decltype(kClientPatterns)> clientPatternSearchResults;
     PatternSearchResults<decltype(kSceneSystemPatterns)> sceneSystemPatternSearchResults;
     PatternSearchResults<decltype(kTier0Patterns)> tier0PatternSearchResults;

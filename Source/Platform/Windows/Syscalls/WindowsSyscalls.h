@@ -34,6 +34,18 @@ struct WindowsSyscalls {
         return static_cast<NTSTATUS>(systemCall(&params, event, apcRoutine, apcContext, ioStatusBlock, buffer, length, byteOffset, key));
     }
 
+    static NTSTATUS NtWriteFile(HANDLE fileHandle, HANDLE event, IO_APC_ROUTINE* apcRoutine, void* apcContext, IO_STATUS_BLOCK* ioStatusBlock, void* buffer, ULONG length, LARGE_INTEGER* byteOffset, ULONG* key) noexcept
+    {
+        const SyscallParams params{WindowsSyscallIndex::NtWriteFile, reinterpret_cast<std::uintptr_t>(fileHandle)};
+        return static_cast<NTSTATUS>(systemCall(&params, event, apcRoutine, apcContext, ioStatusBlock, buffer, length, byteOffset, key));
+    }
+
+    static NTSTATUS NtSetInformationFile(HANDLE fileHandle, IO_STATUS_BLOCK* ioStatusBlock, void* fileInformation, ULONG length, FILE_INFORMATION_CLASS fileInformationClass) noexcept
+    {
+        const SyscallParams params{WindowsSyscallIndex::NtSetInformationFile, reinterpret_cast<std::uintptr_t>(fileHandle)};
+        return static_cast<NTSTATUS>(systemCall(&params, ioStatusBlock, fileInformation, length, fileInformationClass));
+    }
+
     static NTSTATUS NtClose(HANDLE handle) noexcept
     {
         const SyscallParams params{WindowsSyscallIndex::NtClose, reinterpret_cast<std::uintptr_t>(handle)};

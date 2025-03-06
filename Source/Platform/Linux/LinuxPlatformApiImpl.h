@@ -28,14 +28,19 @@ int LinuxPlatformApi::dlinfo(void* handle, int request, void* info) noexcept
     return ::dlinfo(handle, request, info);
 }
 
-int LinuxPlatformApi::open(const char* pathname, int flags) noexcept
+int LinuxPlatformApi::open(const char* pathname, int flags, mode_t mode) noexcept
 {
-    return ::open(pathname, flags);
+    return ::open(pathname, flags, mode);
 }
 
 ssize_t LinuxPlatformApi::pread(int fd, void* buf, size_t count, off_t offset) noexcept
 {
     return ::pread(fd, buf, count, offset);
+}
+
+ssize_t LinuxPlatformApi::write(int fd, const void* buf, size_t count) noexcept
+{
+    return ::write(fd, buf, count);
 }
 
 int LinuxPlatformApi::close(int fd) noexcept

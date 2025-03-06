@@ -134,9 +134,7 @@ public:
             state().modelGlowPreviewPlayerLabelHandleCT = guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCTLabel").getHandle();
         }
 
-        hookContext.template make<HudTab>().updateFromConfig(mainMenu);
-        hookContext.template make<VisualsTab>().updateFromConfig(mainMenu);
-        hookContext.template make<SoundTab>().updateFromConfig(mainMenu);
+        updateFromConfig();
     }
 
     void run(Features<HookContext> features, UnloadFlag& unloadFlag) const noexcept
@@ -161,6 +159,15 @@ public:
 
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleTT), TeamNumber::TT).update();
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleCT), TeamNumber::CT).update();
+    }
+
+    void updateFromConfig() noexcept
+    {
+        const auto mainMenuPointer = hookContext.clientPatternSearchResults().template get<MainMenuPanelPointer>();
+        auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
+        hookContext.template make<HudTab>().updateFromConfig(mainMenu);
+        hookContext.template make<VisualsTab>().updateFromConfig(mainMenu);
+        hookContext.template make<SoundTab>().updateFromConfig(mainMenu);
     }
 
 private:

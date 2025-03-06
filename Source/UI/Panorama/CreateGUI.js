@@ -99,6 +99,14 @@ $.Osiris = (function () {
       class: "negativeColor"
     });
 
+    var activeCfgNameLabel = $.CreatePanel('Label', leftContainer, 'ActiveConfigName', {
+      text: "default.cfg",
+      style: "margin-left: 5px;"
+    });
+
+    activeCfgNameLabel.SetPanelEvent('onmouseover', function () { UiToolkitAPI.ShowTextTooltip('ActiveConfigName', 'Active config file. Changes are saved automatically.'); });
+    activeCfgNameLabel.SetPanelEvent('onmouseout', function () { UiToolkitAPI.HideTextTooltip(); });
+
     var centerContainer = $.CreatePanel('Panel', navbar, '', {
       class: "content-navbar__tabs__center-container",
     });

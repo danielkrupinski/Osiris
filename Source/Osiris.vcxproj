@@ -13,6 +13,14 @@
   <ItemGroup>
     <ClInclude Include="BuildConfig.h" />
     <ClInclude Include="Common\Visibility.h" />
+    <ClInclude Include="Config\Config.h" />
+    <ClInclude Include="Config\ConfigFileOperation.h" />
+    <ClInclude Include="Config\ConfigFromString.h" />
+    <ClInclude Include="Config\ConfigParams.h" />
+    <ClInclude Include="Config\ConfigSchema.h" />
+    <ClInclude Include="Config\ConfigState.h" />
+    <ClInclude Include="Config\ConfigStringConversionState.h" />
+    <ClInclude Include="Config\ConfigToString.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h" />
     <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h" />
@@ -331,6 +339,7 @@
     <ClInclude Include="GlobalContext\DeferredCompleteObject.h" />
     <ClInclude Include="GlobalContext\FullGlobalContext.h" />
     <ClInclude Include="GlobalContext\GlobalContext.h" />
+    <ClInclude Include="GlobalContext\OsirisDirectoryPath.h" />
     <ClInclude Include="GlobalContext\PartialGlobalContext.h" />
     <ClInclude Include="GlobalContext\PeepEventsHookResult.h" />
     <ClInclude Include="GlobalContext\UnloadFlag.h" />
@@ -452,6 +461,7 @@
     <ClInclude Include="Platform\Macros\IsPlatform.h" />
     <ClInclude Include="Platform\Macros\PlatformSpecific.h" />
     <ClInclude Include="Platform\PlatformApi.h" />
+    <ClInclude Include="Platform\PlatformPath.h" />
     <ClInclude Include="Platform\SimpleMessageBox.h" />
     <ClInclude Include="Platform\TypeInfoPrecedingVmt.h" />
     <ClInclude Include="Platform\VmtFinder.h" />
@@ -524,6 +534,7 @@
     <ClInclude Include="Utils\TypedStaticStringPool.h" />
     <ClInclude Include="Utils\TypeIndex.h" />
     <ClInclude Include="Utils\TypeList.h" />
+    <ClInclude Include="Utils\Wcslen.h" />
     <ClInclude Include="Verification\Verifier.h" />
     <ClInclude Include="Verification\VerifyMacros.h" />
     <ClInclude Include="Vmt\VmtCopy.h" />

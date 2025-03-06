@@ -13,6 +13,7 @@ struct SetCommandHandler {
 
     void operator()() noexcept
     {
+        features.hookContext.config().scheduleAutoSave();
         if (const auto section = parser.getLine('/'); section == "hud") {
             handleHudSection();
         } else if (section == "visuals") {

@@ -17,7 +17,7 @@ struct MockLinuxPlatformApi {
     MOCK_METHOD(void*, dlsym, (void* handle, const char* name), (const noexcept));
     MOCK_METHOD(int, dlclose, (void* handle), (const noexcept));
     MOCK_METHOD(int, dlinfo, (void* handle, int request, void* info), (const noexcept));
-    MOCK_METHOD(int, open, (const char* pathname, int flags), (const noexcept));
+    MOCK_METHOD(int, open, (const char* pathname, int flags, mode_t mode), (const noexcept));
     MOCK_METHOD(int, close, (int fd), (const noexcept));
     MOCK_METHOD(int, fstat, (int fd, struct stat* buf), (const noexcept));
     MOCK_METHOD(void*, mmap, (void* addr, size_t length, int prot, int flags, int fd, off_t offset), (const noexcept));
@@ -171,9 +171,9 @@ int LinuxPlatformApi::dlinfo(void* handle, int request, void* info) noexcept
     return MockLinuxPlatformApi::instance->dlinfo(handle, request, info);
 }
 
-int LinuxPlatformApi::open(const char* pathname, int flags) noexcept
+int LinuxPlatformApi::open(const char* pathname, int flags, mode_t mode) noexcept
 {
-    return MockLinuxPlatformApi::instance->open(pathname, flags);
+    return MockLinuxPlatformApi::instance->open(pathname, flags, mode);
 }
 
 int LinuxPlatformApi::close(int fd) noexcept

@@ -77,6 +77,8 @@ public:
             fullCtx.entityClassifier.init(hookContext);
             if (const auto mainMenu{fullCtx.clientPatternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
                 hookContext.make<PanoramaGUI>().init(hookContext.make<PanoramaUiPanel>((*mainMenu)->uiPanel));
+            hookContext.config().init();
+            hookContext.config().scheduleLoad();
             fullCtx.hooks.peepEventsHook.disable();
             fullCtx.hooks.viewRenderHook.install();
         }
@@ -123,7 +125,9 @@ public:
 
         UnloadFlag unloadFlag;
         hookContext.make<PanoramaGUI>().run(fullContext().features(hookContext), unloadFlag);
-    
+        hookContext.config().enableAutoSave();
+        hookContext.config().update();
+
         if (unloadFlag) {
             FeaturesUnloadHandler{hookContext, fullContext().featuresStates}.handleUnload();
             BombStatusPanelUnloadHandler{hookContext}.handleUnload();

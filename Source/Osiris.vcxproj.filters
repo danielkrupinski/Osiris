@@ -220,6 +220,9 @@
     <Filter Include="HookContext">
       <UniqueIdentifier>{64e2a5d8-cdec-4e92-88c3-d2be92a01410}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{5526912e-3dfb-467b-a785-3785aea27537}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1774,6 +1777,39 @@
     </ClInclude>
     <ClInclude Include="HookContext\HookContext.h">
       <Filter>HookContext</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\Config.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigFileOperation.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigParams.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigState.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigFromString.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigSchema.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigStringConversionState.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigToString.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalContext\OsirisDirectoryPath.h">
+      <Filter>GlobalContext</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\PlatformPath.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Wcslen.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
