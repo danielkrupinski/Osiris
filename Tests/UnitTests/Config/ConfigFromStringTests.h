@@ -1243,3 +1243,447 @@ testing::Values(
         .expectedReadBytes = 1
     }
 )));
+
+INSTANTIATE_TEST_SUITE_P(MultipleElementsInMultipleNestingLevels, ConfigFromStringTest, testing::Combine(
+testing::Values([](ConfigFromString& configFromString, MockConfigValueSetter& mockConfigValueSetter) {
+    configFromString.beginObject(u8"Group1");
+    configFromString.beginObject(u8"Function1");
+    configFromString.boolean(u8"Enabled", mockConfigValueSetter.boolSetterFunctor("Group1.Function1.Enabled"), []{ return bool{}; });
+    configFromString.endObject();
+    configFromString.beginObject(u8"Function2");
+    configFromString.boolean(u8"Enabled", mockConfigValueSetter.boolSetterFunctor("Group1.Function2.Enabled"), []{ return bool{}; });
+    configFromString.uint(u8"Mode", mockConfigValueSetter.uintSetterFunctor("Group1.Function2.Mode"), []{ return std::uint64_t{}; });
+    configFromString.endObject();
+    configFromString.endObject();
+
+    configFromString.beginObject(u8"Group2");
+    configFromString.beginObject(u8"Function1");
+    configFromString.boolean(u8"Enabled", mockConfigValueSetter.boolSetterFunctor("Group2.Function1.Enabled"), []{ return bool{}; });
+    configFromString.endObject();
+    configFromString.beginObject(u8"Function2");
+    configFromString.boolean(u8"Enabled", mockConfigValueSetter.boolSetterFunctor("Group2.Function2.Enabled"), []{ return bool{}; });
+    configFromString.uint(u8"Mode", mockConfigValueSetter.uintSetterFunctor("Group2.Function2.Mode"), []{ return std::uint64_t{}; });
+    configFromString.endObject();
+    configFromString.endObject();
+}),
+testing::Values(
+    ConfigFromStringTestParam{
+        .bufferContent = u8"{\"Group1\":{\"Function1\":{\"Enabled\":true},\"Function2\":{\"Enabled\":false,\"Mode\":1024}},\"Group2\":{\"Function1\":{\"Enabled\":false},\"Function2\":{\"Enabled\":true,\"Mode\":514}}}",
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group1.Function1.Enabled", true));
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group1.Function2.Enabled", false));
+            EXPECT_CALL(mockConfigValueSetter, setValueUint("Group1.Function2.Mode", 1024));
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group2.Function1.Enabled", false));
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group2.Function2.Enabled", true));
+            EXPECT_CALL(mockConfigValueSetter, setValueUint("Group2.Function2.Mode", 514));
+        },
+        .expectedConversionState{
+            .nestingLevel = 0,
+            .indexInNestingLevel{1},
+            .offset = 164
+        },
+        .expectedReadBytes = 164
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"",
+        .expectedConversionState{
+            .nestingLevel = 0,
+            .indexInNestingLevel{0},
+            .offset = 0
+        },
+        .expectedReadBytes = 0
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"{\"Group1\":",
+        .expectedConversionState{
+            .nestingLevel = 1,
+            .indexInNestingLevel{0, config_params::kInvalidObjectIndex},
+            .offset = 1
+        },
+        .expectedReadBytes = 1
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\"Group1\":{\"Function1\":",
+        .conversionState{
+            .nestingLevel = 1,
+            .indexInNestingLevel{0, config_params::kInvalidObjectIndex},
+            .offset = 1
+        },
+        .expectedConversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 0, config_params::kInvalidObjectIndex},
+            .offset = 11
+        },
+        .expectedReadBytes = 10
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\"Function1\":{\"Enabled\":tru",
+        .conversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 0, config_params::kInvalidObjectIndex},
+            .offset = 11
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 0, config_params::kInvalidObjectIndex},
+            .offset = 24
+        },
+        .expectedReadBytes = 13
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\"Enabled\":true",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 0, config_params::kInvalidObjectIndex},
+            .offset = 24
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group1.Function1.Enabled", true));
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 0, 0},
+            .offset = 38
+        },
+        .expectedReadBytes = 14
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"},\"Function2\":",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 0, 0},
+            .offset = 38
+        },
+        .expectedConversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 0, 0},
+            .offset = 39
+        },
+        .expectedReadBytes = 1
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8",\"Function2\":{\"Enabled\":fals",
+        .conversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 0, 0},
+            .offset = 39
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 1, config_params::kInvalidObjectIndex},
+            .offset = 53
+        },
+        .expectedReadBytes = 14
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\"Enabled\":false,\"Mode\":1024",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 1, config_params::kInvalidObjectIndex},
+            .offset = 53
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group1.Function2.Enabled", false));
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 1, 0},
+            .offset = 68
+        },
+        .expectedReadBytes = 15
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8",\"Mode\":1024}",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 1, 0},
+            .offset = 68
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueUint("Group1.Function2.Mode", 1024));
+        },
+        .expectedConversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 0, 1},
+            .offset = 81
+        },
+        .expectedReadBytes = 13
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"},\"Group2\":",
+        .conversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 0, 1},
+            .offset = 81
+        },
+        .expectedConversionState{
+            .nestingLevel = 1,
+            .indexInNestingLevel{0, 0},
+            .offset = 82
+        },
+        .expectedReadBytes = 1
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8",\"Group2\":{\"Function1\":",
+        .conversionState{
+            .nestingLevel = 1,
+            .indexInNestingLevel{0, 0},
+            .offset = 82
+        },
+        .expectedConversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 1, config_params::kInvalidObjectIndex},
+            .offset = 93
+        },
+        .expectedReadBytes = 11
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\"Function1\":{\"Enabled\":fals",
+        .conversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 1, config_params::kInvalidObjectIndex},
+            .offset = 93
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 0, config_params::kInvalidObjectIndex},
+            .offset = 106
+        },
+        .expectedReadBytes = 13
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\"Enabled\":false",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 0, config_params::kInvalidObjectIndex},
+            .offset = 106
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group2.Function1.Enabled", false));
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 0, 0},
+            .offset = 121
+        },
+        .expectedReadBytes = 15
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"}",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 0, 0},
+            .offset = 121
+        },
+        .expectedConversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 1, 0},
+            .offset = 122
+        },
+        .expectedReadBytes = 1
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8",\"Function2\":{",
+        .conversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 1, 0},
+            .offset = 122
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 1, config_params::kInvalidObjectIndex},
+            .offset = 136
+        },
+        .expectedReadBytes = 14
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\"Enabled\":true,",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 1, config_params::kInvalidObjectIndex},
+            .offset = 136
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group2.Function2.Enabled", true));
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 1, 0},
+            .offset = 150
+        },
+        .expectedReadBytes = 14
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8",\"Mode\":514}",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 1, 0},
+            .offset = 150
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueUint("Group2.Function2.Mode", 514));
+        },
+        .expectedConversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 1, 1},
+            .offset = 162
+        },
+        .expectedReadBytes = 12
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"}}",
+        .conversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 1, 1},
+            .offset = 162
+        },
+        .expectedConversionState{
+            .nestingLevel = 0,
+            .indexInNestingLevel{1},
+            .offset = 164
+        },
+        .expectedReadBytes = 2
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\n{\n\t\"Group1\"\n\r:\r { \"Function1\":\n{\n\"Enabled\":\ttrue\r}\n\n,\r\"Function2\": { \"Enabled\": false,\n\"Mode\":1024\n}\t\t}\r,\n\"Group2\":\t{\n\"Function1\" :{ \"Enabled\"\r:\nfalse\n},\"Function2\":{\"Enabled\":true\r\n,\r\n\"Mode\":514\n}}}",
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group1.Function1.Enabled", true));
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group1.Function2.Enabled", false));
+            EXPECT_CALL(mockConfigValueSetter, setValueUint("Group1.Function2.Mode", 1024));
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group2.Function1.Enabled", false));
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group2.Function2.Enabled", true));
+            EXPECT_CALL(mockConfigValueSetter, setValueUint("Group2.Function2.Mode", 514));
+        },
+        .expectedConversionState{
+            .nestingLevel = 0,
+            .indexInNestingLevel{1},
+            .offset = 200
+        },
+        .expectedReadBytes = 200
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\n{\n",
+        .expectedConversionState{
+            .nestingLevel = 1,
+            .indexInNestingLevel{0, config_params::kInvalidObjectIndex},
+            .offset = 3
+        },
+        .expectedReadBytes = 3
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"\t\"Group1\"\n\r:\r {",
+        .conversionState{
+            .nestingLevel = 1,
+            .indexInNestingLevel{0, config_params::kInvalidObjectIndex},
+            .offset = 3
+        },
+        .expectedConversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 0, config_params::kInvalidObjectIndex},
+            .offset = 18
+        },
+        .expectedReadBytes = 15
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8" \"Function1\":\n{\n\"Enabled\":\ttrue\r",
+        .conversionState{
+            .nestingLevel = 2,
+            .indexInNestingLevel{0, 0, config_params::kInvalidObjectIndex},
+            .offset = 18
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group1.Function1.Enabled", true));
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 0, 0},
+            .offset = 50
+        },
+        .expectedReadBytes = 32
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"}\n\n,\r\"Function2\": { \"Enabled\": false",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 0, 0},
+            .offset = 50
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group1.Function2.Enabled", false));
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 1, 0},
+            .offset = 86
+        },
+        .expectedReadBytes = 36
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8",\n\"Mode\":1024\n}\t\t}\r,",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 0, 1, 0},
+            .offset = 86
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueUint("Group1.Function2.Mode", 1024));
+        },
+        .expectedConversionState{
+            .nestingLevel = 1,
+            .indexInNestingLevel{0, 0},
+            .offset = 105
+        },
+        .expectedReadBytes = 19
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8",\n\"Group2\":\t{\n\"Function1\" :{ \"Enabled\"\r:\nfalse\n",
+        .conversionState{
+            .nestingLevel = 1,
+            .indexInNestingLevel{0, 0},
+            .offset = 105
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group2.Function1.Enabled", false));
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 0, 0},
+            .offset = 152
+        },
+        .expectedReadBytes = 47
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8"},\"Function2\":{\"Enabled\":true\r\n",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 0, 0},
+            .offset = 152
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueBool("Group2.Function2.Enabled", true));
+        },
+        .expectedConversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 1, 0},
+            .offset = 183
+        },
+        .expectedReadBytes = 31
+    },
+    ConfigFromStringTestParam{
+        .bufferContent = u8",\r\n\"Mode\":514\n}}}",
+        .conversionState{
+            .nestingLevel = 3,
+            .indexInNestingLevel{0, 1, 1, 0},
+            .offset = 183
+        },
+        .setExpectations = [](MockConfigValueSetter& mockConfigValueSetter) {
+            EXPECT_CALL(mockConfigValueSetter, setValueUint("Group2.Function2.Mode", 514));
+        },
+        .expectedConversionState{
+            .nestingLevel = 0,
+            .indexInNestingLevel{1},
+            .offset = 200
+        },
+        .expectedReadBytes = 17
+    }
+)));
