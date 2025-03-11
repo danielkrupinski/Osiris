@@ -58,21 +58,20 @@ public:
 
     void boolean(const char8_t* key, auto&& /* valueSetter */, auto&& valueGetter) noexcept
     {
-        if (shouldWriteMe()) {
-            const auto previousWriteIndex = writeIndex;
-            if (writeCommaAfterPreviousElement() && writeKey(key) && writeBool(valueGetter()))
-                increaseConversionIndexInNestingLevel();
-            else
-                writeIndex = previousWriteIndex;
-        }
-        increaseIndexInNestingLevel();
+        writeBool(key, valueGetter());
     }
 
     void uint(const char8_t* key, auto&& /* valueSetter */, auto&& valueGetter) noexcept
     {
+        writeUint(key, valueGetter());
+    }
+
+private:
+    void writeBool(const char8_t* key, bool value) noexcept
+    {
         if (shouldWriteMe()) {
             const auto previousWriteIndex = writeIndex;
-            if (writeCommaAfterPreviousElement() && writeKey(key) && writeUint(valueGetter()))
+            if (writeCommaAfterPreviousElement() && writeKey(key) && writeBool(value))
                 increaseConversionIndexInNestingLevel();
             else
                 writeIndex = previousWriteIndex;
@@ -80,7 +79,18 @@ public:
         increaseIndexInNestingLevel();
     }
 
-private:
+    void writeUint(const char8_t* key, std::uint64_t value) noexcept
+    {
+        if (shouldWriteMe()) {
+            const auto previousWriteIndex = writeIndex;
+            if (writeCommaAfterPreviousElement() && writeKey(key) && writeUint(value))
+                increaseConversionIndexInNestingLevel();
+            else
+                writeIndex = previousWriteIndex;
+        }
+        increaseIndexInNestingLevel();
+    }
+
     [[nodiscard]] bool writeKey(const char8_t* key) noexcept
     {
         return writeChar(u8'"') && writeString(key) && writeString(u8"\":");
@@ -125,7 +135,7 @@ private:
         ++indexInNestingLevel[nestingLevel];
     }
 
-    void increaseConversionIndexInNestingLevel()const noexcept
+    void increaseConversionIndexInNestingLevel() const noexcept
     {
         assert(conversionState.indexInNestingLevel[conversionState.nestingLevel] < config_params::kMaxObjectIndex);
         ++conversionState.indexInNestingLevel[conversionState.nestingLevel];

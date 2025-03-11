@@ -49,33 +49,49 @@ public:
 
     void boolean(const char8_t* key, auto&& valueSetter, auto&& /* valueGetter */) noexcept
     {
-        if (shouldReadMe()) {
-            const auto previousReadIndex = readIndex;
-            if (bool parsedBool{}; readUntilStartOfValue(key) && parseBool(parsedBool)) {
-                valueSetter(parsedBool);
-                markElementReadAtCurrentNestingLevel();
-            } else {
-                readIndex = previousReadIndex;
-            }
-        }
-        increaseIndexInNestingLevel();
+        if (bool value; parseBool(key, value))
+            valueSetter(value);
     }
 
     void uint(const char8_t* key, auto&& valueSetter, auto&& /* valueGetter */) noexcept
     {
+        if (std::uint64_t value; parseUint(key, value))
+            valueSetter(value);
+    }
+
+private:
+    [[nodiscard]] bool parseBool(const char8_t* key, bool& value) noexcept
+    {
+        bool parsed = false;
         if (shouldReadMe()) {
             const auto previousReadIndex = readIndex;
-            if (std::uint64_t parsedUint{}; readUntilStartOfValue(key) && parseUint(parsedUint)) {
-                valueSetter(parsedUint);
+            if (readUntilStartOfValue(key) && parseBool(value)) {
+                parsed = true;
                 markElementReadAtCurrentNestingLevel();
             } else {
                 readIndex = previousReadIndex;
             }
         }
         increaseIndexInNestingLevel();
+        return parsed;
     }
 
-private:
+    [[nodiscard]] bool parseUint(const char8_t* key, std::uint64_t& value) noexcept
+    {
+        bool parsed = false;
+        if (shouldReadMe()) {
+            const auto previousReadIndex = readIndex;
+            if (readUntilStartOfValue(key) && parseUint(value)) {
+                parsed = true;
+                markElementReadAtCurrentNestingLevel();
+            } else {
+                readIndex = previousReadIndex;
+            }
+        }
+        increaseIndexInNestingLevel();
+        return parsed;
+    }
+
     void markConversionComplete() noexcept
     {
         assert(conversionState.nestingLevel == 1);
