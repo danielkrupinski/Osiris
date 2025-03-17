@@ -5,7 +5,7 @@
 #include "PlayerOutlineGlowColorType.h"
 
 template <typename HookContext>
-struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<HookContext>> {
+struct PlayerOutlineGlowToggle {
     explicit PlayerOutlineGlowToggle(HookContext& hookContext) noexcept
         : hookContext{hookContext}
     {
@@ -14,24 +14,19 @@ struct PlayerOutlineGlowToggle : FeatureToggle<PlayerOutlineGlowToggle<HookConte
     void update(char option) noexcept
     {
         switch (option) {
-        case '0': this->enable(); state().showOnlyEnemies = true; break;
-        case '1': this->enable(); state().showOnlyEnemies = false; break;
-        case '2': this->disable(); break;
+        case '0': hookContext.config().template setVariable<PlayerOutlineGlowEnabled>(true); hookContext.config().template setVariable<PlayerOutlineGlowOnlyEnemies>(true); break;
+        case '1': hookContext.config().template setVariable<PlayerOutlineGlowEnabled>(true); hookContext.config().template setVariable<PlayerOutlineGlowOnlyEnemies>(false); break;
+        case '2': hookContext.config().template setVariable<PlayerOutlineGlowEnabled>(false); break;
         }
     }
 
     void updateColor(char option) noexcept
     {
         switch (option) {
-        case '0': state().playerGlowColorType = PlayerOutlineGlowColorType::PlayerOrTeamColor; break;
-        case '1': state().playerGlowColorType = PlayerOutlineGlowColorType::TeamColor; break;
-        case '2': state().playerGlowColorType = PlayerOutlineGlowColorType::HealthBased; break;
+        case '0': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::PlayerOrTeamColor); break;
+        case '1': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::TeamColor); break;
+        case '2': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::HealthBased); break;
         }
-    }
-
-    [[nodiscard]] auto& enabledVariable(typename PlayerOutlineGlowToggle::ToggleMethod) const noexcept
-    {
-        return state().enabledForPlayers;
     }
 
 private:

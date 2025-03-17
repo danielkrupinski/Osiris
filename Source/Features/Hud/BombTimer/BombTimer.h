@@ -35,6 +35,11 @@ public:
             context.bombTimerPanel().hide();
     }
 
+    void onDisable() const noexcept
+    {
+        context.bombTimerPanel().hide();
+    }
+
 private:
     Context context;
 };

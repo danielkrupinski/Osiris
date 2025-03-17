@@ -25,6 +25,11 @@ public:
             context.defusingAlertPanel().hide();
     }
 
+    void onDisable() const noexcept
+    {
+        context.defusingAlertPanel().hide();
+    }
+
 private:
     Context context;
 };

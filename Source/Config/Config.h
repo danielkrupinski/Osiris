@@ -4,8 +4,9 @@
 
 #include "ConfigStringConversionState.h"
 #include "ConfigFromString.h"
-#include "ConfigToString.h"
 #include "ConfigSchema.h"
+#include "ConfigToString.h"
+#include "ConfigVariableChangeHandler.h"
 
 #if IS_WIN64()
 #include <Platform/Windows/FileSystem/WindowsFileSystem.h>
@@ -28,20 +29,28 @@ public:
         buildConfigTempFilePath();
     }
 
-    void enableAutoSave() noexcept
+    template <typename ConfigVariable>
+    [[nodiscard]] auto getVariable() noexcept
     {
-        state().autoSaveEnabled = true;
+        return state().configVariables.template getVariableValue<ConfigVariable>();
+    }
+
+    template <typename ConfigVariable>
+    void setVariable(ConfigVariable::ValueType newValue) noexcept
+    {
+        if (changeVariableValue<ConfigVariable>(newValue))
+            scheduleAutoSave();
+    }
+
+    template <typename ConfigVariable>
+    void setVariableWithoutAutoSave(ConfigVariable::ValueType newValue) noexcept
+    {
+        changeVariableValue<ConfigVariable>(newValue);
     }
 
     void scheduleLoad() noexcept
     {
         state().loadScheduled = true;
-    }
-
-    void scheduleAutoSave() noexcept
-    {
-        if (state().autoSaveEnabled)
-            state().autoSaveScheduled = true;
     }
 
     void update() noexcept
@@ -67,6 +76,22 @@ public:
     }
 
 private:
+    template <typename ConfigVariable>
+    bool changeVariableValue(ConfigVariable::ValueType newValue) noexcept
+    {
+        if (getVariable<ConfigVariable>() == newValue)
+            return false;
+
+        ConfigVariableChangeHandler{hookContext}.template onConfigVariableValueChanged<ConfigVariable>(newValue);
+        state().configVariables.template storeVariableValue<ConfigVariable>(newValue);
+        return true;
+    }
+
+    void scheduleAutoSave() noexcept
+    {
+        state().autoSaveScheduled = true;
+    }
+
     [[nodiscard]] auto& state() noexcept
     {
         return hookContext.configState();

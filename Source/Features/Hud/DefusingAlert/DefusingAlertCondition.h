@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DefusingAlertConfigVariables.h"
+
 template <typename Context>
 struct DefusingAlertCondition {
     explicit DefusingAlertCondition(Context context) noexcept
@@ -9,7 +11,7 @@ struct DefusingAlertCondition {
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabled;
+        return context.config().template getVariable<DefusingAlertEnabled>();
     }
 
     [[nodiscard]] bool shouldShowDefuseAlert() const noexcept

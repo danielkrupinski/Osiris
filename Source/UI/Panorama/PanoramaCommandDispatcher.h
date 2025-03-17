@@ -10,10 +10,11 @@
 
 template <typename HookContext>
 struct PanoramaCommandDispatcher {
-    PanoramaCommandDispatcher(const char* commandline, Features<HookContext> features, UnloadFlag& unloadFlag) noexcept
+    PanoramaCommandDispatcher(const char* commandline, Features<HookContext> features, UnloadFlag& unloadFlag, HookContext& hookContext) noexcept
         : parser{commandline}
         , features{features}
         , unloadFlag{unloadFlag}
+        , hookContext{hookContext}
     {
     }
 
@@ -37,11 +38,12 @@ private:
         if (command == "unload") {
             unloadFlag.set();
         } else if (command == "set") {
-            SetCommandHandler{parser, features}();
+            SetCommandHandler{parser, features, hookContext}();
         }
     }
 
     StringParser parser;
     Features<HookContext> features;
     UnloadFlag& unloadFlag;
+    HookContext& hookContext;
 };

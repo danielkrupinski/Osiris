@@ -21,6 +21,7 @@
     <ClInclude Include="Config\ConfigState.h" />
     <ClInclude Include="Config\ConfigStringConversionState.h" />
     <ClInclude Include="Config\ConfigToString.h" />
+    <ClInclude Include="Config\ConfigVariables.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h" />
     <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoContainerPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorld.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldCondition.h" />
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldConfigVariables.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldPanelFactory.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldState.h" />

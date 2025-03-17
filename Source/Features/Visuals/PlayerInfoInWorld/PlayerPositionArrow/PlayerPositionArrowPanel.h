@@ -19,7 +19,7 @@ public:
 
     void update(auto&& playerPawn) const noexcept
     {
-        if (!context.state().showPlayerPosition) {
+        if (!context.config().template getVariable<PlayerInfoInWorldPlayerPositionArrowEnabled>()) {
             context.panel().setVisible(false);
             return;
         }
@@ -34,7 +34,7 @@ public:
 private:
     [[nodiscard]] cs2::Color getArrowColor(auto&& playerPawn) const noexcept
     {
-        if (context.state().playerPositionArrowColor == PlayerPositionArrowColorType::PlayerOrTeamColor) {
+        if (context.config().template getVariable<PlayerInfoInWorldPlayerPositionArrowColorMode>() == PlayerPositionArrowColorType::PlayerOrTeamColor) {
             const auto playerColor = playerPawn.playerController().getPlayerColor();
             if (playerColor.has_value())
                 return *playerColor;

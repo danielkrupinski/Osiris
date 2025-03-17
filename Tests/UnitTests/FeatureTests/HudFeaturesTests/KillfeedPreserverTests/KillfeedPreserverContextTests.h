@@ -4,7 +4,6 @@
 #include <gtest/gtest.h>
 
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserverContext.h>
-#include <Features/Hud/KillfeedPreserver/KillfeedPreserverState.h>
 #include <Mocks/HudMocks/MockDeathNotice.h>
 #include <Mocks/HudMocks/MockDeathNotices.h>
 #include <Mocks/HudMocks/MockHud.h>
@@ -16,7 +15,6 @@ protected:
     testing::StrictMock<MockHud> mockHud;
     testing::StrictMock<MockDeathNotices> mockDeathNotices;
 
-    KillfeedPreserverState state;
     KillfeedPreserverContext<MockHookContext&> killfeedPreserverContext{mockHookContext};
 };
 

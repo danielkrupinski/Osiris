@@ -21,7 +21,7 @@ public:
 
     void update(auto&& playerPawn) const noexcept
     {
-        if (!context.state().showPlayerHealth) {
+        if (!context.config().template getVariable<PlayerInfoInWorldPlayerHealthEnabled>()) {
             context.panel().setVisible(false);
             return;
         }
@@ -40,7 +40,7 @@ public:
 private:
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
-        if (context.state().playerHealthTextColor == PlayerHealthTextColor::HealthBased)
+        if (context.config().template getVariable<PlayerInfoInWorldPlayerHealthColorMode>() == PlayerHealthTextColor::HealthBased)
             return playerPawn.healthColor().value_or(cs2::kColorWhite);
         return cs2::kColorWhite;
     }

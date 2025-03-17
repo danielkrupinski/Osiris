@@ -96,10 +96,10 @@ private:
 
     [[nodiscard]] auto computeColorMode() const noexcept
     {
-        if (modelGlowState().masterSwitch != ModelGlowState::State::Enabled || modelGlowState().playerModelGlow != ModelGlowState::State::Enabled)
+        if (!hookContext.config().template getVariable<ModelGlowEnabled>() || !hookContext.config().template getVariable<PlayerModelGlowEnabled>())
             return PlayerModelGlowPreviewColorMode::None;
 
-        switch (modelGlowState().playerModelGlowColorType) {
+        switch (hookContext.config().template getVariable<PlayerModelGlowColorMode>()) {
         case PlayerModelGlowColorType::HealthBased: return PlayerModelGlowPreviewColorMode::HealthBased;
         case PlayerModelGlowColorType::PlayerOrTeamColor: return PlayerModelGlowPreviewColorMode::PlayerOrTeamColor;
         case PlayerModelGlowColorType::TeamColor: return PlayerModelGlowPreviewColorMode::TeamColor;

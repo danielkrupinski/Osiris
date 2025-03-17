@@ -69,6 +69,11 @@ public:
         hookContext.template make<GlowSceneObjects>().clearObjects();
     }
 
+    [[nodiscard]] decltype(auto) config() const noexcept
+    {
+        return hookContext.config();
+    }
+
 private:
     HookContext& hookContext;
 };

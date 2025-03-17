@@ -13,7 +13,7 @@ public:
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabledForTickingBomb;
+        return context.config().template getVariable<TickingBombModelGlowEnabled>();
     }
 
     [[nodiscard]] bool shouldGlowPlantedBomb(auto&& plantedBomb) const noexcept

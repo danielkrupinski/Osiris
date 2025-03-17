@@ -22,6 +22,11 @@ public:
         return _hookContext.template make<PanoramaUiPanel>(_panel);
     }
 
+    [[nodiscard]] decltype(auto) config() const noexcept
+    {
+        return _hookContext.config();
+    }
+
 private:
     HookContext& _hookContext;
     cs2::CUIPanel* _panel;

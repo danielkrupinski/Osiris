@@ -19,21 +19,18 @@ protected:
 
 class PostRoundTimerConditionShouldRunTest : public PostRoundTimerConditionTest {
 protected:
-    PostRoundTimerConditionShouldRunTest()
-    {
-        EXPECT_CALL(mockContext, state()).WillOnce(testing::ReturnRef(state));
-    }
-
-    PostRoundTimerState state;
+    testing::StrictMock<MockConfig> mockConfig;
 };
 
 TEST_F(PostRoundTimerConditionShouldRunTest, ShouldRunIfEnabled) {
-    state.enabled = true;
+    EXPECT_CALL(mockContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    EXPECT_CALL(mockConfig, getVariableBool(ConfigVariableTypes::indexOf<PostRoundTimerEnabled>())).WillOnce(testing::Return(true));
     EXPECT_TRUE(postRoundTimerCondition.shouldRun());
 }
 
 TEST_F(PostRoundTimerConditionShouldRunTest, ShouldNotRunIfNotEnabled) {
-    state.enabled = false;
+    EXPECT_CALL(mockContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    EXPECT_CALL(mockConfig, getVariableBool(ConfigVariableTypes::indexOf<PostRoundTimerEnabled>())).WillOnce(testing::Return(false));
     EXPECT_FALSE(postRoundTimerCondition.shouldRun());
 }
 

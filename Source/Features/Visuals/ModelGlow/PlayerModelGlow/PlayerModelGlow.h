@@ -25,8 +25,7 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        if (state().playerModelGlow == ModelGlowState::State::Disabling)
-            state().playerModelGlow = ModelGlowState::State::Disabled;
+        state().playerModelGlowDisabling = false;
     }
  
     void updateSceneObjectUpdaterHook(auto&& playerPawn) const noexcept
@@ -48,30 +47,19 @@ public:
 
     void onUnload(auto&& playerPawn) const noexcept
     {
-        if (state().playerModelGlow != ModelGlowState::State::Disabled)
+        if (hookContext.config().template getVariable<PlayerModelGlowEnabled>() || state().playerModelGlowDisabling)
             unhookPlayerSceneObjectUpdater(playerPawn);
-    }
-
-    void enable() const noexcept
-    {
-        state().playerModelGlow = ModelGlowState::State::Enabled;
-    }
-
-    void disable() const noexcept
-    {
-        if (state().playerModelGlow == ModelGlowState::State::Enabled)
-            state().playerModelGlow = ModelGlowState::State::Disabling;
     }
 
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return state().playerModelGlow != ModelGlowState::State::Disabled;
+        return hookContext.config().template getVariable<PlayerModelGlowEnabled>() || state().playerModelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return state().playerModelGlow == ModelGlowState::State::Enabled;
+        return hookContext.config().template getVariable<PlayerModelGlowEnabled>();
     }
 
     void hookPlayerSceneObjectUpdater(auto&& playerPawn) const noexcept
@@ -106,12 +94,12 @@ private:
 
     [[nodiscard]] bool shouldGlowPlayerModel(auto&& playerPawn) const noexcept
     {
-        return state().masterSwitch == ModelGlowState::State::Enabled
+        return hookContext.config().template getVariable<ModelGlowEnabled>()
             && playerPawn.isAlive().value_or(true)
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
-            && (!state().showOnlyEnemies || playerPawn.isEnemy().value_or(true));
+            && (!hookContext.config().template getVariable<PlayerModelGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
     [[nodiscard]] auto& state() const noexcept
@@ -161,10 +149,10 @@ private:
 
     [[nodiscard]] cs2::Color getColorSaturated(auto&& playerPawn) const noexcept
     {
-        if (state().playerModelGlowColorType == PlayerModelGlowColorType::HealthBased)
+        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::HealthBased)
             return healthColor(playerPawn, 1.0f).value_or(cs2::kColorWhite);
 
-        if (state().playerModelGlowColorType == PlayerModelGlowColorType::PlayerOrTeamColor) {
+        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::PlayerOrTeamColor) {
             if (const auto playerColor = getPlayerColorSaturated(playerPawn.playerController().playerColorIndex()); playerColor.has_value())
                 return *playerColor;
         }
@@ -178,10 +166,10 @@ private:
 
     [[nodiscard]] cs2::Color getColorHalfSaturated(auto&& playerPawn) const noexcept
     {
-        if (state().playerModelGlowColorType == PlayerModelGlowColorType::HealthBased)
+        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::HealthBased)
             return healthColor(playerPawn, 0.5f).value_or(cs2::kColorWhite);
 
-        if (state().playerModelGlowColorType == PlayerModelGlowColorType::PlayerOrTeamColor) {
+        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::PlayerOrTeamColor) {
             if (const auto playerColor = getPlayerColorHalfSaturated(playerPawn.playerController().playerColorIndex()); playerColor.has_value())
                 return *playerColor;
         }

@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include "KillfeedPreserverConfigVariables.h"
 #include "KillfeedPreserverContext.h"
 
 template <typename HookContext, typename Context = KillfeedPreserverContext<HookContext>>
@@ -15,7 +16,7 @@ public:
 
     void run() noexcept
     {
-        if (context.state().enabled)
+        if (context.config().template getVariable<KillfeedPreserverEnabled>())
             context.deathNotices().forEach(context.preserveDeathNotice());
     }
 

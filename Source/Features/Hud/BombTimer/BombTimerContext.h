@@ -81,6 +81,11 @@ struct BombTimerContext {
         return _context.featuresStates().hudFeaturesStates.bombTimerState;
     }
 
+    [[nodiscard]] decltype(auto) config() const noexcept
+    {
+        return _context.config();
+    }
+
 private:
     [[nodiscard]] decltype(auto) uiEngine() const noexcept
     {

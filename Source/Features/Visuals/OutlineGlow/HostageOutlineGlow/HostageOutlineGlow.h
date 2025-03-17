@@ -5,22 +5,20 @@
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include "HostageOutlineGlowContext.h"
 
-template <typename HookContext, typename Context = HostageOutlineGlowContext<HookContext>>
+template <typename HookContext>
 class HostageOutlineGlow {
 public:
-    template <typename... Args>
-    HostageOutlineGlow(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit HostageOutlineGlow(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     void applyGlowToHostage(auto&& hostage) const noexcept
     {
-        if (context.state().enabledForHostages) {
+        if (hookContext.config().template getVariable<HostageOutlineGlowEnabled>())
             hostage.applyGlowRecursively(outline_glow_params::kHostageColor);
-        }
     }
 
 private:
-    Context context;
+    HookContext& hookContext;
 };

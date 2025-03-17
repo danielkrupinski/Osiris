@@ -151,7 +151,7 @@ public:
 
         const auto cmdSymbol = uiEngine().makeSymbol(0, "cmd");
         const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
-        PanoramaCommandDispatcher{cmd, features, unloadFlag}();
+        PanoramaCommandDispatcher{cmd, features, unloadFlag, hookContext}();
         guiPanel.setAttributeString(cmdSymbol, "");
 
         hookContext.template make<PlayerModelGlowPreview>().hookPreviewPlayersSceneObjectUpdaters();

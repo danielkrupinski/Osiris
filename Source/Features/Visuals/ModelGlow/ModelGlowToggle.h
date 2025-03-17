@@ -14,70 +14,76 @@ public:
     void updateMasterSwitch(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.template make<ModelGlow>().enable(); break;
-        case '1': hookContext.template make<ModelGlow>().disable(); break;
+        case '0': setVariable<ModelGlowEnabled>(true); break;
+        case '1': setVariable<ModelGlowEnabled>(false); break;
         }
     }
 
     void updatePlayerModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.template make<PlayerModelGlow>().enable(); state().showOnlyEnemies = true; break;
-        case '1': hookContext.template make<PlayerModelGlow>().enable(); state().showOnlyEnemies = false; break;
-        case '2': hookContext.template make<PlayerModelGlow>().disable(); break;
+        case '0': setVariable<PlayerModelGlowEnabled>(true); setVariable<PlayerModelGlowOnlyEnemies>(true); break;
+        case '1': setVariable<PlayerModelGlowEnabled>(true); setVariable<PlayerModelGlowOnlyEnemies>(false); break;
+        case '2': setVariable<PlayerModelGlowEnabled>(false); break;
         }
     }
 
     void updatePlayerModelGlowColor(char option) noexcept
     {
         switch (option) {
-        case '0': state().playerModelGlowColorType = PlayerModelGlowColorType::PlayerOrTeamColor; break;
-        case '1': state().playerModelGlowColorType = PlayerModelGlowColorType::TeamColor; break;
-        case '2': state().playerModelGlowColorType = PlayerModelGlowColorType::HealthBased; break;
+        case '0': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::PlayerOrTeamColor); break;
+        case '1': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::TeamColor); break;
+        case '2': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::HealthBased); break;
         }
     }
 
     void updateWeaponModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.template make<WeaponModelGlow>().enable(); break;
-        case '1': hookContext.template make<WeaponModelGlow>().disable(); break;
+        case '0': setVariable<WeaponModelGlowEnabled>(true); break;
+        case '1': setVariable<WeaponModelGlowEnabled>(false); break;
         }
     }
 
     void updateDroppedBombModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.template make<DroppedBombModelGlow>().enable(); break;
-        case '1': hookContext.template make<DroppedBombModelGlow>().disable(); break;
+        case '0': setVariable<DroppedBombModelGlowEnabled>(true); break;
+        case '1': setVariable<DroppedBombModelGlowEnabled>(false); break;
         }
     }
 
     void updateTickingBombModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.template make<TickingBombModelGlow>().enable(); break;
-        case '1': hookContext.template make<TickingBombModelGlow>().disable(); break;
+        case '0': setVariable<TickingBombModelGlowEnabled>(true); break;
+        case '1': setVariable<TickingBombModelGlowEnabled>(false); break;
         }
     }
 
     void updateDefuseKitModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.template make<DefuseKitModelGlow>().enable(); break;
-        case '1': hookContext.template make<DefuseKitModelGlow>().disable(); break;
+        case '0': setVariable<DefuseKitModelGlowEnabled>(true); break;
+        case '1': setVariable<DefuseKitModelGlowEnabled>(false); break;
         }
     }
 
     void updateGrenadeProjectileModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.template make<GrenadeProjectileModelGlow>().enable(); break;
-        case '1': hookContext.template make<GrenadeProjectileModelGlow>().disable(); break;
+        case '0': setVariable<GrenadeProjectileModelGlowEnabled>(true); break;
+        case '1': setVariable<GrenadeProjectileModelGlowEnabled>(false); break;
         }
     }
 
 private:
+    template <typename ConfigVariable>
+    void setVariable(ConfigVariable::ValueType value) noexcept
+    {
+        hookContext.config().template setVariable<ConfigVariable>(value);
+    }
+
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.featuresStates().visualFeaturesStates.modelGlowState;

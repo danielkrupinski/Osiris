@@ -24,7 +24,7 @@ public:
 
     void applyGlowToEntity(EntityTypeInfo entityTypeInfo, auto&& modelEntity) noexcept
     {
-        if (!context.state().masterSwitch)
+        if (!context.config().template getVariable<OutlineGlowEnabled>())
             return;
 
         if (modelEntity.glowProperty().isGlowing().valueOr(false))
@@ -44,19 +44,6 @@ public:
             context.applyGlowToGrenadeProjectile(entityTypeInfo, modelEntity.baseEntity());
         else if (entityTypeInfo.isWeapon())
             context.applyGlowToWeapon(entityTypeInfo, modelEntity.baseEntity());
-    }
-
-    void enable() const noexcept
-    {
-        context.state().masterSwitch = true;
-    }
-
-    void disable() const noexcept
-    {
-        if (context.state().masterSwitch) {
-            context.state().masterSwitch = false;
-            context.clearGlowSceneObjects();
-        }
     }
 
 private:

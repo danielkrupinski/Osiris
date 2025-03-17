@@ -1811,6 +1811,12 @@
     <ClInclude Include="Utils\Wcslen.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldConfigVariables.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigVariables.h">
+      <Filter>Config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

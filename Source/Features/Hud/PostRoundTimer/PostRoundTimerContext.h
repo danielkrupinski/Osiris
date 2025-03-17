@@ -54,6 +54,11 @@ struct PostRoundTimerContext {
         return _hookContext.localPlayerController().teamNumber();
     }
 
+    [[nodiscard]] decltype(auto) config() const noexcept
+    {
+        return _hookContext.config();
+    }
+
 private:
     [[nodiscard]] decltype(auto) countdownContainerPanelHandle() const noexcept
     {

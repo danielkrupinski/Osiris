@@ -33,7 +33,7 @@ private:
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return state().enabledForPlayers;
+        return hookContext.config().template getVariable<PlayerOutlineGlowEnabled>();
     }
 
     [[nodiscard]] bool shouldGlowPlayer(auto&& playerPawn) const noexcept
@@ -42,7 +42,7 @@ private:
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
-            && (!state().showOnlyEnemies || playerPawn.isEnemy().value_or(true));
+            && (!hookContext.config().template getVariable<PlayerOutlineGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
     [[nodiscard]] cs2::Color correctAlpha(auto&& playerPawn, cs2::Color color) const noexcept
@@ -54,10 +54,10 @@ private:
 
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
-        if (state().playerGlowColorType == PlayerOutlineGlowColorType::HealthBased)
+        if (hookContext.config().template getVariable<PlayerOutlineGlowColorMode>() == PlayerOutlineGlowColorType::HealthBased)
             return playerPawn.healthColor().value_or(cs2::kColorWhite);
 
-        if (state().playerGlowColorType == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
+        if (hookContext.config().template getVariable<PlayerOutlineGlowColorMode>() == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
             if (const auto playerColor = playerPawn.playerController().getPlayerColor(); playerColor.has_value())
                 return *playerColor;
         }

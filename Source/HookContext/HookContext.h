@@ -245,6 +245,11 @@ struct HookContext {
         return fullGlobalContext.osirisDirectoryPath;
     }
 
+    [[nodiscard]] auto soundWatcher() noexcept
+    {
+        return SoundWatcher<HookContext>{fullGlobalContext.soundWatcherState, *this};
+    }
+
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {

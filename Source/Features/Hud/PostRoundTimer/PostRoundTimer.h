@@ -30,6 +30,11 @@ public:
         }
     }
 
+    void onDisable() const noexcept
+    {
+        context.postRoundTimerPanel().hide();
+    }
+
 private:
     Context context;
 };

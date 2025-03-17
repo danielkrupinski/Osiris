@@ -14,16 +14,16 @@ public:
 
     [[nodiscard]] bool shouldShowOnPlayer(auto&& playerPawn) const noexcept
     {
-        if (state().showBombCarrierIcon)
+        if (_hookContext.config().template getVariable<PlayerInfoInWorldBombCarrierIconEnabled>())
             return playerPawn.isCarryingC4();
-        if (state().showBombPlantingIcon)
+        if (_hookContext.config().template getVariable<PlayerInfoInWorldBombPlantIconEnabled>())
             return playerPawn.carriedC4().isBeingPlanted().valueOr(false);
         return false;
     }
 
     [[nodiscard]] bool shouldShowPlantingColor(auto&& playerPawn) const noexcept
     {
-        return state().showBombPlantingIcon && playerPawn.carriedC4().isBeingPlanted().valueOr(false);
+        return _hookContext.config().template getVariable<PlayerInfoInWorldBombPlantIconEnabled>() && playerPawn.carriedC4().isBeingPlanted().valueOr(false);
     }
 
     [[nodiscard]] auto& state() const noexcept

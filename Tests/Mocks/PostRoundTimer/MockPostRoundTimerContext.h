@@ -6,6 +6,7 @@ struct MockGameRules;
 struct MockPostRoundTimerCondition;
 struct MockPostRoundTimerPanel;
 struct PostRoundTimerState;
+struct MockConfig;
 
 struct MockPostRoundTimerContext {
     MOCK_METHOD(MockPostRoundTimerCondition&, condition, ());
@@ -13,4 +14,5 @@ struct MockPostRoundTimerContext {
     MOCK_METHOD(MockGameRules&, gameRules, ());
     MOCK_METHOD(PostRoundTimerState&, state, ());
     MOCK_METHOD(bool, isGameRoundTimeVisible, ());
+    MOCK_METHOD(MockConfig&, config, ());
 };
