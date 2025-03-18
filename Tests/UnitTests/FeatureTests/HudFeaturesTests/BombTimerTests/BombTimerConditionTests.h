@@ -6,27 +6,27 @@
 #include <Features/Hud/BombTimer/BombTimerCondition.h>
 #include <Features/Hud/BombTimer/BombTimerState.h>
 #include <Mocks/BombTimerMocks/MockBombTimerContext.h>
+#include <Mocks/MockConfig.h>
 #include <Mocks/MockPanel.h>
 #include <Utils/Optional.h>
 
 class BombTimerConditionTest : public testing::Test {
 protected:
     testing::StrictMock<MockBombTimerContext> mockBombTimerContext;
+    testing::StrictMock<MockConfig> mockConfig;
     BombTimerCondition<MockBombTimerContext&> bombTimerCondition{mockBombTimerContext};
 };
 
 TEST_F(BombTimerConditionTest, ShouldRunIfEnabled) {
-    BombTimerState bombTimerState;
-    bombTimerState.enabled = true;
-    EXPECT_CALL(mockBombTimerContext, state()).WillOnce(testing::ReturnRef(bombTimerState));
+    EXPECT_CALL(mockBombTimerContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    EXPECT_CALL(mockConfig, getVariableBool(ConfigVariableTypes::indexOf<BombTimerEnabled>())).WillOnce(testing::Return(true));
 
     EXPECT_EQ(bombTimerCondition.shouldRun(), true);
 }
 
 TEST_F(BombTimerConditionTest, ShouldNotRunIfNotEnabled) {
-    BombTimerState bombTimerState;
-    bombTimerState.enabled = false;
-    EXPECT_CALL(mockBombTimerContext, state()).WillOnce(testing::ReturnRef(bombTimerState));
+    EXPECT_CALL(mockBombTimerContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    EXPECT_CALL(mockConfig, getVariableBool(ConfigVariableTypes::indexOf<BombTimerEnabled>())).WillOnce(testing::Return(false));
 
     EXPECT_EQ(bombTimerCondition.shouldRun(), false);
 }

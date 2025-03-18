@@ -20,6 +20,11 @@ public:
         return hookContext.template make<GrenadeProjectileOutlineGlowCondition<GrenadeProjectileOutlineGlowContext>>();
     }
 
+    [[nodiscard]] decltype(auto) config() const noexcept
+    {
+        return hookContext.config();
+    }
+
 private:
     HookContext& hookContext;
 };

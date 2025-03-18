@@ -5,15 +5,15 @@
 
 template <typename HookContext>
 struct SetCommandHandler {
-    SetCommandHandler(StringParser& parser, Features<HookContext> features) noexcept
+    SetCommandHandler(StringParser& parser, Features<HookContext> features, HookContext& hookContext) noexcept
         : parser{parser}
         , features{features}
+        , hookContext{hookContext}
     {
     }
 
     void operator()() noexcept
     {
-        features.hookContext.config().scheduleAutoSave();
         if (const auto section = parser.getLine('/'); section == "hud") {
             handleHudSection();
         } else if (section == "visuals") {
@@ -27,30 +27,30 @@ private:
     void handleHudSection() const noexcept
     {
         if (const auto feature = parser.getLine('/'); feature == "bomb_timer") {
-            handleTogglableFeature(features.hudFeatures().bombTimerToggle());
+            handleTogglableVariable<BombTimerEnabled>();
         } else if (feature == "defusing_alert") {
-            handleTogglableFeature(features.hudFeatures().defusingAlertToggle());
+            handleTogglableVariable<DefusingAlertEnabled>();
         } else if (feature == "preserve_killfeed") {
-            handleTogglableFeature(features.hudFeatures().killfeedPreserveToggle());
+            handleTogglableVariable<KillfeedPreserverEnabled>();
         } else if (feature == "postround_timer") {
-            handleTogglableFeature(features.hudFeatures().postRoundTimerToggle());
+            handleTogglableVariable<PostRoundTimerEnabled>();
         }
     }
 
     void handleSoundSection() const noexcept
     {
         if (const auto feature = parser.getLine('/'); feature == "visualize_player_footsteps") {
-            handleTogglableFeature(features.soundFeatures().footstepVisualizerToggle());
+            handleTogglableVariable<FootstepSoundVisualizationEnabled>();
         } else if (feature == "visualize_bomb_plant") {
-            handleTogglableFeature(features.soundFeatures().bombPlantVisualizerToggle());
+            handleTogglableVariable<BombPlantSoundVisualizationEnabled>();
         } else if (feature == "visualize_bomb_beep") {
-            handleTogglableFeature(features.soundFeatures().bombBeepVisualizerToggle());
+            handleTogglableVariable<BombBeepSoundVisualizationEnabled>();
         } else if (feature == "visualize_bomb_defuse") {
-            handleTogglableFeature(features.soundFeatures().bombDefuseVisualizerToggle());
+            handleTogglableVariable<BombDefuseSoundVisualizationEnabled>();
         } else if (feature == "visualize_scope_sound") {
-            handleTogglableFeature(features.soundFeatures().weaponScopeVisualizerToggle());
+            handleTogglableVariable<WeaponScopeSoundVisualizationEnabled>();
         } else if (feature == "visualize_reload_sound") {
-            handleTogglableFeature(features.soundFeatures().weaponReloadVisualizerToggle());
+            handleTogglableVariable<WeaponReloadSoundVisualizationEnabled>();
         }
     }
 
@@ -59,47 +59,47 @@ private:
         if (const auto feature = parser.getLine('/'); feature == "player_information_through_walls") {
             handleFeature(features.visualFeatures().playerInfoInWorld());
         } else if (feature == "player_info_position") {
-            handleTogglableFeature(features.visualFeatures().playerPositionToggle());
+            handleTogglableVariable<PlayerInfoInWorldPlayerPositionArrowEnabled>();
         } else if (feature == "player_info_position_color") {
-            handleFeature(features.visualFeatures().playerPositionArrowColorToggle());
+            features.visualFeatures().playerInfoInWorld().updatePlayerPositionArrowColorMode(parser.getChar());
         } else if (feature == "player_info_health") {
-            handleTogglableFeature(features.visualFeatures().playerHealthToggle());
+            handleTogglableVariable<PlayerInfoInWorldPlayerHealthEnabled>();
         } else if (feature == "player_info_health_color") {
-            handleFeature(features.visualFeatures().playerHealthTextColorToggle());
+            features.visualFeatures().playerInfoInWorld().updatePlayerHealthColorMode(parser.getChar());
         } else if (feature == "player_info_weapon") {
-            handleTogglableFeature(features.visualFeatures().playerActiveWeaponToggle());
+            handleTogglableVariable<PlayerInfoInWorldActiveWeaponIconEnabled>();
         } else if (feature == "player_info_weapon_clip") {
-            handleTogglableFeature(features.visualFeatures().playerActiveWeaponAmmoToggle());
+            handleTogglableVariable<PlayerInfoInWorldActiveWeaponAmmoEnabled>();
         } else if (feature == "player_info_defuse") {
-            handleFeature(features.visualFeatures().playerDefuseIconToggle());
+            handleTogglableVariable<PlayerInfoInWorldBombDefuseIconEnabled>();
         } else if (feature == "player_info_hostage_pickup") {
-            handleFeature(features.visualFeatures().hostagePickupIconToggle());
+            handleTogglableVariable<PlayerInfoInWorldHostagePickupIconEnabled>();
         } else if (feature == "player_info_hostage_rescue") {
-            handleFeature(features.visualFeatures().hostageRescueIconToggle());
+            handleTogglableVariable<PlayerInfoInWorldHostageRescueIconEnabled>();
         } else if (feature == "player_info_blinded") {
-            handleFeature(features.visualFeatures().blindedIconToggle());
+            handleTogglableVariable<PlayerInfoInWorldBlindedIconEnabled>();
         } else if (feature == "player_info_bomb_carrier") {
-            handleTogglableFeature(features.visualFeatures().bombIconToggle());
+            handleTogglableVariable<PlayerInfoInWorldBombCarrierIconEnabled>();
         } else if (feature == "player_info_bomb_planting") {
-            handleTogglableFeature(features.visualFeatures().bombPlantingIconToggle());
+            handleTogglableVariable<PlayerInfoInWorldBombPlantIconEnabled>();
         } else if (feature == "player_outline_glow") {
             handleFeature(features.visualFeatures().playerOutlineGlowToggle());
         } else if (feature == "player_outline_glow_color") {
             features.visualFeatures().playerOutlineGlowToggle().updateColor(parser.getChar());
         } else if (feature == "outline_glow_enable") {
-            handleTogglableFeature(features.visualFeatures().outlineGlowToggle());
+            handleTogglableVariable<OutlineGlowEnabled>();
         } else if (feature == "weapon_outline_glow") {
-            handleTogglableFeature(features.visualFeatures().weaponOutlineGlowToggle());
+            handleTogglableVariable<WeaponOutlineGlowEnabled>();
         } else if (feature == "defuse_kit_outline_glow") {
-            handleTogglableFeature(features.visualFeatures().defuseKitOutlineGlowToggle());
+            handleTogglableVariable<DefuseKitOutlineGlowEnabled>();
         } else if (feature == "grenade_proj_outline_glow") {
-            handleTogglableFeature(features.visualFeatures().grenadeProjectileOutlineGlowToggle());
+            handleTogglableVariable<GrenadeProjectileOutlineGlowEnabled>();
         } else if (feature == "dropped_bomb_outline_glow") {
-            handleTogglableFeature(features.visualFeatures().droppedBombOutlineGlowToggle());
+            handleTogglableVariable<DroppedBombOutlineGlowEnabled>();
         } else if (feature == "ticking_bomb_outline_glow") {
-            handleTogglableFeature(features.visualFeatures().tickingBombOutlineGlowToggle());
+            handleTogglableVariable<TickingBombOutlineGlowEnabled>();
         } else if (feature == "hostage_outline_glow") {
-            handleTogglableFeature(features.visualFeatures().hostageOutlineGlowToggle());
+            handleTogglableVariable<HostageOutlineGlowEnabled>();
         } else if (feature == "model_glow_enable") {
             features.visualFeatures().modelGlowToggle().updateMasterSwitch(parser.getChar());
         } else if (feature == "player_model_glow") {
@@ -139,6 +139,22 @@ private:
         }
     }
 
+    template <typename ConfigVariable>
+    void handleTogglableVariable() const noexcept
+    {
+        switch (parser.getChar()) {
+        case '1':
+            hookContext.config().template setVariable<ConfigVariable>(false);
+            break;
+        case '0':
+            hookContext.config().template setVariable<ConfigVariable>(true);
+            break;
+        default:
+            break;
+        }
+    }
+
     StringParser& parser;
     Features<HookContext> features;
+    HookContext& hookContext;
 };

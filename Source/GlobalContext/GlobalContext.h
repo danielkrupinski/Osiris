@@ -125,7 +125,6 @@ public:
 
         UnloadFlag unloadFlag;
         hookContext.make<PanoramaGUI>().run(fullContext().features(hookContext), unloadFlag);
-        hookContext.config().enableAutoSave();
         hookContext.config().update();
 
         if (unloadFlag) {

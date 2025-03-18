@@ -10,7 +10,7 @@ public:
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabled;
+        return context.config().template getVariable<PlayerInfoInWorldEnabled>();
     }
 
     [[nodiscard]] bool shouldDrawInfoOnPawn(auto&& playerPawn) const noexcept
@@ -19,7 +19,7 @@ public:
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
-            && (!context.state().showOnlyEnemies || playerPawn.isEnemy().value_or(true));
+            && (!context.config().template getVariable<PlayerInfoInWorldOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
 private:

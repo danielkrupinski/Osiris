@@ -13,11 +13,10 @@ public:
 
     void updateFromConfig(auto&& mainMenu) const noexcept
     {
-        const auto& hudFeaturesState = hookContext.featuresStates().hudFeaturesStates;
-        setDropDownSelectedIndex(mainMenu, "bomb_timer", !hudFeaturesState.bombTimerState.enabled);
-        setDropDownSelectedIndex(mainMenu, "defusing_alert", !hudFeaturesState.defusingAlertState.enabled);
-        setDropDownSelectedIndex(mainMenu, "preserve_killfeed", !hudFeaturesState.killfeedPreserverState.enabled);
-        setDropDownSelectedIndex(mainMenu, "postround_timer", !hudFeaturesState.postRoundTimerState.enabled);
+        setDropDownSelectedIndex(mainMenu, "bomb_timer", !hookContext.config().template getVariable<BombTimerEnabled>());
+        setDropDownSelectedIndex(mainMenu, "defusing_alert", !hookContext.config().template getVariable<DefusingAlertEnabled>());
+        setDropDownSelectedIndex(mainMenu, "preserve_killfeed", !hookContext.config().template getVariable<KillfeedPreserverEnabled>());
+        setDropDownSelectedIndex(mainMenu, "postround_timer", !hookContext.config().template getVariable<PostRoundTimerEnabled>());
     }
 
 private:

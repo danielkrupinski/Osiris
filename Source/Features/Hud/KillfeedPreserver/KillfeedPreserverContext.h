@@ -21,9 +21,9 @@ struct KillfeedPreserverContext {
         };
     }
 
-    [[nodiscard]] auto& state() const noexcept
+    [[nodiscard]] decltype(auto) config() const noexcept
     {
-        return hookContext.featuresStates().hudFeaturesStates.killfeedPreserverState;
+        return hookContext.config();
     }
     
 private:

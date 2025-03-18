@@ -6,6 +6,7 @@ struct MockDefusingAlertPanel;
 struct MockDefusingCountdownTextPanel;
 struct MockPanel;
 struct MockPlantedC4;
+struct MockConfig;
 
 struct MockDefusingAlertContext {
     MOCK_METHOD(MockPanel&, defusingAlertContainerPanel, ());
@@ -15,4 +16,5 @@ struct MockDefusingAlertContext {
     MOCK_METHOD(MockDefusingAlertCondition&, defusingAlertCondition, ());
     MOCK_METHOD(MockDefusingAlertPanel&, defusingAlertPanel, ());
     MOCK_METHOD(DefusingAlertState&, state, ());
+    MOCK_METHOD(MockConfig&, config, ());
 };

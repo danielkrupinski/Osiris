@@ -70,9 +70,7 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        if (state().masterSwitch == ModelGlowState::State::Disabling)
-            state().masterSwitch = ModelGlowState::State::Disabled;
-
+        state().modelGlowDisabling = false;
         hookContext.template make<PlayerModelGlow>().onEntityListTraversed();
         hookContext.template make<WeaponModelGlow>().onEntityListTraversed();
         hookContext.template make<DroppedBombModelGlow>().onEntityListTraversed();
@@ -83,7 +81,7 @@ public:
 
     void onUnload(EntityTypeInfo entityTypeInfo, auto&& entity) const noexcept
     {
-        if (state().masterSwitch == ModelGlowState::State::Disabled)
+        if (!hookContext.config().template getVariable<ModelGlowEnabled>() && !state().modelGlowDisabling)
             return;
 
         if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
@@ -100,26 +98,15 @@ public:
             hookContext.template make<WeaponModelGlow>().onUnload(entity.template as<BaseWeapon>());
     }
 
-    void enable() const noexcept
-    {
-        state().masterSwitch = ModelGlowState::State::Enabled;
-    }
-
-    void disable() const noexcept
-    {
-        if (state().masterSwitch == ModelGlowState::State::Enabled)
-            state().masterSwitch = ModelGlowState::State::Disabling;
-    }
-
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return state().masterSwitch != ModelGlowState::State::Disabled;
+        return hookContext.config().template getVariable<ModelGlowEnabled>() || state().modelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return state().masterSwitch == ModelGlowState::State::Enabled;
+        return hookContext.config().template getVariable<ModelGlowEnabled>();
     }
 
     [[nodiscard]] auto& state() const noexcept

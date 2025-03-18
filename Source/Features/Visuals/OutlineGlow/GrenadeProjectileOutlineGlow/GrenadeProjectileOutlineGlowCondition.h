@@ -17,7 +17,7 @@ public:
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabledForGrenadeProjectiles;
+        return context.config().template getVariable<GrenadeProjectileOutlineGlowEnabled>();
     }
 
     [[nodiscard]] bool shouldGlowGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept

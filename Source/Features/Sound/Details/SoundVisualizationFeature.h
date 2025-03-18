@@ -13,55 +13,14 @@
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 #include "SoundVisualization.h"
 
-struct SoundVisualizationFeatureState {
-    bool enabled{false};
-};
-
-template <typename HookContext, typename SoundType>
-struct SoundVisualizationFeatureToggle : FeatureToggleOnOff<SoundVisualizationFeatureToggle<HookContext, SoundType>> {
-    SoundVisualizationFeatureToggle(SoundVisualizationFeatureState& state,
-        HookContext& hookContext,
-        SoundWatcher<HookContext> soundWatcher,
-        ViewRenderHook& viewRenderHook)
-        : state{state}
-        , hookContext{hookContext}
-        , soundWatcher{soundWatcher}
-        , viewRenderHook{viewRenderHook}
-    {
-    }
-
-    [[nodiscard]] auto& enabledVariable(typename SoundVisualizationFeatureToggle::ToggleMethod) const noexcept
-    {
-        return state.enabled;
-    }
-
-    void onEnable(typename SoundVisualizationFeatureToggle::ToggleMethod) noexcept
-    {
-        soundWatcher.template startWatching<SoundType>();
-    }
-
-    void onDisable(typename SoundVisualizationFeatureToggle::ToggleMethod) noexcept
-    {
-        soundWatcher.template stopWatching<SoundType>();
-    }
-
-private:
-    SoundVisualizationFeatureState& state;
-    HookContext& hookContext;
-    SoundWatcher<HookContext> soundWatcher;
-    ViewRenderHook& viewRenderHook;
-};
-
 template <typename HookContext, typename PanelsType, typename SoundType>
 class SoundVisualizationFeature {
 public:
     SoundVisualizationFeature(
-        SoundVisualizationFeatureState& state,
         HookContext& hookContext,
         ViewRenderHook& viewRenderHook,
         SoundWatcher<HookContext> soundWatcher) noexcept
-        : state{state}
-        , hookContext{hookContext}
+        : hookContext{hookContext}
         , viewRenderHook{viewRenderHook}
         , soundWatcher{soundWatcher}
     {
@@ -69,7 +28,7 @@ public:
 
     void run() noexcept
     {
-        if (!state.enabled)
+        if (!enabled())
             return;
 
         const auto curtime = hookContext.globalVars().curtime();
@@ -100,7 +59,24 @@ public:
     }
 
 private:
-    SoundVisualizationFeatureState& state;
+    [[nodiscard]] auto enabled() noexcept
+    {
+        if constexpr (std::is_same_v<SoundType, BombBeepSound>)
+            return hookContext.config().template getVariable<BombBeepSoundVisualizationEnabled>();
+        else if constexpr (std::is_same_v<SoundType, BombDefuseSound>)
+            return hookContext.config().template getVariable<BombBeepSoundVisualizationEnabled>();
+        else if constexpr (std::is_same_v<SoundType, BombPlantSound>)
+            return hookContext.config().template getVariable<BombPlantSoundVisualizationEnabled>();
+        else if constexpr (std::is_same_v<SoundType, FootstepSound>)
+            return hookContext.config().template getVariable<FootstepSoundVisualizationEnabled>();
+        else if constexpr (std::is_same_v<SoundType, WeaponReloadSound>)
+            return hookContext.config().template getVariable<WeaponReloadSoundVisualizationEnabled>();
+        else if constexpr (std::is_same_v<SoundType, WeaponScopeSound>)
+            return hookContext.config().template getVariable<WeaponScopeSoundVisualizationEnabled>();
+        else
+            static_assert(!std::is_same_v<SoundType, SoundType>, "Unknown type");
+    }
+
     HookContext& hookContext;
     ViewRenderHook& viewRenderHook;
     SoundWatcher<HookContext> soundWatcher;

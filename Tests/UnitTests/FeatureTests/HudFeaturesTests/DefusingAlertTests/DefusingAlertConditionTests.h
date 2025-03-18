@@ -15,20 +15,20 @@ protected:
     }
 
     testing::StrictMock<MockDefusingAlertContext> mockDefusingAlertContext;
+    testing::StrictMock<MockConfig> mockConfig;
     DefusingAlertCondition<MockDefusingAlertContext&> defusingAlertCondition{mockDefusingAlertContext};
-    DefusingAlertState defusingAlertState;
 };
 
 TEST_F(DefusingAlertConditionTest, ShouldRunIfEnabled) {
-    defusingAlertState.enabled = true;
-    EXPECT_CALL(mockDefusingAlertContext, state()).WillOnce(testing::ReturnRef(defusingAlertState));
+    EXPECT_CALL(mockDefusingAlertContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    EXPECT_CALL(mockConfig, getVariableBool(ConfigVariableTypes::indexOf<DefusingAlertEnabled>())).WillOnce(testing::Return(true));
 
     EXPECT_EQ(defusingAlertCondition.shouldRun(), true);
 }
 
 TEST_F(DefusingAlertConditionTest, ShouldNotRunIfNotEnabled) {
-    defusingAlertState.enabled = false;
-    EXPECT_CALL(mockDefusingAlertContext, state()).WillOnce(testing::ReturnRef(defusingAlertState));
+    EXPECT_CALL(mockDefusingAlertContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    EXPECT_CALL(mockConfig, getVariableBool(ConfigVariableTypes::indexOf<DefusingAlertEnabled>())).WillOnce(testing::Return(false));
 
     EXPECT_EQ(defusingAlertCondition.shouldRun(), false);
 }

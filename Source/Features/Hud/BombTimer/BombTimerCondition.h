@@ -1,5 +1,7 @@
 #pragma once
 
+#include "BombTimerConfigVariables.h"
+
 template <typename Context>
 struct BombTimerCondition {
     explicit BombTimerCondition(Context context) noexcept
@@ -9,7 +11,7 @@ struct BombTimerCondition {
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabled;
+        return context.config().template getVariable<BombTimerEnabled>();
     }
 
     [[nodiscard]] bool shouldShowBombTimer() const noexcept

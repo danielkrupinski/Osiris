@@ -261,9 +261,6 @@
     <ClInclude Include="Features\Features.h">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\HudFeatures.h">
-      <Filter>Features\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\VisualFeatures.h">
       <Filter>Features\Visuals</Filter>
     </ClInclude>
@@ -596,9 +593,6 @@
     <ClInclude Include="Features\FeaturesStates.h">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Sound\SoundFeaturesStates.h">
-      <Filter>Features\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\EntitySystem\CConcreteEntityList.h">
       <Filter>CS2\Classes\EntitySystem</Filter>
     </ClInclude>
@@ -809,9 +803,6 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerTextPanel.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerToggle.h">
-      <Filter>Features\Hud\BombTimer</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimerState.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
@@ -836,9 +827,6 @@
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertState.h">
       <Filter>Features\Hud\DefusingAlert</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertToggle.h">
-      <Filter>Features\Hud\DefusingAlert</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingCountdownTextPanel.h">
       <Filter>Features\Hud\DefusingAlert</Filter>
     </ClInclude>
@@ -846,12 +834,6 @@
       <Filter>Features\Hud\KillfeedPreserver</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverContext.h">
-      <Filter>Features\Hud\KillfeedPreserver</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverState.h">
-      <Filter>Features\Hud\KillfeedPreserver</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserveToggle.h">
       <Filter>Features\Hud\KillfeedPreserver</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\IconURLs.h">
@@ -900,9 +882,6 @@
       <Filter>Features\Hud\PostRoundTimer</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerState.h">
-      <Filter>Features\Hud\PostRoundTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerToggle.h">
       <Filter>Features\Hud\PostRoundTimer</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerUnloadHandler.h">
@@ -1013,9 +992,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowContext.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowState.h">
-      <Filter>Features\Visuals\OutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowUnloadHandler.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>
@@ -1026,9 +1002,6 @@
       <Filter>Features\Visuals\OutlineGlow\WeaponOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowContext.h">
-      <Filter>Features\Visuals\OutlineGlow\WeaponOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\WeaponOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlow.h">
@@ -1052,9 +1025,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowContext.h">
       <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowToggle.h">
-      <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\C_BaseCSGrenadeProjectile.h">
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
@@ -1062,9 +1032,6 @@
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowContext.h">
-      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlow.h">
@@ -1085,9 +1052,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowContext.h">
       <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowToggle.h">
-      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\TypedStaticStringPool.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -1106,16 +1070,10 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowContext.h">
       <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowToggle.h">
-      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlow.h">
       <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlowContext.h">
-      <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlowToggle.h">
       <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\C_Hostage.h">
@@ -1810,6 +1768,45 @@
     </ClInclude>
     <ClInclude Include="Utils\Wcslen.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldConfigVariables.h">
+      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigVariables.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigVariable.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigVariableChangeHandler.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigVariableTypes.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombTimer\BombTimerConfigVariables.h">
+      <Filter>Features\Hud\BombTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertConfigVariables.h">
+      <Filter>Features\Hud\DefusingAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverConfigVariables.h">
+      <Filter>Features\Hud\KillfeedPreserver</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerConfigVariables.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanelParams.h">
+      <Filter>Features\Hud\PostRoundTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\SoundVisualizationConfigVariables.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowConfigVariables.h">
+      <Filter>Features\Visuals\ModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowConfigVariables.h">
+      <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

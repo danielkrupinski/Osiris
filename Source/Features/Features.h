@@ -2,7 +2,6 @@
 
 #include <Hooks/Hooks.h>
 
-#include "Hud/HudFeatures.h"
 #include "Sound/SoundFeatures.h"
 #include "Visuals/VisualFeatures.h"
 
@@ -17,14 +16,9 @@ struct Features {
     {
     }
 
-    [[nodiscard]] auto hudFeatures() const noexcept
-    {
-        return HudFeatures{states.hudFeaturesStates, hookContext};
-    }
-
     [[nodiscard]] auto soundFeatures() const noexcept
     {
-        return SoundFeatures{states.soundFeaturesStates, hookContext.soundWatcherState(), hooks.viewRenderHook, hookContext};
+        return SoundFeatures{hookContext.soundWatcherState(), hooks.viewRenderHook, hookContext};
     }
 
     [[nodiscard]] auto visualFeatures() const noexcept

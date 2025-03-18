@@ -9,7 +9,7 @@ struct PostRoundTimerCondition {
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return context.state().enabled;
+        return context.config().template getVariable<PostRoundTimerEnabled>();
     }
 
     [[nodiscard]] bool shouldShowPostRoundTimer() const noexcept

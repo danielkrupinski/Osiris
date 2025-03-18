@@ -16,8 +16,7 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        if (state().grenadeProjectileModelGlow == ModelGlowState::State::Disabling)
-            state().grenadeProjectileModelGlow = ModelGlowState::State::Disabled;
+        state().grenadeProjectileModelGlowDisabling = false;
     }
 
     void updateModelGlow(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
@@ -37,26 +36,15 @@ public:
             grenadeProjectile.baseEntity().removeSpawnProtectionEffectRecursively();
     }
 
-    void enable() const noexcept
-    {
-        state().grenadeProjectileModelGlow = ModelGlowState::State::Enabled;
-    }
-
-    void disable() const noexcept
-    {
-        if (state().grenadeProjectileModelGlow == ModelGlowState::State::Enabled)
-            state().grenadeProjectileModelGlow = ModelGlowState::State::Disabling;
-    }
-
 private:
     [[nodiscard]] bool isDisabled() const noexcept
     {
-        return state().grenadeProjectileModelGlow == ModelGlowState::State::Disabled;
+        return !hookContext.config().template getVariable<GrenadeProjectileModelGlowEnabled>() && !state().grenadeProjectileModelGlowDisabling;
     }
 
     [[nodiscard]] bool isEnabled() const noexcept
     {
-        return state().masterSwitch == ModelGlowState::State::Enabled && state().grenadeProjectileModelGlow == ModelGlowState::State::Enabled;
+        return hookContext.config().template getVariable<ModelGlowEnabled>() && hookContext.config().template getVariable<GrenadeProjectileModelGlowEnabled>();
     }
 
     [[nodiscard]] auto& state() const noexcept

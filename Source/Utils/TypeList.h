@@ -61,4 +61,9 @@ struct TypeList {
 
     template <template <typename> typename ValueOfType>
     using sortBy = decltype(typeListFromTuple(std::declval<decltype(Sorter<ValueOfType>::template sorted<>(std::make_integer_sequence<decltype(min<ValueOfType>()), max<ValueOfType>() - min<ValueOfType>() + 1>{}))>()));
+
+    static constexpr void forEach(auto&& callable) noexcept
+    {
+        (callable(std::type_identity<Types>{}), ...);
+    }
 };

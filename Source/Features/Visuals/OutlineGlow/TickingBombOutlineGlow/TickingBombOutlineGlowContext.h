@@ -20,6 +20,11 @@ public:
         return hookContext.template make<TickingBombOutlineGlowCondition<TickingBombOutlineGlowContext>>();
     }
 
+    [[nodiscard]] decltype(auto) config() const noexcept
+    {
+        return hookContext.config();
+    }
+
 private:
     HookContext& hookContext;
 };

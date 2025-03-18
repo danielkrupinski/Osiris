@@ -62,6 +62,11 @@ public:
         return DefusingCountdownTextPanel{uiEngine().getPanelFromHandle(state().defusingTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
     }
 
+    [[nodiscard]] decltype(auto) config() const noexcept
+    {
+        return context.config();
+    }
+
 private:
     [[nodiscard]] decltype(auto) uiEngine() const noexcept
     {

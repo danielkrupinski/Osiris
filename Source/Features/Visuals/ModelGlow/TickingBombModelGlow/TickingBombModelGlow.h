@@ -13,8 +13,7 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        if (state().tickingBombModelGlow == ModelGlowState::State::Disabling)
-            state().tickingBombModelGlow = ModelGlowState::State::Disabled;
+        state().tickingBombModelGlowDisabling = true;
     }
 
     void applyModelGlow(auto&& plantedBomb) const noexcept
@@ -34,26 +33,15 @@ public:
             plantedBomb.baseEntity().removeSpawnProtectionEffectRecursively();
     }
 
-    void enable() const noexcept
-    {
-        state().tickingBombModelGlow = ModelGlowState::State::Enabled;
-    }
-
-    void disable() const noexcept
-    {
-        if (state().tickingBombModelGlow == ModelGlowState::State::Enabled)
-            state().tickingBombModelGlow = ModelGlowState::State::Disabling;
-    }
-
 private:
     [[nodiscard]] bool isDisabled() const noexcept
     {
-        return state().tickingBombModelGlow == ModelGlowState::State::Disabled;
+        return hookContext.config().template getVariable<TickingBombModelGlowEnabled>() && !state().playerModelGlowDisabling;
     }
 
     [[nodiscard]] bool isEnabled() const noexcept
     {
-        return state().masterSwitch == ModelGlowState::State::Enabled && state().tickingBombModelGlow == ModelGlowState::State::Enabled;
+        return hookContext.config().template getVariable<ModelGlowEnabled>() && hookContext.config().template getVariable<TickingBombModelGlowEnabled>();
     }
 
     [[nodiscard]] bool shouldGlowPlantedBombModel(auto&& plantedBomb) const noexcept

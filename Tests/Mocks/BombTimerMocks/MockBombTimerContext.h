@@ -9,6 +9,7 @@ struct MockBombTimerPanel;
 struct MockBombTimerTextPanel;
 struct MockPanel;
 struct MockPlantedC4;
+struct MockConfig;
 
 struct MockBombTimerContext {
     MOCK_METHOD(MockBombTimerCondition&, bombTimerCondition, ());
@@ -20,4 +21,5 @@ struct MockBombTimerContext {
     MOCK_METHOD(MockPlantedC4&, tickingC4, ());
     MOCK_METHOD(MockBombTimerTextPanel&, bombTimerTextPanel, ());
     MOCK_METHOD(MockBombSiteIconPanel&, bombSiteIconPanel, ());
+    MOCK_METHOD(MockConfig&, config, ());
 };

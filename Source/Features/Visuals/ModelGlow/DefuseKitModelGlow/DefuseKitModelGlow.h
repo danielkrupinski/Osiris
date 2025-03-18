@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 
@@ -13,8 +14,7 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        if (state().defuseKitModelGlow == ModelGlowState::State::Disabling)
-            state().defuseKitModelGlow = ModelGlowState::State::Disabled;
+        state().defuseKitModelGlowDisabling = false;
     }
 
     void updateModelGlow(auto&& defuseKit) const noexcept
@@ -35,26 +35,15 @@ public:
             defuseKit.baseEntity().removeSpawnProtectionEffectRecursively();
     }
 
-    void enable() const noexcept
-    {
-        state().defuseKitModelGlow = ModelGlowState::State::Enabled;
-    }
-
-    void disable() const noexcept
-    {
-        if (state().defuseKitModelGlow == ModelGlowState::State::Enabled)
-            state().defuseKitModelGlow = ModelGlowState::State::Disabling;
-    }
-
 private:
     [[nodiscard]] bool isDisabled() const noexcept
     {
-        return state().defuseKitModelGlow == ModelGlowState::State::Disabled;
+        return !isEnabled() && !state().defuseKitModelGlowDisabling;
     }
 
     [[nodiscard]] bool isEnabled() const noexcept
     {
-        return state().masterSwitch == ModelGlowState::State::Enabled && state().defuseKitModelGlow == ModelGlowState::State::Enabled;
+        return hookContext.config().template getVariable<ModelGlowEnabled>() && hookContext.config().template getVariable<DefuseKitModelGlowEnabled>();
     }
 
     [[nodiscard]] auto& state() const noexcept

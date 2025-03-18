@@ -18,8 +18,7 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        if (state().droppedBombModelGlow == ModelGlowState::State::Disabling)
-            state().droppedBombModelGlow = ModelGlowState::State::Disabled;
+        state().droppedBombModelGlowDisabling = false;
     }
 
     void updateSceneObjectUpdaterHook(auto&& bomb) const noexcept
@@ -41,30 +40,19 @@ public:
 
     void onUnload(auto&& bomb) const noexcept
     {
-        if (state().droppedBombModelGlow != ModelGlowState::State::Disabled)
+        if (hookContext.config().template getVariable<DroppedBombModelGlowEnabled>() || state().droppedBombModelGlowDisabling)
             unhookWeaponSceneObjectUpdater(bomb);
-    }
-
-    void enable() const noexcept
-    {
-        state().droppedBombModelGlow = ModelGlowState::State::Enabled;
-    }
-
-    void disable() const noexcept
-    {
-        if (state().droppedBombModelGlow == ModelGlowState::State::Enabled)
-            state().droppedBombModelGlow = ModelGlowState::State::Disabling;
     }
 
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return state().droppedBombModelGlow != ModelGlowState::State::Disabled;
+        return hookContext.config().template getVariable<DroppedBombModelGlowEnabled>() || state().droppedBombModelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return state().droppedBombModelGlow == ModelGlowState::State::Enabled;
+        return hookContext.config().template getVariable<DroppedBombModelGlowEnabled>();
     }
 
     void hookWeaponSceneObjectUpdater(auto&& bomb) const noexcept
@@ -99,7 +87,7 @@ private:
 
     [[nodiscard]] bool shouldGlowBombModel(auto&& bomb) const noexcept
     {
-        return state().masterSwitch == ModelGlowState::State::Enabled && !bomb.baseWeapon().baseEntity().hasOwner().valueOr(true);
+        return hookContext.config().template getVariable<ModelGlowEnabled>() && !bomb.baseWeapon().baseEntity().hasOwner().valueOr(true);
     }
 
     [[nodiscard]] auto& state() const noexcept

@@ -13,13 +13,12 @@ public:
 
     void updateFromConfig(auto&& mainMenu) const noexcept
     {
-        const auto& soundFeaturesState = hookContext.featuresStates().soundFeaturesStates;
-        setDropDownSelectedIndex(mainMenu, "visualize_player_footsteps", !soundFeaturesState.footstepVisualizerState.enabled);
-        setDropDownSelectedIndex(mainMenu, "visualize_bomb_plant", !soundFeaturesState.bombPlantVisualizerState.enabled);
-        setDropDownSelectedIndex(mainMenu, "visualize_bomb_beep", !soundFeaturesState.bombBeepVisualizerState.enabled);
-        setDropDownSelectedIndex(mainMenu, "visualize_bomb_defuse", !soundFeaturesState.bombDefuseVisualizerState.enabled);
-        setDropDownSelectedIndex(mainMenu, "visualize_scope_sound", !soundFeaturesState.weaponScopeVisualizerState.enabled);
-        setDropDownSelectedIndex(mainMenu, "visualize_reload_sound", !soundFeaturesState.weaponReloadVisualizerState.enabled);
+        setDropDownSelectedIndex(mainMenu, "visualize_player_footsteps", !hookContext.config().template getVariable<FootstepSoundVisualizationEnabled>());
+        setDropDownSelectedIndex(mainMenu, "visualize_bomb_plant", !hookContext.config().template getVariable<BombPlantSoundVisualizationEnabled>());
+        setDropDownSelectedIndex(mainMenu, "visualize_bomb_beep", !hookContext.config().template getVariable<BombBeepSoundVisualizationEnabled>());
+        setDropDownSelectedIndex(mainMenu, "visualize_bomb_defuse", !hookContext.config().template getVariable<BombDefuseSoundVisualizationEnabled>());
+        setDropDownSelectedIndex(mainMenu, "visualize_scope_sound", !hookContext.config().template getVariable<WeaponScopeSoundVisualizationEnabled>());
+        setDropDownSelectedIndex(mainMenu, "visualize_reload_sound", !hookContext.config().template getVariable<WeaponReloadSoundVisualizationEnabled>());
     }
 
 private:

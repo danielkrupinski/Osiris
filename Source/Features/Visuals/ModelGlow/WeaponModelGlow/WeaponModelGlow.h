@@ -21,8 +21,7 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        if (state().weaponModelGlow == ModelGlowState::State::Disabling)
-            state().weaponModelGlow = ModelGlowState::State::Disabled;
+        state().weaponModelGlowDisabling = true;
     }
 
     void updateSceneObjectUpdaterHook(auto&& weapon) const noexcept
@@ -44,30 +43,19 @@ public:
 
     void onUnload(auto&& weapon) const noexcept
     {
-        if (state().weaponModelGlow != ModelGlowState::State::Disabled)
+        if (hookContext.config().template getVariable<WeaponModelGlowEnabled>() || state().weaponModelGlowDisabling)
             unhookWeaponSceneObjectUpdater(weapon);
-    }
-
-    void enable() const noexcept
-    {
-        state().weaponModelGlow = ModelGlowState::State::Enabled;
-    }
-
-    void disable() const noexcept
-    {
-        if (state().weaponModelGlow == ModelGlowState::State::Enabled)
-            state().weaponModelGlow = ModelGlowState::State::Disabling;
     }
 
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return state().weaponModelGlow != ModelGlowState::State::Disabled;
+        return hookContext.config().template getVariable<WeaponModelGlowEnabled>() || state().weaponModelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return state().weaponModelGlow == ModelGlowState::State::Enabled;
+        return hookContext.config().template getVariable<WeaponModelGlowEnabled>();
     }
 
     void hookWeaponSceneObjectUpdater(auto&& weapon) const noexcept
@@ -102,7 +90,7 @@ private:
 
     [[nodiscard]] bool shouldGlowWeaponModel(auto&& weapon) const noexcept
     {
-        return state().masterSwitch == ModelGlowState::State::Enabled && !weapon.baseEntity().hasOwner().valueOr(true);
+        return hookContext.config().template getVariable<ModelGlowEnabled>() && !weapon.baseEntity().hasOwner().valueOr(true);
     }
 
     [[nodiscard]] auto& state() const noexcept

@@ -21,7 +21,7 @@ public:
 
     [[nodiscard]] bool shouldShowOn(auto&& playerPawn) const noexcept
     {
-        return state().showPlayerActiveWeaponAmmo && playerPawn.getActiveWeapon().clipAmmo().greaterThan(-1).valueOr(true);
+        return _hookContext.config().template getVariable<PlayerInfoInWorldActiveWeaponAmmoEnabled>() && playerPawn.getActiveWeapon().clipAmmo().greaterThan(-1).valueOr(true);
     }
 
     [[nodiscard]] decltype(auto) panel() const noexcept

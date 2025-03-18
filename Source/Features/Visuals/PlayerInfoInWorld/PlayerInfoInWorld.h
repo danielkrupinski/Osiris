@@ -10,177 +10,46 @@
 #include "PlayerPositionArrow/PlayerPositionArrowColorType.h"
 #include "PlayerStateIcons/PlayerStateIconsToShow.h"
 
-struct PlayerPositionToggle : public FeatureToggle<PlayerPositionToggle> {
-    explicit PlayerPositionToggle(PlayerInfoInWorldState& state) noexcept
-        : state{state}
-    {
-    }
-
-    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
-    {
-        return state.showPlayerPosition;
-    }
-
-    PlayerInfoInWorldState& state;
-};
-
-struct PlayerPositionArrowColorToggle {
-    explicit PlayerPositionArrowColorToggle(PlayerPositionArrowColorType& color) noexcept
-        : color{color}
-    {
-    }
-
-    void update(char option) const noexcept
-    {
-        switch (option) {
-        case '0': color = PlayerPositionArrowColorType::PlayerOrTeamColor; break;
-        case '1': color = PlayerPositionArrowColorType::TeamColor; break;
-        }
-    }
-
-private:
-    PlayerPositionArrowColorType& color;
-};
-
-struct PlayerHealthToggle : public FeatureToggle<PlayerHealthToggle> {
-    explicit PlayerHealthToggle(PlayerInfoInWorldState& state) noexcept
-        : state{state}
-    {
-    }
-
-    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
-    {
-        return state.showPlayerHealth;
-    }
-
-    PlayerInfoInWorldState& state;
-};
-
-struct PlayerHealthTextColorToggle {
-    explicit PlayerHealthTextColorToggle(PlayerHealthTextColor& color) noexcept
-        : color{color}
-    {
-    }
-
-    void update(char option) const noexcept
-    {
-        switch (option) {
-        case '0': color = PlayerHealthTextColor::HealthBased; break;
-        case '1': color = PlayerHealthTextColor::White; break;
-        }
-    }
-
-private:
-    PlayerHealthTextColor& color;
-};
-
-struct PlayerActiveWeaponToggle : public FeatureToggle<PlayerActiveWeaponToggle> {
-    explicit PlayerActiveWeaponToggle(PlayerInfoInWorldState& state) noexcept
-        : state{state}
-    {
-    }
-
-    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
-    {
-        return state.showPlayerActiveWeapon;
-    }
-
-    PlayerInfoInWorldState& state;
-};
-
-struct PlayerActiveWeaponAmmoToggle : public FeatureToggle<PlayerActiveWeaponAmmoToggle> {
-    explicit PlayerActiveWeaponAmmoToggle(PlayerInfoInWorldState& state) noexcept
-        : state{state}
-    {
-    }
-
-    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
-    {
-        return state.showPlayerActiveWeaponAmmo;
-    }
-
-    PlayerInfoInWorldState& state;
-};
-
-struct BombIconToggle : public FeatureToggle<BombIconToggle> {
-    explicit BombIconToggle(PlayerInfoInWorldState& state) noexcept
-        : state{state}
-    {
-    }
-
-    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
-    {
-        return state.showBombCarrierIcon;
-    }
-
-    PlayerInfoInWorldState& state;
-};
-
-struct BombPlantingIconToggle : public FeatureToggle<BombPlantingIconToggle> {
-    explicit BombPlantingIconToggle(PlayerInfoInWorldState& state) noexcept
-        : state{state}
-    {
-    }
-
-    [[nodiscard]] auto& enabledVariable(ToggleMethod) const noexcept
-    {
-        return state.showBombPlantingIcon;
-    }
-
-    PlayerInfoInWorldState& state;
-};
-
-
-template <typename IconPanel>
-struct PlayerStateIconToggle {
-    explicit PlayerStateIconToggle(PlayerStateIconsToShow& playerStateIconsToShow) noexcept
-        : playerStateIconsToShow{playerStateIconsToShow}
-    {
-    }
-
-    void update(char option) noexcept
-    {
-        switch (option) {
-        case '0': playerStateIconsToShow.set<IconPanel>(); break;
-        case '1': playerStateIconsToShow.unset<IconPanel>(); break;
-        }
-    }
-
-    PlayerStateIconsToShow& playerStateIconsToShow;
-};
-
-using PlayerDefuseIconToggle = PlayerStateIconToggle<DefuseIconPanel>;
-using HostagePickupIconToggle = PlayerStateIconToggle<HostagePickupPanel>;
-using HostageRescueIconToggle = PlayerStateIconToggle<HostageRescuePanel>;
-using BlindedIconToggle = PlayerStateIconToggle<BlindedIconPanel>;
-
 template <typename HookContext>
-struct PlayerInfoInWorldToggle : FeatureToggle<PlayerInfoInWorldToggle<HookContext>> {
-    PlayerInfoInWorldToggle(PlayerInfoInWorldState& state, HookContext& hookContext, ViewRenderHook& viewRenderHook) noexcept
-        : state{state}
-        , hookContext{hookContext}
-        , viewRenderHook{viewRenderHook}
+struct PlayerInfoInWorldToggle {
+    PlayerInfoInWorldToggle(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     void update(char option) noexcept
     {
         switch (option) {
-        case '0': this->enable(); state.showOnlyEnemies = true; break;
-        case '1': this->enable(); state.showOnlyEnemies = false; break;
-        case '2': this->disable(); break;
+        case '0': setVariable<PlayerInfoInWorldEnabled>(true); setVariable<PlayerInfoInWorldOnlyEnemies>(true); break;
+        case '1': setVariable<PlayerInfoInWorldEnabled>(true); setVariable<PlayerInfoInWorldOnlyEnemies>(false); break;
+        case '2': setVariable<PlayerInfoInWorldEnabled>(false); break;
         }
     }
 
-    [[nodiscard]] auto& enabledVariable(typename PlayerInfoInWorldToggle::ToggleMethod) const noexcept
+    void updatePlayerPositionArrowColorMode(char option) const noexcept
     {
-        return state.enabled;
+        switch (option) {
+        case '0': hookContext.config().template setVariable<PlayerInfoInWorldPlayerPositionArrowColorMode>(PlayerPositionArrowColorType::PlayerOrTeamColor); break;
+        case '1': hookContext.config().template setVariable<PlayerInfoInWorldPlayerPositionArrowColorMode>(PlayerPositionArrowColorType::TeamColor); break;
+        }
+    }
+
+    void updatePlayerHealthColorMode(char option) const noexcept
+    {
+        switch (option) {
+        case '0': hookContext.config().template setVariable<PlayerInfoInWorldPlayerHealthColorMode>(PlayerHealthTextColor::HealthBased); break;
+        case '1': hookContext.config().template setVariable<PlayerInfoInWorldPlayerHealthColorMode>(PlayerHealthTextColor::White); break;
+        }
     }
 
 private:
-    PlayerInfoInWorldState& state;
+    template <typename ConfigVariable>
+    void setVariable(ConfigVariable::ValueType value) const noexcept
+    {
+        hookContext.config().template setVariable<ConfigVariable>(value);
+    }
+
     HookContext& hookContext;
-    ViewRenderHook& viewRenderHook;
 };
 
 template <typename HookContext>
