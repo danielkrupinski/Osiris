@@ -6,5 +6,6 @@
 #include "HudTests/BombStatusTests/BombStatusPanelTests.h"
 #include "HudTests/BombStatusTests/BombStatusPanelManagerTests.h"
 
-#include "Config/ConfigToStringTests.h"
 #include "Config/ConfigFromStringTests.h"
+#include "Config/ConfigSchemaTests.h"
+#include "Config/ConfigToStringTests.h"

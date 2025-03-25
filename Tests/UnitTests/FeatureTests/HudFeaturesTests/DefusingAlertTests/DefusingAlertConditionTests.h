@@ -21,14 +21,14 @@ protected:
 
 TEST_F(DefusingAlertConditionTest, ShouldRunIfEnabled) {
     EXPECT_CALL(mockDefusingAlertContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariableBool(ConfigVariableTypes::indexOf<DefusingAlertEnabled>())).WillOnce(testing::Return(true));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<DefusingAlertEnabled>())).WillOnce(testing::Return(true));
 
     EXPECT_EQ(defusingAlertCondition.shouldRun(), true);
 }
 
 TEST_F(DefusingAlertConditionTest, ShouldNotRunIfNotEnabled) {
     EXPECT_CALL(mockDefusingAlertContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariableBool(ConfigVariableTypes::indexOf<DefusingAlertEnabled>())).WillOnce(testing::Return(false));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<DefusingAlertEnabled>())).WillOnce(testing::Return(false));
 
     EXPECT_EQ(defusingAlertCondition.shouldRun(), false);
 }
