@@ -128,7 +128,10 @@ public:
         hookContext.config().update();
 
         if (unloadFlag) {
-            FeaturesUnloadHandler{hookContext, fullContext().featuresStates}.handleUnload();
+            hookContext.make<BombTimer>().onUnload();
+            hookContext.make<DefusingAlert>().onUnload();
+            hookContext.make<PostRoundTimer>().onUnload();
+            hookContext.make<OutlineGlow>().onUnload();
             BombStatusPanelUnloadHandler{hookContext}.handleUnload();
             InWorldPanelsUnloadHandler{hookContext}.handleUnload();
             PanoramaGuiUnloadHandler{hookContext}.handleUnload();

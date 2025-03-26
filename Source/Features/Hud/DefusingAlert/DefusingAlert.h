@@ -30,6 +30,11 @@ public:
         context.defusingAlertPanel().hide();
     }
 
+    void onUnload() const noexcept
+    {
+        context.uiEngine().deletePanelByHandle(context.state().defusingAlertContainerPanelHandle);
+    }
+
 private:
     Context context;
 };

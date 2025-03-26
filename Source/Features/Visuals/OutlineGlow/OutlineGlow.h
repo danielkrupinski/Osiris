@@ -46,6 +46,11 @@ public:
             context.applyGlowToWeapon(entityTypeInfo, modelEntity.baseEntity());
     }
 
+    void onUnload() const noexcept
+    {
+        context.clearGlowSceneObjects();
+    }
+
 private:
     Context context;
 };

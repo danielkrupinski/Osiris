@@ -35,6 +35,11 @@ public:
         context.postRoundTimerPanel().hide();
     }
 
+    void onUnload() const noexcept
+    {
+        context.uiEngine().deletePanelByHandle(context.state().countdownContainerPanelHandle);
+    }
+
 private:
     Context context;
 };

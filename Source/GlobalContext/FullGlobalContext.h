@@ -15,7 +15,6 @@
 #include <Features/Common/InWorldPanelsState.h>
 #include <Features/Features.h>
 #include <Features/FeaturesStates.h>
-#include <Features/FeaturesUnloadHandler.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheState.h>
 #include <MemoryPatterns/MemoryPatterns.h>

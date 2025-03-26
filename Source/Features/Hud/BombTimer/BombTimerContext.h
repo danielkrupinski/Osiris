@@ -86,11 +86,11 @@ struct BombTimerContext {
         return _context.config();
     }
 
-private:
     [[nodiscard]] decltype(auto) uiEngine() const noexcept
     {
         return _context.template make<PanoramaUiEngine>();
     }
 
+private:
     HookContext& _context;
 };

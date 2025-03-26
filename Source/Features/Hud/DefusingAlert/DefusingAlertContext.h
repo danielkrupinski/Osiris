@@ -67,12 +67,12 @@ public:
         return context.config();
     }
 
-private:
     [[nodiscard]] decltype(auto) uiEngine() const noexcept
     {
         return context.template make<PanoramaUiEngine>();
     }
 
+private:
     void updatePanelHandles() const noexcept
     {
         if (uiEngine().getPanelFromHandle(state().defusingTimerPanelHandle))

@@ -59,6 +59,11 @@ struct PostRoundTimerContext {
         return _hookContext.config();
     }
 
+    [[nodiscard]] decltype(auto) uiEngine() const noexcept
+    {
+        return _hookContext.template make<PanoramaUiEngine>();
+    }
+
 private:
     [[nodiscard]] decltype(auto) countdownContainerPanelHandle() const noexcept
     {

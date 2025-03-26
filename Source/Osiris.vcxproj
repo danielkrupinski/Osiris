@@ -115,7 +115,6 @@
     <ClInclude Include="Features\Common\RenderingHookEntityLoop.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\FeaturesStates.h" />
-    <ClInclude Include="Features\FeaturesUnloadHandler.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombSiteIconPanel.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimer.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerCondition.h" />
@@ -126,7 +125,6 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanelParams.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerState.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerTextPanel.h" />
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerUnloadHandler.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlert.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertCondition.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertConfigVariables.h" />
@@ -134,10 +132,8 @@
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanel.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanelParams.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertState.h" />
-    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertUnloadHandler.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingCountdownTextPanel.h" />
     <ClInclude Include="Features\Hud\HudFeaturesStates.h" />
-    <ClInclude Include="Features\Hud\HudFeaturesUnloadHandler.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserver.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverConfigVariables.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverContext.h" />
@@ -149,7 +145,6 @@
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanelFactory.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanelParams.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerState.h" />
-    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerUnloadHandler.h" />
     <ClInclude Include="Features\Sound\BombBeepVisualizer.h" />
     <ClInclude Include="Features\Sound\BombDefuseVisualizer.h" />
     <ClInclude Include="Features\Sound\BombPlantVisualizer.h" />
@@ -208,7 +203,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowConfigVariables.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowParams.h" />
-    <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowUnloadHandler.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowColorType.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowToggle.h" />

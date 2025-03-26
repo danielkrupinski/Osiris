@@ -848,18 +848,6 @@
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBaseImpl.h">
       <Filter>MemoryAllocation</Filter>
     </ClInclude>
-    <ClInclude Include="Features\FeaturesUnloadHandler.h">
-      <Filter>Features</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerUnloadHandler.h">
-      <Filter>Features\Hud\BombTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertUnloadHandler.h">
-      <Filter>Features\Hud\DefusingAlert</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\HudFeaturesUnloadHandler.h">
-      <Filter>Features\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Lvalue.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -882,9 +870,6 @@
       <Filter>Features\Hud\PostRoundTimer</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerState.h">
-      <Filter>Features\Hud\PostRoundTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerUnloadHandler.h">
       <Filter>Features\Hud\PostRoundTimer</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Panorama\CImagePanel.h">
@@ -990,9 +975,6 @@
       <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowContext.h">
-      <Filter>Features\Visuals\OutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowUnloadHandler.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlow.h">

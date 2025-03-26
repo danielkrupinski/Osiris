@@ -40,6 +40,13 @@ public:
         context.bombTimerPanel().hide();
     }
 
+    void onUnload() const noexcept
+    {
+        auto&& uiEngine = context.uiEngine();
+        uiEngine.deletePanelByHandle(context.state().bombTimerPanelHandle);
+        uiEngine.deletePanelByHandle(context.state().bombTimerContainerPanelHandle);
+    }
+
 private:
     Context context;
 };
