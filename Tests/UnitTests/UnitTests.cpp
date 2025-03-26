@@ -9,3 +9,4 @@
 #include "Config/ConfigFromStringTests.h"
 #include "Config/ConfigSchemaTests.h"
 #include "Config/ConfigToStringTests.h"
+#include "Config/ConfigVariablesTests.h"
