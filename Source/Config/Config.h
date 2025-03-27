@@ -48,6 +48,14 @@ public:
         changeVariableValue<ConfigVariable>(newValue);
     }
 
+    void restoreDefaults() noexcept
+    {
+        ConfigVariableTypes::forEach([this] <typename ConfigVariable> (std::type_identity<ConfigVariable>) {
+            setVariable<ConfigVariable>(ConfigVariable::kDefaultValue);
+        });
+        hookContext.gui().updateFromConfig();
+    }
+
     void scheduleLoad() noexcept
     {
         state().loadScheduled = true;
