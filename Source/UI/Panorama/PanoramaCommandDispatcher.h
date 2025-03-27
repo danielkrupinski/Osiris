@@ -39,6 +39,8 @@ private:
             unloadFlag.set();
         } else if (command == "set") {
             SetCommandHandler{parser, features, hookContext}();
+        } else if (command == "restore_defaults") {
+            hookContext.config().restoreDefaults();
         }
     }
 

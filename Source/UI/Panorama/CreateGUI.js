@@ -107,6 +107,19 @@ $.Osiris = (function () {
     activeCfgNameLabel.SetPanelEvent('onmouseover', function () { UiToolkitAPI.ShowTextTooltip('ActiveConfigName', 'Active config file. Changes are saved automatically.'); });
     activeCfgNameLabel.SetPanelEvent('onmouseout', function () { UiToolkitAPI.HideTextTooltip(); });
 
+    var restoreDefaultsButton = $.CreatePanel('Button', leftContainer, 'RestoreDefaultsButton', {
+      class: "content-navbar__tabs__btn",
+      onactivate: "UiToolkitAPI.ShowGenericPopupOneOptionCustomCancelBgStyle('Restore Defaults', 'Are you sure you want to restore default settings in the active config file (default.cfg)?', '', 'RESTORE DEFAULTS', function() { $.Osiris.addCommand('restore_defaults'); }, 'RETURN', function() {}, 'dim');"
+    });
+
+    restoreDefaultsButton.SetPanelEvent('onmouseover', function () { UiToolkitAPI.ShowTextTooltip('RestoreDefaultsButton', 'Restore defaults'); });
+    restoreDefaultsButton.SetPanelEvent('onmouseout', function () { UiToolkitAPI.HideTextTooltip(); });
+
+    $.CreatePanel('Image', restoreDefaultsButton, '', {
+      src: "s2r://panorama/images/icons/ui/recent.vsvg",
+      texturewidth: "24"
+    });
+  
     var centerContainer = $.CreatePanel('Panel', navbar, '', {
       class: "content-navbar__tabs__center-container",
     });
