@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 27 March 2025
+    * Add an option to restore default settings in the active config file
+
+    ![Restore Defaults](https://github.com/user-attachments/assets/496cc3cb-17ee-445a-802c-2f496f39a34c)
+
 * 06 March 2025
     * Settings are now automatically saved to the config file (`default.cfg`) inside `%appdata%\OsirisCS2\configs` directory on Windows and `$HOME/OsirisCS2/configs` on Linux. `default.cfg` file is loaded automatically when starting Osiris.
 
@@ -22,11 +27,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added model glow for defuse kits on the ground
 
     ![Defuse Kit Model Glow](https://github.com/user-attachments/assets/43dc555d-8c1d-40dc-b94a-3aa8f8396c7b)
-
-* 11 December 2024
-    * Added model glow for ticking bomb
-
-    ![Ticking Bomb Model Glow](https://github.com/user-attachments/assets/6cadde5a-f999-4649-b483-9122e7b350ba)
 
 ## Technical features
 
