@@ -190,7 +190,6 @@
     <ClInclude Include="Features\Visuals\ModelGlow\TickingBombModelGlow\TickingBombModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlow.h" />
-    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowCondition.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowContext.h" />
@@ -198,7 +197,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowCondition.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlow.h" />
-    <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlowContext.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowConfigVariables.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowContext.h" />

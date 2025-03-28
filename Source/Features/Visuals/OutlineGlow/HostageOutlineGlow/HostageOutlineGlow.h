@@ -3,7 +3,6 @@
 #include <utility>
 
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
-#include "HostageOutlineGlowContext.h"
 
 template <typename HookContext>
 class HostageOutlineGlow {

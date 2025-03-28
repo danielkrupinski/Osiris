@@ -2,7 +2,6 @@
 
 #include <utility>
 
-#include "DefuseKitOutlineGlowContext.h"
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 
 template <typename HookContext>
