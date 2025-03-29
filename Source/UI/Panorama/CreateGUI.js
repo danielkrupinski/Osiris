@@ -82,26 +82,11 @@ $.Osiris = (function () {
     });
 
     var leftContainer = $.CreatePanel('Panel', navbar, '', {
-      style: "horizontal-align: left; flow-children: right; height: 100%; padding-left: 5px;"
-    });
-
-    var unloadButton = $.CreatePanel('Button', leftContainer, 'UnloadButton', {
-      class: "content-navbar__tabs__btn",
-      onactivate: "UiToolkitAPI.ShowGenericPopupOneOptionCustomCancelBgStyle('Unload Osiris', 'Are you sure you want to unload Osiris?', '', 'UNLOAD', function() { $.Osiris.goHome(); $.Osiris.addCommand('unload'); }, 'RETURN', function() {}, 'dim');"
-    });
-
-    unloadButton.SetPanelEvent('onmouseover', function () { UiToolkitAPI.ShowTextTooltip('UnloadButton', 'Unload'); });
-    unloadButton.SetPanelEvent('onmouseout', function () { UiToolkitAPI.HideTextTooltip(); });
-
-    $.CreatePanel('Image', unloadButton, '', {
-      src: "s2r://panorama/images/icons/ui/cancel.vsvg",
-      texturewidth: "24",
-      class: "negativeColor"
+      style: "horizontal-align: left; flow-children: right; height: 100%; margin-left: 15px;"
     });
 
     var activeCfgNameLabel = $.CreatePanel('Label', leftContainer, 'ActiveConfigName', {
-      text: "default.cfg",
-      style: "margin-left: 5px;"
+      text: "default.cfg"
     });
 
     activeCfgNameLabel.SetPanelEvent('onmouseover', function () { UiToolkitAPI.ShowTextTooltip('ActiveConfigName', 'Active config file. Changes are saved automatically.'); });
@@ -109,6 +94,7 @@ $.Osiris = (function () {
 
     var restoreDefaultsButton = $.CreatePanel('Button', leftContainer, 'RestoreDefaultsButton', {
       class: "content-navbar__tabs__btn",
+      style: "margin-left: 5px;",
       onactivate: "UiToolkitAPI.ShowGenericPopupOneOptionCustomCancelBgStyle('Restore Defaults', 'Are you sure you want to restore default settings in the active config file (default.cfg)?', '', 'RESTORE DEFAULTS', function() { $.Osiris.addCommand('restore_defaults'); }, 'RETURN', function() {}, 'dim');"
     });
 
@@ -147,6 +133,24 @@ $.Osiris = (function () {
     });
 
     $.CreatePanel('Label', soundTabButton, '', { text: "Sound" });
+
+    var rightContainer = $.CreatePanel('Panel', navbar, '', {
+        style: "horizontal-align: right; flow-children: right; height: 100%; margin-right: 70px;"
+    });
+
+    var unloadButton = $.CreatePanel('Button', rightContainer, 'UnloadButton', {
+        class: "content-navbar__tabs__btn",
+        onactivate: "UiToolkitAPI.ShowGenericPopupOneOptionCustomCancelBgStyle('Unload Osiris', 'Are you sure you want to unload Osiris?', '', 'UNLOAD', function() { $.Osiris.goHome(); $.Osiris.addCommand('unload'); }, 'RETURN', function() {}, 'dim');"
+    });
+
+    unloadButton.SetPanelEvent('onmouseover', function () { UiToolkitAPI.ShowTextTooltip('UnloadButton', 'Unload'); });
+    unloadButton.SetPanelEvent('onmouseout', function () { UiToolkitAPI.HideTextTooltip(); });
+
+    $.CreatePanel('Image', unloadButton, '', {
+        src: "s2r://panorama/images/icons/ui/cancel.vsvg",
+        texturewidth: "24",
+        class: "negativeColor"
+    });
   };
 
   var createVisualsNavbar = function () {
