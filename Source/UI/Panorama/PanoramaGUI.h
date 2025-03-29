@@ -170,6 +170,15 @@ public:
         hookContext.template make<SoundTab>().updateFromConfig(mainMenu);
     }
 
+    void onUnload() const noexcept
+    {
+        uiEngine().deletePanelByHandle(state().guiButtonHandle);
+        uiEngine().deletePanelByHandle(state().guiPanelHandle);
+
+        if (auto&& settingsPanel = uiEngine().getPanelFromHandle(state().settingsPanelHandle))
+            uiEngine().runScript(settingsPanel, "delete $.Osiris");
+    }
+
 private:
     [[nodiscard]] decltype(auto) uiEngine() const noexcept
     {

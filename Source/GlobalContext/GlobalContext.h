@@ -17,7 +17,6 @@
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserver.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
-#include <Features/Common/InWorldPanelsUnloadHandler.h>
 #include <MemorySearch/PatternNotFoundLogger.h>
 #include <MemoryAllocation/FreeMemoryRegionList.h>
 #include <MemorySearch/PatternFinder.h>
@@ -132,9 +131,9 @@ public:
             hookContext.make<DefusingAlert>().onUnload();
             hookContext.make<PostRoundTimer>().onUnload();
             hookContext.make<OutlineGlow>().onUnload();
-            BombStatusPanelUnloadHandler{hookContext}.handleUnload();
-            InWorldPanelsUnloadHandler{hookContext}.handleUnload();
-            PanoramaGuiUnloadHandler{hookContext}.handleUnload();
+            hookContext.make<BombStatusPanel>().onUnload();
+            hookContext.make<InWorldPanels>().onUnload();
+            hookContext.make<PanoramaGUI>().onUnload();
             fullContext().hooks.viewRenderHook.uninstall();
             hookContext.make<PlayerModelGlowPreview>().onUnload();
 

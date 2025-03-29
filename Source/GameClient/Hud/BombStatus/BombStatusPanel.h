@@ -23,6 +23,12 @@ struct BombStatusPanel {
         changeVisibility(Visibility::Visible, [this] { context.bombStatusPanel().setParent(context.scoreAndTimeAndBombPanel()); });
     }
 
+    void onUnload() noexcept
+    {
+        restore();
+        context.hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(context.hookContext.bombStatusPanelState().invisiblePanelHandle);
+    }
+
 private:
     void changeVisibility(Visibility targetVisibility, auto performVisibilityChange) noexcept
     {

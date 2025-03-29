@@ -29,6 +29,8 @@ struct BombStatusPanelContext {
         return state().visibility;
     }
 
+    HookContext& hookContext;
+
 private:
     [[nodiscard]] decltype(auto) state() const noexcept
     {
@@ -48,6 +50,4 @@ private:
             return invisiblePanel;
         };
     }
-
-    HookContext& hookContext;
 };

@@ -111,7 +111,6 @@
     <ClInclude Include="Features\Common\InWorldPanels.h" />
     <ClInclude Include="Features\Common\InWorldPanelsPerHookState.h" />
     <ClInclude Include="Features\Common\InWorldPanelsState.h" />
-    <ClInclude Include="Features\Common\InWorldPanelsUnloadHandler.h" />
     <ClInclude Include="Features\Common\RenderingHookEntityLoop.h" />
     <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\FeaturesStates.h" />
@@ -283,7 +282,6 @@
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManager.h" />
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManagerContext.h" />
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelState.h" />
-    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelUnloadHandler.h" />
     <ClInclude Include="GameClient\Hud\DeathNotice.h" />
     <ClInclude Include="GameClient\Hud\DeathNoticeContext.h" />
     <ClInclude Include="GameClient\Hud\DeathNotices.h" />
@@ -487,7 +485,6 @@
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
     <ClInclude Include="UI\Panorama\PanoramaGUI.h" />
     <ClInclude Include="UI\Panorama\PanoramaGuiState.h" />
-    <ClInclude Include="UI\Panorama\PanoramaGuiUnloadHandler.h" />
     <ClInclude Include="UI\Panorama\SetCommandHandler.h" />
     <ClInclude Include="UI\Panorama\SoundTab.h" />
     <ClInclude Include="UI\Panorama\VisualsTab.h" />

@@ -923,9 +923,6 @@
     <ClInclude Include="UI\Panorama\PanoramaGuiState.h">
       <Filter>UI\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Panorama\PanoramaGuiUnloadHandler.h">
-      <Filter>UI\Panorama</Filter>
-    </ClInclude>
     <ClInclude Include="OutlineGlow\GlowSceneObject.h">
       <Filter>OutlineGlow</Filter>
     </ClInclude>
@@ -1004,9 +1001,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlow.h">
       <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlowContext.h">
-      <Filter>Features\Visuals\OutlineGlow\DefuseKitOutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\C_BaseCSGrenadeProjectile.h">
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
@@ -1053,9 +1047,6 @@
       <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlow.h">
-      <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlowContext.h">
       <Filter>Features\Visuals\OutlineGlow\HostageOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\C_Hostage.h">
@@ -1340,9 +1331,6 @@
     <ClInclude Include="Features\Common\InWorldPanelsState.h">
       <Filter>Features\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Common\InWorldPanelsUnloadHandler.h">
-      <Filter>Features\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Sound\SoundVisualizationPanelTypes.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>
@@ -1575,9 +1563,6 @@
       <Filter>GameClient\Hud\BombStatus</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelState.h">
-      <Filter>GameClient\Hud\BombStatus</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelUnloadHandler.h">
       <Filter>GameClient\Hud\BombStatus</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Panorama\ClientPanel.h">

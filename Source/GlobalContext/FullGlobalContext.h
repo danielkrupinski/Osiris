@@ -25,12 +25,10 @@
 #include <GameClient/Hud/BombStatus/BombStatusPanelManager.h>
 #include <GameClient/Hud/BombStatus/BombStatusPanelManagerContext.h>
 #include <GameClient/Hud/BombStatus/BombStatusPanelState.h>
-#include <GameClient/Hud/BombStatus/BombStatusPanelUnloadHandler.h>
 #include <MemorySearch/PatternFinder.h>
 #include <MemorySearch/PatternSearchResults.h>
 #include <UI/Panorama/PanoramaGUI.h>
 #include <UI/Panorama/PanoramaGuiState.h>
-#include <UI/Panorama/PanoramaGuiUnloadHandler.h>
 #include <OutlineGlow/GlowSceneObjectsState.h>
 #include <Platform/DynamicLibrary.h>
 #include <Platform/VmtFinder.h>
