@@ -7,8 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 29 March 2025
+    * Moved "Unload" button to the right side of the tab bar
+
 * 27 March 2025
-    * Add an option to restore default settings in the active config file
+    * Added an option to restore default settings in the active config file
 
     ![Restore Defaults](https://github.com/user-attachments/assets/496cc3cb-17ee-445a-802c-2f496f39a34c)
 
@@ -22,11 +25,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 27 December 2024
     * Added model glow for grenade projectiles
-
-* 14 December 2024
-    * Added model glow for defuse kits on the ground
-
-    ![Defuse Kit Model Glow](https://github.com/user-attachments/assets/43dc555d-8c1d-40dc-b94a-3aa8f8396c7b)
 
 ## Technical features
 
