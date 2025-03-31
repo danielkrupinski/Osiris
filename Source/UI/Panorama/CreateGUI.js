@@ -294,7 +294,7 @@ $.Osiris = (function () {
   };
 
   var createPlayerModelGlowPreview = function (parent, id, labelId, playerModel, itemId) {
-    var container = $.CreatePanel('Panel', parent, '', { style: 'width: 100%; flow-children: none;' });
+    var container = $.CreatePanel('Panel', parent, '', { style: 'flow-children: none;' });
     var previewPanel = $.CreatePanel('MapPlayerPreviewPanel', container, id, {
       map: "ui/buy_menu",
       camera: "cam_loadoutmenu_ct",
@@ -308,7 +308,7 @@ $.Osiris = (function () {
       "transparent-background": true,
       "pin-fov": "vertical",
       csm_split_plane0_distance_override: "250.0",
-      style: "vertical-align: top; width: 100%; height: 400px; horizontal-align: center;"
+      style: "vertical-align: top; width: 300px; height: 400px; horizontal-align: center;"
     });
     previewPanel.EquipPlayerWithItem(itemId);
     $.CreatePanel('Label', container, labelId, { style: 'vertical-align: top; horizontal-align: center;' });
@@ -393,12 +393,14 @@ u8R"(
 
   var _modelGlowTab = createSubTab(visuals, 'model_glow');
   _modelGlowTab.style.flowChildren = 'right';
-  var leftModelGlowPanel = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'padding-left: 64px; width: fill-parent-flow(1); flow-children: down;' });
-  var modelGlowTab = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down;' });
-  var rightModelGlowPanel = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'padding-right: 64px; width: fill-parent-flow(1); flow-children: down;' });
 
-  createPlayerModelGlowPreview(leftModelGlowPanel, 'ModelGlowPreviewPlayerTT', 'ModelGlowPreviewPlayerTTLabel', 'characters/models/tm_professional/tm_professional_varf.vmdl', makeFauxItemId(7, 921));
-  createPlayerModelGlowPreview(rightModelGlowPanel, 'ModelGlowPreviewPlayerCT', 'ModelGlowPreviewPlayerCTLabel', 'characters/models/ctm_st6/ctm_st6_variante.vmdl', makeFauxItemId(9, 819));
+  var modelGlowPreview = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down;' });
+  $.CreatePanel('Label', modelGlowPreview, '', { style: 'vertical-align: top; horizontal-align: center; font-size: 40;', text: 'Preview' });
+  var playerModelGlowPreview = $.CreatePanel('Panel', modelGlowPreview, '', { style: 'flow-children: right; margin-top: 10px;' });
+  createPlayerModelGlowPreview(playerModelGlowPreview, 'ModelGlowPreviewPlayerTT', 'ModelGlowPreviewPlayerTTLabel', 'characters/models/tm_professional/tm_professional_varf.vmdl', makeFauxItemId(7, 921));
+  createPlayerModelGlowPreview(playerModelGlowPreview, 'ModelGlowPreviewPlayerCT', 'ModelGlowPreviewPlayerCTLabel', 'characters/models/ctm_st6/ctm_st6_variante.vmdl', makeFauxItemId(9, 819));
+
+  var modelGlowTab = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down;' });
 
   var modelGlow = createSection(modelGlowTab, 'Model Glow');
   createOnOffDropDown(modelGlow, "Master Switch", 'visuals', 'model_glow_enable');
