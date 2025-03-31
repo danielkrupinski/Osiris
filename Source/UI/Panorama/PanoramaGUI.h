@@ -35,7 +35,7 @@ public:
 
         StringBuilderStorage<100> storage;
         auto builder = storage.builder();
-        builder.put("Preview - Player ");
+        builder.put("Player ");
         if (teamNumber == TeamNumber::TT)
             builder.put("TT");
         else
