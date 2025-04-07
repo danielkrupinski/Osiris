@@ -99,7 +99,7 @@
     <ClInclude Include="CS2\Panorama\CUIEngine.h" />
     <ClInclude Include="CS2\Panorama\CUILength.h" />
     <ClInclude Include="CS2\Panorama\CUIPanel.h" />
-    <ClInclude Include="CS2\Panorama\CUI_MapPlayerPreviewPanel.h" />
+    <ClInclude Include="CS2\Panorama\CUI_MapPreviewPanel.h" />
     <ClInclude Include="CS2\Panorama\PanelHandle.h" />
     <ClInclude Include="CS2\Panorama\StyleEnums.h" />
     <ClInclude Include="CS2\Panorama\StyleProperties.h" />
@@ -186,6 +186,8 @@
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerModelGlowPreviewParams.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerModelGlowPreviewState.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerPawnForModelGlowPreview.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\WeaponModelGlowPreview.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\WeaponModelGlowPreviewState.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\TickingBombModelGlow\TickingBombModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\WeaponModelGlow\WeaponModelGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\DefuseKitOutlineGlow\DefuseKitOutlineGlow.h" />
@@ -291,7 +293,7 @@
     <ClInclude Include="GameClient\MemAlloc.h" />
     <ClInclude Include="GameClient\MemAllocState.h" />
     <ClInclude Include="GameClient\Panorama\ClientPanel.h" />
-    <ClInclude Include="GameClient\Panorama\MapPlayerPreviewPanel.h" />
+    <ClInclude Include="GameClient\Panorama\MapPreviewPanel.h" />
     <ClInclude Include="GameClient\Panorama\PanelAlignmentParams.h" />
     <ClInclude Include="GameClient\Panorama\PanelFactory.h" />
     <ClInclude Include="GameClient\Panorama\PanelFontParams.h" />
@@ -358,7 +360,7 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\GlowPropertyPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GlowSceneObjectPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\HostageServicesPatternTypes.h" />
-    <ClInclude Include="MemoryPatterns\PatternTypes\MapPlayerPreviewPanelPatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\MapPreviewPanelPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\MemAllocPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PanelPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PanelStylePatternTypes.h" />
@@ -392,7 +394,7 @@
     <ClInclude Include="MemoryPatterns\Windows\GlowPropertyPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h" />
-    <ClInclude Include="MemoryPatterns\Windows\MapPlayerPreviewPanelPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\MapPreviewPanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h" />

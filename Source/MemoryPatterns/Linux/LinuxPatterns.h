@@ -13,7 +13,7 @@
 #include "GlowPropertyPatternsLinux.h"
 #include "GlowSceneObjectPatternsLinux.h"
 #include "HostageServicesPatternsLinux.h"
-#include "MapPlayerPreviewPanelPatternsLinux.h"
+#include "MapPreviewPanelPatternsLinux.h"
 #include "MemAllocPatternsLinux.h"
 #include "PanelPatternsLinux.h"
 #include "PanelStylePatternsLinux.h"

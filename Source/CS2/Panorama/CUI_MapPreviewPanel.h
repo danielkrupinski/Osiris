@@ -8,7 +8,7 @@
 namespace cs2
 {
 
-struct CUI_MapPlayerPreviewPanel : CPanel2D {
+struct CUI_MapPreviewPanel : CPanel2D {
     using EntityHandles = CUtlVector<CEntityHandle>;
 };
 
