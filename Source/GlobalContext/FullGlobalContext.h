@@ -16,6 +16,7 @@
 #include <Features/Features.h>
 #include <Features/FeaturesStates.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewState.h>
+#include <Features/Visuals/ModelGlow/Preview/WeaponModelGlowPreviewState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheState.h>
 #include <MemoryPatterns/MemoryPatterns.h>
 #include <MemorySearch/PatternNotFoundLogger.h>
@@ -87,4 +88,5 @@ struct FullGlobalContext {
     EntityClassifier entityClassifier;
     PlayerInfoPanelCacheState playerInfoPanelCacheState;
     PlayerModelGlowPreviewState playerModelGlowPreviewState;
+    WeaponModelGlowPreviewState weaponModelGlowPreviewState;
 };

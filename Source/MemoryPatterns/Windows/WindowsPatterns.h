@@ -13,7 +13,7 @@
 #include "GameSceneNodePatternsWindows.h"
 #include "GlowPropertyPatternsWindows.h"
 #include "GlowSceneObjectPatternsWindows.h"
-#include "MapPlayerPreviewPanelPatternsWindows.h"
+#include "MapPreviewPanelPatternsWindows.h"
 #include "MemAllocPatternsWindows.h"
 #include "PanelPatternsWindows.h"
 #include "PanelStylePatternsWindows.h"

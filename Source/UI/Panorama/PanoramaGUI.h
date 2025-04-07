@@ -4,10 +4,11 @@
 #include <GameClient/Entities/PreviewPlayer.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
+#include <Features/Visuals/ModelGlow/Preview/WeaponModelGlowPreview.h>
 #include <Features/Features.h>
 #include <GameClient/Entities/TeamNumber.h>
 #include <GlobalContext/UnloadFlag.h>
-#include <GameClient/Panorama/MapPlayerPreviewPanel.h>
+#include <GameClient/Panorama/MapPreviewPanel.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
 #include <GameClient/Panorama/PanoramaUiEngine.h>
 #include <GameClient/Panorama/PanoramaUiPanel.h>
@@ -145,9 +146,21 @@ public:
 
         auto&& playerModelGlowPreview = hookContext.template make<PlayerModelGlowPreview>();
         if (!playerModelGlowPreview.isPreviewPlayerSetTT())
-            playerModelGlowPreview.setPreviewPlayerTT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerTT").clientPanel().template as<MapPlayerPreviewPanel>().findPreviewPlayer());
+            playerModelGlowPreview.setPreviewPlayerTT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerTT").clientPanel().template as<MapPreviewPanel>().findPreviewPlayer());
         if (!playerModelGlowPreview.isPreviewPlayerSetCT())
-            playerModelGlowPreview.setPreviewPlayerCT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCT").clientPanel().template as<MapPlayerPreviewPanel>().findPreviewPlayer());
+            playerModelGlowPreview.setPreviewPlayerCT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCT").clientPanel().template as<MapPreviewPanel>().findPreviewPlayer());
+
+        auto&& weaponModelGlowPreview = hookContext.template make<WeaponModelGlowPreview>();
+        if (!weaponModelGlowPreview.isPreviewWeaponSet())
+            weaponModelGlowPreview.setPreviewWeapon(guiPanel.findChildInLayoutFile("ModelGlowPreviewWeapon").clientPanel().template as<MapPreviewPanel>().findPreviewWeapon());
+        if (!weaponModelGlowPreview.isPreviewFlashbangSet())
+            weaponModelGlowPreview.setPreviewFlashbang(guiPanel.findChildInLayoutFile("ModelGlowPreviewFlashbang").clientPanel().template as<MapPreviewPanel>().findPreviewWeapon());
+        if (!weaponModelGlowPreview.isPreviewHEGrenadeSet())
+            weaponModelGlowPreview.setPreviewHEGrenade(guiPanel.findChildInLayoutFile("ModelGlowPreviewHEGrenade").clientPanel().template as<MapPreviewPanel>().findPreviewWeapon());
+        if (!weaponModelGlowPreview.isPreviewSmokeGrenadeSet())
+            weaponModelGlowPreview.setPreviewSmokeGrenade(guiPanel.findChildInLayoutFile("ModelGlowPreviewSmoke").clientPanel().template as<MapPreviewPanel>().findPreviewWeapon());
+        if (!weaponModelGlowPreview.isPreviewIncendiarySet())
+            weaponModelGlowPreview.setPreviewIncendiary(guiPanel.findChildInLayoutFile("ModelGlowPreviewIncendiary").clientPanel().template as<MapPreviewPanel>().findPreviewWeapon());
 
         const auto cmdSymbol = uiEngine().makeSymbol(0, "cmd");
         const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
@@ -156,6 +169,8 @@ public:
 
         hookContext.template make<PlayerModelGlowPreview>().hookPreviewPlayersSceneObjectUpdaters();
         hookContext.template make<PlayerModelGlowPreview>().update();
+
+        hookContext.template make<WeaponModelGlowPreview>().updateSceneObjectUpdaterHooks();
 
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleTT), TeamNumber::TT).update();
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleCT), TeamNumber::CT).update();

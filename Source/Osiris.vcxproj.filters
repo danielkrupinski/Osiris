@@ -1394,9 +1394,6 @@
     <ClInclude Include="CS2\Classes\Entities\C_CSGO_PreviewPlayer.h">
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="CS2\Panorama\CUI_MapPlayerPreviewPanel.h">
-      <Filter>CS2\Panorama</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\BaseEntityForModelGlowPreview.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
@@ -1418,10 +1415,7 @@
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerPawnForModelGlowPreview.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\PatternTypes\MapPlayerPreviewPanelPatternTypes.h">
-      <Filter>MemoryPatterns\PatternTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPatterns\Windows\MapPlayerPreviewPanelPatternsWindows.h">
+    <ClInclude Include="MemoryPatterns\Windows\MapPreviewPanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
     <ClInclude Include="GlobalContext\UnloadFlag.h">
@@ -1566,9 +1560,6 @@
       <Filter>GameClient\Hud\BombStatus</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Panorama\ClientPanel.h">
-      <Filter>GameClient\Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClient\Panorama\MapPlayerPreviewPanel.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Panorama\PanelAlignmentParams.h">
@@ -1774,6 +1765,21 @@
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowConfigVariables.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CUI_MapPreviewPanel.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\WeaponModelGlowPreview.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\WeaponModelGlowPreviewState.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\MapPreviewPanel.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\MapPreviewPanelPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

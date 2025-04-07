@@ -136,6 +136,7 @@ public:
             hookContext.make<PanoramaGUI>().onUnload();
             fullContext().hooks.viewRenderHook.uninstall();
             hookContext.make<PlayerModelGlowPreview>().onUnload();
+            hookContext.make<WeaponModelGlowPreview>().onUnload();
 
             hookContext.make<EntitySystem>().forEachEntityIdentity([&hookContext](const auto& entityIdentity) {
                 auto&& baseEntity = hookContext.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));

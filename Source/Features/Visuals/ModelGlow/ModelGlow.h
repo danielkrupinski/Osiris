@@ -51,6 +51,12 @@ public:
             hookContext.template make<PlayerModelGlow>().updateSceneObjectUpdaterHook(playerPawnForModelGlowPreview);
     }
 
+    void updateWeaponSceneObjectUpdaterHook(auto&& weapon) const noexcept
+    {
+        if (shouldUpdateSceneObjectUpdaterHook())
+            hookContext.template make<WeaponModelGlow>().updateSceneObjectUpdaterHook(weapon);
+    }
+
     void applyPlayerModelGlow(auto&& playerPawn) const noexcept
     {
         if (shouldRun())

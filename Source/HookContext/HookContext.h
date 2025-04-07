@@ -93,6 +93,11 @@ struct HookContext {
         return fullGlobalContext.playerModelGlowPreviewState;
     }
 
+    [[nodiscard]] auto& weaponModelGlowPreviewState() const noexcept
+    {
+        return fullGlobalContext.weaponModelGlowPreviewState;
+    }
+
     [[nodiscard]] Hooks& hooks() const noexcept
     {
         return fullGlobalContext.hooks;

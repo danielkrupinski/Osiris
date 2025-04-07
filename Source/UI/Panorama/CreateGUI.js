@@ -308,10 +308,27 @@ $.Osiris = (function () {
       "transparent-background": true,
       "pin-fov": "vertical",
       csm_split_plane0_distance_override: "250.0",
-      style: "vertical-align: top; width: 300px; height: 400px; horizontal-align: center;"
+      style: "y: 5px; vertical-align: top; width: 300px; height: 300px; horizontal-align: center;"
     });
     previewPanel.EquipPlayerWithItem(itemId);
     $.CreatePanel('Label', container, labelId, { style: 'vertical-align: top; horizontal-align: center;' });
+  };
+
+  var createGrenadeModelGlowPreview = function (parent, id, defIndex) {
+    var container = $.CreatePanel('Panel', parent, '', { style: 'width: 80px; overflow: clip;' });
+    var panel = $.CreatePanel('MapItemPreviewPanel', container, id, {
+      map: "ui/xpshop_item",
+      camera: "camera_weapon_4",
+      "require-composition-layer": true,
+      player: false,
+      initial_entity: "item",
+      mouse_rotate: false,
+      sync_spawn_addons: true,
+      "transparent-background": true,
+      "pin-fov": "vertical",
+      style: "x: -10px; horizontal-align: center; width: 200px; height: 80px;"
+    });
+    panel.SetItemItemId(makeFauxItemId(defIndex, 0), {});
   };
 )"
 // split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
@@ -396,9 +413,37 @@ u8R"(
 
   var modelGlowPreview = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down;' });
   $.CreatePanel('Label', modelGlowPreview, '', { style: 'vertical-align: top; horizontal-align: center; font-size: 40;', text: 'Preview' });
-  var playerModelGlowPreview = $.CreatePanel('Panel', modelGlowPreview, '', { style: 'flow-children: right; margin-top: 10px;' });
+  var playerModelGlowPreview = $.CreatePanel('Panel', modelGlowPreview, '', { style: 'flow-children: right; margin-top: 20px;' });
   createPlayerModelGlowPreview(playerModelGlowPreview, 'ModelGlowPreviewPlayerTT', 'ModelGlowPreviewPlayerTTLabel', 'characters/models/tm_professional/tm_professional_varf.vmdl', makeFauxItemId(7, 921));
   createPlayerModelGlowPreview(playerModelGlowPreview, 'ModelGlowPreviewPlayerCT', 'ModelGlowPreviewPlayerCTLabel', 'characters/models/ctm_st6/ctm_st6_variante.vmdl', makeFauxItemId(9, 819));
+
+  $.CreatePanel('Label', modelGlowPreview, '', { style: 'horizontal-align: center; margin-top: 20px;', text: 'Weapons on the Ground' });
+
+  var weaponModelGlowPreview = $.CreatePanel('Panel', modelGlowPreview, '', { style: 'flow-children: right;' });
+
+  var modelGlowPreviewWeapon = $.CreatePanel('MapItemPreviewPanel', weaponModelGlowPreview, 'ModelGlowPreviewWeapon', {
+    map: "ui/xpshop_item",
+    camera: "camera_weapon_0",
+    "require-composition-layer": true,
+    player: false,
+    initial_entity: "item",
+    mouse_rotate: false,
+    sync_spawn_addons: true,
+    "transparent-background": true,
+    "pin-fov": "vertical",
+    style: "width: 400px; height: 160px;"
+  });
+  modelGlowPreviewWeapon.SetItemItemId(makeFauxItemId(16, 255), {});
+
+  var grenadeModelGlowPreview = $.CreatePanel('Panel', weaponModelGlowPreview, '', { style: 'flow-children: down;' });
+
+  var grenadeModelGlowPreviewRow1 = $.CreatePanel('Panel', grenadeModelGlowPreview, '', { style: 'flow-children: right;' });
+  createGrenadeModelGlowPreview(grenadeModelGlowPreviewRow1, 'ModelGlowPreviewFlashbang', 43);
+  createGrenadeModelGlowPreview(grenadeModelGlowPreviewRow1, 'ModelGlowPreviewHEGrenade', 44);
+
+  var grenadeModelGlowPreviewRow2 = $.CreatePanel('Panel', grenadeModelGlowPreview, '', { style: 'flow-children: right;' });
+  createGrenadeModelGlowPreview(grenadeModelGlowPreviewRow2, 'ModelGlowPreviewSmoke', 45);
+  createGrenadeModelGlowPreview(grenadeModelGlowPreviewRow2, 'ModelGlowPreviewIncendiary', 48);
 
   var modelGlowTab = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down;' });
 
