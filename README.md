@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 7 April 2025
+    * Added weapon model glow preview
+
+    <img src=https://github.com/user-attachments/assets/409cabba-b80a-49d1-8737-d0178ad1ead9 height="200" alt="Weapon Model Glow Preview">
+
 * 31 March 2025
     * Moved model glow preview to the left side of the model glow tab
 
@@ -22,11 +27,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 06 March 2025
     * Settings are now automatically saved to the config file (`default.cfg`) inside `%appdata%\OsirisCS2\configs` directory on Windows and `$HOME/OsirisCS2/configs` on Linux. `default.cfg` file is loaded automatically when starting Osiris.
-
-* 23 January 2025
-    * Added player model glow preview to the menu
-
-    ![Player Model Glow Preview](https://github.com/user-attachments/assets/361ff865-2a0c-4145-9fd0-5ff397f50972)
 
 ## Technical features
 
