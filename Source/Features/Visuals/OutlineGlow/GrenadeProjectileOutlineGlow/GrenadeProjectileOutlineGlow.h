@@ -5,28 +5,34 @@
 #include <CS2/Classes/Color.h>
 #include <CS2/Classes/Entities/GrenadeProjectiles.h>
 #include <GameClient/Entities/EntityClassifier.h>
+#include <GameClient/Entities/SmokeGrenadeProjectile.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
-#include "GrenadeProjectileOutlineGlowContext.h"
 
-template <typename HookContext, typename Context = GrenadeProjectileOutlineGlowContext<HookContext>>
+template <typename HookContext>
 class GrenadeProjectileOutlineGlow {
 public:
-    template <typename... Args>
-    GrenadeProjectileOutlineGlow(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit GrenadeProjectileOutlineGlow(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     void applyGlowToGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
     {
-        auto&& condition = context.condition();
-        if (!condition.shouldRun() || !condition.shouldGlowGrenadeProjectile(entityTypeInfo, grenadeProjectile))
-            return;
-
-        grenadeProjectile.applyGlowRecursively(getColor(entityTypeInfo));
+        if (enabled() && shouldGlowGrenadeProjectile(entityTypeInfo, grenadeProjectile))
+            grenadeProjectile.applyGlowRecursively(getColor(entityTypeInfo));
     }
 
 private:
+    [[nodiscard]] bool enabled() const noexcept
+    {
+        return hookContext.config().template getVariable<GrenadeProjectileOutlineGlowEnabled>();
+    }
+
+    [[nodiscard]] bool shouldGlowGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
+    {
+        return !entityTypeInfo.is<cs2::C_SmokeGrenadeProjectile>() || !grenadeProjectile.template as<SmokeGrenadeProjectile>().didSmokeEffect().valueOr(false);
+    }
+
     [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
     {
         using namespace outline_glow_params;
@@ -40,5 +46,5 @@ private:
         }
     }
 
-    Context context;
+    HookContext& hookContext;
 };

@@ -10,3 +10,8 @@
 #include "Config/ConfigSchemaTests.h"
 #include "Config/ConfigToStringTests.h"
 #include "Config/ConfigVariablesTests.h"
+
+#include "Features/Visuals/OutlineGlow/DefuseKitOutlineGlowTests.h"
+#include "Features/Visuals/OutlineGlow/DroppedBombOutlineGlowTests.h"
+#include "Features/Visuals/OutlineGlow/GrenadeProjectileOutlineGlowTests.h"
+#include "Features/Visuals/OutlineGlow/HostageOutlineGlowTests.h"

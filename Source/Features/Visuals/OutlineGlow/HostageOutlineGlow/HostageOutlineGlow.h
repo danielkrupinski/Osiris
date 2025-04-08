@@ -1,7 +1,6 @@
 #pragma once
 
-#include <utility>
-
+#include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 
 template <typename HookContext>
