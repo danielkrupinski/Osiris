@@ -41,8 +41,8 @@ TEST_P(DroppedBombOutlineGlowTest, GlowIsAppliedAsExpected) {
 }
 
 INSTANTIATE_TEST_SUITE_P(, DroppedBombOutlineGlowTest, testing::Values(
-    DroppedBombOutlineGlowTestParam{.enabled{false}, .expectGlowApplied{false}},
-    DroppedBombOutlineGlowTestParam{.enabled{true}, .expectBombHasOwnerCalled{true}, .bombHasOwner{std::nullopt}, .expectGlowApplied{false}},
-    DroppedBombOutlineGlowTestParam{.enabled{true}, .expectBombHasOwnerCalled{true}, .bombHasOwner{true}, .expectGlowApplied{false}},
-    DroppedBombOutlineGlowTestParam{.enabled{true}, .expectBombHasOwnerCalled{true}, .bombHasOwner{false}, .expectGlowApplied{true}}
+    DroppedBombOutlineGlowTestParam{.enabled = false, .expectBombHasOwnerCalled = false, .expectGlowApplied = false},
+    DroppedBombOutlineGlowTestParam{.enabled = true, .expectBombHasOwnerCalled = true, .bombHasOwner{std::nullopt}, .expectGlowApplied = false},
+    DroppedBombOutlineGlowTestParam{.enabled = true, .expectBombHasOwnerCalled = true, .bombHasOwner{true}, .expectGlowApplied = false},
+    DroppedBombOutlineGlowTestParam{.enabled = true, .expectBombHasOwnerCalled = true, .bombHasOwner{false}, .expectGlowApplied = true}
 ));

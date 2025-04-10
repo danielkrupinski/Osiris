@@ -15,3 +15,6 @@
 #include "Features/Visuals/OutlineGlow/DroppedBombOutlineGlowTests.h"
 #include "Features/Visuals/OutlineGlow/GrenadeProjectileOutlineGlowTests.h"
 #include "Features/Visuals/OutlineGlow/HostageOutlineGlowTests.h"
+#include "Features/Visuals/OutlineGlow/PlayerOutlineGlowTests.h"
+#include "Features/Visuals/OutlineGlow/TickingBombOutlineGlowTests.h"
+#include "Features/Visuals/OutlineGlow/WeaponOutlineGlowTests.h"

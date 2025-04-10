@@ -1,28 +1,32 @@
 #pragma once
 
-#include <utility>
-
+#include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
-#include "TickingBombOutlineGlowContext.h"
 
-template <typename HookContext, typename Context = TickingBombOutlineGlowContext<HookContext>>
+template <typename HookContext>
 class TickingBombOutlineGlow {
 public:
-    template <typename... Args>
-    TickingBombOutlineGlow(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    TickingBombOutlineGlow(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     void applyGlowToPlantedBomb(auto&& plantedBomb) const noexcept
     {
-        auto&& condition = context.condition();
-        if (!condition.shouldRun() || !condition.shouldGlowPlantedBomb(plantedBomb))
-            return;
-
-        plantedBomb.baseEntity().applyGlowRecursively(outline_glow_params::kTickingBombColor);
+        if (shouldRun() && shouldGlowPlantedBomb(plantedBomb))
+            plantedBomb.baseEntity().applyGlowRecursively(outline_glow_params::kTickingBombColor);
     }
 
 private:
-    Context context;
+    [[nodiscard]] bool shouldRun() const noexcept
+    {
+        return hookContext.config().template getVariable<TickingBombOutlineGlowEnabled>();
+    }
+
+    [[nodiscard]] bool shouldGlowPlantedBomb(auto&& plantedBomb) const noexcept
+    {
+        return plantedBomb.isTicking().valueOr(true);
+    }
+
+    HookContext& hookContext;
 };
