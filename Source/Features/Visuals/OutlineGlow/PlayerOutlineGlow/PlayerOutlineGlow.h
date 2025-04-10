@@ -37,7 +37,7 @@ private:
             && (!hookContext.config().template getVariable<PlayerOutlineGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
-    [[nodiscard]] auto getColorAlpha(auto&& playerPawn) const noexcept
+    [[nodiscard]] std::uint8_t getColorAlpha(auto&& playerPawn) const noexcept
     {
         using namespace outline_glow_params;
         return playerPawn.hasImmunity().valueOr(false) ? kImmunePlayerGlowAlpha : kGlowAlpha;
