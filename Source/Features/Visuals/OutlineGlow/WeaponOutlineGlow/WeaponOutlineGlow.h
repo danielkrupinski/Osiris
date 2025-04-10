@@ -5,30 +5,32 @@
 #include <CS2/Classes/Entities/WeaponEntities.h>
 #include <GameClient/Entities/EntityClassifier.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
-#include "WeaponOutlineGlowContext.h"
 
-template <typename HookContext, typename Context = WeaponOutlineGlowContext<HookContext>>
+template <typename HookContext>
 class WeaponOutlineGlow {
 public:
-    template <typename... Args>
-    WeaponOutlineGlow(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit WeaponOutlineGlow(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
     
     void applyGlowToWeapon(EntityTypeInfo entityTypeInfo, auto&& weapon) const noexcept
     {
-        auto&& condition = context.condition();
-        if (!condition.shouldRun() || !condition.shouldGlowWeapon(weapon))
-            return;
-
-        using namespace outline_glow_params;
-        const auto color = getColor(entityTypeInfo);
-        weapon.applyGlow(color, kWeaponGlowRange);
-        weapon.forEachChild([color](auto&& entity) { entity.applyGlow(color, kWeaponGlowRange); });
+        if (shouldRun() && shouldGlowWeapon(weapon))
+            weapon.applyGlowRecursively(getColor(entityTypeInfo), outline_glow_params::kWeaponGlowRange);
     }
 
 private:
+    [[nodiscard]] bool shouldRun() const noexcept
+    {
+        return hookContext.config().template getVariable<WeaponOutlineGlowEnabled>();
+    }
+
+    [[nodiscard]] bool shouldGlowWeapon(auto&& weapon) const noexcept
+    {
+        return !weapon.hasOwner().valueOr(true);
+    }
+
     [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
     {
         using namespace outline_glow_params;
@@ -43,5 +45,5 @@ private:
         }
     }
 
-    Context context;
+    HookContext& hookContext;
 };

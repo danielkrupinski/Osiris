@@ -11,46 +11,51 @@
 #include <GameClient/Entities/PlayerPawn.h>
 #include <GameClient/Entities/EntityClassifier.h>
 
-#include "OutlineGlowContext.h"
+#include "DefuseKitOutlineGlow/DefuseKitOutlineGlow.h"
+#include "DroppedBombOutlineGlow/DroppedBombOutlineGlow.h"
+#include "GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlow.h"
+#include "HostageOutlineGlow/HostageOutlineGlow.h"
+#include "PlayerOutlineGlow/PlayerOutlineGlow.h"
+#include "TickingBombOutlineGlow/TickingBombOutlineGlow.h"
+#include "WeaponOutlineGlow/WeaponOutlineGlow.h"
 
-template <typename HookContext, typename Context = OutlineGlowContext<HookContext>>
+template <typename HookContext>
 class OutlineGlow {
 public:
-    template <typename... Args>
-    OutlineGlow(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit OutlineGlow(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     void applyGlowToEntity(EntityTypeInfo entityTypeInfo, auto&& modelEntity) noexcept
     {
-        if (!context.config().template getVariable<OutlineGlowEnabled>())
+        if (!hookContext.config().template getVariable<OutlineGlowEnabled>())
             return;
 
         if (modelEntity.glowProperty().isGlowing().valueOr(false))
             return;
 
         if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
-            context.applyGlowToPlayer(modelEntity.template as<PlayerPawn>());
+            hookContext.template make<PlayerOutlineGlow>().applyGlowToPlayer(modelEntity.template as<PlayerPawn>());
         else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
-            context.applyGlowToDefuseKit(modelEntity.baseEntity());
+            hookContext.template make<DefuseKitOutlineGlow>().applyGlowToDefuseKit(modelEntity.baseEntity());
         else if (entityTypeInfo.is<cs2::CPlantedC4>())
-            context.applyGlowToPlantedBomb(modelEntity.template as<PlantedC4>());
+            hookContext.template make<TickingBombOutlineGlow>().applyGlowToPlantedBomb(modelEntity.template as<PlantedC4>());
         else if (entityTypeInfo.is<cs2::C_C4>())
-            context.applyGlowToBomb(modelEntity.baseEntity());
+            hookContext.template make<DroppedBombOutlineGlow>().applyGlowToBomb(modelEntity.baseEntity());
         else if (entityTypeInfo.is<cs2::C_Hostage>())
-            context.applyGlowToHostage(modelEntity.baseEntity());
+            hookContext.template make<HostageOutlineGlow>().applyGlowToHostage(modelEntity.baseEntity());
         else if (entityTypeInfo.isGrenadeProjectile())
-            context.applyGlowToGrenadeProjectile(entityTypeInfo, modelEntity.baseEntity());
+            hookContext.template make<GrenadeProjectileOutlineGlow>().applyGlowToGrenadeProjectile(entityTypeInfo, modelEntity.baseEntity());
         else if (entityTypeInfo.isWeapon())
-            context.applyGlowToWeapon(entityTypeInfo, modelEntity.baseEntity());
+            hookContext.template make<WeaponOutlineGlow>().applyGlowToWeapon(entityTypeInfo, modelEntity.baseEntity());
     }
 
     void onUnload() const noexcept
     {
-        context.clearGlowSceneObjects();
+        hookContext.template make<GlowSceneObjects>().clearObjects();
     }
 
 private:
-    Context context;
+    HookContext& hookContext;
 };
