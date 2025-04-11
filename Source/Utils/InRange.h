@@ -16,9 +16,6 @@ struct BinaryRepresentationTemplateParameter {
     {
     }
 
-    template <typename U>
-    BinaryRepresentationTemplateParameter(U) = delete;
-
     constexpr operator T() const noexcept
     {
         return std::bit_cast<T>(binaryRepresentation);

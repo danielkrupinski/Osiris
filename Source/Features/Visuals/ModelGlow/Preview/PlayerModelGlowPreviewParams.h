@@ -20,7 +20,14 @@ namespace player_model_glow_preview_params::player_health_animation_params
     constexpr auto kStepDuration{kCycleDuration / kSteps};
 }
 
+namespace player_model_glow_preview_params::team_animation_params
+{
+    constexpr auto kCycleDuration{10.0f};
+    constexpr auto kSteps{2};
+    constexpr auto kStepDuration{kCycleDuration / kSteps};
+}
+
 namespace player_model_glow_preview_params
 {
-    constexpr auto kAnimationCycleDuration{player_color_animation_params::kCycleDuration * player_health_animation_params::kCycleDuration};
+    constexpr auto kAnimationCycleDuration{player_color_animation_params::kCycleDuration * player_health_animation_params::kCycleDuration * team_animation_params::kCycleDuration};
 }

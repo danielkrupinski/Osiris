@@ -13,4 +13,5 @@ struct PlayerModelGlowPreviewState {
     PlayerModelGlowPreviewColorMode colorMode{};
     cs2::CCSPlayerController::m_iCompTeammateColor previewPlayerColorIndex{};
     bool shouldUpdatePanel{true};
+    EnemyTeam enemyTeam{EnemyTeam::None};
 };

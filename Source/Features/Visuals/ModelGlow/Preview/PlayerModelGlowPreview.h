@@ -8,6 +8,7 @@
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
 
+#include "EnemyTeam.h"
 #include "PlayerPawnForModelGlowPreview.h"
 #include "PlayerModelGlowPreviewParams.h"
 
@@ -46,11 +47,13 @@ public:
         const auto previewPlayerHealth = computePreviewPlayerHealth();
         const auto previewPlayerColorIndex = computePreviewPlayerColorIndex();
         const auto colorMode = computeColorMode();
+        const auto enemyTeam = computeEnemyTeam();
 
-        state().shouldUpdatePanel = shouldUpdatePreviewPanel(colorMode, previewPlayerColorIndex, previewPlayerHealth);
+        state().shouldUpdatePanel = shouldUpdatePreviewPanel(colorMode, previewPlayerColorIndex, previewPlayerHealth, enemyTeam);
         state().previewPlayerHealth = previewPlayerHealth;
         state().colorMode = colorMode;
         state().previewPlayerColorIndex = previewPlayerColorIndex;
+        state().enemyTeam = enemyTeam;
     }
 
     void hookPreviewPlayersSceneObjectUpdaters() const noexcept
@@ -71,8 +74,18 @@ public:
     }
 
 private:
+    [[nodiscard]] bool previewActive() const noexcept
+    {
+        return getConfigVariable<ModelGlowEnabled>() && getConfigVariable<PlayerModelGlowEnabled>();
+    }
+
     void updateAnimationProgress() const noexcept
     {
+        if (!previewActive()) {
+            state().animationProgress = 0.0f;
+            return;
+        }
+
         constexpr auto kDefaultFrameTime{1 / 60.0f};
         const auto frameTime = hookContext.globalVars().frametime().valueOr(kDefaultFrameTime);
 
@@ -81,6 +94,23 @@ private:
             state().animationProgress += frameTime;
         else
             state().animationProgress = 0.0f;
+    }
+
+    [[nodiscard]] auto computeEnemyTeam() const noexcept
+    {
+        if (getConfigVariable<PlayerModelGlowEnabled>() && getConfigVariable<PlayerModelGlowOnlyEnemies>())
+            return EnemyTeam::Both;
+
+        if (getConfigVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::EnemyAlly)
+            return enemyTeamAnimationStep() == 0 ? EnemyTeam::T : EnemyTeam::CT;
+
+        return EnemyTeam::None;
+    }
+
+    [[nodiscard]] int enemyTeamAnimationStep() const noexcept
+    {
+        using namespace player_model_glow_preview_params::team_animation_params;
+        return static_cast<int>(state().animationProgress / kStepDuration) % kSteps;
     }
 
     [[nodiscard]] auto computePreviewPlayerHealth() const noexcept
@@ -96,20 +126,23 @@ private:
 
     [[nodiscard]] auto computeColorMode() const noexcept
     {
-        if (!hookContext.config().template getVariable<ModelGlowEnabled>() || !hookContext.config().template getVariable<PlayerModelGlowEnabled>())
+        if (!previewActive())
             return PlayerModelGlowPreviewColorMode::None;
 
-        switch (hookContext.config().template getVariable<PlayerModelGlowColorMode>()) {
+        switch (getConfigVariable<PlayerModelGlowColorMode>()) {
         case PlayerModelGlowColorType::HealthBased: return PlayerModelGlowPreviewColorMode::HealthBased;
         case PlayerModelGlowColorType::PlayerOrTeamColor: return PlayerModelGlowPreviewColorMode::PlayerOrTeamColor;
         case PlayerModelGlowColorType::TeamColor: return PlayerModelGlowPreviewColorMode::TeamColor;
+        case PlayerModelGlowColorType::EnemyAlly: return PlayerModelGlowPreviewColorMode::EnemyAlly;
         default: return PlayerModelGlowPreviewColorMode::None;
         }
     }
 
-    [[nodiscard]] bool shouldUpdatePreviewPanel(auto colorMode, auto previewPlayerColorIndex, auto previewPlayerHealth) const noexcept
+    [[nodiscard]] bool shouldUpdatePreviewPanel(auto colorMode, auto previewPlayerColorIndex, auto previewPlayerHealth, auto enemyTeam) const noexcept
     {
         if (colorMode != state().colorMode)
+            return true;
+        if (enemyTeam != state().enemyTeam)
             return true;
 
         switch (colorMode) {
@@ -179,6 +212,12 @@ private:
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.playerModelGlowPreviewState();
+    }
+
+    template <typename ConfigVariable>
+    [[nodiscard]] decltype(auto) getConfigVariable() const noexcept
+    {
+        return hookContext.config().template getVariable<ConfigVariable>(); 
     }
 
     HookContext& hookContext;

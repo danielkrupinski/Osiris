@@ -13,6 +13,17 @@ using Hue = InRange<float, 0.0f, 1.0f>;
 using Saturation = InRange<float, 0.0f, 1.0f>;
 using Brightness = InRange<float, 0.0f, 1.0f>;
 
+struct HueInteger {
+    using ValueType = InRange<std::uint16_t, 0, 360>;
+
+    [[nodiscard]] constexpr Hue toHueFloat() const noexcept
+    {
+        return value / 360.0f;
+    }
+
+    ValueType value;
+};
+
 constexpr Hue kGreenHue = 120.0f / 360.0f;
 constexpr Hue kRedHue = 0.0f / 360.0f;
 
@@ -41,6 +52,11 @@ constexpr Hue kRedHue = 0.0f / 360.0f;
     }
 
     return cs2::Color{static_cast<std::uint8_t>(r * 255), static_cast<std::uint8_t>(g * 255), static_cast<std::uint8_t>(b * 255)};
+}
+
+[[nodiscard]] constexpr cs2::Color HSBtoRGB(HueInteger hue, Saturation saturation, Brightness brightness) noexcept
+{
+    return HSBtoRGB(hue.toHueFloat(), saturation, brightness);
 }
 
 }

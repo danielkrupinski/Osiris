@@ -36,11 +36,8 @@ public:
 
         StringBuilderStorage<100> storage;
         auto builder = storage.builder();
-        builder.put("Player ");
-        if (teamNumber == TeamNumber::TT)
-            builder.put("TT");
-        else
-            builder.put("CT");
+        builder.put(playerName(), ' ', teamName());
+
         if (state().colorMode == PlayerModelGlowPreviewColorMode::PlayerOrTeamColor) {
             if (const auto colorString = colorIndexToString()) {
                 builder.put(" - ");
@@ -54,6 +51,21 @@ public:
     }
 
 private:
+    [[nodiscard]] const char* playerName() const noexcept
+    {
+        switch (state().enemyTeam) {
+        case EnemyTeam::Both: return "Enemy";
+        case EnemyTeam::CT: return teamNumber == TeamNumber::CT ? "Enemy" : "Ally";
+        case EnemyTeam::T: return teamNumber == TeamNumber::TT ? "Enemy" : "Ally";
+        default: return "Player";
+        }
+    }
+
+    [[nodiscard]] const char* teamName() const noexcept
+    {
+        return teamNumber == TeamNumber::TT ? "T" : "CT";
+    }
+
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.playerModelGlowPreviewState();
@@ -167,8 +179,8 @@ public:
         PanoramaCommandDispatcher{cmd, features, unloadFlag, hookContext}();
         guiPanel.setAttributeString(cmdSymbol, "");
 
-        hookContext.template make<PlayerModelGlowPreview>().hookPreviewPlayersSceneObjectUpdaters();
         hookContext.template make<PlayerModelGlowPreview>().update();
+        hookContext.template make<PlayerModelGlowPreview>().hookPreviewPlayersSceneObjectUpdaters();
 
         hookContext.template make<WeaponModelGlowPreview>().updateSceneObjectUpdaterHooks();
 

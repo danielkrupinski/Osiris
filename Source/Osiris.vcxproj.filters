@@ -971,16 +971,7 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlow.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowContext.h">
-      <Filter>Features\Visuals\OutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlow.h">
-      <Filter>Features\Visuals\OutlineGlow\WeaponOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowCondition.h">
-      <Filter>Features\Visuals\OutlineGlow\WeaponOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlowContext.h">
       <Filter>Features\Visuals\OutlineGlow\WeaponOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlow.h">
@@ -1007,25 +998,13 @@
     <ClInclude Include="CS2\Classes\Entities\GrenadeProjectiles.h">
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowContext.h">
-      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlow.h">
       <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\SmokeGrenadeProjectilePatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow\GrenadeProjectileOutlineGlowCondition.h">
-      <Filter>Features\Visuals\OutlineGlow\GrenadeProjectileOutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlow.h">
-      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowCondition.h">
-      <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\DroppedBombOutlineGlow\DroppedBombOutlineGlowContext.h">
       <Filter>Features\Visuals\OutlineGlow\DroppedBombOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Utils\TypedStaticStringPool.h">
@@ -1038,12 +1017,6 @@
       <Filter>CS2\Constants</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlow.h">
-      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowCondition.h">
-      <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlowContext.h">
       <Filter>Features\Visuals\OutlineGlow\TickingBombOutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\OutlineGlow\HostageOutlineGlow\HostageOutlineGlow.h">
@@ -1780,6 +1753,9 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\PatternTypes\MapPreviewPanelPatternTypes.h">
       <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\EnemyTeam.h">
+      <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

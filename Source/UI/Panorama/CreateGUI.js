@@ -453,7 +453,7 @@ u8R"(
   var playerModelGlow = createSection(modelGlowTab, 'Players');
   createDropDown(playerModelGlow, "Glow Player Models", 'visuals', 'player_model_glow', ['Enemies', 'All Players', 'Off']);
   separator(playerModelGlow);
-  createDropDown(playerModelGlow, "Player Model Glow Color", 'visuals', 'player_model_glow_color', ['Player / Team Color', 'Team Color', 'Health-based']);
+  createDropDown(playerModelGlow, "Player Model Glow Color Mode", 'visuals', 'player_model_glow_color', ['Player / Team Color', 'Team Color', 'Health-based', 'Enemy / Ally']);
 
   var weaponModelGlow = createSection(modelGlowTab, 'Weapons');
   createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow');
