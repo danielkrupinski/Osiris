@@ -180,6 +180,7 @@
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\PlayerModelGlow\PlayerModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\BaseEntityForModelGlowPreview.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\Preview\EnemyTeam.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerControllerForModelGlowPreview.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerModelGlowPreview.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerModelGlowPreviewColorMode.h" />

@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
+#include <Utils/ColorUtils.h>
 
 namespace model_glow_params
 {
@@ -13,4 +14,7 @@ namespace model_glow_params
     constexpr cs2::Color kSmokeGrenadeColor{0, 255, 0};
     constexpr cs2::Color kTickingBombColor{255, 0, 0};
     constexpr cs2::Color kDefaultWeaponColor{cs2::kColorWhite};
+
+    constexpr color::HueInteger kEnemyHue{0};
+    constexpr color::HueInteger kAllyHue{120};
 }

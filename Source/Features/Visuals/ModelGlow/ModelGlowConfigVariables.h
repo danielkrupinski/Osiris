@@ -5,7 +5,8 @@
 enum class PlayerModelGlowColorType : std::uint8_t {
     PlayerOrTeamColor,
     TeamColor,
-    HealthBased
+    HealthBased,
+    EnemyAlly
 };
 
 CONFIG_VARIABLE(ModelGlowEnabled, bool, false);

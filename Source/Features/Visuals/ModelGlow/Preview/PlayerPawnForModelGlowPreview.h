@@ -66,7 +66,12 @@ public:
 
     [[nodiscard]] std::optional<bool> isEnemy() const noexcept
     {
-        return true;
+        switch (hookContext.playerModelGlowPreviewState().enemyTeam) {
+        case EnemyTeam::CT: return playerTeamNumber == TeamNumber::CT;
+        case EnemyTeam::T: return playerTeamNumber == TeamNumber::TT;
+        case EnemyTeam::None: return false;
+        default: return true;
+        }
     }
 
     template <typename... Args>

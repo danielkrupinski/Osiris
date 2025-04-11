@@ -4,5 +4,6 @@ enum class PlayerModelGlowPreviewColorMode {
     None,
     HealthBased,
     PlayerOrTeamColor,
-    TeamColor
+    TeamColor,
+    EnemyAlly
 };

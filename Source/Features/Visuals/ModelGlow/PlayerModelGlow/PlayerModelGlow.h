@@ -149,6 +149,12 @@ private:
 
     [[nodiscard]] cs2::Color getColorSaturated(auto&& playerPawn) const noexcept
     {
+        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::EnemyAlly) {
+            if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
+                return color::HSBtoRGB(*isEnemy ? model_glow_params::kEnemyHue : model_glow_params::kAllyHue, 1.0f, 1.0f);
+            return cs2::kColorWhite;
+        }
+
         if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::HealthBased)
             return healthColor(playerPawn, 1.0f).value_or(cs2::kColorWhite);
 
@@ -166,6 +172,12 @@ private:
 
     [[nodiscard]] cs2::Color getColorHalfSaturated(auto&& playerPawn) const noexcept
     {
+        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::EnemyAlly) {
+            if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
+                return color::HSBtoRGB(*isEnemy ? model_glow_params::kEnemyHue : model_glow_params::kAllyHue, 0.5f, 1.0f);
+            return cs2::kColorWhite;
+        }
+
         if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::HealthBased)
             return healthColor(playerPawn, 0.5f).value_or(cs2::kColorWhite);
 

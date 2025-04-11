@@ -34,6 +34,7 @@ public:
         case '0': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::PlayerOrTeamColor); break;
         case '1': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::TeamColor); break;
         case '2': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::HealthBased); break;
+        case '3': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::EnemyAlly); break;
         }
     }
 
