@@ -7,6 +7,12 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 11 April 2025
+    * Added "Enemy / Ally" color mode for Player Model Glow
+
+    <br>
+    <img src=https://github.com/user-attachments/assets/c5e3143c-e5af-40b2-8ebe-b8fa0e2034ca height="200" alt="Player Model Glow Enemy/Ally Color Mode">
+
 * 7 April 2025
     * Added weapon model glow preview
 
