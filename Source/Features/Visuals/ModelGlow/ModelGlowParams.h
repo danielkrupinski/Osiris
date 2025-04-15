@@ -17,4 +17,15 @@ namespace model_glow_params
 
     constexpr color::HueInteger kEnemyHue{0};
     constexpr color::HueInteger kAllyHue{120};
+    constexpr color::HueInteger kTeamTHue{42};
+    constexpr color::HueInteger kTeamCTHue{210};
+    constexpr color::HueInteger kPlayerBlueHue{201};
+    constexpr color::HueInteger kPlayerGreenHue{166};
+    constexpr color::HueInteger kPlayerYellowHue{59};
+    constexpr color::HueInteger kPlayerOrangeHue{32};
+    constexpr color::HueInteger kPlayerPurpleHue{317};
+
+    constexpr color::Saturation kNormalPlayerColorSaturation{1.0f};
+    constexpr color::Saturation kImmunePlayerColorSaturation{0.5f};
+
 }

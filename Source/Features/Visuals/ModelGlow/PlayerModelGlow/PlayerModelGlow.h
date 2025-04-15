@@ -107,89 +107,73 @@ private:
         return hookContext.featuresStates().visualFeaturesStates.modelGlowState;
     }
 
+    [[nodiscard]] color::Saturation getColorSaturation(auto&& playerPawn) const noexcept
+    {
+        return playerPawn.hasImmunity().valueOr(false) ? model_glow_params::kImmunePlayerColorSaturation : model_glow_params::kNormalPlayerColorSaturation;
+    }
+
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
-        if (playerPawn.hasImmunity().valueOr(false))
-            return getColorHalfSaturated(playerPawn);
-        return getColorSaturated(playerPawn);
+        if (const auto colorHue = getColorHue(playerPawn))
+            return color::HSBtoRGB(*colorHue, getColorSaturation(playerPawn), 1.0f);
+        return cs2::kColorWhite;
     }
 
-    [[nodiscard]] std::optional<cs2::Color> getPlayerColor(auto playerColorIndex) const noexcept
+    [[nodiscard]] std::optional<color::Hue> getColorHue(auto&& playerPawn) const noexcept
     {
-        return getPlayerColor(playerColorIndex, cs2::kPlayerColors);
+        switch (hookContext.config().template getVariable<PlayerModelGlowColorMode>()) {
+        using enum PlayerModelGlowColorType;
+        case EnemyAlly:
+            return enemyAllyColorModeHue(playerPawn);
+        case HealthBased:
+            return healthBasedColorModeHue(playerPawn);
+        case PlayerOrTeamColor:
+            if (const auto playerColor = getPlayerColorHue(playerPawn.playerController().playerColorIndex()))
+                return playerColor->toHueFloat();
+            [[fallthrough]];
+        case TeamColor:
+            return teamColorModeHue(playerPawn);
+        default:
+            return {};
+        }
     }
 
-    [[nodiscard]] std::optional<cs2::Color> getPlayerColorSaturated(auto playerColorIndex) const noexcept
+    [[nodiscard]] std::optional<color::Hue> teamColorModeHue(auto&& playerPawn) const noexcept
     {
-        return getPlayerColor(playerColorIndex, cs2::kPlayerColorsSaturated);
+        switch (playerPawn.teamNumber()) {
+        case TeamNumber::TT: return model_glow_params::kTeamTHue.toHueFloat();
+        case TeamNumber::CT: return model_glow_params::kTeamCTHue.toHueFloat();
+        default: return {};
+        }
     }
 
-    [[nodiscard]] std::optional<cs2::Color> getPlayerColorHalfSaturated(auto playerColorIndex) const noexcept
+    [[nodiscard]] std::optional<color::Hue> enemyAllyColorModeHue(auto&& playerPawn) const noexcept
     {
-        return getPlayerColor(playerColorIndex, cs2::kPlayerColorsHalfSaturated);
-    }
-
-    [[nodiscard]] std::optional<cs2::Color> getPlayerColor(auto playerColorIndex, std::span<const cs2::Color> playerColors) const noexcept
-    {
-        if (playerColorIndex.hasValue() && playerColorIndex.value() >= 0 && std::cmp_less(playerColorIndex.value(), playerColors.size()))
-            return playerColors[playerColorIndex.value()];
+        if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
+            return (*isEnemy ? model_glow_params::kEnemyHue : model_glow_params::kAllyHue).toHueFloat();
         return {};
     }
 
-    [[nodiscard]] std::optional<cs2::Color> healthColor(auto&& playerPawn, float saturation = 0.7f) const noexcept
+    [[nodiscard]] std::optional<color::Hue> healthBasedColorModeHue(auto&& playerPawn) const noexcept
     {
         if (const auto healthValue = playerPawn.health(); healthValue.hasValue())
-            return getColorOfHealthFraction(saturation, std::clamp(healthValue.value(), 0, 100) / 100.0f);
+            return color::kRedHue + (color::kGreenHue - color::kRedHue) * (std::clamp(healthValue.value(), 0, 100) / 100.0f);
         return {};
     }
-    [[nodiscard]] static cs2::Color getColorOfHealthFraction(float saturation, float healthFraction) noexcept
+
+    [[nodiscard]] std::optional<color::HueInteger> getPlayerColorHue(auto playerColorIndex) const noexcept
     {
-        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, saturation, 1.0f);
-    }
+        if (!playerColorIndex.hasValue())
+            return {};
 
-    [[nodiscard]] cs2::Color getColorSaturated(auto&& playerPawn) const noexcept
-    {
-        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::EnemyAlly) {
-            if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
-                return color::HSBtoRGB(*isEnemy ? model_glow_params::kEnemyHue : model_glow_params::kAllyHue, 1.0f, 1.0f);
-            return cs2::kColorWhite;
-        }
-
-        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::HealthBased)
-            return healthColor(playerPawn, 1.0f).value_or(cs2::kColorWhite);
-
-        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::PlayerOrTeamColor) {
-            if (const auto playerColor = getPlayerColorSaturated(playerPawn.playerController().playerColorIndex()); playerColor.has_value())
-                return *playerColor;
-        }
-
-        switch (playerPawn.teamNumber()) {
-        case TeamNumber::TT: return cs2::Color{255, 179, 0};
-        case TeamNumber::CT: return cs2::Color{0, 127, 255};
-        default: return cs2::kColorWhite;
-        }
-    }
-
-    [[nodiscard]] cs2::Color getColorHalfSaturated(auto&& playerPawn) const noexcept
-    {
-        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::EnemyAlly) {
-            if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
-                return color::HSBtoRGB(*isEnemy ? model_glow_params::kEnemyHue : model_glow_params::kAllyHue, 0.5f, 1.0f);
-            return cs2::kColorWhite;
-        }
-
-        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::HealthBased)
-            return healthColor(playerPawn, 0.5f).value_or(cs2::kColorWhite);
-
-        if (hookContext.config().template getVariable<PlayerModelGlowColorMode>() == PlayerModelGlowColorType::PlayerOrTeamColor) {
-            if (const auto playerColor = getPlayerColorHalfSaturated(playerPawn.playerController().playerColorIndex()); playerColor.has_value())
-                return *playerColor;
-        }
-
-        switch (playerPawn.teamNumber()) {
-        case TeamNumber::TT: return cs2::Color{255, 217, 128};
-        case TeamNumber::CT: return cs2::Color{128, 191, 255};
-        default: return cs2::kColorWhite;
+        switch (playerColorIndex.value()) {
+        using namespace model_glow_params;
+        case 0: return kPlayerBlueHue;
+        case 1: return kPlayerGreenHue;
+        case 2: return kPlayerYellowHue;
+        case 3: return kPlayerOrangeHue;
+        case 4: return kPlayerPurpleHue;
+        default: return {};
         }
     }
 

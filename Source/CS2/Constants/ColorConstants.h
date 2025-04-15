@@ -34,32 +34,4 @@ constexpr auto kPlayerColors = std::to_array<Color>({
 
 constexpr Color kColorDefuseKit{119, 221, 255};
 
-constexpr Color kColorPlayerYellowSaturated{255, 251, 0};
-constexpr Color kColorPlayerPurpleSaturated{255, 0, 183};
-constexpr Color kColorPlayerGreenSaturated{0, 255, 196};
-constexpr Color kColorPlayerBlueSaturated{0, 166, 255};
-constexpr Color kColorPlayerOrangeSaturated{255, 136, 0};
-
-constexpr auto kPlayerColorsSaturated = std::to_array<Color>({
-    kColorPlayerBlueSaturated,
-    kColorPlayerGreenSaturated,
-    kColorPlayerYellowSaturated,
-    kColorPlayerOrangeSaturated,
-    kColorPlayerPurpleSaturated
-});
-
-constexpr Color kColorPlayerYellowHalfSaturated{255, 253, 128};
-constexpr Color kColorPlayerPurpleHalfSaturated{255, 128, 219};
-constexpr Color kColorPlayerGreenHalfSaturated{128, 255, 255};
-constexpr Color kColorPlayerBlueHalfSaturated{128, 210, 255};
-constexpr Color kColorPlayerOrangeHalfSaturated{255, 195, 128};
-
-constexpr auto kPlayerColorsHalfSaturated = std::to_array<Color>({
-    kColorPlayerBlueHalfSaturated,
-    kColorPlayerGreenHalfSaturated,
-    kColorPlayerYellowHalfSaturated,
-    kColorPlayerOrangeHalfSaturated,
-    kColorPlayerPurpleHalfSaturated
-});
-
 }
