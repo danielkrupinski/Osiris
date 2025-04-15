@@ -2,6 +2,7 @@
 
 #include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
+#include <GameClient/Entities/EntityClassifier.h>
 
 template <typename HookContext>
 class DroppedBombOutlineGlow {
@@ -11,10 +12,14 @@ public:
     {
     }
 
-    void applyGlowToBomb(auto&& bomb) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& bomb) const noexcept
     {
-        if (enabled() && shouldGlowBomb(bomb))
-            bomb.applyGlowRecursively(outline_glow_params::kDroppedBombColor);
+        return enabled() && shouldGlowBomb(bomb);
+    }
+
+    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo /* entityTypeInfo */, auto&& /* bomb */) const noexcept
+    {
+        return outline_glow_params::kDroppedBombColor;
     }
 
 private:

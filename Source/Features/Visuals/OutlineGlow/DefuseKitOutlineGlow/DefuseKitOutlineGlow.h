@@ -1,8 +1,8 @@
 #pragma once
 
-#include <utility>
-
+#include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
+#include <GameClient/Entities/EntityClassifier.h>
 
 template <typename HookContext>
 class DefuseKitOutlineGlow {
@@ -11,13 +11,20 @@ public:
         : hookContext{hookContext}
     {
     }
-    
-    void applyGlowToDefuseKit(auto&& defuseKit) const noexcept
+
+    [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& /* defuseKit */) const noexcept
     {
-        if (hookContext.config().template getVariable<DefuseKitOutlineGlowEnabled>()) {
-            using namespace outline_glow_params;
-            defuseKit.applyGlowRecursively(kDefuseKitColor, kDefuseKitGlowRange);
-        }
+        return hookContext.config().template getVariable<DefuseKitOutlineGlowEnabled>();
+    }
+
+    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo /* entityTypeInfo */, auto&& /* defuseKit */) const noexcept
+    {
+        return outline_glow_params::kDefuseKitColor;
+    }
+
+    [[nodiscard]] int getGlowRange() const noexcept
+    {
+        return outline_glow_params::kDefuseKitGlowRange;
     }
 
 private:

@@ -16,10 +16,22 @@ public:
     {
     }
 
-    void applyGlowToGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
     {
-        if (enabled() && shouldGlowGrenadeProjectile(entityTypeInfo, grenadeProjectile))
-            grenadeProjectile.applyGlowRecursively(getColor(entityTypeInfo));
+        return enabled() && shouldGlowGrenadeProjectile(entityTypeInfo, grenadeProjectile);
+    }
+
+    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo entityTypeInfo, auto&& /* grenadeProjectile */) const noexcept
+    {
+        using namespace outline_glow_params;
+
+        switch (entityTypeInfo.typeIndex) {
+        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return kFlashbangColor;
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return kHEGrenadeColor;
+        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return kMolotovColor;
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return kSmokeGrenadeColor;
+        default: return kDefaultWeaponColor;
+        }
     }
 
 private:
@@ -31,19 +43,6 @@ private:
     [[nodiscard]] bool shouldGlowGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
     {
         return !entityTypeInfo.is<cs2::C_SmokeGrenadeProjectile>() || !grenadeProjectile.template as<SmokeGrenadeProjectile>().didSmokeEffect().valueOr(false);
-    }
-
-    [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
-    {
-        using namespace outline_glow_params;
-
-        switch (entityTypeInfo.typeIndex) {
-        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return kFlashbangColor;
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return kHEGrenadeColor;
-        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return kMolotovColor;
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return kSmokeGrenadeColor;
-        default: return kDefaultWeaponColor;
-        }
     }
 
     HookContext& hookContext;

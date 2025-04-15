@@ -10,22 +10,8 @@
 #include <Features/Visuals/OutlineGlow/GrenadeProjectileOutlineGlow/GrenadeProjectileOutlineGlow.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 
-struct GrenadeProjectileOutlineGlowTestParam {
-    bool enabled{};
-    EntityTypeInfo entityTypeInfo{};
-    bool expectSmokeGrenadeCheck{};
-    Optional<bool> didSmokeEffect{};
-    cs2::Color expectedColor{0, 0, 0};
-    bool expectGlowApplied{};
-};
-
-class GrenadeProjectileOutlineGlowTest : public testing::TestWithParam<GrenadeProjectileOutlineGlowTestParam> {
+class GrenadeProjectileOutlineGlowTest : public testing::Test {
 protected:
-    GrenadeProjectileOutlineGlowTest()
-    {
-        EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    }
-
     testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockConfig> mockConfig;
     testing::StrictMock<MockBaseEntity> mockGrenadeProjectile;
@@ -34,8 +20,52 @@ protected:
     GrenadeProjectileOutlineGlow<MockHookContext> grenadeProjectileOutlineGlow{mockHookContext};
 };
 
+struct GrenadeProjectileOutlineGlowColorTestParam {
+    EntityTypeInfo entityTypeInfo{};
+    cs2::Color expectedColor{0, 0, 0};
+};
 
-TEST_P(GrenadeProjectileOutlineGlowTest, GlowIsAppliedAsExpected) {
+class GrenadeProjectileOutlineGlowColorTest : public GrenadeProjectileOutlineGlowTest, public testing::WithParamInterface<GrenadeProjectileOutlineGlowColorTestParam> {
+};
+
+TEST_P(GrenadeProjectileOutlineGlowColorTest, CorrectGlowColorIsReturned) {
+    EXPECT_EQ(grenadeProjectileOutlineGlow.getGlowColor(GetParam().entityTypeInfo, mockGrenadeProjectile), GetParam().expectedColor);
+}
+
+INSTANTIATE_TEST_SUITE_P(, GrenadeProjectileOutlineGlowColorTest, testing::ValuesIn(
+    std::to_array<GrenadeProjectileOutlineGlowColorTestParam>({
+        {
+            .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>()},
+            .expectedColor{outline_glow_params::kFlashbangColor},
+        },
+        {
+            .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>()},
+            .expectedColor{outline_glow_params::kHEGrenadeColor}
+        },
+        {
+            .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>()},
+            .expectedColor{outline_glow_params::kMolotovColor}
+        },
+        {
+            .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
+            .expectedColor{outline_glow_params::kSmokeGrenadeColor}
+        }
+    })
+));
+
+struct GrenadeProjectileOutlineGlowConditionTestParam {
+    bool enabled{};
+    EntityTypeInfo entityTypeInfo{};
+    bool expectSmokeGrenadeCheck{};
+    Optional<bool> didSmokeEffect{};
+    bool expectGlowApplied{};
+};
+
+class GrenadeProjectileOutlineGlowConditionTest : public GrenadeProjectileOutlineGlowTest, public testing::WithParamInterface<GrenadeProjectileOutlineGlowConditionTestParam> {
+};
+
+TEST_P(GrenadeProjectileOutlineGlowConditionTest, GlowIsAppliedAsExpected) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<GrenadeProjectileOutlineGlowEnabled>())).WillOnce(testing::Return(GetParam().enabled));
 
     if (GetParam().expectSmokeGrenadeCheck) {
@@ -43,39 +73,28 @@ TEST_P(GrenadeProjectileOutlineGlowTest, GlowIsAppliedAsExpected) {
         EXPECT_CALL(mockSmokeGrenadeProjectile, didSmokeEffect()).WillOnce(testing::Return(GetParam().didSmokeEffect));
     }
 
-    if (GetParam().expectGlowApplied)
-        EXPECT_CALL(mockGrenadeProjectile, applyGlowRecursively(GetParam().expectedColor));
-
-    grenadeProjectileOutlineGlow.applyGlowToGrenadeProjectile(GetParam().entityTypeInfo, mockGrenadeProjectile);
+    EXPECT_EQ(grenadeProjectileOutlineGlow.shouldApplyGlow(GetParam().entityTypeInfo, mockGrenadeProjectile), GetParam().expectGlowApplied);
 }
 
-INSTANTIATE_TEST_SUITE_P(, GrenadeProjectileOutlineGlowTest, testing::ValuesIn(
-    std::to_array<GrenadeProjectileOutlineGlowTestParam>({
+INSTANTIATE_TEST_SUITE_P(, GrenadeProjectileOutlineGlowConditionTest, testing::ValuesIn(
+    std::to_array<GrenadeProjectileOutlineGlowConditionTestParam>({
         {
             .enabled = false,
             .expectGlowApplied = false
         },
         {
             .enabled = true,
-            .expectedColor{outline_glow_params::kDefaultWeaponColor},
-            .expectGlowApplied = true
-        },
-        {
-            .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>()},
-            .expectedColor{outline_glow_params::kFlashbangColor},
             .expectGlowApplied = true
         },
         {
             .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>()},
-            .expectedColor{outline_glow_params::kHEGrenadeColor},
             .expectGlowApplied = true
         },
         {
             .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>()},
-            .expectedColor{outline_glow_params::kMolotovColor},
             .expectGlowApplied = true
         },
         {
@@ -83,7 +102,6 @@ INSTANTIATE_TEST_SUITE_P(, GrenadeProjectileOutlineGlowTest, testing::ValuesIn(
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .expectSmokeGrenadeCheck = true,
             .didSmokeEffect{std::nullopt},
-            .expectedColor{outline_glow_params::kSmokeGrenadeColor},
             .expectGlowApplied = true
         },
         {
@@ -91,7 +109,6 @@ INSTANTIATE_TEST_SUITE_P(, GrenadeProjectileOutlineGlowTest, testing::ValuesIn(
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .expectSmokeGrenadeCheck = true,
             .didSmokeEffect{false},
-            .expectedColor{outline_glow_params::kSmokeGrenadeColor},
             .expectGlowApplied = true
         },
         {

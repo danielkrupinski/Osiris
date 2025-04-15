@@ -10,41 +10,41 @@
 #include <Mocks/MockPlantedC4.h>
 #include <Utils/Optional.h>
 
-struct TickingBombOutlineGlowTestParam {
+class TickingBombOutlineGlowTest : public testing::Test {
+protected:
+    testing::StrictMock<MockHookContext> mockHookContext;
+    testing::StrictMock<MockPlantedC4> mockPlantedC4;
+
+    TickingBombOutlineGlow<MockHookContext> tickingBombOutlineGlow{mockHookContext};
+};
+
+TEST_F(TickingBombOutlineGlowTest, CorrectGlowColorIsReturned) {
+    EXPECT_EQ(tickingBombOutlineGlow.getGlowColor(EntityTypeInfo{}, mockPlantedC4), outline_glow_params::kTickingBombColor);
+}
+
+struct TickingBombOutlineGlowConditionTestParam {
     bool enabled{};
     Optional<bool> isTicking{};
     bool expectPlantedC4Access{};
     bool expectGlowApplied{};
 };
 
-class TickingBombOutlineGlowTest : public testing::TestWithParam<TickingBombOutlineGlowTestParam> {
+class TickingBombOutlineGlowConditionTest : public TickingBombOutlineGlowTest, public testing::WithParamInterface<TickingBombOutlineGlowConditionTestParam> {
 protected:
-    TickingBombOutlineGlowTest()
-    {
-        EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    }
-
-    testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockConfig> mockConfig;
-    testing::StrictMock<MockPlantedC4> mockPlantedC4;
-    testing::StrictMock<MockBaseEntity> mockBaseEntity;
-
-    TickingBombOutlineGlow<MockHookContext> tickingBombOutlineGlow{mockHookContext};
 };
 
-TEST_P(TickingBombOutlineGlowTest, GlowIsAppliedAsExpected) {
+TEST_P(TickingBombOutlineGlowConditionTest, ShouldApplyGlowWhenExpected) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<TickingBombOutlineGlowEnabled>())).WillOnce(testing::Return(GetParam().enabled));
-    if (GetParam().expectPlantedC4Access) {
+    if (GetParam().expectPlantedC4Access)
         EXPECT_CALL(mockPlantedC4, isTicking()).WillOnce(testing::Return(GetParam().isTicking));
-        EXPECT_CALL(mockPlantedC4, baseEntity()).WillRepeatedly(testing::ReturnRef(mockBaseEntity));
-    }
-    if (GetParam().expectGlowApplied)
-        EXPECT_CALL(mockBaseEntity, applyGlowRecursively(outline_glow_params::kTickingBombColor));
-    tickingBombOutlineGlow.applyGlowToPlantedBomb(mockPlantedC4);
+
+    EXPECT_EQ(tickingBombOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockPlantedC4), GetParam().expectGlowApplied);
 }
 
-INSTANTIATE_TEST_SUITE_P(, TickingBombOutlineGlowTest, testing::ValuesIn(
-    std::to_array<TickingBombOutlineGlowTestParam>({
+INSTANTIATE_TEST_SUITE_P(, TickingBombOutlineGlowConditionTest, testing::ValuesIn(
+    std::to_array<TickingBombOutlineGlowConditionTestParam>({
         {.enabled = false, .expectPlantedC4Access = false, .expectGlowApplied = false},
         {.enabled = true, .isTicking{true}, .expectPlantedC4Access = true, .expectGlowApplied = true},
         {.enabled = true, .isTicking{false}, .expectPlantedC4Access = true, .expectGlowApplied = false},

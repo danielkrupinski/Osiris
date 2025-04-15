@@ -12,17 +12,16 @@
 
 class WeaponOutlineGlowTest : public testing::Test {
 protected:
-    WeaponOutlineGlowTest()
-    {
-        EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    }
-
     testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockConfig> mockConfig;
     testing::StrictMock<MockBaseEntity> mockBaseEntity;
 
     WeaponOutlineGlow<MockHookContext> weaponOutlineGlow{mockHookContext};
 };
+
+TEST_F(WeaponOutlineGlowTest, CorrectGlowRangeIsReturned) {
+    EXPECT_EQ(weaponOutlineGlow.getGlowRange(), outline_glow_params::kWeaponGlowRange);
+}
 
 struct WeaponOutlineGlowConditionTestParam {
     bool enabled{};
@@ -34,16 +33,14 @@ struct WeaponOutlineGlowConditionTestParam {
 class WeaponOutlineGlowConditionTest : public WeaponOutlineGlowTest, public testing::WithParamInterface<WeaponOutlineGlowConditionTestParam> {
 };
 
-TEST_P(WeaponOutlineGlowConditionTest, GlowIsAppliedWhenExpected) {
+TEST_P(WeaponOutlineGlowConditionTest, GlowShouldBeAppliedWhenExpected) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<WeaponOutlineGlowEnabled>())).WillOnce(testing::Return(GetParam().enabled));
 
     if (GetParam().expectWeaponAccess)
         EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(GetParam().hasOwner));
 
-    if (GetParam().expectGlowApplied)
-        EXPECT_CALL(mockBaseEntity, applyGlowRecursively(testing::_, outline_glow_params::kWeaponGlowRange));
-
-    weaponOutlineGlow.applyGlowToWeapon(EntityTypeInfo{}, mockBaseEntity);
+    EXPECT_EQ(weaponOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity), GetParam().expectGlowApplied);
 }
 
 INSTANTIATE_TEST_SUITE_P(, WeaponOutlineGlowConditionTest, testing::ValuesIn(
@@ -82,12 +79,8 @@ struct WeaponOutlineGlowColorTestParam {
 class WeaponOutlineGlowColorTest : public WeaponOutlineGlowTest, public testing::WithParamInterface<WeaponOutlineGlowColorTestParam> {
 };
 
-TEST_P(WeaponOutlineGlowColorTest, CorrectGlowColorIsApplied) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<WeaponOutlineGlowEnabled>())).WillOnce(testing::Return(true));
-    EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(false));
-    EXPECT_CALL(mockBaseEntity, applyGlowRecursively(GetParam().expectedColor, outline_glow_params::kWeaponGlowRange));
-
-    weaponOutlineGlow.applyGlowToWeapon(GetParam().entityTypeInfo, mockBaseEntity);
+TEST_P(WeaponOutlineGlowColorTest, CorrectGlowColorIsReturned) {
+    EXPECT_EQ(weaponOutlineGlow.getGlowColor(GetParam().entityTypeInfo, mockBaseEntity), GetParam().expectedColor);
 }
 
 INSTANTIATE_TEST_SUITE_P(, WeaponOutlineGlowColorTest, testing::ValuesIn(

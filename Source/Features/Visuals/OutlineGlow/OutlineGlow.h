@@ -36,19 +36,19 @@ public:
             return;
 
         if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
-            hookContext.template make<PlayerOutlineGlow>().applyGlowToPlayer(modelEntity.template as<PlayerPawn>());
+            applyGlow(entityTypeInfo, hookContext.template make<PlayerOutlineGlow>(), modelEntity.template as<PlayerPawn>());
         else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
-            hookContext.template make<DefuseKitOutlineGlow>().applyGlowToDefuseKit(modelEntity.baseEntity());
+            applyGlow(entityTypeInfo, hookContext.template make<DefuseKitOutlineGlow>(), modelEntity.baseEntity());
         else if (entityTypeInfo.is<cs2::CPlantedC4>())
-            hookContext.template make<TickingBombOutlineGlow>().applyGlowToPlantedBomb(modelEntity.template as<PlantedC4>());
+            applyGlow(entityTypeInfo, hookContext.template make<TickingBombOutlineGlow>(), modelEntity.template as<PlantedC4>());
         else if (entityTypeInfo.is<cs2::C_C4>())
-            hookContext.template make<DroppedBombOutlineGlow>().applyGlowToBomb(modelEntity.baseEntity());
+            applyGlow(entityTypeInfo, hookContext.template make<DroppedBombOutlineGlow>(), modelEntity.baseEntity());
         else if (entityTypeInfo.is<cs2::C_Hostage>())
-            hookContext.template make<HostageOutlineGlow>().applyGlowToHostage(modelEntity.baseEntity());
+            applyGlow(entityTypeInfo, hookContext.template make<HostageOutlineGlow>(), modelEntity.baseEntity());
         else if (entityTypeInfo.isGrenadeProjectile())
-            hookContext.template make<GrenadeProjectileOutlineGlow>().applyGlowToGrenadeProjectile(entityTypeInfo, modelEntity.baseEntity());
+            applyGlow(entityTypeInfo, hookContext.template make<GrenadeProjectileOutlineGlow>(), modelEntity.baseEntity());
         else if (entityTypeInfo.isWeapon())
-            hookContext.template make<WeaponOutlineGlow>().applyGlowToWeapon(entityTypeInfo, modelEntity.baseEntity());
+            applyGlow(entityTypeInfo, hookContext.template make<WeaponOutlineGlow>(), modelEntity.baseEntity());
     }
 
     void onUnload() const noexcept
@@ -57,5 +57,19 @@ public:
     }
 
 private:
+    static void applyGlow(EntityTypeInfo entityTypeInfo, auto&& glow, auto&& entity) noexcept
+    {
+        if (glow.shouldApplyGlow(entityTypeInfo, entity))
+            entity.baseEntity().applyGlowRecursively(glow.getGlowColor(entityTypeInfo, entity), getGlowRange(glow));
+    }
+
+    [[nodiscard]] static int getGlowRange(auto&& glow) noexcept
+    {
+        if constexpr (requires { { glow.getGlowRange() } -> std::same_as<int>; })
+            return glow.getGlowRange();
+        else
+            return 0;
+    }
+
     HookContext& hookContext;
 };

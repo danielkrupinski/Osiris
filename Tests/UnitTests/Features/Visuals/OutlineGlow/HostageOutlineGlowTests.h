@@ -11,11 +11,6 @@
 
 class HostageOutlineGlowTest : public testing::Test {
 protected:
-    HostageOutlineGlowTest()
-    {
-        EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    }
-
     testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockConfig> mockConfig;
     testing::StrictMock<MockBaseEntity> mockBaseEntity;
@@ -23,13 +18,18 @@ protected:
     HostageOutlineGlow<MockHookContext> hostageOutlineGlow{mockHookContext};
 };
 
-TEST_F(HostageOutlineGlowTest, GlowIsNotAppliedWhenNotEnabled) {
+TEST_F(HostageOutlineGlowTest, GlowShouldNotBeAppliedWhenNotEnabled) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<HostageOutlineGlowEnabled>())).WillOnce(testing::Return(false));
-    hostageOutlineGlow.applyGlowToHostage(mockBaseEntity);
+    EXPECT_FALSE(hostageOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
-TEST_F(HostageOutlineGlowTest, GlowIsAppliedWhenEnabled) {
+TEST_F(HostageOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<HostageOutlineGlowEnabled>())).WillOnce(testing::Return(true));
-    EXPECT_CALL(mockBaseEntity, applyGlowRecursively(outline_glow_params::kHostageColor));
-    hostageOutlineGlow.applyGlowToHostage(mockBaseEntity);
+    EXPECT_TRUE(hostageOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
+}
+
+TEST_F(HostageOutlineGlowTest, CorrectGlowColorIsReturned) {
+    EXPECT_EQ(hostageOutlineGlow.getGlowColor(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kHostageColor);
 }

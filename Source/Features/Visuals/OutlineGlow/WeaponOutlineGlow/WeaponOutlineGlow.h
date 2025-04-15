@@ -13,25 +13,13 @@ public:
         : hookContext{hookContext}
     {
     }
-    
-    void applyGlowToWeapon(EntityTypeInfo entityTypeInfo, auto&& weapon) const noexcept
+
+    [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& weapon) const noexcept
     {
-        if (shouldRun() && shouldGlowWeapon(weapon))
-            weapon.applyGlowRecursively(getColor(entityTypeInfo), outline_glow_params::kWeaponGlowRange);
+        return enabled() && shouldGlowWeapon(weapon);
     }
 
-private:
-    [[nodiscard]] bool shouldRun() const noexcept
-    {
-        return hookContext.config().template getVariable<WeaponOutlineGlowEnabled>();
-    }
-
-    [[nodiscard]] bool shouldGlowWeapon(auto&& weapon) const noexcept
-    {
-        return !weapon.hasOwner().valueOr(true);
-    }
-
-    [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
+    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo entityTypeInfo, auto&& /* weapon */) const noexcept
     {
         using namespace outline_glow_params;
 
@@ -43,6 +31,22 @@ private:
         case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return kSmokeGrenadeColor;
         default: return kDefaultWeaponColor;
         }
+    }
+
+    [[nodiscard]] int getGlowRange() const noexcept
+    {
+        return outline_glow_params::kWeaponGlowRange;
+    }
+
+private:
+    [[nodiscard]] bool enabled() const noexcept
+    {
+        return hookContext.config().template getVariable<WeaponOutlineGlowEnabled>();
+    }
+
+    [[nodiscard]] bool shouldGlowWeapon(auto&& weapon) const noexcept
+    {
+        return !weapon.hasOwner().valueOr(true);
     }
 
     HookContext& hookContext;

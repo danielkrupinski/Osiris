@@ -2,6 +2,7 @@
 
 #include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
+#include <GameClient/Entities/EntityClassifier.h>
 
 template <typename HookContext>
 class HostageOutlineGlow {
@@ -11,10 +12,14 @@ public:
     {
     }
 
-    void applyGlowToHostage(auto&& hostage) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& /* hostage */) const noexcept
     {
-        if (hookContext.config().template getVariable<HostageOutlineGlowEnabled>())
-            hostage.applyGlowRecursively(outline_glow_params::kHostageColor);
+        return hookContext.config().template getVariable<HostageOutlineGlowEnabled>();
+    }
+
+    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo /* entityTypeInfo */, auto&& /* hostage */) const noexcept
+    {
+        return outline_glow_params::kHostageColor;
     }
 
 private:

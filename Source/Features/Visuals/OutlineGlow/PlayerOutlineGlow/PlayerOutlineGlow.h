@@ -4,6 +4,7 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
+#include <GameClient/Entities/EntityClassifier.h>
 #include <GameClient/Entities/TeamNumber.h>
 #include <Utils/ColorUtils.h>
 #include "PlayerOutlineGlowColorType.h"
@@ -16,14 +17,18 @@ public:
     {
     }
 
-    void applyGlowToPlayer(auto&& playerPawn) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
     {
-        if (shouldRun() && shouldGlowPlayer(playerPawn))
-            playerPawn.baseEntity().applyGlowRecursively(getColorForPlayer(playerPawn));
+        return enabled() && shouldGlowPlayer(playerPawn);
+    }
+
+    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
+    {
+        return getColor(playerPawn).setAlpha(getColorAlpha(playerPawn));
     }
 
 private:
-    [[nodiscard]] bool shouldRun() const noexcept
+    [[nodiscard]] bool enabled() const noexcept
     {
         return hookContext.config().template getVariable<PlayerOutlineGlowEnabled>();
     }
@@ -41,11 +46,6 @@ private:
     {
         using namespace outline_glow_params;
         return playerPawn.hasImmunity().valueOr(false) ? kImmunePlayerGlowAlpha : kGlowAlpha;
-    }
-
-    [[nodiscard]] cs2::Color getColorForPlayer(auto&& playerPawn) const noexcept
-    {
-        return getColor(playerPawn).setAlpha(getColorAlpha(playerPawn));
     }
 
     [[nodiscard]] static cs2::Color healthColor(float healthFraction) noexcept

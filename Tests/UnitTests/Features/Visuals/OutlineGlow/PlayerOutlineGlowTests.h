@@ -4,7 +4,6 @@
 #include <gtest/gtest.h>
 
 #include <Features/Visuals/OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlow.h>
-#include <Mocks/MockBaseEntity.h>
 #include <Mocks/MockConfig.h>
 #include <Mocks/MockHookContext.h>
 #include <Mocks/MockPlayerController.h>
@@ -21,7 +20,6 @@ protected:
     testing::StrictMock<MockConfig> mockConfig;
     testing::StrictMock<MockPlayerPawn> mockPlayerPawn;
     testing::StrictMock<MockPlayerController> mockPlayerController;
-    testing::StrictMock<MockBaseEntity> mockBaseEntity;
 
     PlayerOutlineGlow<MockHookContext> playerOutlineGlow{mockHookContext};
 };
@@ -43,26 +41,20 @@ class PlayerOutlineGlowConditionTest : public PlayerOutlineGlowTest, public test
 };
 
 TEST_P(PlayerOutlineGlowConditionTest, GlowIsAppliedWhenExpected) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowEnabled>())).WillRepeatedly(testing::Return(GetParam().enabled));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowEnabled>())).WillOnce(testing::Return(GetParam().enabled));
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowOnlyEnemies>())).WillRepeatedly(testing::Return(GetParam().onlyEnemies));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowColorMode>())).WillRepeatedly(testing::Return(PlayerOutlineGlowColorType::HealthBased));
 
     if (GetParam().expectPlayerPawnAccess) {
-        EXPECT_CALL(mockPlayerPawn, baseEntity()).WillRepeatedly(testing::ReturnRef(mockBaseEntity));
         EXPECT_CALL(mockPlayerPawn, isAlive()).WillRepeatedly(testing::Return(GetParam().isAlive));
         EXPECT_CALL(mockPlayerPawn, health()).WillRepeatedly(testing::Return(GetParam().health));
         EXPECT_CALL(mockPlayerPawn, isControlledByLocalPlayer()).WillRepeatedly(testing::Return(GetParam().isControlledByLocalPlayer));
         EXPECT_CALL(mockPlayerPawn, isTTorCT()).WillRepeatedly(testing::Return(GetParam().isTTorCT));
-        EXPECT_CALL(mockPlayerPawn, hasImmunity()).WillRepeatedly(testing::Return(false));
-    
+
         if (GetParam().expectEnemyCheck)
             EXPECT_CALL(mockPlayerPawn, isEnemy()).WillRepeatedly(testing::Return(GetParam().isEnemy));
     }
 
-    if (GetParam().expectGlowApplied)
-        EXPECT_CALL(mockBaseEntity, applyGlowRecursively(testing::_));
-
-    playerOutlineGlow.applyGlowToPlayer(mockPlayerPawn);
+    EXPECT_EQ(playerOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockPlayerPawn), GetParam().expectGlowApplied);
 }
 
 INSTANTIATE_TEST_SUITE_P(Disabled, PlayerOutlineGlowConditionTest, testing::Values(
@@ -215,24 +207,15 @@ class PlayerOutlineGlowColorTest : public PlayerOutlineGlowTest, public testing:
 };
 
 TEST_P(PlayerOutlineGlowColorTest, CorrectGlowColorIsApplied) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowEnabled>())).WillRepeatedly(testing::Return(true));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowOnlyEnemies>())).WillRepeatedly(testing::Return(true));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowColorMode>())).WillRepeatedly(testing::Return(GetParam().colorMode));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowColorMode>())).WillOnce(testing::Return(GetParam().colorMode));
 
-    EXPECT_CALL(mockPlayerPawn, baseEntity()).WillRepeatedly(testing::ReturnRef(mockBaseEntity));
-    EXPECT_CALL(mockPlayerPawn, isAlive()).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(mockPlayerPawn, health()).WillRepeatedly(testing::Return(GetParam().health));
-    EXPECT_CALL(mockPlayerPawn, isControlledByLocalPlayer()).WillRepeatedly(testing::Return(false));
-    EXPECT_CALL(mockPlayerPawn, isTTorCT()).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(mockPlayerPawn, hasImmunity()).WillRepeatedly(testing::Return(GetParam().hasImmunity));
-    EXPECT_CALL(mockPlayerPawn, isEnemy()).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(mockPlayerPawn, playerController()).WillRepeatedly(testing::ReturnRef(mockPlayerController));
     EXPECT_CALL(mockPlayerPawn, teamNumber()).WillRepeatedly(testing::Return(GetParam().teamNumber));
     EXPECT_CALL(mockPlayerController, playerColorIndex()).WillRepeatedly(testing::Return(GetParam().playerColorIndex));
 
-    EXPECT_CALL(mockBaseEntity, applyGlowRecursively(GetParam().expectedColor));
-
-    playerOutlineGlow.applyGlowToPlayer(mockPlayerPawn);
+    EXPECT_EQ(playerOutlineGlow.getGlowColor(EntityTypeInfo{}, mockPlayerPawn), GetParam().expectedColor);
 }
 
 INSTANTIATE_TEST_SUITE_P(HealthBased, PlayerOutlineGlowColorTest, testing::ValuesIn(

@@ -11,11 +11,6 @@
 
 class DefuseKitOutlineGlowTest : public testing::Test {
 protected:
-    DefuseKitOutlineGlowTest()
-    {
-        EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    }
-
     testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockConfig> mockConfig;
     testing::StrictMock<MockBaseEntity> mockBaseEntity;
@@ -23,16 +18,22 @@ protected:
     DefuseKitOutlineGlow<MockHookContext> defuseKitOutlineGlow{mockHookContext};
 };
 
-TEST_F(DefuseKitOutlineGlowTest, GlowIsNotAppliedWhenNotEnabled) {
+TEST_F(DefuseKitOutlineGlowTest, GlowShouldNotBeAppliedWhenNotEnabled) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<DefuseKitOutlineGlowEnabled>())).WillOnce(testing::Return(false));
-    defuseKitOutlineGlow.applyGlowToDefuseKit(mockBaseEntity);
+    EXPECT_FALSE(defuseKitOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
-TEST_F(DefuseKitOutlineGlowTest, GlowIsAppliedWhenEnabled) {
+TEST_F(DefuseKitOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<DefuseKitOutlineGlowEnabled>())).WillOnce(testing::Return(true));
+    EXPECT_TRUE(defuseKitOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
+}
 
-    using namespace outline_glow_params;
-    EXPECT_CALL(mockBaseEntity, applyGlowRecursively(kDefuseKitColor, kDefuseKitGlowRange));
+TEST_F(DefuseKitOutlineGlowTest, CorrectGlowColorIsReturned) {
+    EXPECT_EQ(defuseKitOutlineGlow.getGlowColor(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kDefuseKitColor);
+}
 
-    defuseKitOutlineGlow.applyGlowToDefuseKit(mockBaseEntity);
+TEST_F(DefuseKitOutlineGlowTest, CorrectGlowRangeIsReturned) {
+    EXPECT_EQ(defuseKitOutlineGlow.getGlowRange(), outline_glow_params::kDefuseKitGlowRange);
 }
