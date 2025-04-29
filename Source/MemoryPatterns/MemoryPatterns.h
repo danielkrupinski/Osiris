@@ -53,7 +53,9 @@ constexpr auto kClientPatterns = []() consteval {
         .ADD_PATTERNS(PlayerPawnPatterns)
         .ADD_PATTERNS(RenderComponentPatterns)
         .ADD_PATTERNS(SceneObjectUpdaterPatterns)
+        .ADD_PATTERNS(SliderPatterns)
         .ADD_PATTERNS(SmokeGrenadeProjectilePatterns)
+        .ADD_PATTERNS(TextEntryPatterns)
         .ADD_PATTERNS(WeaponPatterns)
         .ADD_PATTERNS(WeaponServicesPatterns)
         .ADD_PATTERNS(WeaponVDataPatterns);

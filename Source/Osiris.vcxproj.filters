@@ -1757,6 +1757,36 @@
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\EnemyTeam.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Panorama\CSlider.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\SliderPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\SliderPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\Slider.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CTextEntry.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\TextEntry.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\TextEntryPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\TextEntryPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\IdentityMacro.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\HueSlider.h">
+      <Filter>UI\Panorama</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

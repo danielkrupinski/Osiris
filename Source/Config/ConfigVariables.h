@@ -22,21 +22,30 @@ public:
     template <typename ConfigVariable>
     [[nodiscard]] auto getVariableValue() noexcept
     {
-        if constexpr (OneByteConfigVariables::contains<ConfigVariable>()) {
-            return std::bit_cast<typename ConfigVariable::ValueType>(oneByteConfigVariables[OneByteConfigVariables::template indexOf<ConfigVariable>()]);
-        }
+        return std::bit_cast<typename ConfigVariable::ValueType>(variableStorage<ConfigVariable>());
     }
 
     template <typename ConfigVariable>
     void storeVariableValue(ConfigVariable::ValueType value) noexcept
     {
-        if constexpr (OneByteConfigVariables::contains<ConfigVariable>()) {
-            std::memcpy(&oneByteConfigVariables[OneByteConfigVariables::template indexOf<ConfigVariable>()], &value, sizeof(value));
-        }
+        std::memcpy(&variableStorage<ConfigVariable>(), &value, sizeof(value));
     }
 
 private:
-    using OneByteConfigVariables = ConfigVariableTypes::filter<Projected<UnpackConfigVariable, WithSizeOf<1>::Equal>::Value>;
+    template <typename ConfigVariable>
+    [[nodiscard]] auto& variableStorage() noexcept
+    {
+        if constexpr (OneByteConfigVariables::contains<ConfigVariable>())
+            return oneByteConfigVariables[OneByteConfigVariables::template indexOf<ConfigVariable>()];
+        else if constexpr (TwoByteConfigVariables::contains<ConfigVariable>())
+            return twoByteConfigVariables[TwoByteConfigVariables::template indexOf<ConfigVariable>()];
+        else
+            static_assert(!std::is_same_v<ConfigVariable, ConfigVariable>, "Unknown type");
+    }
 
-    std::array<std::byte, OneByteConfigVariables::size()> oneByteConfigVariables;
+    using OneByteConfigVariables = ConfigVariableTypes::filter<Projected<UnpackConfigVariable, WithSizeOf<1>::Equal>::Value>;
+    using TwoByteConfigVariables = ConfigVariableTypes::filter<Projected<UnpackConfigVariable, WithSizeOf<2>::Equal>::Value>;
+
+    std::array<std::byte[1], OneByteConfigVariables::size()> oneByteConfigVariables;
+    std::array<std::byte[2], TwoByteConfigVariables::size()> twoByteConfigVariables;
 };

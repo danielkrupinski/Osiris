@@ -180,7 +180,7 @@ private:
 
     [[nodiscard]] static cs2::Color getColorOfHealthFraction(float saturation, float healthFraction) noexcept
     {
-        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, saturation, 1.0f);
+        return color::HSBtoRGB(color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction}, color::Saturation{saturation}, color::Brightness{1.0f});
     }
 
     [[nodiscard]] bool teammatesAreEnemies() const noexcept

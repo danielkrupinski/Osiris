@@ -223,6 +223,11 @@ struct PanoramaUiPanel {
     {
         context.setSimpleForegroundColor(color);
     }
+    
+    void setBackgroundColor(cs2::Color color) const noexcept
+    {
+        context.setSimpleBackgroundColor(color);
+    }
 
     void setTransform3D(const cs2::CUtlVector<cs2::CTransform3D*>& transforms) const noexcept
     {

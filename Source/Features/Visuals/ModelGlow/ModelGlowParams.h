@@ -19,11 +19,26 @@ namespace model_glow_params
     constexpr color::HueInteger kAllyHue{120};
     constexpr color::HueInteger kTeamTHue{42};
     constexpr color::HueInteger kTeamCTHue{210};
-    constexpr color::HueInteger kPlayerBlueHue{201};
-    constexpr color::HueInteger kPlayerGreenHue{166};
-    constexpr color::HueInteger kPlayerYellowHue{59};
-    constexpr color::HueInteger kPlayerOrangeHue{32};
-    constexpr color::HueInteger kPlayerPurpleHue{317};
+
+    constexpr color::HueInteger kPlayerBlueMinHue{191};
+    constexpr color::HueInteger kPlayerBlueDefaultHue{215};
+    constexpr color::HueInteger kPlayerBlueMaxHue{240};
+
+    constexpr color::HueInteger kPlayerGreenMinHue{110};
+    constexpr color::HueInteger kPlayerGreenDefaultHue{125};
+    constexpr color::HueInteger kPlayerGreenMaxHue{140};
+
+    constexpr color::HueInteger kPlayerYellowMinHue{47};
+    constexpr color::HueInteger kPlayerYellowDefaultHue{53};
+    constexpr color::HueInteger kPlayerYellowMaxHue{60};
+    
+    constexpr color::HueInteger kPlayerOrangeMinHue{11};
+    constexpr color::HueInteger kPlayerOrangeDefaultHue{15};
+    constexpr color::HueInteger kPlayerOrangeMaxHue{20};
+
+    constexpr color::HueInteger kPlayerPurpleMinHue{250};
+    constexpr color::HueInteger kPlayerPurpleDefaultHue{265};
+    constexpr color::HueInteger kPlayerPurpleMaxHue{280};
 
     constexpr color::Saturation kNormalPlayerColorSaturation{1.0f};
     constexpr color::Saturation kImmunePlayerColorSaturation{0.5f};

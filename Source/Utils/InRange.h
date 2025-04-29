@@ -23,31 +23,40 @@ struct BinaryRepresentationTemplateParameter {
 };
 
 template <typename T, BinaryRepresentationTemplateParameter<T> min, BinaryRepresentationTemplateParameter<T> max>
-    requires (min <= max)
+    requires (static_cast<T>(min) < static_cast<T>(max))
 struct InRange {
-    explicit(false) constexpr InRange(T value) noexcept
+    static constexpr auto kMin{static_cast<T>(min)};
+    static constexpr auto kMax{static_cast<T>(max)};
+
+    using ValueType = T;
+
+    explicit constexpr InRange(T value) noexcept
         : value{value}
     {
-        assert(value >= min);
-        assert(value <= max);
         if (std::is_constant_evaluated()) {
-            if (value < min || value > max)
-                fail();
+            if (value < kMin || value > kMax)
+                fail("Value out of range");
+        } else {
+            assert(value >= kMin);
+            assert(value <= kMax);
         }
     }
 
-    constexpr operator T&() noexcept
-    {
-        return value;
-    }
+    [[nodiscard]] constexpr bool operator==(const InRange&) const = default;
 
-    constexpr operator const T&() const noexcept
+    [[nodiscard]] constexpr operator const T&() const noexcept
     {
         return value;
     }
 
 private:
-    void fail() {}
+    void fail(const char*) {}
 
     T value;
 };
+
+template <typename T>
+struct IsRangeConstrained : std::false_type {};
+
+template <typename T, BinaryRepresentationTemplateParameter<T> min, BinaryRepresentationTemplateParameter<T> max>
+struct IsRangeConstrained<InRange<T, min, max>> : std::true_type {};

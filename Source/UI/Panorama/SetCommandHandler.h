@@ -3,6 +3,10 @@
 #include <Features/Features.h>
 #include <Utils/StringParser.h>
 
+#include <GameClient/Panorama/Slider.h>
+#include <GameClient/Panorama/TextEntry.h>
+#include "HueSlider.h"
+
 template <typename HookContext>
 struct SetCommandHandler {
     SetCommandHandler(StringParser& parser, Features<HookContext> features, HookContext& hookContext) noexcept
@@ -116,6 +120,26 @@ private:
             features.visualFeatures().modelGlowToggle().updateDefuseKitModelGlowToggle(parser.getChar());
         } else if (feature == "grenade_proj_model_glow") {
             features.visualFeatures().modelGlowToggle().updateGrenadeProjectileModelGlowToggle(parser.getChar());
+        } else if (feature == "player_model_glow_blue_hue") {
+            handleHueSlider<PlayerModelGlowPlayerBlueHue>("player_model_glow_blue_hue");
+        } else if (feature == "player_model_glow_blue_hue_text") {
+            handleHueTextEntry<PlayerModelGlowPlayerBlueHue>("player_model_glow_blue_hue");
+        } else if (feature == "player_model_glow_green_hue") {
+            handleHueSlider<PlayerModelGlowPlayerGreenHue>("player_model_glow_green_hue");
+        } else if (feature == "player_model_glow_green_hue_text") {
+            handleHueTextEntry<PlayerModelGlowPlayerGreenHue>("player_model_glow_green_hue");
+        } else if (feature == "player_model_glow_yellow_hue") {
+            handleHueSlider<PlayerModelGlowPlayerYellowHue>("player_model_glow_yellow_hue");
+        } else if (feature == "player_model_glow_yellow_hue_text") {
+            handleHueTextEntry<PlayerModelGlowPlayerYellowHue>("player_model_glow_yellow_hue");
+        } else if (feature == "player_model_glow_orange_hue") {
+            handleHueSlider<PlayerModelGlowPlayerOrangeHue>("player_model_glow_orange_hue");
+        } else if (feature == "player_model_glow_orange_hue_text") {
+            handleHueTextEntry<PlayerModelGlowPlayerOrangeHue>("player_model_glow_orange_hue");
+        } else if (feature == "player_model_glow_purple_hue") {
+            handleHueSlider<PlayerModelGlowPlayerPurpleHue>("player_model_glow_purple_hue");
+        } else if (feature == "player_model_glow_purple_hue_text") {
+            handleHueTextEntry<PlayerModelGlowPlayerPurpleHue>("player_model_glow_purple_hue");
         }
     }
 
@@ -152,6 +176,64 @@ private:
         default:
             break;
         }
+    }
+
+    template <typename ConfigVariable>
+    void handleHueSlider(const char* sliderId) const noexcept
+    {
+        const auto hue = parseHueVariable<ConfigVariable>();
+        if (!hue.has_value())
+            return;
+
+        if (!hookContext.config().template setVariable<ConfigVariable>(*hue))
+            return;
+
+        auto&& hueSlider = getHueSlider(sliderId);
+        hueSlider.updateTextEntry(*hue);
+        hueSlider.updateColorPreview(*hue);
+    }
+
+    template <typename ConfigVariable>
+    void handleHueTextEntry(const char* sliderId) const noexcept
+    {
+        auto&& hueSlider = getHueSlider(sliderId);
+        const auto hue = parseHueVariable<ConfigVariable>();
+        if (!hue.has_value()) {
+            hueSlider.updateTextEntry(hookContext.config().template getVariable<ConfigVariable>());
+            return;
+        }
+
+        if (!hookContext.config().template setVariable<ConfigVariable>(*hue))
+            return;
+
+        hueSlider.updateSlider(*hue);
+        hueSlider.updateColorPreview(*hue);
+    }
+
+    [[nodiscard]] decltype(auto) getHueSlider(const char* sliderId) const noexcept
+    {
+        const auto mainMenuPointer = hookContext.clientPatternSearchResults().template get<MainMenuPanelPointer>();
+        auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
+        return hookContext.template make<HueSlider>(mainMenu.findChildInLayoutFile(sliderId));
+    }
+
+    template <typename ConfigVariable>
+    [[nodiscard]] std::optional<typename ConfigVariable::ValueType> parseHueVariable() const noexcept
+    {
+        const auto hueInteger = parseHueInteger();
+        if (!hueInteger.has_value())
+            return {};
+
+        if (*hueInteger >= ConfigVariable::ValueType::kMin && *hueInteger <= ConfigVariable::ValueType::kMax)
+            return typename ConfigVariable::ValueType{*hueInteger};
+        return {};
+    }
+
+    [[nodiscard]] std::optional<color::HueInteger> parseHueInteger() const noexcept
+    {
+        if (color::HueInteger::UnderlyingType underlying; parser.parseInt(underlying) && underlying >= color::HueInteger::kMin && underlying <= color::HueInteger::kMax)
+            return color::HueInteger{underlying};
+        return {};
     }
 
     StringParser& parser;

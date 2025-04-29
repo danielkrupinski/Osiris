@@ -14,18 +14,33 @@ using Saturation = InRange<float, 0.0f, 1.0f>;
 using Brightness = InRange<float, 0.0f, 1.0f>;
 
 struct HueInteger {
-    using ValueType = InRange<std::uint16_t, 0, 360>;
+    using UnderlyingType = std::uint16_t;
+    static constexpr UnderlyingType kMin{0};
+    static constexpr UnderlyingType kMax{360};
+
+    explicit constexpr HueInteger(UnderlyingType value) noexcept
+        : value{value}
+    {
+    }
+
+    [[nodiscard]] constexpr bool operator==(const HueInteger&) const = default;
+
+    [[nodiscard]] constexpr operator UnderlyingType() const noexcept
+    {
+        return value;
+    }
 
     [[nodiscard]] constexpr Hue toHueFloat() const noexcept
     {
-        return value / 360.0f;
+        return Hue{value / 360.0f};
     }
 
-    ValueType value;
+private:
+    InRange<UnderlyingType, kMin, kMax> value;
 };
 
-constexpr Hue kGreenHue = 120.0f / 360.0f;
-constexpr Hue kRedHue = 0.0f / 360.0f;
+constexpr Hue kGreenHue{120.0f / 360.0f};
+constexpr Hue kRedHue{0.0f / 360.0f};
 
 [[nodiscard]] constexpr cs2::Color HSBtoRGB(Hue hue, Saturation saturation, Brightness brightness) noexcept
 {

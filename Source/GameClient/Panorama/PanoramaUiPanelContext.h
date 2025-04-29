@@ -53,6 +53,14 @@ struct PanoramaUiPanelContext {
         }
     }
 
+    void setSimpleBackgroundColor(cs2::Color color) const noexcept
+    {
+        if (const auto style = getStyle()) {
+            // FIXME: hardcoded virtual method index
+            reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::Color* color)>((*reinterpret_cast<void(***)()>(style))[53])(style, &color);
+        }
+    }
+
     void setTransform3D(const cs2::CUtlVector<cs2::CTransform3D*>& transforms) const noexcept
     {
         if (const auto style = getStyle()) {

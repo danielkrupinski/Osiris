@@ -94,7 +94,9 @@
     <ClInclude Include="CS2\Panorama\CPanel2D.h" />
     <ClInclude Include="CS2\Panorama\CPanelStyle.h" />
     <ClInclude Include="CS2\Panorama\CPanoramaSymbol.h" />
+    <ClInclude Include="CS2\Panorama\CSlider.h" />
     <ClInclude Include="CS2\Panorama\CStyleSymbol.h" />
+    <ClInclude Include="CS2\Panorama\CTextEntry.h" />
     <ClInclude Include="CS2\Panorama\CTopLevelWindow.h" />
     <ClInclude Include="CS2\Panorama\CUIEngine.h" />
     <ClInclude Include="CS2\Panorama\CUILength.h" />
@@ -307,8 +309,10 @@
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelContext.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelIterator.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelMethodInvoker.h" />
+    <ClInclude Include="GameClient\Panorama\Slider.h" />
     <ClInclude Include="GameClient\Panorama\StylePropertiesSymbolsAndVMTs.h" />
     <ClInclude Include="GameClient\Panorama\StylePropertySymbolMap.h" />
+    <ClInclude Include="GameClient\Panorama\TextEntry.h" />
     <ClInclude Include="GameClient\Panorama\TopLevelWindow.h" />
     <ClInclude Include="GameClient\SceneSystem\SceneObject.h" />
     <ClInclude Include="GameClient\SceneSystem\SceneObjectAttributes.h" />
@@ -365,8 +369,10 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\SceneObjectPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\SceneObjectUpdaterPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\SceneSystemPatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\SliderPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\SmokeGrenadeProjectilePatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\SoundSystemPatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\TextEntryPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\TopLevelWindowPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\UiEnginePatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\UiPanelPatternTypes.h" />
@@ -403,8 +409,10 @@
     <ClInclude Include="MemoryPatterns\Windows\SceneObjectUpdaterPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SceneSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SdlPatternWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\SliderPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SmokeGrenadeProjectilePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\TextEntryPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WeaponPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WeaponServicesPatternsWindows.h" />
@@ -476,6 +484,7 @@
     <ClInclude Include="SDL\SdlDll.h" />
     <ClInclude Include="SDL\SdlFunctions.h" />
     <ClInclude Include="UI\Panorama\HudTab.h" />
+    <ClInclude Include="UI\Panorama\HueSlider.h" />
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
     <ClInclude Include="UI\Panorama\PanoramaGUI.h" />
     <ClInclude Include="UI\Panorama\PanoramaGuiState.h" />
@@ -496,6 +505,7 @@
     <ClInclude Include="Utils\GenericFunctionPointer.h" />
     <ClInclude Include="Utils\GenericPointer.h" />
     <ClInclude Include="Utils\HexChars.h" />
+    <ClInclude Include="Utils\IdentityMacro.h" />
     <ClInclude Include="Utils\InRange.h" />
     <ClInclude Include="Utils\LazyInitialized.h" />
     <ClInclude Include="Utils\Lvalue.h" />

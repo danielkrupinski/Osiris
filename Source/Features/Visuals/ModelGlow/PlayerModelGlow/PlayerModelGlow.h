@@ -47,19 +47,19 @@ public:
 
     void onUnload(auto&& playerPawn) const noexcept
     {
-        if (hookContext.config().template getVariable<PlayerModelGlowEnabled>() || state().playerModelGlowDisabling)
+        if (getConfigVariable<PlayerModelGlowEnabled>() || state().playerModelGlowDisabling)
             unhookPlayerSceneObjectUpdater(playerPawn);
     }
 
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return hookContext.config().template getVariable<PlayerModelGlowEnabled>() || state().playerModelGlowDisabling;
+        return getConfigVariable<PlayerModelGlowEnabled>() || state().playerModelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return hookContext.config().template getVariable<PlayerModelGlowEnabled>();
+        return getConfigVariable<PlayerModelGlowEnabled>();
     }
 
     void hookPlayerSceneObjectUpdater(auto&& playerPawn) const noexcept
@@ -94,12 +94,12 @@ private:
 
     [[nodiscard]] bool shouldGlowPlayerModel(auto&& playerPawn) const noexcept
     {
-        return hookContext.config().template getVariable<ModelGlowEnabled>()
+        return getConfigVariable<ModelGlowEnabled>()
             && playerPawn.isAlive().value_or(true)
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
-            && (!hookContext.config().template getVariable<PlayerModelGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
+            && (!getConfigVariable<PlayerModelGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
     [[nodiscard]] auto& state() const noexcept
@@ -115,13 +115,13 @@ private:
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
         if (const auto colorHue = getColorHue(playerPawn))
-            return color::HSBtoRGB(*colorHue, getColorSaturation(playerPawn), 1.0f);
+            return color::HSBtoRGB(*colorHue, getColorSaturation(playerPawn), color::Brightness{1.0f});
         return cs2::kColorWhite;
     }
 
     [[nodiscard]] std::optional<color::Hue> getColorHue(auto&& playerPawn) const noexcept
     {
-        switch (hookContext.config().template getVariable<PlayerModelGlowColorMode>()) {
+        switch (getConfigVariable<PlayerModelGlowColorMode>()) {
         using enum PlayerModelGlowColorType;
         case EnemyAlly:
             return enemyAllyColorModeHue(playerPawn);
@@ -157,7 +157,7 @@ private:
     [[nodiscard]] std::optional<color::Hue> healthBasedColorModeHue(auto&& playerPawn) const noexcept
     {
         if (const auto healthValue = playerPawn.health(); healthValue.hasValue())
-            return color::kRedHue + (color::kGreenHue - color::kRedHue) * (std::clamp(healthValue.value(), 0, 100) / 100.0f);
+            return color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * (std::clamp(healthValue.value(), 0, 100) / 100.0f)};
         return {};
     }
 
@@ -167,14 +167,19 @@ private:
             return {};
 
         switch (playerColorIndex.value()) {
-        using namespace model_glow_params;
-        case 0: return kPlayerBlueHue;
-        case 1: return kPlayerGreenHue;
-        case 2: return kPlayerYellowHue;
-        case 3: return kPlayerOrangeHue;
-        case 4: return kPlayerPurpleHue;
+        case 0: return getConfigVariable<PlayerModelGlowPlayerBlueHue>();
+        case 1: return getConfigVariable<PlayerModelGlowPlayerGreenHue>();
+        case 2: return getConfigVariable<PlayerModelGlowPlayerYellowHue>();
+        case 3: return getConfigVariable<PlayerModelGlowPlayerOrangeHue>();
+        case 4: return getConfigVariable<PlayerModelGlowPlayerPurpleHue>();
         default: return {};
         }
+    }
+
+    template <typename ConfigVariable>
+    [[nodiscard]] decltype(auto) getConfigVariable() const noexcept
+    {
+        return hookContext.config().template getVariable<ConfigVariable>();
     }
 
     HookContext& hookContext;

@@ -71,6 +71,12 @@ $.Osiris = (function () {
     },
     dropDownUpdated: function (tabID, dropDownID) {
       this.addCommand('set', tabID + '/' + dropDownID + '/' + this.rootPanel.FindChildInLayoutFile(dropDownID).GetSelected().GetAttributeString('value', ''));
+    },
+    sliderUpdated: function (tabID, sliderID, slider) {
+      this.addCommand('set', tabID + '/' + sliderID + '/' + Math.floor(slider.value));
+    },
+    sliderTextEntryUpdated: function (tabID, sliderID, panel) {
+      this.addCommand('set', tabID + '/' + sliderID + '/' + panel.text);
     }
   };
 })();
@@ -330,6 +336,48 @@ $.Osiris = (function () {
     });
     panel.SetItemItemId(makeFauxItemId(defIndex, 0), {});
   };
+
+  var createHueSlider = function (parent, name, id, min, max) {
+    var container = $.CreatePanel('Panel', parent, '', {
+      class: "SettingsMenuDropdownContainer"
+    });
+
+    $.CreatePanel('Label', container, '', {
+      class: "half-width",
+      text: name
+    });
+
+    var sliderContainer = $.CreatePanel('Panel', container, id, {
+      style: "vertical-align: center; horizontal-align: right; flow-children: right; margin-right: 8px;"
+    });
+
+    var slider = $.CreatePanel('Slider', sliderContainer, '', {
+      class: "HorizontalSlider",
+      style: "width: 200px; vertical-align: center;",
+      direction: "horizontal"
+    });
+
+    slider.SetPanelEvent('onvaluechanged', function () { $.Osiris.sliderUpdated('visuals', id, slider); });
+    slider.min = min;
+    slider.max = max;
+    slider.increment = 1.0;
+
+    var textEntry = $.CreatePanel('TextEntry', sliderContainer, id + '_text', {
+      maxchars: "3",
+      textmode: "numeric",
+      style: "width: 75px; margin-left: 10px; padding-left: 10px; text-align: center; font-size: 20px; color: #ccccccff; font-weight: bold; font-family: Stratum2, notosans, 'Arial Unicode MS'; border: 2px solid #cccccc15;"
+    });
+
+    textEntry.SetPanelEvent('ontextentrysubmit', function () { $.Osiris.sliderTextEntryUpdated('visuals', `${id}_text`, textEntry); });
+    textEntry.SetPanelEvent('onfocus', function () { textEntry.style.backgroundColor = 'gradient(linear, 100% 0%, 0% 0%, from(#00000080), color-stop(0, #00000060), to(#00000080))'; });
+    textEntry.SetPanelEvent('onblur', function () { textEntry.style.backgroundColor = 'none'; });
+    textEntry.SetPanelEvent('onmouseover', function () { if (!textEntry.BHasKeyFocus()) textEntry.style.backgroundColor = 'gradient(linear, 100% 0%, 0% 0%, from(#000000ff), color-stop(0, #00000000), to(#00000050));'; });
+    textEntry.SetPanelEvent('onmouseout', function () { if (!textEntry.BHasKeyFocus()) textEntry.style.backgroundColor = 'none'; });
+
+    $.CreatePanel('Panel', sliderContainer, id + '_color', {
+        style: "border: 1px solid #00000070; border-radius: 5px; margin-left: 10px; width: 25px; vertical-align: center; height: 25px;"
+    });
+  }
 )"
 // split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
 u8R"(
@@ -409,6 +457,7 @@ u8R"(
   createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow');
 
   var _modelGlowTab = createSubTab(visuals, 'model_glow');
+  _modelGlowTab.style.overflow = 'squish squish';
   _modelGlowTab.style.flowChildren = 'right';
 
   var modelGlowPreview = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down;' });
@@ -445,7 +494,7 @@ u8R"(
   createGrenadeModelGlowPreview(grenadeModelGlowPreviewRow2, 'ModelGlowPreviewSmoke', 45);
   createGrenadeModelGlowPreview(grenadeModelGlowPreviewRow2, 'ModelGlowPreviewIncendiary', 48);
 
-  var modelGlowTab = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down;' });
+  var modelGlowTab = $.CreatePanel('Panel', _modelGlowTab, '', { style: 'flow-children: down; margin-right: 40px; overflow: squish scroll;' });
 
   var modelGlow = createSection(modelGlowTab, 'Model Glow');
   createOnOffDropDown(modelGlow, "Master Switch", 'visuals', 'model_glow_enable');
@@ -454,6 +503,17 @@ u8R"(
   createDropDown(playerModelGlow, "Glow Player Models", 'visuals', 'player_model_glow', ['Enemies', 'All Players', 'Off']);
   separator(playerModelGlow);
   createDropDown(playerModelGlow, "Player Model Glow Color Mode", 'visuals', 'player_model_glow_color', ['Player / Team Color', 'Team Color', 'Health-based', 'Enemy / Ally']);
+  separator(playerModelGlow);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Player Blue Hue", 'player_model_glow_blue_hue', 191, 240);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Player Green Hue", 'player_model_glow_green_hue', 110, 140);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Player Yellow Hue", 'player_model_glow_yellow_hue', 47, 60);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Player Orange Hue", 'player_model_glow_orange_hue', 11, 20);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Player Purple Hue", 'player_model_glow_purple_hue', 250, 280);
 
   var weaponModelGlow = createSection(modelGlowTab, 'Weapons');
   createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow');

@@ -3,7 +3,7 @@
 #define CONFIG_VARIABLE(name, type, defaultValue) \
 struct name { \
     using ValueType = type; \
-    static constexpr ValueType kDefaultValue = defaultValue; \
+    static constexpr ValueType kDefaultValue{defaultValue}; \
 }
 
 template <typename ConfigVariable>
