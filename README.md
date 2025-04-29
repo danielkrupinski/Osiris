@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 29 April 2025
+    * Player color hues are now customizable in Model Glow settings
+
+    ![Custom player color hues in Model Glow](https://github.com/user-attachments/assets/6f543dd5-3d16-49d6-aca8-81b9a8be1ee8)
+
 * 11 April 2025
     * Added "Enemy / Ally" color mode for Player Model Glow
 
