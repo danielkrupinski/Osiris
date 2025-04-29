@@ -224,31 +224,31 @@ INSTANTIATE_TEST_SUITE_P(HealthBased, PlayerOutlineGlowColorTest, testing::Value
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{100},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{120},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{75},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(std::lerp(color::kRedHue, color::kGreenHue, 0.7474f), outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.7474f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{25},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(std::lerp(color::kRedHue, color::kGreenHue, 0.2424f), outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.2424f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{1},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
@@ -260,31 +260,31 @@ INSTANTIATE_TEST_SUITE_P(HealthBased, PlayerOutlineGlowColorTest, testing::Value
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{100},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{120},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{75},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(std::lerp(color::kRedHue, color::kGreenHue, 0.7474f), outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.7474f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{25},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(std::lerp(color::kRedHue, color::kGreenHue, 0.2424f), outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.2424f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{1},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
@@ -296,31 +296,31 @@ INSTANTIATE_TEST_SUITE_P(HealthBased, PlayerOutlineGlowColorTest, testing::Value
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{100},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{120},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{75},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(std::lerp(color::kRedHue, color::kGreenHue, 0.7474f), outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.7474f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{25},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(std::lerp(color::kRedHue, color::kGreenHue, 0.2424f), outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.2424f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{1},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, 1.0f).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,

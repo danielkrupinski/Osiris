@@ -13,7 +13,11 @@ public:
             return !ConfigVariable::kDefaultValue;
         else if constexpr (std::is_enum_v<typename ConfigVariable::ValueType>)
             return typename ConfigVariable::ValueType{static_cast<std::underlying_type_t<typename ConfigVariable::ValueType>>(ConfigVariable::kDefaultValue) + 1};
-        else
+        else if constexpr (IsRangeConstrained<typename ConfigVariable::ValueType>::value) {
+            if (ConfigVariable::kDefaultValue != ConfigVariable::ValueType::kMin)
+                return typename ConfigVariable::ValueType{ConfigVariable::ValueType::kMin};
+            return typename ConfigVariable::ValueType{ConfigVariable::ValueType::kMax};
+        } else
             static_assert(!std::is_same_v<ConfigVariable, ConfigVariable>, "Unsupported type");
     }
 

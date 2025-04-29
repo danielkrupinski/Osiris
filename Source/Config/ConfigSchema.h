@@ -57,6 +57,13 @@ private:
         configConversion.boolean(u8"TickingBomb", loadVariable<TickingBombModelGlowEnabled>(), saveVariable<TickingBombModelGlowEnabled>());
         configConversion.boolean(u8"DefuseKits", loadVariable<DefuseKitModelGlowEnabled>(), saveVariable<DefuseKitModelGlowEnabled>());
         configConversion.boolean(u8"GrenadeProjectiles", loadVariable<GrenadeProjectileModelGlowEnabled>(), saveVariable<GrenadeProjectileModelGlowEnabled>());
+        configConversion.beginObject(u8"Hues");
+        configConversion.uint(u8"PlayerBlue", loadVariable<PlayerModelGlowPlayerBlueHue>(), saveVariable<PlayerModelGlowPlayerBlueHue>());
+        configConversion.uint(u8"PlayerGreen", loadVariable<PlayerModelGlowPlayerGreenHue>(), saveVariable<PlayerModelGlowPlayerGreenHue>());
+        configConversion.uint(u8"PlayerYellow", loadVariable<PlayerModelGlowPlayerYellowHue>(), saveVariable<PlayerModelGlowPlayerYellowHue>());
+        configConversion.uint(u8"PlayerOrange", loadVariable<PlayerModelGlowPlayerOrangeHue>(), saveVariable<PlayerModelGlowPlayerOrangeHue>());
+        configConversion.uint(u8"PlayerPurple", loadVariable<PlayerModelGlowPlayerPurpleHue>(), saveVariable<PlayerModelGlowPlayerPurpleHue>());
+        configConversion.endObject();
         configConversion.endObject();
 
         configConversion.beginObject(u8"OutlineGlow");
@@ -134,30 +141,55 @@ private:
         configConversion.endObject();
     }
 
+    template <std::unsigned_integral T>
+    [[nodiscard]] static T saturateCast(std::unsigned_integral auto value) noexcept
+    {
+        if (value < (std::numeric_limits<T>::min)())
+            return (std::numeric_limits<T>::min)();
+        if (value > (std::numeric_limits<T>::max)())
+            return (std::numeric_limits<T>::max)();
+        return static_cast<T>(value);
+    }
+
     template <typename ConfigVariable>
     [[nodiscard]] auto loadVariable() noexcept
     {
-        if constexpr (std::is_enum_v<typename ConfigVariable::ValueType>)
+        if constexpr (IsRangeConstrained<typename ConfigVariable::ValueType>::value) {
+            return [this](auto value) {
+                if constexpr (std::is_same_v<color::HueInteger, typename ConfigVariable::ValueType::ValueType>) {
+                    color::HueInteger hue{std::clamp(saturateCast<color::HueInteger::UnderlyingType>(value), color::HueInteger::kMin, color::HueInteger::kMax)};
+                    hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(typename ConfigVariable::ValueType{std::clamp(hue, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax)});
+                } else {
+                    static_assert(!std::is_same_v<ConfigVariable, ConfigVariable>, "Unsupported type");
+                }
+            };
+        } else if constexpr (std::is_enum_v<typename ConfigVariable::ValueType>) {
             return [this](std::integral auto value) {
                 hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(static_cast<ConfigVariable::ValueType>(value));
             };
-        else
+        } else {
             return [this](ConfigVariable::ValueType value) {
                 hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(value);
             };
+        }
     }
 
     template <typename ConfigVariable>
     [[nodiscard]] auto saveVariable() noexcept
     {
-        if constexpr (std::is_enum_v<typename ConfigVariable::ValueType>)
+        if constexpr (IsRangeConstrained<typename ConfigVariable::ValueType>::value) {
+            return [this] {
+                return static_cast<typename ConfigVariable::ValueType::ValueType>(hookContext.config().template getVariable<ConfigVariable>());
+            };
+        } else if constexpr (std::is_enum_v<typename ConfigVariable::ValueType>) {
             return [this] {
                 return static_cast<std::underlying_type_t<typename ConfigVariable::ValueType>>(hookContext.config().template getVariable<ConfigVariable>());
             };
-        else
+        } else {
             return [this] {
                 return hookContext.config().template getVariable<ConfigVariable>();
             };
+        }
     }
 
     HookContext& hookContext;

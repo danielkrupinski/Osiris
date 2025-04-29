@@ -53,5 +53,10 @@ using ConfigVariableTypes = TypeList<
     PlayerInfoInWorldBombDefuseIconEnabled,
     PlayerInfoInWorldHostagePickupIconEnabled,
     PlayerInfoInWorldHostageRescueIconEnabled,
-    PlayerInfoInWorldBlindedIconEnabled
+    PlayerInfoInWorldBlindedIconEnabled,
+    PlayerModelGlowPlayerBlueHue,
+    PlayerModelGlowPlayerGreenHue,
+    PlayerModelGlowPlayerYellowHue,
+    PlayerModelGlowPlayerOrangeHue,
+    PlayerModelGlowPlayerPurpleHue
 >;

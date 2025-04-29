@@ -50,7 +50,7 @@ private:
 
     [[nodiscard]] static cs2::Color healthColor(float healthFraction) noexcept
     {
-        return color::HSBtoRGB(color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction, outline_glow_params::kPlayerGlowSaturation, 1.0f);
+        return color::HSBtoRGB(color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f});
     }
 
     [[nodiscard]] static constexpr float healthFraction(int playerHealth) noexcept

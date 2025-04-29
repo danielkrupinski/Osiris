@@ -3,6 +3,8 @@
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerStateIcons/PlayerStateIconsToShow.h>
 #include <GameClient/Panorama/PanoramaDropDown.h>
+#include <GameClient/Panorama/Slider.h>
+#include <GameClient/Panorama/TextEntry.h>
 #include <Platform/Macros/FunctionAttributes.h>
 
 template <typename HookContext>
@@ -61,6 +63,21 @@ private:
         setDropDownSelectedIndex(mainMenu, "dropped_bomb_model_glow", !hookContext.config().template getVariable<DroppedBombModelGlowEnabled>());
         setDropDownSelectedIndex(mainMenu, "ticking_bomb_model_glow", !hookContext.config().template getVariable<TickingBombModelGlowEnabled>());
         setDropDownSelectedIndex(mainMenu, "defuse_kit_model_glow", !hookContext.config().template getVariable<DefuseKitModelGlowEnabled>());
+        updateHueSlider<PlayerModelGlowPlayerBlueHue>(mainMenu, "player_model_glow_blue_hue");
+        updateHueSlider<PlayerModelGlowPlayerGreenHue>(mainMenu, "player_model_glow_green_hue");
+        updateHueSlider<PlayerModelGlowPlayerYellowHue>(mainMenu, "player_model_glow_yellow_hue");
+        updateHueSlider<PlayerModelGlowPlayerOrangeHue>(mainMenu, "player_model_glow_orange_hue");
+        updateHueSlider<PlayerModelGlowPlayerPurpleHue>(mainMenu, "player_model_glow_purple_hue");
+    }
+
+    template <typename ConfigVariable>
+    void updateHueSlider(auto&& mainMenu, const char* sliderId) const noexcept
+    {
+        auto&& hueSlider = hookContext.template make<HueSlider>(mainMenu.findChildInLayoutFile(sliderId));
+        const auto hue = hookContext.config().template getVariable<ConfigVariable>();
+        hueSlider.updateSlider(hue);
+        hueSlider.updateTextEntry(hue);
+        hueSlider.updateColorPreview(hue);
     }
 
     [[NOINLINE]] void setDropDownSelectedIndex(auto&& mainMenu, const char* dropDownId, int selectedIndex) const noexcept

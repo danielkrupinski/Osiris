@@ -36,10 +36,13 @@ public:
     }
 
     template <typename ConfigVariable>
-    void setVariable(ConfigVariable::ValueType newValue) noexcept
+    bool setVariable(ConfigVariable::ValueType newValue) noexcept
     {
-        if (changeVariableValue<ConfigVariable>(newValue))
+        if (changeVariableValue<ConfigVariable>(newValue)) {
             scheduleAutoSave();
+            return true;
+        }
+        return false;
     }
 
     template <typename ConfigVariable>
