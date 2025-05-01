@@ -136,7 +136,7 @@ struct PanoramaUiPanelContext {
 
     [[nodiscard]] decltype(auto) nullPanel() const noexcept
     {
-        return hookContext.template make<PanoramaUiPanel>(nullptr);
+        return hookContext.uiPanel(nullptr);
     }
 
     [[nodiscard]] cs2::CUIPanel* getRawPointer() const noexcept

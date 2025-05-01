@@ -33,8 +33,8 @@ struct PanoramaUiPanelChildPanels {
     [[nodiscard]] decltype(auto) operator[](std::size_t index) noexcept
     {
         if (vector && std::cmp_less(index, vector->size))
-            return hookContext.template make<PanoramaUiPanel>(vector->memory[index]);
-        return hookContext.template make<PanoramaUiPanel>(nullptr);
+            return hookContext.uiPanel(vector->memory[index]);
+        return hookContext.uiPanel(nullptr);
     }
 
     template <typename F>
@@ -44,7 +44,7 @@ struct PanoramaUiPanelChildPanels {
             return;
 
         for (int i = 0; i < vector->size; ++i)
-            f(hookContext.template make<PanoramaUiPanel>(vector->memory[i]));
+            f(hookContext.uiPanel(vector->memory[i]));
     }
 
     HookContext& hookContext;

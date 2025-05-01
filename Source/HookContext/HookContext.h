@@ -255,6 +255,11 @@ struct HookContext {
         return SoundWatcher<HookContext>{fullGlobalContext.soundWatcherState, *this};
     }
 
+    [[nodiscard]] auto uiPanel(cs2::CUIPanel* panel) noexcept
+    {
+        return PanoramaUiPanel<HookContext>{*this, panel};
+    }
+
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {

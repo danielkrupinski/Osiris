@@ -3,9 +3,6 @@
 #include <CS2/Panorama/CPanel2D.h>
 #include <CS2/Panorama/CUIPanel.h>
 
-template <typename HookContext, typename Context>
-struct PanoramaUiPanel;
-
 template <typename HookContext>
 struct ClientPanel {
     ClientPanel(HookContext& hookContext, cs2::CPanel2D* panel) noexcept
@@ -21,7 +18,7 @@ struct ClientPanel {
 
     [[nodiscard]] decltype(auto) uiPanel() const noexcept
     {
-        return hookContext.template make<PanoramaUiPanel>(uiPanelPointer());
+        return hookContext.uiPanel(uiPanelPointer());
     }
 
     template <template <typename...> typename T>

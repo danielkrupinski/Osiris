@@ -2,9 +2,6 @@
 
 #include <CS2/Panorama/CUIPanel.h>
 
-template <typename HookContext, typename Context>
-struct PanoramaUiPanel;
-
 template <typename HookContext>
 struct PanoramaUiPanelIterator {
     PanoramaUiPanelIterator(HookContext& hookContext, cs2::CUIPanel** panel) noexcept
@@ -26,7 +23,7 @@ struct PanoramaUiPanelIterator {
 
     [[nodiscard]] auto operator*() const noexcept
     {
-        return hookContext.template make<PanoramaUiPanel>(*panel);
+        return hookContext.uiPanel(*panel);
     }
 
     HookContext& hookContext;

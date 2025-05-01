@@ -4,9 +4,6 @@
 #include <Platform/Macros/IsPlatform.h>
 #include <MemoryPatterns/PatternTypes/UiEnginePatternTypes.h>
 
-template <typename HookContext, typename Context>
-struct PanoramaUiPanel;
-
 template <typename HookContext>
 class PanoramaUiEngine {
 public:
@@ -28,8 +25,8 @@ public:
     [[nodiscard]] decltype(auto) getPanelFromHandle(cs2::PanelHandle handle) noexcept
     {
         if (hookContext.panoramaPatternSearchResults().template get<GetPanelPointerFunctionPointer>() && thisptr())
-            return hookContext.template make<PanoramaUiPanel>(hookContext.panoramaPatternSearchResults().template get<GetPanelPointerFunctionPointer>()(*thisptr(), &handle));
-        return hookContext.template make<PanoramaUiPanel>(nullptr);
+            return hookContext.uiPanel(hookContext.panoramaPatternSearchResults().template get<GetPanelPointerFunctionPointer>()(*thisptr(), &handle));
+        return hookContext.uiPanel(nullptr);
     }
 
     [[nodiscard]] cs2::PanelHandle getPanelHandle(cs2::CUIPanel* panel) noexcept
