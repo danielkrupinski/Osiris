@@ -67,6 +67,12 @@ private:
         configConversion.uint(u8"PlayerYellow", loadVariable<PlayerModelGlowPlayerYellowHue>(), saveVariable<PlayerModelGlowPlayerYellowHue>());
         configConversion.uint(u8"PlayerOrange", loadVariable<PlayerModelGlowPlayerOrangeHue>(), saveVariable<PlayerModelGlowPlayerOrangeHue>());
         configConversion.uint(u8"PlayerPurple", loadVariable<PlayerModelGlowPlayerPurpleHue>(), saveVariable<PlayerModelGlowPlayerPurpleHue>());
+        configConversion.uint(u8"TeamT", loadVariable<PlayerModelGlowTeamTHue>(), saveVariable<PlayerModelGlowTeamTHue>());
+        configConversion.uint(u8"TeamCT", loadVariable<PlayerModelGlowTeamCTHue>(), saveVariable<PlayerModelGlowTeamCTHue>());
+        configConversion.uint(u8"LowHealth", loadVariable<PlayerModelGlowLowHealthHue>(), saveVariable<PlayerModelGlowLowHealthHue>());
+        configConversion.uint(u8"HighHealth", loadVariable<PlayerModelGlowHighHealthHue>(), saveVariable<PlayerModelGlowHighHealthHue>());
+        configConversion.uint(u8"Enemy", loadVariable<PlayerModelGlowEnemyHue>(), saveVariable<PlayerModelGlowEnemyHue>());
+        configConversion.uint(u8"Ally", loadVariable<PlayerModelGlowAllyHue>(), saveVariable<PlayerModelGlowAllyHue>());
         configConversion.endObject();
         configConversion.endObject();
 
