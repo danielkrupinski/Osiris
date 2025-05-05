@@ -94,9 +94,20 @@ protected:
         get<PlayerModelGlowPlayerPurpleHue>() = PlayerModelGlowPlayerPurpleHue::ValueType{color::HueInteger{269}};
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV3()
     {
         setVariableExpectationsV2();
+        get<PlayerModelGlowTeamTHue>() = PlayerModelGlowTeamTHue::ValueType{color::HueInteger{30}};
+        get<PlayerModelGlowTeamCTHue>() = PlayerModelGlowTeamCTHue::ValueType{color::HueInteger{220}};
+        get<PlayerModelGlowLowHealthHue>() = PlayerModelGlowLowHealthHue::ValueType{color::HueInteger{311}};
+        get<PlayerModelGlowHighHealthHue>() = PlayerModelGlowHighHealthHue::ValueType{color::HueInteger{256}};
+        get<PlayerModelGlowEnemyHue>() = PlayerModelGlowEnemyHue::ValueType{color::HueInteger{353}};
+        get<PlayerModelGlowAllyHue>() = PlayerModelGlowEnemyHue::ValueType{color::HueInteger{74}};
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV3();
     }
 
     struct VariableChecker {
@@ -206,6 +217,11 @@ protected:
 TEST_F(ConfigCompatibilityLoadTest, ConfigV1) {
     setVariableExpectationsV1();
     testLoadingConfigFile("config_v1.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, ConfigV2) {
+    setVariableExpectationsV2();
+    testLoadingConfigFile("config_v2.cfg");
 }
 
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {

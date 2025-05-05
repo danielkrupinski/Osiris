@@ -140,6 +140,30 @@ private:
             handleHueSlider<PlayerModelGlowPlayerPurpleHue>("player_model_glow_purple_hue");
         } else if (feature == "player_model_glow_purple_hue_text") {
             handleHueTextEntry<PlayerModelGlowPlayerPurpleHue>("player_model_glow_purple_hue");
+        } else if (feature == "player_model_glow_t_hue") {
+            handleHueSlider<PlayerModelGlowTeamTHue>("player_model_glow_t_hue");
+        } else if (feature == "player_model_glow_t_hue_text") {
+            handleHueTextEntry<PlayerModelGlowTeamTHue>("player_model_glow_t_hue");
+        } else if (feature == "player_model_glow_ct_hue") {
+            handleHueSlider<PlayerModelGlowTeamCTHue>("player_model_glow_ct_hue");
+        } else if (feature == "player_model_glow_ct_hue_text") {
+            handleHueTextEntry<PlayerModelGlowTeamCTHue>("player_model_glow_ct_hue");
+        } else if (feature == "player_model_glow_low_hp_hue") {
+            handleHueSlider<PlayerModelGlowLowHealthHue>("player_model_glow_low_hp_hue");
+        } else if (feature == "player_model_glow_low_hp_hue_text") {
+            handleHueTextEntry<PlayerModelGlowLowHealthHue>("player_model_glow_low_hp_hue");
+        } else if (feature == "player_model_glow_high_hp_hue") {
+            handleHueSlider<PlayerModelGlowHighHealthHue>("player_model_glow_high_hp_hue");
+        } else if (feature == "player_model_glow_high_hp_hue_text") {
+            handleHueTextEntry<PlayerModelGlowHighHealthHue>("player_model_glow_high_hp_hue");
+        } else if (feature == "player_model_glow_enemy_hue") {
+            handleHueSlider<PlayerModelGlowEnemyHue>("player_model_glow_enemy_hue");
+        } else if (feature == "player_model_glow_enemy_hue_text") {
+            handleHueTextEntry<PlayerModelGlowEnemyHue>("player_model_glow_enemy_hue");
+        } else if (feature == "player_model_glow_ally_hue") {
+            handleHueSlider<PlayerModelGlowAllyHue>("player_model_glow_ally_hue");
+        } else if (feature == "player_model_glow_ally_hue_text") {
+            handleHueTextEntry<PlayerModelGlowAllyHue>("player_model_glow_ally_hue");
         }
     }
 

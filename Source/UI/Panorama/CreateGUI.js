@@ -514,6 +514,21 @@ u8R"(
   createHueSlider(playerModelGlow, "Player Orange Hue", 'player_model_glow_orange_hue', 11, 20);
   separator(playerModelGlow);
   createHueSlider(playerModelGlow, "Player Purple Hue", 'player_model_glow_purple_hue', 250, 280);
+  separator(playerModelGlow);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Team T Hue", 'player_model_glow_t_hue', 25, 35);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Team CT Hue", 'player_model_glow_ct_hue', 210, 230);
+  separator(playerModelGlow);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "High Health Hue", 'player_model_glow_high_hp_hue', 0, 359);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Low Health Hue", 'player_model_glow_low_hp_hue', 0, 359);
+  separator(playerModelGlow);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Enemy Hue", 'player_model_glow_enemy_hue', 0, 359);
+  separator(playerModelGlow);
+  createHueSlider(playerModelGlow, "Ally Hue", 'player_model_glow_ally_hue', 0, 359);
 
   var weaponModelGlow = createSection(modelGlowTab, 'Weapons');
   createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow');

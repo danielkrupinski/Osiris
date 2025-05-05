@@ -68,6 +68,12 @@ private:
         updateHueSlider<PlayerModelGlowPlayerYellowHue>(mainMenu, "player_model_glow_yellow_hue");
         updateHueSlider<PlayerModelGlowPlayerOrangeHue>(mainMenu, "player_model_glow_orange_hue");
         updateHueSlider<PlayerModelGlowPlayerPurpleHue>(mainMenu, "player_model_glow_purple_hue");
+        updateHueSlider<PlayerModelGlowTeamTHue>(mainMenu, "player_model_glow_t_hue");
+        updateHueSlider<PlayerModelGlowTeamCTHue>(mainMenu, "player_model_glow_ct_hue");
+        updateHueSlider<PlayerModelGlowLowHealthHue>(mainMenu, "player_model_glow_low_hp_hue");
+        updateHueSlider<PlayerModelGlowHighHealthHue>(mainMenu, "player_model_glow_high_hp_hue");
+        updateHueSlider<PlayerModelGlowAllyHue>(mainMenu, "player_model_glow_ally_hue");
+        updateHueSlider<PlayerModelGlowEnemyHue>(mainMenu, "player_model_glow_enemy_hue");
     }
 
     template <typename ConfigVariable>

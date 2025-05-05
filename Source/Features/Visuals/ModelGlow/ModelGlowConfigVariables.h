@@ -44,3 +44,27 @@ CONFIG_VARIABLE(PlayerModelGlowPlayerOrangeHue,
 CONFIG_VARIABLE(PlayerModelGlowPlayerPurpleHue,
     IDENTITY(InRange<color::HueInteger, model_glow_params::kPlayerPurpleMinHue, model_glow_params::kPlayerPurpleMaxHue>),
     model_glow_params::kPlayerPurpleDefaultHue);
+
+CONFIG_VARIABLE(PlayerModelGlowTeamTHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kTeamTMinHue, model_glow_params::kTeamTMaxHue>),
+    model_glow_params::kTeamTDefaultHue);
+
+CONFIG_VARIABLE(PlayerModelGlowTeamCTHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kTeamCTMinHue, model_glow_params::kTeamCTMaxHue>),
+    model_glow_params::kTeamCTDefaultHue);
+
+CONFIG_VARIABLE(PlayerModelGlowLowHealthHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kLowHealthMinHue, model_glow_params::kLowHealthMaxHue>),
+    model_glow_params::kLowHealthDefaultHue);
+
+CONFIG_VARIABLE(PlayerModelGlowHighHealthHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kHighHealthMinHue, model_glow_params::kHighHealthMaxHue>),
+    model_glow_params::kHighHealthDefaultHue);
+
+CONFIG_VARIABLE(PlayerModelGlowAllyHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kAllyMinHue, model_glow_params::kAllyMaxHue>),
+    model_glow_params::kAllyDefaultHue);
+
+CONFIG_VARIABLE(PlayerModelGlowEnemyHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kEnemyMinHue, model_glow_params::kEnemyMaxHue>),
+    model_glow_params::kEnemyDefaultHue);

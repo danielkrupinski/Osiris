@@ -141,8 +141,8 @@ private:
     [[nodiscard]] std::optional<color::Hue> teamColorModeHue(auto&& playerPawn) const noexcept
     {
         switch (playerPawn.teamNumber()) {
-        case TeamNumber::TT: return model_glow_params::kTeamTHue.toHueFloat();
-        case TeamNumber::CT: return model_glow_params::kTeamCTHue.toHueFloat();
+        case TeamNumber::TT: return static_cast<color::HueInteger>(getConfigVariable<PlayerModelGlowTeamTHue>()).toHueFloat();
+        case TeamNumber::CT: return static_cast<color::HueInteger>(getConfigVariable<PlayerModelGlowTeamCTHue>()).toHueFloat();
         default: return {};
         }
     }
@@ -150,14 +150,22 @@ private:
     [[nodiscard]] std::optional<color::Hue> enemyAllyColorModeHue(auto&& playerPawn) const noexcept
     {
         if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
-            return (*isEnemy ? model_glow_params::kEnemyHue : model_glow_params::kAllyHue).toHueFloat();
+            return (*isEnemy ? static_cast<color::HueInteger>(getConfigVariable<PlayerModelGlowEnemyHue>()) : static_cast<color::HueInteger>(getConfigVariable<PlayerModelGlowAllyHue>())).toHueFloat();
         return {};
     }
 
     [[nodiscard]] std::optional<color::Hue> healthBasedColorModeHue(auto&& playerPawn) const noexcept
     {
-        if (const auto healthValue = playerPawn.health(); healthValue.hasValue())
-            return color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * (std::clamp(healthValue.value(), 0, 100) / 100.0f)};
+        if (const auto healthValue = playerPawn.health(); healthValue.hasValue()) {
+            const auto fraction = std::clamp(healthValue.value(), 0, 100) / 100.0f;
+
+            const color::HueInteger lowHealthHue{getConfigVariable<PlayerModelGlowLowHealthHue>()};
+            const color::HueInteger highHealthHue{getConfigVariable<PlayerModelGlowHighHealthHue>()};
+            if (lowHealthHue < highHealthHue)
+                return color::Hue{(lowHealthHue + (highHealthHue - lowHealthHue) * fraction) / 360.0f};
+            else
+                return color::Hue{(lowHealthHue - (lowHealthHue - highHealthHue) * fraction) / 360.0f};
+        }
         return {};
     }
 

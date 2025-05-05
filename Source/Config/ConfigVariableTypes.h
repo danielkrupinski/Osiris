@@ -58,5 +58,11 @@ using ConfigVariableTypes = TypeList<
     PlayerModelGlowPlayerGreenHue,
     PlayerModelGlowPlayerYellowHue,
     PlayerModelGlowPlayerOrangeHue,
-    PlayerModelGlowPlayerPurpleHue
+    PlayerModelGlowPlayerPurpleHue,
+    PlayerModelGlowTeamTHue,
+    PlayerModelGlowTeamCTHue,
+    PlayerModelGlowLowHealthHue,
+    PlayerModelGlowHighHealthHue,
+    PlayerModelGlowAllyHue,
+    PlayerModelGlowEnemyHue
 >;
