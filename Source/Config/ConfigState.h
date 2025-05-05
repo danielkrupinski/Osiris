@@ -10,6 +10,8 @@ struct ConfigState {
     bool autoSaveScheduled{false};
     bool loadScheduled{false};
     ConfigFileOperation currentFileOperation{ConfigFileOperation::None};
+    char8_t* fileOperationBuffer{};
+    std::size_t bufferUsedBytes{};
     UniquePtr<platform::PathCharType[]> pathToConfigDirectory{};
     UniquePtr<platform::PathCharType[]> pathToConfigFile{};
     UniquePtr<platform::PathCharType[]> pathToConfigTempFile{};

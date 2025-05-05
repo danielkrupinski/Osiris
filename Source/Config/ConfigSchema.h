@@ -1,5 +1,9 @@
 #pragma once
 
+#include <algorithm>
+
+#include "ConfigVariableTypes.h"
+
 template <typename HookContext>
 class ConfigSchema {
 public:
@@ -8,7 +12,7 @@ public:
     {
     }
 
-    [[nodiscard]] decltype(auto) performConversion(auto&& configConversion) noexcept
+    [[nodiscard]] decltype(auto) performConversion(auto&& configConversion)
     {
         configConversion.beginRoot();
         hudObject(configConversion);
@@ -18,7 +22,7 @@ public:
     }
 
 private:
-    void hudObject(auto&& configConversion) noexcept
+    void hudObject(auto&& configConversion)
     {
         configConversion.beginObject(u8"Hud");
 
@@ -41,7 +45,7 @@ private:
         configConversion.endObject();
     }
 
-    void visualsObject(auto&& configConversion) noexcept
+    void visualsObject(auto&& configConversion)
     {
         configConversion.beginObject(u8"Visuals");
 
@@ -108,7 +112,7 @@ private:
         configConversion.endObject();
     }
 
-    void soundObject(auto&& configConversion) noexcept
+    void soundObject(auto&& configConversion)
     {
         configConversion.beginObject(u8"Sound");
         configConversion.beginObject(u8"Visualizations");
@@ -152,7 +156,7 @@ private:
     }
 
     template <typename ConfigVariable>
-    [[nodiscard]] auto loadVariable() noexcept
+    [[nodiscard]] auto loadVariable()
     {
         if constexpr (IsRangeConstrained<typename ConfigVariable::ValueType>::value) {
             return [this](auto value) {
@@ -175,7 +179,7 @@ private:
     }
 
     template <typename ConfigVariable>
-    [[nodiscard]] auto saveVariable() noexcept
+    [[nodiscard]] auto saveVariable()
     {
         if constexpr (IsRangeConstrained<typename ConfigVariable::ValueType>::value) {
             return [this] {

@@ -1,10 +1,14 @@
 #pragma once
 
+#include <cassert>
 #include <BuildConfig.h>
+#include <MemoryAllocation/UniquePtr.h>
+#include <Platform/PlatformPath.h>
 
-#include "ConfigStringConversionState.h"
+#include "ConfigFileOperation.h"
 #include "ConfigFromString.h"
 #include "ConfigSchema.h"
+#include "ConfigStringConversionState.h"
 #include "ConfigToString.h"
 #include "ConfigVariableChangeHandler.h"
 
@@ -12,6 +16,8 @@
 #include <Platform/Windows/FileSystem/WindowsFileSystem.h>
 #include <Platform/Macros/PlatformSpecific.h>
 #include <Utils/Wcslen.h>
+#elif IS_LINUX()
+#include <Platform/Linux/LinuxPlatformApi.h>
 #endif
 
 template <typename HookContext>
@@ -27,6 +33,8 @@ public:
         buildConfigDirectoryPath();
         buildConfigFilePath(WIN64_LINUX(L"default.cfg", "default.cfg"));
         buildConfigTempFilePath();
+        static constinit char8_t fileOperationBuffer[build::kConfigFileBufferSize];
+        state().fileOperationBuffer = fileOperationBuffer;
     }
 
     template <typename ConfigVariable>
@@ -64,24 +72,41 @@ public:
         state().loadScheduled = true;
     }
 
-    void update() noexcept
+    void update()
     {
         switch (state().currentFileOperation) {
         case ConfigFileOperation::None:
             if (state().autoSaveScheduled) {
-                saveToFile();
+                state().currentFileOperation = ConfigFileOperation::Save;
+                prepareSaveToFile();
                 state().autoSaveScheduled = false;
                 break;
             }
             if (state().loadScheduled) {
-                loadFromFile();
+                state().currentFileOperation = ConfigFileOperation::Load;
+                state().bufferUsedBytes = 0;
                 state().loadScheduled = false;
                 break;
             }
             break;
         case ConfigFileOperation::Load:
+            finishLoadFromFile();
+            break;
+        default:
+            break;
+        }
+    }
+
+    void performFileOperation() noexcept
+    {
+        switch (state().currentFileOperation) {
+        case ConfigFileOperation::Load:
+            loadFromFile();
             break;
         case ConfigFileOperation::Save:
+            saveToFile();
+            break;
+        default:
             break;
         }
     }
@@ -103,14 +128,13 @@ private:
         state().autoSaveScheduled = true;
     }
 
-    [[nodiscard]] auto& state() noexcept
+    [[nodiscard]] auto& state()
     {
         return hookContext.configState();
     }
 
     void loadFromFile() noexcept
     {
-        std::size_t readBytes{0};
         if (!state().pathToConfigFile)
             return;
 
@@ -118,25 +142,30 @@ private:
         const std::basic_string_view path{state().pathToConfigFile.get(), utils::wcslen(state().pathToConfigFile.get())};
         UNICODE_STRING pathStr{.Length = static_cast<USHORT>(path.length() * sizeof(wchar_t)), .MaximumLength = static_cast<USHORT>(path.length() * sizeof(wchar_t)), .Buffer = const_cast<wchar_t*>(path.data())};
         if (const auto handle = WindowsFileSystem::openFileForReading(pathStr); handle != INVALID_HANDLE_VALUE) {
-            readBytes = WindowsFileSystem::readFile(handle, 0, fileOperationBuffer, sizeof(fileOperationBuffer));
+            state().bufferUsedBytes = WindowsFileSystem::readFile(handle, 0, state().fileOperationBuffer, build::kConfigFileBufferSize);
             WindowsSyscalls::NtClose(handle);
         }
 #elif IS_LINUX()
         if (const auto fd = LinuxPlatformApi::open(state().pathToConfigFile.get(), O_RDONLY); fd >= 0) {
-            if (const auto read = LinuxPlatformApi::pread(fd, fileOperationBuffer, sizeof(fileOperationBuffer), 0); read > 0)
-                readBytes = static_cast<std::size_t>(read);
+            if (const auto read = LinuxPlatformApi::pread(fd, state().fileOperationBuffer, build::kConfigFileBufferSize, 0); read > 0)
+                state().bufferUsedBytes = static_cast<std::size_t>(read);
             LinuxPlatformApi::close(fd);
         }
 #endif
-        if (!readBytes)
-            return;
+    }
 
+    void finishLoadFromFile()
+    {
+        assert(state().currentFileOperation == ConfigFileOperation::Load);
+        state().currentFileOperation = ConfigFileOperation::None;
+
+        const auto readBytes = state().bufferUsedBytes;
         assert(readBytes < build::kConfigFileBufferSize && "Currently file must fit into a buffer");
         ConfigStringConversionState conversionState;
         std::size_t parsedBytes{0};
         do {
             assert(conversionState.offset <= readBytes);
-            ConfigFromString configFromString{std::span{fileOperationBuffer + conversionState.offset, readBytes - conversionState.offset}, conversionState};
+            ConfigFromString configFromString{std::span{state().fileOperationBuffer + conversionState.offset, readBytes - conversionState.offset}, conversionState};
             parsedBytes = ConfigSchema{hookContext}.performConversion(configFromString);
         } while (parsedBytes != 0 && (conversionState.nestingLevel != 0 || conversionState.indexInNestingLevel[0] != 1));
         
@@ -144,22 +173,29 @@ private:
         hookContext.gui().updateFromConfig();
     }
 
-    void saveToFile() noexcept
+    void prepareSaveToFile()
     {
         ConfigStringConversionState conversionState;
-        ConfigToString configToString{fileOperationBuffer, conversionState};
-        const auto numberOfBytesToWrite = ConfigSchema{hookContext}.performConversion(configToString);
+        ConfigToString configToString{std::span{state().fileOperationBuffer, build::kConfigFileBufferSize}, conversionState};
+        state().bufferUsedBytes = ConfigSchema{hookContext}.performConversion(configToString);
         assert(conversionState.nestingLevel == 0 && conversionState.indexInNestingLevel[0] == 1);
+    }
+
+    void saveToFile() noexcept
+    {
+        assert(state().currentFileOperation == ConfigFileOperation::Save);
+        state().currentFileOperation = ConfigFileOperation::None;
 
         if (!hookContext.osirisDirectoryPath().get() || !state().pathToConfigDirectory || !state().pathToConfigFile || !state().pathToConfigTempFile)
             return;
 
+        const auto numberOfBytesToWrite = state().bufferUsedBytes;
 #if IS_WIN64()
         WindowsFileSystem::createDirectory(hookContext.osirisDirectoryPath().get());
         WindowsFileSystem::createDirectory(state().pathToConfigDirectory.get());
 
         if (const auto handle = WindowsFileSystem::createFileForOverwrite(state().pathToConfigTempFile.get()); handle != INVALID_HANDLE_VALUE) {
-            if (WindowsFileSystem::writeFile(handle, 0, fileOperationBuffer, numberOfBytesToWrite) == numberOfBytesToWrite)
+            if (WindowsFileSystem::writeFile(handle, 0, state().fileOperationBuffer, numberOfBytesToWrite) == numberOfBytesToWrite)
                 WindowsFileSystem::renameFile(handle, state().pathToConfigFile.get());
             WindowsSyscalls::NtClose(handle);
         }
@@ -168,7 +204,7 @@ private:
         mkdir(state().pathToConfigDirectory.get(), 0777);
 
         if (const auto fd = LinuxPlatformApi::open(state().pathToConfigTempFile.get(), O_CREAT | O_WRONLY, 0666); fd >= 0) {
-            if (std::cmp_equal(LinuxPlatformApi::write(fd, fileOperationBuffer, numberOfBytesToWrite), numberOfBytesToWrite))
+            if (std::cmp_equal(LinuxPlatformApi::write(fd, state().fileOperationBuffer, numberOfBytesToWrite), numberOfBytesToWrite))
                 rename(state().pathToConfigTempFile.get(), state().pathToConfigFile.get());
             LinuxPlatformApi::close(fd);
         }
@@ -238,6 +274,4 @@ private:
     }
 
     HookContext& hookContext;
-
-    static inline char8_t fileOperationBuffer[build::kConfigFileBufferSize];
 };

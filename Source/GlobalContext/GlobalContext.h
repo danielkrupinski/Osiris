@@ -125,6 +125,7 @@ public:
         UnloadFlag unloadFlag;
         hookContext.make<PanoramaGUI>().run(fullContext().features(hookContext), unloadFlag);
         hookContext.config().update();
+        hookContext.config().performFileOperation();
 
         if (unloadFlag) {
             hookContext.make<BombTimer>().onUnload();

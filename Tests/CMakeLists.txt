@@ -1,4 +1,4 @@
-if("unit" IN_LIST ENABLE_TESTS)
+if("unit" IN_LIST ENABLE_TESTS OR "functional" IN_LIST ENABLE_TESTS)
   set(THREADS_PREFER_PTHREAD_FLAG ON)
   find_package(Threads REQUIRED)
 
@@ -12,6 +12,12 @@ if("unit" IN_LIST ENABLE_TESTS)
   FetchContent_MakeAvailable(googletest)
 
   include(GoogleTest)
+endif()
 
+if("unit" IN_LIST ENABLE_TESTS)
   add_subdirectory(UnitTests)
+endif()
+
+if("functional" IN_LIST ENABLE_TESTS)
+  add_subdirectory(FunctionalTests)
 endif()

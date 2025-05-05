@@ -2,6 +2,18 @@
 
 #include <type_traits>
 
+#include <Features/Hud/BombTimer/BombTimer.h>
+#include <Features/Hud/DefusingAlert/DefusingAlert.h>
+#include <Features/Hud/PostRoundTimer/PostRoundTimer.h>
+#include <Features/Sound/Details/BombBeepSound.h>
+#include <Features/Sound/Details/BombDefuseSound.h>
+#include <Features/Sound/Details/BombPlantSound.h>
+#include <Features/Sound/Details/FootstepSound.h>
+#include <Features/Sound/Details/WeaponReloadSound.h>
+#include <Features/Sound/Details/WeaponScopeSound.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerStateIcons/PlayerStateIconsToShow.h>
+#include <OutlineGlow/GlowSceneObjects.h>
+
 template <typename HookContext>
 class ConfigVariableChangeHandler {
 public:

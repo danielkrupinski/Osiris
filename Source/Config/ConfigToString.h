@@ -56,12 +56,12 @@ public:
         decreaseNestingLevel();
     }
 
-    void boolean(const char8_t* key, auto&& /* valueSetter */, auto&& valueGetter) noexcept
+    void boolean(const char8_t* key, auto&& /* valueSetter */, auto&& valueGetter)
     {
         writeBool(key, valueGetter());
     }
 
-    void uint(const char8_t* key, auto&& /* valueSetter */, auto&& valueGetter) noexcept
+    void uint(const char8_t* key, auto&& /* valueSetter */, auto&& valueGetter)
     {
         writeUint(key, valueGetter());
     }
