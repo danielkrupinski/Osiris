@@ -33,17 +33,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
     <img src=https://github.com/user-attachments/assets/9cd923b0-7f37-46e9-b857-d5ee0930a82b height="200" alt="Model Glow Preview">
 
-* 29 March 2025
-    * Moved "Unload" button to the right side of the tab bar
-
-* 27 March 2025
-    * Added an option to restore default settings in the active config file
-
-    ![Restore Defaults](https://github.com/user-attachments/assets/496cc3cb-17ee-445a-802c-2f496f39a34c)
-
-* 06 March 2025
-    * Settings are now automatically saved to the config file (`default.cfg`) inside `%appdata%\OsirisCS2\configs` directory on Windows and `$HOME/OsirisCS2/configs` on Linux. `default.cfg` file is loaded automatically when starting Osiris.
-
 ## Technical features
 
 * C++ runtime library (CRT) is not used in release builds
@@ -101,6 +90,12 @@ You can simply run the following script in the directory containing **libOsiris.
     sudo gdb -batch-silent -p $(pidof cs2) -ex "call (void*)dlopen(\"$PWD/libOsiris.so\", 2)"
 
 However, this injection method might be detected by VAC as gdb is visible under **TracerPid** in `/proc/$(pidof cs2)/status` for the duration of the injection.
+
+## FAQ
+
+### Where are the settings stored on disk?
+
+In a configuration file `default.cfg` inside `%appdata%\OsirisCS2\configs` directory on Windows and `$HOME/OsirisCS2/configs` on Linux.
 
 ## License
 
