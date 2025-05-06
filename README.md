@@ -99,6 +99,6 @@ In a configuration file `default.cfg` inside `%appdata%\OsirisCS2\configs` direc
 
 ## License
 
-> Copyright (c) 2018-2024 Daniel Krupiński
+> Copyright (c) 2018-2025 Daniel Krupiński
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/mit-license.php) - see the [LICENSE](https://github.com/danielkrupinski/Osiris/blob/master/LICENSE) file for details.
