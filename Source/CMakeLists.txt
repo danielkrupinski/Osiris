@@ -32,7 +32,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU
   target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wno-missing-braces>)
 endif()
 
-target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:$<IF:${MSVC},/W4,-Wall>>)
+target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:$<IF:$<BOOL:${MSVC}>,/W4,-Wall>>)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14.0)
   target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wno-dangling-reference>) # false positive
