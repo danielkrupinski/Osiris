@@ -17,7 +17,7 @@ endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   if(NOT CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
-    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-Wall;-Wextra;-pedantic>")
+    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-Wall>")
   endif()
 endif()
 
