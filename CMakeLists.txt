@@ -11,6 +11,16 @@ elseif(UNIX)
   enable_language(ASM-ATT)
 endif()
 
+if(MSVC)
+  add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/W4>)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(NOT CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+    add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:-Wall;-Wextra;-pedantic>")
+  endif()
+endif()
+
 set(ENABLE_TESTS CACHE STRING "List of test types to enable e.g. \"unit;functional\"")
 
 add_subdirectory(Source)
@@ -18,14 +28,4 @@ add_subdirectory(Source)
 if(ENABLE_TESTS)
   enable_testing()
   add_subdirectory(Tests)
-endif()
-
-if(MSVC)
-  add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/W4>)
-endif()
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  if(NOT CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
-    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wall -Wextra -pedantic>)
-  endif()
 endif()

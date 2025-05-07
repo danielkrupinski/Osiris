@@ -114,7 +114,7 @@ class TestLinuxDynamicLibrary_LinkMap
 struct SetLinkMap {
     link_map* linkMap;
 
-    int operator()(void* handle, int request, void* info) const
+    int operator()(void* /* handle */, int /* request */, void* info) const
     {
         *reinterpret_cast<link_map**>(info) = linkMap;
         return 0;
