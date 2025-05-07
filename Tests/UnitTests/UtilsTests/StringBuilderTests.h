@@ -29,7 +29,7 @@ protected:
 };
 
 TEST_F(TestStringBuilder, StringIsFormattedIntoProvidedBuffer) {
-    builder.put('a', " first ", 1234, [](StringBuilder& builder) { builder.put(567); }, " end");
+    builder.put('a', " first ", 1234, [](StringBuilder& stringBuilder) { stringBuilder.put(567); }, " end");
     EXPECT_TRUE(bufferString().starts_with("a first 1234567 end"));
 }
 
@@ -93,7 +93,7 @@ TEST_F(TestStringBuilder, IntegerCanBeWrittenAsHexadecimal) {
 TEST_F(TestStringBuilder, PutAcceptsInvocable) {
     testing::MockFunction<void(StringBuilder& builder)> mockInvocable;
     EXPECT_CALL(mockInvocable, Call(testing::Ref(builder))).WillOnce(testing::Invoke(
-        [](StringBuilder& builder) { builder.put("123"); }
+        [](StringBuilder& stringBuilder) { stringBuilder.put("123"); }
     ));
     builder.put(mockInvocable.AsStdFunction());
     EXPECT_EQ(builder.string(), "123");

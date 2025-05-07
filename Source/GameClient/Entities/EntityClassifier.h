@@ -48,7 +48,7 @@ struct EntityTypeInfo {
     template <typename EntityType>
     [[nodiscard]] static constexpr auto indexOf() noexcept
     {
-        return utils::typeIndex<EntityType, cs2::EntityClasses>();
+        return static_cast<Index>(utils::typeIndex<EntityType, cs2::EntityClasses>());
     }
 
 private:

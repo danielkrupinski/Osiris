@@ -14,7 +14,7 @@ public:
         win::LdrDataTableEntry entry{};
         entry.dllBase = dllBase;
         entry.baseDllName.buffer = const_cast<wchar_t*>(baseDllName);
-        entry.baseDllName.length = std::wcslen(baseDllName);
+        entry.baseDllName.length = static_cast<unsigned short>(std::wcslen(baseDllName));
         entry.baseDllName.maximumLength = entry.baseDllName.length;
         entries.push_back(entry);
     }

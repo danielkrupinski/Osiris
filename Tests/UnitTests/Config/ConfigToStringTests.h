@@ -21,7 +21,7 @@ using CreateConfigSchemaFunctor = std::function<void(ConfigToString&)>;
 
 class ConfigToStringTest : public testing::TestWithParam<std::tuple<CreateConfigSchemaFunctor, ConfigToStringTestParam>> {
 protected:
-    [[nodiscard]] bool bufferEquals(std::span<const char8_t> buffer, std::u8string_view str) const
+    [[nodiscard]] static bool bufferEquals(std::span<const char8_t> buffer, std::u8string_view str)
     {
         if (str.size() > buffer.size())
             return false;

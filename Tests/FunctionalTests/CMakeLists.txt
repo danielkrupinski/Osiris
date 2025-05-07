@@ -1,5 +1,6 @@
 add_executable(FunctionalTests Config/ConfigCompatibilityTests.cpp)
 
+target_compile_options(FunctionalTests PRIVATE $<$<COMPILE_LANGUAGE:CXX>:$<IF:${MSVC},/W4,-Wall>>)
 target_include_directories(FunctionalTests PRIVATE "${CMAKE_SOURCE_DIR}/Tests" "${CMAKE_SOURCE_DIR}/Source")
 target_compile_definitions(FunctionalTests PRIVATE TEST_CONFIGS_PATH="${CMAKE_SOURCE_DIR}/Tests/Configs")
 target_link_libraries(FunctionalTests gtest_main gmock Threads::Threads)
