@@ -4,7 +4,7 @@ if(MSVC)
   target_compile_options(UnitTests PRIVATE /bigobj)
 endif()
 
-target_compile_options(UnitTests PRIVATE $<$<COMPILE_LANGUAGE:CXX>:$<IF:$<BOOL:${MSVC}>,/W4,-Wall>>)
+target_compile_options(UnitTests PRIVATE $<$<COMPILE_LANGUAGE:CXX>:$<IF:$<BOOL:${MSVC}>,/W4,-Wall;-Wno-restrict>>)
 target_include_directories(UnitTests PRIVATE "${CMAKE_SOURCE_DIR}/Tests" "${CMAKE_SOURCE_DIR}/Source")
 target_link_libraries(UnitTests gtest_main gmock Threads::Threads)
 set_target_properties(UnitTests PROPERTIES OUTPUT_NAME UnitTestsBin)
