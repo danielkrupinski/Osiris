@@ -1,36 +1,35 @@
 #pragma once
 
+#include <CS2/Classes/CCS_PortraitWorld.h>
 #include <CS2/Classes/Entities/C_CSGO_PreviewPlayer.h>
-#include <CS2/Panorama/CUI_MapPreviewPanel.h>
+#include <GameClient/Entities/BaseWeapon.h>
 #include <GameClient/Entities/PreviewPlayer.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
-#include <MemoryPatterns/PatternTypes/MapPreviewPanelPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/PortraitWorldPatternTypes.h>
 
 template <typename HookContext>
-class MapPreviewPanel {
+class PortraitWorld {
 public:
-    MapPreviewPanel(HookContext& hookContext, cs2::CUI_MapPreviewPanel* mapPreviewPanel) noexcept
+    PortraitWorld(HookContext& hookContext, cs2::CCS_PortraitWorld* portraitWorld) noexcept
         : hookContext{hookContext}
-        , mapPreviewPanel{mapPreviewPanel}
+        , portraitWorld{portraitWorld}
     {
     }
 
-    using RawType = cs2::CUI_MapPreviewPanel;
-
-    [[nodiscard]] decltype(auto) findPreviewPlayer() const noexcept
+    [[nodiscard]] decltype(auto) findPreviewPlayer() const
     {
         return findEntity([](auto&& entityIdentity) { return entityIdentity.template is<cs2::C_CSGO_PreviewPlayer>(); }).template as<PreviewPlayer>();
     }
 
-    [[nodiscard]] decltype(auto) findPreviewWeapon() const noexcept
+    [[nodiscard]] decltype(auto) findPreviewWeapon() const
     {
         return findEntity([](auto&& entityIdentity) { return entityIdentity.classify().isWeapon(); }).template as<BaseWeapon>();
     }
 
 private:
-    [[nodiscard]] decltype(auto) findEntity(auto&& predicate) const noexcept
+    [[nodiscard]] decltype(auto) findEntity(auto&& predicate) const
     {
-        const auto entityHandles = hookContext.clientPatternSearchResults().template get<OffsetToMapPreviewPanelEntities>().of(mapPreviewPanel).get();
+        const auto entityHandles = hookContext.clientPatternSearchResults().template get<OffsetToPortraitWorldEntities>().of(portraitWorld).get();
         if (!entityHandles)
             return hookContext.template make<BaseEntity>(nullptr);
 
@@ -43,5 +42,5 @@ private:
     }
 
     HookContext& hookContext;
-    cs2::CUI_MapPreviewPanel* mapPreviewPanel;
+    cs2::CCS_PortraitWorld* portraitWorld;
 };

@@ -28,6 +28,7 @@
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h" />
     <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h" />
+    <ClInclude Include="CS2\Classes\CCS_PortraitWorld.h" />
     <ClInclude Include="CS2\Classes\CCvar.h" />
     <ClInclude Include="CS2\Classes\CEntitySubclassVDataBase.h" />
     <ClInclude Include="CS2\Classes\CGameSceneNode.h" />
@@ -101,7 +102,7 @@
     <ClInclude Include="CS2\Panorama\CUIEngine.h" />
     <ClInclude Include="CS2\Panorama\CUILength.h" />
     <ClInclude Include="CS2\Panorama\CUIPanel.h" />
-    <ClInclude Include="CS2\Panorama\CUI_MapPreviewPanel.h" />
+    <ClInclude Include="CS2\Panorama\CUI_3dPanel.h" />
     <ClInclude Include="CS2\Panorama\PanelHandle.h" />
     <ClInclude Include="CS2\Panorama\StyleEnums.h" />
     <ClInclude Include="CS2\Panorama\StyleProperties.h" />
@@ -287,7 +288,7 @@
     <ClInclude Include="GameClient\MemAlloc.h" />
     <ClInclude Include="GameClient\MemAllocState.h" />
     <ClInclude Include="GameClient\Panorama\ClientPanel.h" />
-    <ClInclude Include="GameClient\Panorama\MapPreviewPanel.h" />
+    <ClInclude Include="GameClient\Panorama\Ui3dPanel.h" />
     <ClInclude Include="GameClient\Panorama\PanelAlignmentParams.h" />
     <ClInclude Include="GameClient\Panorama\PanelFactory.h" />
     <ClInclude Include="GameClient\Panorama\PanelFontParams.h" />
@@ -314,6 +315,7 @@
     <ClInclude Include="GameClient\Panorama\StylePropertySymbolMap.h" />
     <ClInclude Include="GameClient\Panorama\TextEntry.h" />
     <ClInclude Include="GameClient\Panorama\TopLevelWindow.h" />
+    <ClInclude Include="GameClient\PortraitWorld.h" />
     <ClInclude Include="GameClient\SceneSystem\SceneObject.h" />
     <ClInclude Include="GameClient\SceneSystem\SceneObjectAttributes.h" />
     <ClInclude Include="GameClient\SceneSystem\SceneObjectUpdater.h" />
@@ -392,7 +394,7 @@
     <ClInclude Include="MemoryPatterns\Windows\GlowPropertyPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h" />
-    <ClInclude Include="MemoryPatterns\Windows\MapPreviewPanelPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PortraitWorldPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelStylePatternsWindows.h" />
@@ -414,6 +416,7 @@
     <ClInclude Include="MemoryPatterns\Windows\SoundSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TextEntryPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\TopLevelWindowPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\Ui3dPanelPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WeaponPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WeaponServicesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\WeaponVDataPatternsWindows.h" />

@@ -1388,7 +1388,7 @@
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\PlayerPawnForModelGlowPreview.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\Windows\MapPreviewPanelPatternsWindows.h">
+    <ClInclude Include="MemoryPatterns\Windows\PortraitWorldPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
     <ClInclude Include="GlobalContext\UnloadFlag.h">
@@ -1739,16 +1739,13 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowConfigVariables.h">
       <Filter>Features\Visuals\OutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="CS2\Panorama\CUI_MapPreviewPanel.h">
-      <Filter>CS2\Panorama</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\WeaponModelGlowPreview.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\WeaponModelGlowPreviewState.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\Panorama\MapPreviewPanel.h">
+    <ClInclude Include="GameClient\Panorama\Ui3dPanel.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\PatternTypes\MapPreviewPanelPatternTypes.h">
@@ -1786,6 +1783,18 @@
     </ClInclude>
     <ClInclude Include="UI\Panorama\HueSlider.h">
       <Filter>UI\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Panorama\CUI_3dPanel.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CCS_PortraitWorld.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\Ui3dPanelPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\PortraitWorld.h">
+      <Filter>GameClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

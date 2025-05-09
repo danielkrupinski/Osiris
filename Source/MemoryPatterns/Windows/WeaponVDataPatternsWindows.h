@@ -7,6 +7,6 @@ struct WeaponVDataPatterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<OffsetToWeaponName, CodePattern{"74 ? 49 8B 85 ? ? ? ? 4C 8D 0D"}.add(5).read()>();
+            .template addPattern<OffsetToWeaponName, CodePattern{"75 ? 49 8B 86 ? ? ? ? 48 8D 35"}.add(5).read()>();
     }
 };
