@@ -14,7 +14,7 @@ struct PanoramaImagePanelContext {
 
     [[nodiscard]] decltype(auto) uiPanel() const noexcept
     {
-        return hookContext.template make<PanoramaUiPanel>(panel->uiPanel);
+        return hookContext.uiPanel(panel ? panel->uiPanel : nullptr);
     }
 
     [[nodiscard]] const char* getImagePath() const noexcept
