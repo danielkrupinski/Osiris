@@ -38,7 +38,7 @@ private:
                 auto&& previewPanel = hookContext.gui().modelGlowPreviewPanel(panelId);
                 auto&& portraitWorld = previewPanel.portraitWorld();
                 if (hadHandle && portraitWorld.isMapLoaded()) {
-                    previewPanel.template as<UiItem3dPanel>().setItem(itemId);
+                    previewPanel.template as<UiItem3dPanel>().createItem(itemId);
                     hadHandle = false;
                 }
                 return portraitWorld.findPreviewWeapon().baseEntity().handle();
