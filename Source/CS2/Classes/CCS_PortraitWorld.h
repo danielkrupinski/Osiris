@@ -7,7 +7,8 @@ namespace cs2
 {
 
 struct CCS_PortraitWorld {
-    using EntityHandles = CUtlVector<CEntityHandle>;
+    using DynamicEntityHandles = CUtlVector<CEntityHandle>;
+    using MapEntityHandles = CUtlVector<CEntityHandle>;
 };
 
 }

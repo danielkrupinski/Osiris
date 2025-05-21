@@ -26,6 +26,12 @@ public:
         return findEntity([](auto&& entityIdentity) { return entityIdentity.classify().isWeapon(); }).template as<BaseWeapon>();
     }
 
+    [[nodiscard]] bool isMapLoaded() const
+    {
+        const auto entityHandles = hookContext.clientPatternSearchResults().template get<OffsetToPortraitWorldMapEntities>().of(portraitWorld).get();
+        return entityHandles && entityHandles->size > 0;
+    }
+
 private:
     [[nodiscard]] decltype(auto) findEntity(auto&& predicate) const
     {

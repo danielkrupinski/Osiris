@@ -1796,6 +1796,30 @@
     <ClInclude Include="GameClient\PortraitWorld.h">
       <Filter>GameClient</Filter>
     </ClInclude>
+    <ClInclude Include="CS2\Panorama\CUI_Item3dPanel.h">
+      <Filter>CS2\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\EntitySystem\EntityHandle.h">
+      <Filter>GameClient\EntitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\UiItem3dPanel.h">
+      <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\PanoramaDropDownPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\PortraitWorldPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\Ui3dPanelPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\UiItem3dPanelPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\UiItem3dPanelPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

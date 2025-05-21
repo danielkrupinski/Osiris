@@ -31,6 +31,11 @@ public:
             return entityIdentity->entity;
         return nullptr;
     }
+
+    [[nodiscard]] decltype(auto) getEntityFromHandle2(cs2::CEntityHandle handle) const noexcept
+    {
+        return hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(getEntityFromHandle(handle)));
+    }
     
     template <typename F>
     void forEachEntityIdentity(F&& f) const noexcept

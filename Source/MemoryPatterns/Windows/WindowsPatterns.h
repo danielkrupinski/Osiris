@@ -36,6 +36,7 @@
 #include "TextEntryPatternsWindows.h"
 #include "TopLevelWindowPatternsWindows.h"
 #include "Ui3dPanelPatternsWindows.h"
+#include "UiItem3dPanelPatternsWindows.h"
 #include "WeaponPatternsWindows.h"
 #include "WeaponServicesPatternsWindows.h"
 #include "WeaponVDataPatternsWindows.h"
