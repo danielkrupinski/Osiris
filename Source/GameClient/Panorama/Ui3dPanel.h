@@ -20,6 +20,12 @@ public:
         return hookContext.template make<PortraitWorld>(portraitWorldPointer());
     }
 
+    template <template <typename...> typename T>
+    [[nodiscard]] decltype(auto) as() const noexcept
+    {
+        return hookContext.template make<T>(static_cast<T<HookContext>::RawType*>(ui3dPanel));
+    }
+
 private:
     [[nodiscard]] decltype(auto) portraitWorldPointer() const noexcept
     {

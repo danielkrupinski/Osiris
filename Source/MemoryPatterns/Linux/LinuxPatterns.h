@@ -36,6 +36,7 @@
 #include "TextEntryPatternsLinux.h"
 #include "TopLevelWindowPatternsLinux.h"
 #include "Ui3dPanelPatternsLinux.h"
+#include "UiItem3dPanelPatternsLinux.h"
 #include "WeaponPatternsLinux.h"
 #include "WeaponServicesPatternsLinux.h"
 #include "WeaponVDataPatternsLinux.h"

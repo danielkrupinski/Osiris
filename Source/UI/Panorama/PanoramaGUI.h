@@ -150,6 +150,12 @@ public:
         updateFromConfig();
     }
 
+    [[nodiscard]] decltype(auto) modelGlowPreviewPanel(const char* panelId) const noexcept
+    {
+        auto&& guiPanel = uiEngine().getPanelFromHandle(state().guiPanelHandle);
+        return guiPanel.findChildInLayoutFile(panelId).clientPanel().template as<Ui3dPanel>();
+    }
+
     void run(Features<HookContext> features, UnloadFlag& unloadFlag) const noexcept
     {
         auto&& guiPanel = uiEngine().getPanelFromHandle(state().guiPanelHandle);
@@ -161,21 +167,6 @@ public:
             playerModelGlowPreview.setPreviewPlayerTT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerTT").clientPanel().template as<Ui3dPanel>().portraitWorld().findPreviewPlayer());
         if (!playerModelGlowPreview.isPreviewPlayerSetCT())
             playerModelGlowPreview.setPreviewPlayerCT(guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCT").clientPanel().template as<Ui3dPanel>().portraitWorld().findPreviewPlayer());
-
-        // FIXME: preview weapons disappear after loading into the server
-        // this is a bug in the game itself (reproduced by inspecting a weapon in the inventory while on the server, then disconnecting through the console)
-
-        auto&& weaponModelGlowPreview = hookContext.template make<WeaponModelGlowPreview>();
-        if (!weaponModelGlowPreview.isPreviewWeaponSet())
-            weaponModelGlowPreview.setPreviewWeapon(guiPanel.findChildInLayoutFile("ModelGlowPreviewWeapon").clientPanel().template as<Ui3dPanel>().portraitWorld().findPreviewWeapon());
-        if (!weaponModelGlowPreview.isPreviewFlashbangSet())
-            weaponModelGlowPreview.setPreviewFlashbang(guiPanel.findChildInLayoutFile("ModelGlowPreviewFlashbang").clientPanel().template as<Ui3dPanel>().portraitWorld().findPreviewWeapon());
-        if (!weaponModelGlowPreview.isPreviewHEGrenadeSet())
-            weaponModelGlowPreview.setPreviewHEGrenade(guiPanel.findChildInLayoutFile("ModelGlowPreviewHEGrenade").clientPanel().template as<Ui3dPanel>().portraitWorld().findPreviewWeapon());
-        if (!weaponModelGlowPreview.isPreviewSmokeGrenadeSet())
-            weaponModelGlowPreview.setPreviewSmokeGrenade(guiPanel.findChildInLayoutFile("ModelGlowPreviewSmoke").clientPanel().template as<Ui3dPanel>().portraitWorld().findPreviewWeapon());
-        if (!weaponModelGlowPreview.isPreviewIncendiarySet())
-            weaponModelGlowPreview.setPreviewIncendiary(guiPanel.findChildInLayoutFile("ModelGlowPreviewIncendiary").clientPanel().template as<Ui3dPanel>().portraitWorld().findPreviewWeapon());
 
         const auto cmdSymbol = uiEngine().makeSymbol(0, "cmd");
         const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
