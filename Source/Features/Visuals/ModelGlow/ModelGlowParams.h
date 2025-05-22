@@ -8,10 +8,6 @@ namespace model_glow_params
 {
     constexpr cs2::Color kDefuseKitColor{0, 238, 255};
     constexpr cs2::Color kDroppedBombColor{255, 255, 0};
-    constexpr cs2::Color kMolotovColor{255, 191, 0};
-    constexpr cs2::Color kFlashbangColor{0, 89, 255};
-    constexpr cs2::Color kHEGrenadeColor{255, 0, 0};
-    constexpr cs2::Color kSmokeGrenadeColor{0, 255, 0};
     constexpr cs2::Color kTickingBombColor{255, 0, 0};
     constexpr cs2::Color kDefaultWeaponColor{cs2::kColorWhite};
 
@@ -58,6 +54,22 @@ namespace model_glow_params
     constexpr color::HueInteger kEnemyMinHue{0};
     constexpr color::HueInteger kEnemyDefaultHue{0};
     constexpr color::HueInteger kEnemyMaxHue{359};
+
+    constexpr color::HueInteger kMolotovMinHue{20};
+    constexpr color::HueInteger kMolotovDefaultHue{40};
+    constexpr color::HueInteger kMolotovMaxHue{60};
+
+    constexpr color::HueInteger kFlashbangMinHue{191};
+    constexpr color::HueInteger kFlashbangDefaultHue{219};
+    constexpr color::HueInteger kFlashbangMaxHue{250};
+
+    constexpr color::HueInteger kHEGrenadeMinHue{300};
+    constexpr color::HueInteger kHEGrenadeDefaultHue{359};
+    constexpr color::HueInteger kHEGrenadeMaxHue{359};
+
+    constexpr color::HueInteger kSmokeGrenadeMinHue{110};
+    constexpr color::HueInteger kSmokeGrenadeDefaultHue{120};
+    constexpr color::HueInteger kSmokeGrenadeMaxHue{140};
 
     constexpr color::Saturation kNormalPlayerColorSaturation{1.0f};
     constexpr color::Saturation kImmunePlayerColorSaturation{0.5f};

@@ -68,3 +68,19 @@ CONFIG_VARIABLE(PlayerModelGlowAllyHue,
 CONFIG_VARIABLE(PlayerModelGlowEnemyHue,
     IDENTITY(InRange<color::HueInteger, model_glow_params::kEnemyMinHue, model_glow_params::kEnemyMaxHue>),
     model_glow_params::kEnemyDefaultHue);
+
+CONFIG_VARIABLE(ModelGlowMolotovHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kMolotovMinHue, model_glow_params::kMolotovMaxHue>),
+    model_glow_params::kMolotovDefaultHue);
+
+CONFIG_VARIABLE(ModelGlowFlashbangHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kFlashbangMinHue, model_glow_params::kFlashbangMaxHue>),
+    model_glow_params::kFlashbangDefaultHue);
+
+CONFIG_VARIABLE(ModelGlowHEGrenadeHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kHEGrenadeMinHue, model_glow_params::kHEGrenadeMaxHue>),
+    model_glow_params::kHEGrenadeDefaultHue);
+
+CONFIG_VARIABLE(ModelGlowSmokeGrenadeHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kSmokeGrenadeMinHue, model_glow_params::kSmokeGrenadeMaxHue>),
+    model_glow_params::kSmokeGrenadeDefaultHue);

@@ -74,6 +74,10 @@ private:
         updateHueSlider<PlayerModelGlowHighHealthHue>(mainMenu, "player_model_glow_high_hp_hue");
         updateHueSlider<PlayerModelGlowAllyHue>(mainMenu, "player_model_glow_ally_hue");
         updateHueSlider<PlayerModelGlowEnemyHue>(mainMenu, "player_model_glow_enemy_hue");
+        updateHueSlider<ModelGlowMolotovHue>(mainMenu, "model_glow_molotov_hue");
+        updateHueSlider<ModelGlowFlashbangHue>(mainMenu, "model_glow_flashbang_hue");
+        updateHueSlider<ModelGlowHEGrenadeHue>(mainMenu, "model_glow_hegrenade_hue");
+        updateHueSlider<ModelGlowSmokeGrenadeHue>(mainMenu, "model_glow_smoke_hue");
     }
 
     template <typename ConfigVariable>

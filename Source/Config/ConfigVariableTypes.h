@@ -64,5 +64,9 @@ using ConfigVariableTypes = TypeList<
     PlayerModelGlowLowHealthHue,
     PlayerModelGlowHighHealthHue,
     PlayerModelGlowAllyHue,
-    PlayerModelGlowEnemyHue
+    PlayerModelGlowEnemyHue,
+    ModelGlowMolotovHue,
+    ModelGlowFlashbangHue,
+    ModelGlowHEGrenadeHue,
+    ModelGlowSmokeGrenadeHue
 >;

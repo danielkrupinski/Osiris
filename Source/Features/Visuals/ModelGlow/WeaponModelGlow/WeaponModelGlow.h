@@ -98,17 +98,23 @@ private:
         return hookContext.featuresStates().visualFeaturesStates.modelGlowState;
     }
 
-    [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
+    [[nodiscard]] std::optional<color::HueInteger> getHue(EntityTypeInfo entityTypeInfo) const noexcept
     {
-        using namespace model_glow_params;
         switch (entityTypeInfo.typeIndex) {
         case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
-        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return kMolotovColor;
-        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return kFlashbangColor;
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return kHEGrenadeColor;
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return kSmokeGrenadeColor;
-        default: return kDefaultWeaponColor;
+        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return hookContext.config().template getVariable<ModelGlowMolotovHue>();
+        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return hookContext.config().template getVariable<ModelGlowFlashbangHue>();
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return hookContext.config().template getVariable<ModelGlowHEGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return hookContext.config().template getVariable<ModelGlowSmokeGrenadeHue>();
+        default: return {};
         }
+    }
+
+    [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
+    {
+        if (const auto hue = getHue(entityTypeInfo); hue.has_value())
+            return color::HSBtoRGB(*hue, color::Saturation{1.0f}, color::Brightness{1.0f});
+        return model_glow_params::kDefaultWeaponColor;
     }
 
     HookContext& hookContext;

@@ -73,6 +73,10 @@ private:
         configConversion.uint(u8"HighHealth", loadVariable<PlayerModelGlowHighHealthHue>(), saveVariable<PlayerModelGlowHighHealthHue>());
         configConversion.uint(u8"Enemy", loadVariable<PlayerModelGlowEnemyHue>(), saveVariable<PlayerModelGlowEnemyHue>());
         configConversion.uint(u8"Ally", loadVariable<PlayerModelGlowAllyHue>(), saveVariable<PlayerModelGlowAllyHue>());
+        configConversion.uint(u8"Molotov", loadVariable<ModelGlowMolotovHue>(), saveVariable<ModelGlowMolotovHue>());
+        configConversion.uint(u8"Flashbang", loadVariable<ModelGlowFlashbangHue>(), saveVariable<ModelGlowFlashbangHue>());
+        configConversion.uint(u8"HEGrenade", loadVariable<ModelGlowHEGrenadeHue>(), saveVariable<ModelGlowHEGrenadeHue>());
+        configConversion.uint(u8"SmokeGrenade", loadVariable<ModelGlowSmokeGrenadeHue>(), saveVariable<ModelGlowSmokeGrenadeHue>());
         configConversion.endObject();
         configConversion.endObject();
 
