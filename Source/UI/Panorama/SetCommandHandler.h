@@ -164,6 +164,22 @@ private:
             handleHueSlider<PlayerModelGlowAllyHue>("player_model_glow_ally_hue");
         } else if (feature == "player_model_glow_ally_hue_text") {
             handleHueTextEntry<PlayerModelGlowAllyHue>("player_model_glow_ally_hue");
+        } else if (feature == "model_glow_molotov_hue") {
+            handleHueSlider<ModelGlowMolotovHue>("model_glow_molotov_hue");
+        } else if (feature == "model_glow_molotov_hue_text") {
+            handleHueTextEntry<ModelGlowMolotovHue>("model_glow_molotov_hue");
+        } else if (feature == "model_glow_flashbang_hue") {
+            handleHueSlider<ModelGlowFlashbangHue>("model_glow_flashbang_hue");
+        } else if (feature == "model_glow_flashbang_hue_text") {
+            handleHueTextEntry<ModelGlowFlashbangHue>("model_glow_flashbang_hue");
+        } else if (feature == "model_glow_hegrenade_hue") {
+            handleHueSlider<ModelGlowHEGrenadeHue>("model_glow_hegrenade_hue");
+        } else if (feature == "model_glow_hegrenade_hue_text") {
+            handleHueTextEntry<ModelGlowHEGrenadeHue>("model_glow_hegrenade_hue");
+        } else if (feature == "model_glow_smoke_hue") {
+            handleHueSlider<ModelGlowSmokeGrenadeHue>("model_glow_smoke_hue");
+        } else if (feature == "model_glow_smoke_hue_text") {
+            handleHueTextEntry<ModelGlowSmokeGrenadeHue>("model_glow_smoke_hue");
         }
     }
 

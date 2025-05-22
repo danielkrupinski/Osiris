@@ -105,9 +105,18 @@ protected:
         get<PlayerModelGlowAllyHue>() = PlayerModelGlowEnemyHue::ValueType{color::HueInteger{74}};
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV4()
     {
         setVariableExpectationsV3();
+        get<ModelGlowMolotovHue>() = ModelGlowMolotovHue::ValueType{color::HueInteger{37}};
+        get<ModelGlowFlashbangHue>() = ModelGlowFlashbangHue::ValueType{color::HueInteger{205}};
+        get<ModelGlowHEGrenadeHue>() = ModelGlowHEGrenadeHue::ValueType{color::HueInteger{333}};
+        get<ModelGlowSmokeGrenadeHue>() = ModelGlowSmokeGrenadeHue::ValueType{color::HueInteger{116}};
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV4();
     }
 
     struct VariableChecker {
@@ -222,6 +231,11 @@ TEST_F(ConfigCompatibilityLoadTest, ConfigV1) {
 TEST_F(ConfigCompatibilityLoadTest, ConfigV2) {
     setVariableExpectationsV2();
     testLoadingConfigFile("config_v2.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, ConfigV3) {
+    setVariableExpectationsV3();
+    testLoadingConfigFile("config_v3.cfg");
 }
 
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {
