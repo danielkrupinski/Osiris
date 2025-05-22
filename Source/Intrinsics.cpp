@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <cstring>
+#include <intrin.h>
 
 extern "C" int _fltused{ 0x9875 };
 
@@ -17,8 +18,7 @@ namespace intrinsics
 
 inline std::byte* memcpy(std::byte* dest, const std::byte* src, std::size_t count) noexcept
 {
-    for (std::size_t i = 0; i < count; ++i)
-        dest[i] = src[i];
+    __movsb(reinterpret_cast<unsigned char*>(dest), reinterpret_cast<const unsigned char*>(src), count);
     return dest;
 }
 
