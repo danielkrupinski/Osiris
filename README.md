@@ -7,6 +7,13 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 22 May 2025
+    * Grenade color hues are now customizable in Model Glow settings
+    * Improved appearance of hue preview squares in GUI
+
+    ![Grenade Model Glow Hues](https://github.com/user-attachments/assets/404f5c6f-273b-46c1-800b-18c84a681a76)
+
+
 * 05 May 2025
     * Player Model Glow hues are now customizable also for `Team`, `Health-based` and `Enemy/Ally` color modes
 
@@ -27,11 +34,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added weapon model glow preview
 
     <img src=https://github.com/user-attachments/assets/409cabba-b80a-49d1-8737-d0178ad1ead9 height="200" alt="Weapon Model Glow Preview">
-
-* 31 March 2025
-    * Moved model glow preview to the left side of the model glow tab
-
-    <img src=https://github.com/user-attachments/assets/9cd923b0-7f37-46e9-b857-d5ee0930a82b height="200" alt="Model Glow Preview">
 
 ## Technical features
 
