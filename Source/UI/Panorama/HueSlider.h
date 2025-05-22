@@ -27,7 +27,7 @@ public:
 
     void updateColorPreview(color::HueInteger hue) const noexcept
     {
-        panel().children()[2].setBackgroundColor(color::HSBtoRGB(hue, color::Saturation{1.0f}, color::Brightness{1.0f}));
+        panel().children()[2].setBackgroundColor(color::HSBtoRGB(hue, color::Saturation{0.7f}, color::Brightness{0.9f}));
     }
 
 private:

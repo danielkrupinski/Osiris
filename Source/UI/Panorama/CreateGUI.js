@@ -375,7 +375,7 @@ $.Osiris = (function () {
     textEntry.SetPanelEvent('onmouseout', function () { if (!textEntry.BHasKeyFocus()) textEntry.style.backgroundColor = 'none'; });
 
     $.CreatePanel('Panel', sliderContainer, id + '_color', {
-        style: "border: 1px solid #00000070; border-radius: 5px; margin-left: 10px; width: 25px; vertical-align: center; height: 25px;"
+        style: "border: 2px solid #000000a0; border-radius: 5px; margin-left: 10px; width: 25px; vertical-align: center; height: 25px;"
     });
   }
 )"
