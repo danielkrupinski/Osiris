@@ -115,3 +115,18 @@ const void* memchr(const void* ptr, int ch, std::size_t count)
 {
     return intrinsics::memchr(reinterpret_cast<const unsigned char*>(ptr), static_cast<unsigned char>(ch), count);
 }
+
+#ifndef _DEBUG // TODO: replace with _DLL
+
+#pragma function(wcslen)
+std::size_t wcslen(const wchar_t* str)
+{
+    std::size_t length = 0;
+    while (*str) {
+        ++length;
+        ++str;
+    }
+    return length;
+}
+
+#endif
