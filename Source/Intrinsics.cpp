@@ -116,14 +116,7 @@ const void* memchr(const void* ptr, int ch, std::size_t count)
     return intrinsics::memchr(reinterpret_cast<const unsigned char*>(ptr), static_cast<unsigned char>(ch), count);
 }
 
-#ifndef _DEBUG // TODO: replace with _DLL
-
-#include <Platform/Macros/IsCompiler.h>
-
-#ifdef CLANG
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Winconsistent-dllimport"
-#endif
+#ifndef _DLL
 
 #pragma function(wcslen)
 std::size_t wcslen(const wchar_t* str)
@@ -135,9 +128,5 @@ std::size_t wcslen(const wchar_t* str)
     }
     return length;
 }
-
-#ifdef CLANG
-#pragma clang diagnostic pop
-#endif
 
 #endif

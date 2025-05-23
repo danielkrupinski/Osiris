@@ -634,6 +634,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <RuntimeLibrary />
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

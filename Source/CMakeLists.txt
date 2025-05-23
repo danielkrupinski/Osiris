@@ -17,6 +17,7 @@ if(UNIX)
 endif()
 
 if(MSVC)
+  set_target_properties(Osiris PROPERTIES MSVC_RUNTIME_LIBRARY "$<$<CONFIG:Debug>:MultiThreadedDebugDLL>")
   string(REGEX REPLACE "/EH[a-z]+" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
   target_sources(Osiris PRIVATE $<$<CONFIG:Release>:Intrinsics.cpp>)
   target_compile_options(Osiris PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/W4 $<$<CONFIG:Release>:/sdl- /GS->>)
