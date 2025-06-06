@@ -1,0 +1,45 @@
+name: Windows
+
+on: [push, pull_request]
+
+jobs:
+  msbuild:
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        toolset: [ClangCL, MSVC]
+        configuration: [Debug, Release]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+    - name: Set toolset
+      if: matrix.toolset == 'ClangCL'
+      run: echo "toolset=/p:PlatformToolset=${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    - name: Build
+      shell: cmd
+      run: msbuild Osiris.sln /p:Platform=x64 /p:Configuration=${{ matrix.configuration }} ${{ env.toolset }}
+
+  cmake:
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        toolset: [ClangCL, MSVC]
+        configuration: [Debug, Release]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set toolset
+      if: matrix.toolset == 'ClangCL'
+      run: echo "toolset=-T ${{ matrix.toolset }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+    - name: configure
+      run: cmake -Werror=dev -D ENABLE_TESTS="unit;functional" -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -A x64 ${{ env.toolset }} -B build
+    - name: build source
+      run: cmake --build build --target Osiris --config ${{ matrix.configuration }}
+    - name: build unit tests
+      run: cmake --build build --target UnitTests --config ${{ matrix.configuration }}
+    - name: build functional tests
+      run: cmake --build build --target FunctionalTests --config ${{ matrix.configuration }}
+    - name: run unit tests
+      run: ctest -R ^Unit --test-dir build --output-on-failure --no-tests=error --schedule-random -j $env:NUMBER_OF_PROCESSORS
+    - name: run functional tests
+      run: ctest -R ^Functional --test-dir build --output-on-failure --no-tests=error --schedule-random -j $env:NUMBER_OF_PROCESSORS
