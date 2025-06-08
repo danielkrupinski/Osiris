@@ -8,9 +8,13 @@
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
+#include <Features/Aimbot/AimbotConfigVariables.h> // Added Aimbot config variables
 #include <Utils/TypeList.h>
 
 using ConfigVariableTypes = TypeList<
+    decltype(AimbotConfigVariables::aimbotEnabled), // Added Aimbot config variables
+    decltype(AimbotConfigVariables::aimbotFov),
+    decltype(AimbotConfigVariables::aimbotTargetBone),
     BombTimerEnabled,
     DefusingAlertEnabled,
     KillfeedPreserverEnabled,

@@ -4,6 +4,7 @@
 
 #include "Sound/SoundFeatures.h"
 #include "Visuals/VisualFeatures.h"
+#include "Aimbot/Aimbot.h"
 
 #include "FeaturesStates.h"
 
@@ -24,6 +25,12 @@ struct Features {
     [[nodiscard]] auto visualFeatures() const noexcept
     {
         return VisualFeatures{hookContext, states.visualFeaturesStates, hooks.viewRenderHook};
+    }
+
+    [[nodiscard]] auto aimbot() const noexcept
+    {
+        // This will likely need to be adjusted once actual dependencies (like config) are figured out
+        return Aimbot{};
     }
 
     FeaturesStates& states;
