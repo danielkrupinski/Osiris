@@ -1,4 +1,7 @@
-add_library(Osiris SHARED dllmain.cpp)
+add_library(Osiris SHARED
+    dllmain.cpp
+    Features/Aimbot/Aimbot.cpp
+)
 
 set_target_properties(Osiris PROPERTIES
   CXX_VISIBILITY_PRESET hidden
