@@ -8,7 +8,7 @@ struct ClientPatterns {
     {
         return clientPatterns
             .template addPattern<MainMenuPanelPointer, CodePattern{"83 FB ? 75 ? 48 8D 05 ? ? ? ? 48 8B 00"}.add(8).abs()>()
-            .template addPattern<HudPanelPointer, CodePattern{"41 C6 84 24 ? ? ? ? ? 4C 89 25 ? ? ? ? E8"}.add(12).abs()>()
+            .template addPattern<HudPanelPointer, CodePattern{"4C 89 25 ? ? ? ? E8 ? ? ? ? 49"}.add(3).abs()>()
             .template addPattern<GlobalVarsPointer, CodePattern{"8D ? ? ? ? ? 48 89 35 ? ? ? ? 48 89 ? ? C3"}.add(9).abs()>()
             .template addPattern<TransformTranslate3dVMT, CodePattern{"48 8D 0D ? ? ? ? 48 89 08 48 89 50 08 48 8B 53 10"}.add(3).abs()>()
             .template addPattern<TransformScale3dVMT, CodePattern{"48 8B 53 08 48 8D 0D ? ? ? ? F3 0F 10 43"}.add(7).abs()>()

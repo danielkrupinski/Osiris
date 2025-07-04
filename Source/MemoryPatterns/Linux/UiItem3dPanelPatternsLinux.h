@@ -8,6 +8,6 @@ struct UiItem3dPanelPatterns {
     {
         return clientPatterns
             .template addPattern<SetItemItemIdFunction, CodePattern{"55 48 89 E5 41 57 41 56 41 55 49 89 D5 41 54 49 89 FC 48 89 F7 53 48 81 EC ? ? ? ? E8"}>()
-            .template addPattern<OffsetToItem3dPanelUnknownField, CodePattern{"8B 85 ? ? ? ? 41 3B 84 24 ? ? ? ? 0F 84"}.add(10).read()>();
+            .template addPattern<OffsetToItem3dPanelUnknownField, CodePattern{"85 ? ? ? ? 41 89 84 24 ? ? ? ? E9 ? ? ? ? 49"}.add(9).read()>();
     }
 };
