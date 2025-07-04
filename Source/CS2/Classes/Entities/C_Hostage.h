@@ -1,11 +1,11 @@
 #pragma once
 
-#include "C_BaseEntity.h"
+#include "C_BaseModelEntity.h"
 
 namespace cs2
 {
 
-struct C_Hostage : C_BaseEntity {
+struct C_Hostage : C_BaseModelEntity {
 };
 
 }
