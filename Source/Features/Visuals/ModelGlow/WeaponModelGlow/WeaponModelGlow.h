@@ -8,6 +8,7 @@
 #include <GameClient/Entities/EntityClassifier.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
+#include <Platform/Macros/FunctionAttributes.h>
 
 extern "C" std::uint64_t Weapon_sceneObjectUpdater_asm(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
 
@@ -41,7 +42,7 @@ public:
             weapon.baseEntity().applySpawnProtectionEffectRecursively(getColor(weapon.baseEntity().classify()));
     }
 
-    void onUnload(auto&& weapon) const noexcept
+    [[NOINLINE]] void onUnload(auto&& weapon) const noexcept
     {
         if (hookContext.config().template getVariable<WeaponModelGlowEnabled>() || state().weaponModelGlowDisabling)
             unhookWeaponSceneObjectUpdater(weapon);

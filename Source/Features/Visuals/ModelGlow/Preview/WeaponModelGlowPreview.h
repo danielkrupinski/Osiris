@@ -2,6 +2,7 @@
 
 #include <GameClient/EntitySystem/EntityHandle.h>
 #include <GameClient/Panorama/UiItem3dPanel.h>
+#include <Platform/Macros/FunctionAttributes.h>
 
 template <typename HookContext>
 class WeaponModelGlowPreview {
@@ -30,7 +31,7 @@ public:
     }
 
 private:
-    [[nodiscard]] decltype(auto) previewWeapon(cs2::CEntityHandle& handle, bool& hadHandle, const char* panelId, const char* itemId) const noexcept
+    [[nodiscard]] [[NOINLINE]] decltype(auto) previewWeapon(cs2::CEntityHandle& handle, bool& hadHandle, const char* panelId, const char* itemId) const noexcept
     {
         auto&& entityIdentity = hookContext.template make<EntityHandle>(handle).getOrInit(
             [&hadHandle] { hadHandle = true; },

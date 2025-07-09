@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Features/Features.h>
-#include <Utils/StringParser.h>
-
 #include <GameClient/Panorama/Slider.h>
 #include <GameClient/Panorama/TextEntry.h>
+#include <Platform/Macros/FunctionAttributes.h>
+#include <Utils/StringParser.h>
 #include "HueSlider.h"
 
 template <typename HookContext>
@@ -189,65 +189,54 @@ private:
         feature.update(parser.getChar());
     }
 
-    void handleTogglableFeature(auto&& feature) const noexcept
-    {
-        switch (parser.getChar()) {
-        case '1':
-            feature.disable();
-            break;
-        case '0':
-            feature.enable();
-            break;
-        default:
-            break;
-        }
-    }
-
     template <typename ConfigVariable>
     void handleTogglableVariable() const noexcept
     {
-        switch (parser.getChar()) {
-        case '1':
-            hookContext.config().template setVariable<ConfigVariable>(false);
-            break;
-        case '0':
-            hookContext.config().template setVariable<ConfigVariable>(true);
-            break;
-        default:
-            break;
-        }
+        if (const auto option = parser.getChar(); option == '0' || option == '1')
+            hookContext.config().template setVariable<ConfigVariable>(option == '0');
     }
 
     template <typename ConfigVariable>
     void handleHueSlider(const char* sliderId) const noexcept
     {
-        const auto hue = parseHueVariable<ConfigVariable>();
-        if (!hue.has_value())
-            return;
+        const auto newVariableValue = handleHueSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, hookContext.config().template getVariable<ConfigVariable>());
+        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
+    }
 
-        if (!hookContext.config().template setVariable<ConfigVariable>(*hue))
-            return;
+    [[nodiscard]] color::HueInteger handleHueSlider(const char* sliderId, color::HueInteger min, color::HueInteger max, color::HueInteger current) const noexcept
+    {
+        const auto hue = parseHueVariable(min, max);
+        if (!hue.has_value() || *hue == current)
+            return current;
 
         auto&& hueSlider = getHueSlider(sliderId);
         hueSlider.updateTextEntry(*hue);
         hueSlider.updateColorPreview(*hue);
+        return *hue;
     }
 
     template <typename ConfigVariable>
     void handleHueTextEntry(const char* sliderId) const noexcept
     {
+        const auto newVariableValue = handleHueTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, hookContext.config().template getVariable<ConfigVariable>());
+        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
+    }
+
+    [[nodiscard]] color::HueInteger handleHueTextEntry(const char* sliderId, color::HueInteger min, color::HueInteger max, color::HueInteger current) const noexcept
+    {
         auto&& hueSlider = getHueSlider(sliderId);
-        const auto hue = parseHueVariable<ConfigVariable>();
+        const auto hue = parseHueVariable(min, max);
         if (!hue.has_value()) {
-            hueSlider.updateTextEntry(hookContext.config().template getVariable<ConfigVariable>());
-            return;
+            hueSlider.updateTextEntry(current);
+            return current;
         }
 
-        if (!hookContext.config().template setVariable<ConfigVariable>(*hue))
-            return;
+        if (*hue == current)
+            return current;
 
         hueSlider.updateSlider(*hue);
         hueSlider.updateColorPreview(*hue);
+        return *hue;
     }
 
     [[nodiscard]] decltype(auto) getHueSlider(const char* sliderId) const noexcept
@@ -257,15 +246,14 @@ private:
         return hookContext.template make<HueSlider>(mainMenu.findChildInLayoutFile(sliderId));
     }
 
-    template <typename ConfigVariable>
-    [[nodiscard]] std::optional<typename ConfigVariable::ValueType> parseHueVariable() const noexcept
+    [[nodiscard]] [[NOINLINE]] std::optional<color::HueInteger> parseHueVariable(color::HueInteger min, color::HueInteger max) const noexcept
     {
         const auto hueInteger = parseHueInteger();
         if (!hueInteger.has_value())
             return {};
 
-        if (*hueInteger >= ConfigVariable::ValueType::kMin && *hueInteger <= ConfigVariable::ValueType::kMax)
-            return typename ConfigVariable::ValueType{*hueInteger};
+        if (*hueInteger >= min && *hueInteger <= max)
+            return *hueInteger;
         return {};
     }
 

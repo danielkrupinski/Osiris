@@ -3,6 +3,7 @@
 #include <span>
 
 #include "ConfigStringConversionState.h"
+#include <Platform/Macros/FunctionAttributes.h>
 
 class ConfigFromString {
 public:
@@ -216,7 +217,7 @@ private:
         }
     }
 
-    bool skipWhitespaces() noexcept
+    [[NOINLINE]] bool skipWhitespaces() noexcept
     {
         while (readIndex < buffer.size() && isWhitespace(buffer[readIndex]))
             ++readIndex;

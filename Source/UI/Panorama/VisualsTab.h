@@ -83,8 +83,12 @@ private:
     template <typename ConfigVariable>
     void updateHueSlider(auto&& mainMenu, const char* sliderId) const noexcept
     {
+        updateHueSlider(mainMenu, sliderId, hookContext.config().template getVariable<ConfigVariable>());
+    }
+
+    void updateHueSlider(auto&& mainMenu, const char* sliderId, color::HueInteger hue) const noexcept
+    {
         auto&& hueSlider = hookContext.template make<HueSlider>(mainMenu.findChildInLayoutFile(sliderId));
-        const auto hue = hookContext.config().template getVariable<ConfigVariable>();
         hueSlider.updateSlider(hue);
         hueSlider.updateTextEntry(hue);
         hueSlider.updateColorPreview(hue);
