@@ -1,10 +1,10 @@
-#include "FeatureTests/HudFeaturesTests/Tests.h"
-#include "MemorySearchTests/Tests.h"
-#include "PlatformTests/Tests.h"
-#include "UtilsTests/Tests.h"
+#include "Features/Hud/Tests.h"
+#include "MemorySearch/Tests.h"
+#include "Platform/Tests.h"
+#include "Utils/Tests.h"
 
-#include "HudTests/BombStatusTests/BombStatusPanelTests.h"
-#include "HudTests/BombStatusTests/BombStatusPanelManagerTests.h"
+#include "GameClient/Hud/BombStatus/BombStatusPanelTests.h"
+#include "GameClient/Hud/BombStatus/BombStatusPanelManagerTests.h"
 
 #include "Config/ConfigFromStringTests.h"
 #include "Config/ConfigSchemaTests.h"

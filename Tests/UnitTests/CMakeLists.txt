@@ -9,4 +9,4 @@ target_link_libraries(UnitTests gtest_main gmock Threads::Threads)
 set_target_properties(UnitTests PROPERTIES OUTPUT_NAME UnitTestsBin)
 gtest_discover_tests(UnitTests DISCOVERY_TIMEOUT 60 TEST_PREFIX Unit_)
 
-add_subdirectory(PlatformTests)
+add_subdirectory(Platform)
