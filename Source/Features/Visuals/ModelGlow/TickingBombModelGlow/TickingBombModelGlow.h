@@ -13,7 +13,7 @@ public:
 
     void onEntityListTraversed() const noexcept
     {
-        state().tickingBombModelGlowDisabling = true;
+        state().tickingBombModelGlowDisabling = false;
     }
 
     void applyModelGlow(auto&& plantedBomb) const noexcept
@@ -36,7 +36,7 @@ public:
 private:
     [[nodiscard]] bool isDisabled() const noexcept
     {
-        return hookContext.config().template getVariable<TickingBombModelGlowEnabled>() && !state().playerModelGlowDisabling;
+        return !hookContext.config().template getVariable<TickingBombModelGlowEnabled>() && !state().tickingBombModelGlowDisabling;
     }
 
     [[nodiscard]] bool isEnabled() const noexcept
