@@ -4,7 +4,7 @@
 
 extern "C" int _fltused{ 0x9875 };
 
-namespace intrinsics
+namespace crt
 {
 
 [[nodiscard]] inline int memcmp(const unsigned char* lhs, const unsigned char* rhs, std::size_t count) noexcept
@@ -77,43 +77,43 @@ inline const unsigned char* memchr(const unsigned char* ptr, unsigned char ch, s
 #pragma function(memcpy)
 void* memcpy(void* dest, const void* src, size_t count)
 {
-    return intrinsics::memcpy(static_cast<std::byte*>(dest), static_cast<const std::byte*>(src), count);
+    return crt::memcpy(static_cast<std::byte*>(dest), static_cast<const std::byte*>(src), count);
 }
 
 #pragma function(memmove)
 void* memmove(void* dest, const void* src, size_t count)
 {
-    return intrinsics::memmove(static_cast<unsigned char*>(dest), static_cast<const unsigned char*>(src), count);
+    return crt::memmove(static_cast<unsigned char*>(dest), static_cast<const unsigned char*>(src), count);
 }
 
 #pragma function(memcmp)
 int memcmp(const void* s1, const void* s2, std::size_t n)
 {
-    return intrinsics::memcmp(static_cast<const unsigned char*>(s1), static_cast<const unsigned char*>(s2), n);
+    return crt::memcmp(static_cast<const unsigned char*>(s1), static_cast<const unsigned char*>(s2), n);
 }
 
 #pragma function(memset)
 void* memset(void* dest, int ch, size_t count)
 {
-    return intrinsics::memset(static_cast<unsigned char*>(dest), static_cast<unsigned char>(ch), count);
+    return crt::memset(static_cast<unsigned char*>(dest), static_cast<unsigned char>(ch), count);
 }
 
 #pragma function(strcmp)
 int strcmp(const char* s1, const char* s2)
 {
-    return intrinsics::strcmp(reinterpret_cast<const unsigned char*>(s1), reinterpret_cast<const unsigned char*>(s2));
+    return crt::strcmp(reinterpret_cast<const unsigned char*>(s1), reinterpret_cast<const unsigned char*>(s2));
 }
 
 #pragma function(strlen)
 std::size_t strlen(const char* str)
 {
-    return intrinsics::strlen(str);
+    return crt::strlen(str);
 }
 
 #pragma function(memchr)
 const void* memchr(const void* ptr, int ch, std::size_t count)
 {
-    return intrinsics::memchr(reinterpret_cast<const unsigned char*>(ptr), static_cast<unsigned char>(ch), count);
+    return crt::memchr(reinterpret_cast<const unsigned char*>(ptr), static_cast<unsigned char>(ch), count);
 }
 
 #ifndef _DLL
