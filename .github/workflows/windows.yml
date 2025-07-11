@@ -4,9 +4,10 @@ on: [push, pull_request]
 
 jobs:
   msbuild:
-    runs-on: windows-2022
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [windows-2022, windows-2025]
         toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
     steps:
@@ -21,9 +22,10 @@ jobs:
       run: msbuild Osiris.sln /p:Platform=x64 /p:Configuration=${{ matrix.configuration }} ${{ env.toolset }}
 
   cmake:
-    runs-on: windows-2022
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [windows-2022, windows-2025]
         toolset: [ClangCL, MSVC]
         configuration: [Debug, Release]
     steps:
