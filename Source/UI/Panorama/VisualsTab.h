@@ -78,6 +78,9 @@ private:
         updateHueSlider<ModelGlowFlashbangHue>(mainMenu, "model_glow_flashbang_hue");
         updateHueSlider<ModelGlowHEGrenadeHue>(mainMenu, "model_glow_hegrenade_hue");
         updateHueSlider<ModelGlowSmokeGrenadeHue>(mainMenu, "model_glow_smoke_hue");
+        updateHueSlider<ModelGlowDroppedBombHue>(mainMenu, "model_glow_dropped_bomb_hue");
+        updateHueSlider<ModelGlowTickingBombHue>(mainMenu, "model_glow_ticking_bomb_hue");
+        updateHueSlider<ModelGlowDefuseKitHue>(mainMenu, "model_glow_defuse_kit_hue");
     }
 
     template <typename ConfigVariable>

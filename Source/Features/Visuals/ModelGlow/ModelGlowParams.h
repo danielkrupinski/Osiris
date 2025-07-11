@@ -6,9 +6,6 @@
 
 namespace model_glow_params
 {
-    constexpr cs2::Color kDefuseKitColor{0, 238, 255};
-    constexpr cs2::Color kDroppedBombColor{255, 255, 0};
-    constexpr cs2::Color kTickingBombColor{255, 0, 0};
     constexpr cs2::Color kDefaultWeaponColor{cs2::kColorWhite};
 
     constexpr color::HueInteger kPlayerBlueMinHue{191};
@@ -70,6 +67,18 @@ namespace model_glow_params
     constexpr color::HueInteger kSmokeGrenadeMinHue{110};
     constexpr color::HueInteger kSmokeGrenadeDefaultHue{120};
     constexpr color::HueInteger kSmokeGrenadeMaxHue{140};
+
+    constexpr color::HueInteger kDroppedBombMinHue{0};
+    constexpr color::HueInteger kDroppedBombDefaultHue{60};
+    constexpr color::HueInteger kDroppedBombMaxHue{359};
+
+    constexpr color::HueInteger kTickingBombMinHue{0};
+    constexpr color::HueInteger kTickingBombDefaultHue{0};
+    constexpr color::HueInteger kTickingBombMaxHue{359};
+
+    constexpr color::HueInteger kDefuseKitMinHue{0};
+    constexpr color::HueInteger kDefuseKitDefaultHue{184};
+    constexpr color::HueInteger kDefuseKitMaxHue{359};
 
     constexpr color::Saturation kNormalPlayerColorSaturation{1.0f};
     constexpr color::Saturation kImmunePlayerColorSaturation{0.5f};

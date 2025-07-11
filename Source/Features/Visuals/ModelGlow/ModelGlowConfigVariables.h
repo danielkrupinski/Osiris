@@ -84,3 +84,15 @@ CONFIG_VARIABLE(ModelGlowHEGrenadeHue,
 CONFIG_VARIABLE(ModelGlowSmokeGrenadeHue,
     IDENTITY(InRange<color::HueInteger, model_glow_params::kSmokeGrenadeMinHue, model_glow_params::kSmokeGrenadeMaxHue>),
     model_glow_params::kSmokeGrenadeDefaultHue);
+
+CONFIG_VARIABLE(ModelGlowDroppedBombHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kDroppedBombMinHue, model_glow_params::kDroppedBombMaxHue>),
+    model_glow_params::kDroppedBombDefaultHue);
+
+CONFIG_VARIABLE(ModelGlowTickingBombHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kTickingBombMinHue, model_glow_params::kTickingBombMaxHue>),
+    model_glow_params::kTickingBombDefaultHue);
+
+CONFIG_VARIABLE(ModelGlowDefuseKitHue,
+    IDENTITY(InRange<color::HueInteger, model_glow_params::kDefuseKitMinHue, model_glow_params::kDefuseKitMaxHue>),
+    model_glow_params::kDefuseKitDefaultHue);

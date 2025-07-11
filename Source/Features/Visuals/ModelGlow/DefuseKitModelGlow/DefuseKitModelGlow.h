@@ -22,9 +22,8 @@ public:
         if (isDisabled())
             return;
 
-        using namespace model_glow_params;
         if (isEnabled())
-            defuseKit.baseEntity().applySpawnProtectionEffectRecursively(kDefuseKitColor);
+            defuseKit.baseEntity().applySpawnProtectionEffectRecursively(getColor());
         else
             defuseKit.baseEntity().removeSpawnProtectionEffectRecursively();
     }
@@ -36,6 +35,11 @@ public:
     }
 
 private:
+    [[nodiscard]] cs2::Color getColor() const noexcept
+    {
+        return color::HSBtoRGB(hookContext.config().template getVariable<ModelGlowDefuseKitHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
+    }
+
     [[nodiscard]] bool isDisabled() const noexcept
     {
         return !isEnabled() && !state().defuseKitModelGlowDisabling;
