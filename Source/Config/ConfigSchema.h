@@ -77,6 +77,9 @@ private:
         configConversion.uint(u8"Flashbang", loadVariable<ModelGlowFlashbangHue>(), saveVariable<ModelGlowFlashbangHue>());
         configConversion.uint(u8"HEGrenade", loadVariable<ModelGlowHEGrenadeHue>(), saveVariable<ModelGlowHEGrenadeHue>());
         configConversion.uint(u8"SmokeGrenade", loadVariable<ModelGlowSmokeGrenadeHue>(), saveVariable<ModelGlowSmokeGrenadeHue>());
+        configConversion.uint(u8"DroppedBomb", loadVariable<ModelGlowDroppedBombHue>(), saveVariable<ModelGlowDroppedBombHue>());
+        configConversion.uint(u8"TickingBomb", loadVariable<ModelGlowTickingBombHue>(), saveVariable<ModelGlowTickingBombHue>());
+        configConversion.uint(u8"DefuseKit", loadVariable<ModelGlowDefuseKitHue>(), saveVariable<ModelGlowDefuseKitHue>());
         configConversion.endObject();
         configConversion.endObject();
 

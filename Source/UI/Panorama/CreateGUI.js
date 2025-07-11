@@ -550,6 +550,13 @@ u8R"(
   createYesNoDropDown(bombModelGlow, "Glow Ticking Bomb Model", 'visuals', 'ticking_bomb_model_glow');
   separator(bombModelGlow);
   createYesNoDropDown(bombModelGlow, "Glow Defuse Kit Models on Ground", 'visuals', 'defuse_kit_model_glow');
+  separator(bombModelGlow);
+  separator(bombModelGlow);
+  createHueSlider(bombModelGlow, "Dropped Bomb Hue", 'model_glow_dropped_bomb_hue', 0, 359);
+  separator(bombModelGlow);
+  createHueSlider(bombModelGlow, "Ticking Bomb Hue", 'model_glow_ticking_bomb_hue', 0, 359);
+  separator(bombModelGlow);
+  createHueSlider(bombModelGlow, "Defuse Kit Hue", 'model_glow_defuse_kit_hue', 0, 359);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 

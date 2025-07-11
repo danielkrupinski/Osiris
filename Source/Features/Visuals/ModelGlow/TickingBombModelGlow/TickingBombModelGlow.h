@@ -22,7 +22,7 @@ public:
             return;
 
         if (shouldGlowPlantedBombModel(plantedBomb))
-            plantedBomb.baseEntity().applySpawnProtectionEffectRecursively(model_glow_params::kTickingBombColor);
+            plantedBomb.baseEntity().applySpawnProtectionEffectRecursively(getColor());
         else
             plantedBomb.baseEntity().removeSpawnProtectionEffectRecursively();
     }
@@ -34,6 +34,11 @@ public:
     }
 
 private:
+    [[nodiscard]] cs2::Color getColor() const noexcept
+    {
+        return color::HSBtoRGB(hookContext.config().template getVariable<ModelGlowTickingBombHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
+    }
+
     [[nodiscard]] bool isDisabled() const noexcept
     {
         return !hookContext.config().template getVariable<TickingBombModelGlowEnabled>() && !state().tickingBombModelGlowDisabling;

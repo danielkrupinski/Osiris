@@ -68,5 +68,8 @@ using ConfigVariableTypes = TypeList<
     ModelGlowMolotovHue,
     ModelGlowFlashbangHue,
     ModelGlowHEGrenadeHue,
-    ModelGlowSmokeGrenadeHue
+    ModelGlowSmokeGrenadeHue,
+    ModelGlowDroppedBombHue,
+    ModelGlowTickingBombHue,
+    ModelGlowDefuseKitHue
 >;

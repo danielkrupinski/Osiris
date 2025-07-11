@@ -35,7 +35,7 @@ public:
     void applyModelGlow(auto&& bomb) const noexcept
     {
         if (shouldRun() && shouldGlowBombModel(bomb))
-            bomb.baseWeapon().baseEntity().applySpawnProtectionEffectRecursively(model_glow_params::kDroppedBombColor);
+            bomb.baseWeapon().baseEntity().applySpawnProtectionEffectRecursively(getColor());
     }
 
     void onUnload(auto&& bomb) const noexcept
@@ -45,6 +45,11 @@ public:
     }
 
 private:
+    [[nodiscard]] cs2::Color getColor() const noexcept
+    {
+        return color::HSBtoRGB(hookContext.config().template getVariable<ModelGlowDroppedBombHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
+    }
+
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
         return hookContext.config().template getVariable<DroppedBombModelGlowEnabled>() || state().droppedBombModelGlowDisabling;

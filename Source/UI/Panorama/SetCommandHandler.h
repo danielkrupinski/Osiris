@@ -180,6 +180,18 @@ private:
             handleHueSlider<ModelGlowSmokeGrenadeHue>("model_glow_smoke_hue");
         } else if (feature == "model_glow_smoke_hue_text") {
             handleHueTextEntry<ModelGlowSmokeGrenadeHue>("model_glow_smoke_hue");
+        } else if (feature == "model_glow_dropped_bomb_hue") {
+            handleHueSlider<ModelGlowDroppedBombHue>("model_glow_dropped_bomb_hue");
+        } else if (feature == "model_glow_dropped_bomb_hue_text") {
+            handleHueTextEntry<ModelGlowDroppedBombHue>("model_glow_dropped_bomb_hue");
+        } else if (feature == "model_glow_ticking_bomb_hue") {
+            handleHueSlider<ModelGlowTickingBombHue>("model_glow_ticking_bomb_hue");
+        } else if (feature == "model_glow_ticking_bomb_hue_text") {
+            handleHueTextEntry<ModelGlowTickingBombHue>("model_glow_ticking_bomb_hue");
+        } else if (feature == "model_glow_defuse_kit_hue") {
+            handleHueSlider<ModelGlowDefuseKitHue>("model_glow_defuse_kit_hue");
+        } else if (feature == "model_glow_defuse_kit_hue_text") {
+            handleHueTextEntry<ModelGlowDefuseKitHue>("model_glow_defuse_kit_hue");
         }
     }
 

@@ -114,9 +114,17 @@ protected:
         get<ModelGlowSmokeGrenadeHue>() = ModelGlowSmokeGrenadeHue::ValueType{color::HueInteger{116}};
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV5()
     {
         setVariableExpectationsV4();
+        get<ModelGlowDroppedBombHue>() = ModelGlowDroppedBombHue::ValueType{color::HueInteger{69}};
+        get<ModelGlowTickingBombHue>() = ModelGlowTickingBombHue::ValueType{color::HueInteger{303}};
+        get<ModelGlowDefuseKitHue>() = ModelGlowDefuseKitHue::ValueType{color::HueInteger{227}};
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV5();
     }
 
     struct VariableChecker {
@@ -236,6 +244,11 @@ TEST_F(ConfigCompatibilityLoadTest, ConfigV2) {
 TEST_F(ConfigCompatibilityLoadTest, ConfigV3) {
     setVariableExpectationsV3();
     testLoadingConfigFile("config_v3.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, ConfigV4) {
+    setVariableExpectationsV4();
+    testLoadingConfigFile("config_v4.cfg");
 }
 
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {
