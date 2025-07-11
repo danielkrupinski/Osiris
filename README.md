@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 11 July 2025
+    * Dropped/ticking bomb and defuse kit color hues are now customizable in Model Glow settings
+
+    ![Bomb and Defuse Kit model glow color customization](https://github.com/user-attachments/assets/e5e174a9-b145-4f1b-b14d-14811d6e5635)
+
 * 22 May 2025
     * Grenade color hues are now customizable in Model Glow settings
     * Improved appearance of hue preview squares in GUI
@@ -29,11 +34,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
     <br>
     <img src=https://github.com/user-attachments/assets/c5e3143c-e5af-40b2-8ebe-b8fa0e2034ca height="200" alt="Player Model Glow Enemy/Ally Color Mode">
-
-* 7 April 2025
-    * Added weapon model glow preview
-
-    <img src=https://github.com/user-attachments/assets/409cabba-b80a-49d1-8737-d0178ad1ead9 height="200" alt="Weapon Model Glow Preview">
 
 ## Technical features
 
