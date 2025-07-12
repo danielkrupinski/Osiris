@@ -19,7 +19,7 @@ namespace outline_glow_params
     constexpr cs2::Color kDefaultWeaponColor{191, 191, 191, kGlowAlpha};
 
     constexpr auto kImmunePlayerGlowAlpha = 40;
-    constexpr color::Saturation kPlayerGlowSaturation{0.7f};
+    constexpr color::Saturation kPlayerGlowSaturation{0.5f};
     constexpr cs2::Color kPlayerGlowFallbackColor{cs2::kColorWhite};
     constexpr cs2::Color kPlayerGlowColorTeamT{cs2::kColorTeamTT};
     constexpr cs2::Color kPlayerGlowColorTeamCT{cs2::kColorTeamCT};
