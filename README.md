@@ -7,6 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 12 July 2025
+    * Reduced saturation of health-based player outline glow
+
 * 11 July 2025
     * Dropped/ticking bomb and defuse kit color hues are now customizable in Model Glow settings
 
@@ -28,12 +31,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Player color hues are now customizable in Model Glow settings
 
     ![Custom player color hues in Model Glow](https://github.com/user-attachments/assets/6f543dd5-3d16-49d6-aca8-81b9a8be1ee8)
-
-* 11 April 2025
-    * Added "Enemy / Ally" color mode for Player Model Glow
-
-    <br>
-    <img src=https://github.com/user-attachments/assets/c5e3143c-e5af-40b2-8ebe-b8fa0e2034ca height="200" alt="Player Model Glow Enemy/Ally Color Mode">
 
 ## Technical features
 
