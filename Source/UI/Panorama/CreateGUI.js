@@ -516,7 +516,7 @@ u8R"(
   createHueSlider(playerModelGlow, "Player Purple Hue", 'player_model_glow_purple_hue', 250, 280);
   separator(playerModelGlow);
   separator(playerModelGlow);
-  createHueSlider(playerModelGlow, "Team T Hue", 'player_model_glow_t_hue', 25, 35);
+  createHueSlider(playerModelGlow, "Team T Hue", 'player_model_glow_t_hue', 30, 40);
   separator(playerModelGlow);
   createHueSlider(playerModelGlow, "Team CT Hue", 'player_model_glow_ct_hue', 210, 230);
   separator(playerModelGlow);

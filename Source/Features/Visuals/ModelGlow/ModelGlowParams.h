@@ -28,9 +28,9 @@ namespace model_glow_params
     constexpr color::HueInteger kPlayerPurpleDefaultHue{265};
     constexpr color::HueInteger kPlayerPurpleMaxHue{280};
 
-    constexpr color::HueInteger kTeamTMinHue{25};
-    constexpr color::HueInteger kTeamTDefaultHue{30};
-    constexpr color::HueInteger kTeamTMaxHue{35};
+    constexpr color::HueInteger kTeamTMinHue{30};
+    constexpr color::HueInteger kTeamTDefaultHue{35};
+    constexpr color::HueInteger kTeamTMaxHue{40};
 
     constexpr color::HueInteger kTeamCTMinHue{210};
     constexpr color::HueInteger kTeamCTDefaultHue{220};
