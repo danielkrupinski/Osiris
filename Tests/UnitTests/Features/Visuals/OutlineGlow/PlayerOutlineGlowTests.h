@@ -302,42 +302,42 @@ INSTANTIATE_TEST_SUITE_P(HealthBased, PlayerOutlineGlowColorTest, testing::Value
             .health{100},
             .hasImmunity{true},
             .expectedHue{color::kGreenHue},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{120},
             .hasImmunity{true},
             .expectedHue{color::kGreenHue},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{75},
             .hasImmunity{true},
             .expectedHue{color::Hue{0.2491582f}},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{25},
             .hasImmunity{true},
             .expectedHue{color::Hue{0.08080808f}},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{1},
             .hasImmunity{true},
             .expectedHue{color::kRedHue},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{std::nullopt},
             .hasImmunity{true},
             .expectedHue{},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         }
     })
 ));
@@ -409,35 +409,35 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorValidColorIndex, PlayerOutlineGlowColo
             .playerColorIndex{0},
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kPlayerBlueHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{1},
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kPlayerGreenHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{2},
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kPlayerYellowHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{3},
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kPlayerOrangeHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{4},
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kPlayerPurpleHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         }
     })
 ));
@@ -534,7 +534,7 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorInvalidColorIndex, PlayerOutlineGlowCo
             .teamNumber = TeamNumber::TT,
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
@@ -542,7 +542,7 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorInvalidColorIndex, PlayerOutlineGlowCo
             .teamNumber = TeamNumber::TT,
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
@@ -550,7 +550,7 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorInvalidColorIndex, PlayerOutlineGlowCo
             .teamNumber = TeamNumber::CT,
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
@@ -558,7 +558,7 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorInvalidColorIndex, PlayerOutlineGlowCo
             .teamNumber = TeamNumber::CT,
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
@@ -566,7 +566,7 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorInvalidColorIndex, PlayerOutlineGlowCo
             .teamNumber = TeamNumber{},
             .hasImmunity{true},
             .expectedHue{},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
@@ -574,7 +574,7 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorInvalidColorIndex, PlayerOutlineGlowCo
             .teamNumber = TeamNumber{},
             .hasImmunity{true},
             .expectedHue{},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         }
     })
 ));
@@ -622,21 +622,21 @@ INSTANTIATE_TEST_SUITE_P(TeamColor, PlayerOutlineGlowColorTest, testing::ValuesI
             .teamNumber = TeamNumber::TT,
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber::CT,
             .hasImmunity{true},
             .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber{},
             .hasImmunity{true},
             .expectedHue{},
-            .expectedColorAlpha{outline_glow_params::kImmunePlayerGlowAlpha}
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         }
     })
 ));
