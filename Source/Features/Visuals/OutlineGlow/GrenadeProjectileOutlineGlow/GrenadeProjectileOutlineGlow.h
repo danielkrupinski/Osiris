@@ -7,6 +7,7 @@
 #include <GameClient/Entities/EntityClassifier.h>
 #include <GameClient/Entities/SmokeGrenadeProjectile.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
+#include <Utils/Optional.h>
 
 template <typename HookContext>
 class GrenadeProjectileOutlineGlow {
@@ -21,17 +22,11 @@ public:
         return enabled() && shouldGlowGrenadeProjectile(entityTypeInfo, grenadeProjectile);
     }
 
-    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo entityTypeInfo, auto&& /* grenadeProjectile */) const noexcept
+    [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo entityTypeInfo, auto&& /* grenadeProjectile */) const noexcept
     {
-        using namespace outline_glow_params;
-
-        switch (entityTypeInfo.typeIndex) {
-        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return kFlashbangColor;
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return kHEGrenadeColor;
-        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return kMolotovColor;
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return kSmokeGrenadeColor;
-        default: return kDefaultWeaponColor;
-        }
+        if (const auto hue = getGlowColorHue(entityTypeInfo); hue.hasValue())
+            return hue.value().toHueFloat();
+        return {};
     }
 
 private:
@@ -43,6 +38,19 @@ private:
     [[nodiscard]] bool shouldGlowGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
     {
         return !entityTypeInfo.is<cs2::C_SmokeGrenadeProjectile>() || !grenadeProjectile.template as<SmokeGrenadeProjectile>().didSmokeEffect().valueOr(false);
+    }
+
+    [[nodiscard]] Optional<color::HueInteger> getGlowColorHue(EntityTypeInfo entityTypeInfo) const noexcept
+    {
+        using namespace outline_glow_params;
+
+        switch (entityTypeInfo.typeIndex) {
+        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return kFlashbangHue;
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return kHEGrenadeHue;
+        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return kMolotovHue;
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return kSmokeGrenadeHue;
+        default: return {};
+        }
     }
 
     HookContext& hookContext;

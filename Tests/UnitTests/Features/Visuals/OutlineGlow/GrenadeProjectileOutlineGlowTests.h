@@ -22,33 +22,33 @@ protected:
 
 struct GrenadeProjectileOutlineGlowColorTestParam {
     EntityTypeInfo entityTypeInfo{};
-    cs2::Color expectedColor{0, 0, 0};
+    Optional<color::Hue> expectedHue{};
 };
 
 class GrenadeProjectileOutlineGlowColorTest : public GrenadeProjectileOutlineGlowTest, public testing::WithParamInterface<GrenadeProjectileOutlineGlowColorTestParam> {
 };
 
 TEST_P(GrenadeProjectileOutlineGlowColorTest, CorrectGlowColorIsReturned) {
-    EXPECT_EQ(grenadeProjectileOutlineGlow.getGlowColor(GetParam().entityTypeInfo, mockGrenadeProjectile), GetParam().expectedColor);
+    EXPECT_EQ(grenadeProjectileOutlineGlow.getGlowHue(GetParam().entityTypeInfo, mockGrenadeProjectile), GetParam().expectedHue);
 }
 
 INSTANTIATE_TEST_SUITE_P(, GrenadeProjectileOutlineGlowColorTest, testing::ValuesIn(
     std::to_array<GrenadeProjectileOutlineGlowColorTestParam>({
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>()},
-            .expectedColor{outline_glow_params::kFlashbangColor},
+            .expectedHue{outline_glow_params::kFlashbangHue.toHueFloat()},
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>()},
-            .expectedColor{outline_glow_params::kHEGrenadeColor}
+            .expectedHue{outline_glow_params::kHEGrenadeHue.toHueFloat()}
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>()},
-            .expectedColor{outline_glow_params::kMolotovColor}
+            .expectedHue{outline_glow_params::kMolotovHue.toHueFloat()}
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
-            .expectedColor{outline_glow_params::kSmokeGrenadeColor}
+            .expectedHue{outline_glow_params::kSmokeGrenadeHue.toHueFloat()}
         }
     })
 ));

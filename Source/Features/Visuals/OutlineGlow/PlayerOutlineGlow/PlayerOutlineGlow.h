@@ -22,9 +22,31 @@ public:
         return enabled() && shouldGlowPlayer(playerPawn);
     }
 
-    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
+    [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
     {
-        return getColor(playerPawn).setAlpha(getColorAlpha(playerPawn));
+        using namespace outline_glow_params;
+
+        const auto colorMode = hookContext.config().template getVariable<PlayerOutlineGlowColorMode>();
+        if (colorMode == PlayerOutlineGlowColorType::HealthBased) {
+            if (const auto playerHealth = playerPawn.health(); playerHealth.hasValue())
+                return healthColor(healthFraction(playerHealth.value()));
+            return {};
+        } else if (colorMode == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
+            if (const auto playerColorHue = getPlayerColorHue(playerPawn.playerController().playerColorIndex()))
+                return playerColorHue->toHueFloat();
+        }
+
+        switch (playerPawn.teamNumber()) {
+        case TeamNumber::TT: return kTeamTHue.toHueFloat();
+        case TeamNumber::CT: return kTeamCTHue.toHueFloat();
+        default: return {};
+        };
+    }
+
+    [[nodiscard]] std::uint8_t getGlowColorAlpha(auto&& playerPawn) const noexcept
+    {
+        using namespace outline_glow_params;
+        return playerPawn.hasImmunity().valueOr(false) ? kImmunePlayerGlowAlpha : kGlowAlpha;
     }
 
 private:
@@ -42,15 +64,9 @@ private:
             && (!hookContext.config().template getVariable<PlayerOutlineGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
-    [[nodiscard]] std::uint8_t getColorAlpha(auto&& playerPawn) const noexcept
+    [[nodiscard]] static color::Hue healthColor(float healthFraction) noexcept
     {
-        using namespace outline_glow_params;
-        return playerPawn.hasImmunity().valueOr(false) ? kImmunePlayerGlowAlpha : kGlowAlpha;
-    }
-
-    [[nodiscard]] static cs2::Color healthColor(float healthFraction) noexcept
-    {
-        return color::HSBtoRGB(color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f});
+        return color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction};
     }
 
     [[nodiscard]] static constexpr float healthFraction(int playerHealth) noexcept
@@ -64,25 +80,20 @@ private:
             return 1.0f;
         return static_cast<float>(playerHealth - kMinHealth) / (kMaxHealth - kMinHealth); 
     }
-    
-    [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
+
+    [[nodiscard]] std::optional<color::HueInteger> getPlayerColorHue(auto playerColorIndex) const noexcept
     {
+        if (!playerColorIndex.hasValue())
+            return {};
+
+        switch (playerColorIndex.value()) {
         using namespace outline_glow_params;
-
-        const auto colorMode = hookContext.config().template getVariable<PlayerOutlineGlowColorMode>();
-        if (colorMode == PlayerOutlineGlowColorType::HealthBased) {
-            if (const auto playerHealth = playerPawn.health(); playerHealth.hasValue())
-                return healthColor(healthFraction(playerHealth.value()));
-            return kPlayerGlowFallbackColor;
-        } else if (colorMode == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
-            if (const auto playerColorIndex = playerPawn.playerController().playerColorIndex(); playerColorIndex.hasValue() && playerColorIndex.value() >= 0 && std::cmp_less(playerColorIndex.value(), kPlayerColors.size()))
-                return kPlayerColors[playerColorIndex.value()];
-        }
-
-        switch (playerPawn.teamNumber()) {
-        case TeamNumber::TT: return kPlayerGlowColorTeamT;
-        case TeamNumber::CT: return kPlayerGlowColorTeamCT;
-        default: return kPlayerGlowFallbackColor;
+        case 0: return kPlayerBlueHue;
+        case 1: return kPlayerGreenHue;
+        case 2: return kPlayerYellowHue;
+        case 3: return kPlayerOrangeHue;
+        case 4: return kPlayerPurpleHue;
+        default: return {};
         }
     }
 

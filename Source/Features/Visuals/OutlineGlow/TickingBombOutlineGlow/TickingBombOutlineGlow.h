@@ -3,6 +3,7 @@
 #include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include <GameClient/Entities/EntityClassifier.h>
+#include <Utils/ColorUtils.h>
 
 template <typename HookContext>
 class TickingBombOutlineGlow {
@@ -17,9 +18,9 @@ public:
         return enabled() && shouldGlowPlantedBomb(plantedBomb);
     }
 
-    [[nodiscard]] cs2::Color getGlowColor(EntityTypeInfo /* entityTypeInfo */, auto&& /* plantedBomb */) const noexcept
+    [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& /* plantedBomb */) const noexcept
     {
-        return outline_glow_params::kTickingBombColor;
+        return outline_glow_params::kTickingBombHue.toHueFloat();
     }
 
 private:

@@ -31,7 +31,7 @@ TEST_F(DefuseKitOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
 }
 
 TEST_F(DefuseKitOutlineGlowTest, CorrectGlowColorIsReturned) {
-    EXPECT_EQ(defuseKitOutlineGlow.getGlowColor(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kDefuseKitColor);
+    EXPECT_EQ(defuseKitOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kDefuseKitHue.toHueFloat());
 }
 
 TEST_F(DefuseKitOutlineGlowTest, CorrectGlowRangeIsReturned) {

@@ -60,7 +60,23 @@ private:
     static void applyGlow(EntityTypeInfo entityTypeInfo, auto&& glow, auto&& entity) noexcept
     {
         if (glow.shouldApplyGlow(entityTypeInfo, entity))
-            entity.baseEntity().applyGlowRecursively(glow.getGlowColor(entityTypeInfo, entity), getGlowRange(glow));
+            entity.baseEntity().applyGlowRecursively(getGlowColor(entityTypeInfo, glow, entity), getGlowRange(glow));
+    }
+
+    [[nodiscard]] static cs2::Color getGlowColor(EntityTypeInfo entityTypeInfo, auto&& glow, auto&& entity)
+    {
+        using namespace outline_glow_params;
+        if (const auto hue = glow.getGlowHue(entityTypeInfo, entity); hue.hasValue())
+            return color::HSBtoRGB(hue.value(), kSaturation, kBrightness).setAlpha(getGlowColorAlpha(glow, entity));
+        return kFallbackColor;
+    }
+
+    [[nodiscard]] static std::uint8_t getGlowColorAlpha(auto&& glow, auto&& entity) noexcept
+    {
+        if constexpr (requires { { glow.getGlowColorAlpha(entity) } -> std::same_as<std::uint8_t>; })
+            return glow.getGlowColorAlpha(entity);
+        else
+            return outline_glow_params::kGlowAlpha;
     }
 
     [[nodiscard]] static int getGlowRange(auto&& glow) noexcept

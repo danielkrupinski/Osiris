@@ -19,7 +19,7 @@ protected:
 };
 
 TEST_F(TickingBombOutlineGlowTest, CorrectGlowColorIsReturned) {
-    EXPECT_EQ(tickingBombOutlineGlow.getGlowColor(EntityTypeInfo{}, mockPlantedC4), outline_glow_params::kTickingBombColor);
+    EXPECT_EQ(tickingBombOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlantedC4), outline_glow_params::kTickingBombHue.toHueFloat());
 }
 
 struct TickingBombOutlineGlowConditionTestParam {
