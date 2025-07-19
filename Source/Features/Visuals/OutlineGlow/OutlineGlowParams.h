@@ -1,28 +1,35 @@
 #pragma once
 
 #include <CS2/Classes/Color.h>
-#include <CS2/Constants/ColorConstants.h>
+#include <Utils/ColorUtils.h>
 
 namespace outline_glow_params
 {
-    constexpr auto kGlowAlpha = 102;
-    constexpr cs2::Color kHostageColor{255, 234, 128, kGlowAlpha};
-    constexpr cs2::Color kDroppedBombColor{255, 255, 128, kGlowAlpha};
-    constexpr cs2::Color kTickingBombColor{255, 128, 128, kGlowAlpha};
     constexpr auto kDefuseKitGlowRange = 800;
-    constexpr cs2::Color kDefuseKitColor{127, 247, 255, kGlowAlpha};
     constexpr auto kWeaponGlowRange = 800;
-    constexpr cs2::Color kMolotovColor{255, 223, 128, kGlowAlpha};
-    constexpr cs2::Color kFlashbangColor{128, 172, 255, kGlowAlpha};
-    constexpr cs2::Color kHEGrenadeColor{255, 128, 128, kGlowAlpha};
-    constexpr cs2::Color kSmokeGrenadeColor{128, 255, 128, kGlowAlpha};
-    constexpr cs2::Color kDefaultWeaponColor{191, 191, 191, kGlowAlpha};
 
+    constexpr auto kGlowAlpha = 102;
     constexpr auto kImmunePlayerGlowAlpha = 40;
-    constexpr color::Saturation kPlayerGlowSaturation{0.5f};
-    constexpr cs2::Color kPlayerGlowFallbackColor{cs2::kColorWhite};
-    constexpr cs2::Color kPlayerGlowColorTeamT{cs2::kColorTeamTT};
-    constexpr cs2::Color kPlayerGlowColorTeamCT{cs2::kColorTeamCT};
+    constexpr color::Saturation kSaturation{0.5f};
+    constexpr color::Brightness kBrightness{1.0f};
 
-    constexpr auto kPlayerColors = cs2::kPlayerColors;
+    constexpr color::HueInteger kHostageHue{50};
+    constexpr color::HueInteger kDroppedBombHue{60};
+    constexpr color::HueInteger kTickingBombHue{0};
+    constexpr color::HueInteger kDefuseKitHue{184};
+    constexpr color::HueInteger kMolotovHue{45};
+    constexpr color::HueInteger kFlashbangHue{219};
+    constexpr color::HueInteger kHEGrenadeHue{0};
+    constexpr color::HueInteger kSmokeGrenadeHue{120};
+
+    constexpr color::HueInteger kTeamTHue{35};
+    constexpr color::HueInteger kTeamCTHue{220};
+
+    constexpr color::HueInteger kPlayerBlueHue{215};
+    constexpr color::HueInteger kPlayerGreenHue{125};
+    constexpr color::HueInteger kPlayerYellowHue{53};
+    constexpr color::HueInteger kPlayerOrangeHue{15};
+    constexpr color::HueInteger kPlayerPurpleHue{265};
+
+    constexpr cs2::Color kFallbackColor{191, 191, 191, kGlowAlpha};
 }

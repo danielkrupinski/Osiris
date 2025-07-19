@@ -200,7 +200,8 @@ struct PlayerOutlineGlowColorTestParam {
     Optional<cs2::CCSPlayerController::m_iCompTeammateColor> playerColorIndex{};
     TeamNumber teamNumber{};
     Optional<bool> hasImmunity{};
-    cs2::Color expectedColor{0, 0, 0};
+    Optional<color::Hue> expectedHue{};
+    std::uint8_t expectedColorAlpha{outline_glow_params::kGlowAlpha};
 };
 
 class PlayerOutlineGlowColorTest : public PlayerOutlineGlowTest, public testing::WithParamInterface<PlayerOutlineGlowColorTestParam> {
@@ -215,7 +216,11 @@ TEST_P(PlayerOutlineGlowColorTest, CorrectGlowColorIsApplied) {
     EXPECT_CALL(mockPlayerPawn, teamNumber()).WillRepeatedly(testing::Return(GetParam().teamNumber));
     EXPECT_CALL(mockPlayerController, playerColorIndex()).WillRepeatedly(testing::Return(GetParam().playerColorIndex));
 
-    EXPECT_EQ(playerOutlineGlow.getGlowColor(EntityTypeInfo{}, mockPlayerPawn), GetParam().expectedColor);
+    const auto hue = playerOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlayerPawn);
+    EXPECT_EQ(hue.hasValue(), GetParam().expectedHue.hasValue());
+    if (hue.hasValue() && GetParam().expectedHue.hasValue())
+        EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue.value());
+    EXPECT_EQ(playerOutlineGlow.getGlowColorAlpha(mockPlayerPawn), GetParam().expectedColorAlpha);
 }
 
 INSTANTIATE_TEST_SUITE_P(HealthBased, PlayerOutlineGlowColorTest, testing::ValuesIn(
@@ -224,109 +229,115 @@ INSTANTIATE_TEST_SUITE_P(HealthBased, PlayerOutlineGlowColorTest, testing::Value
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{100},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::kGreenHue}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{120},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::kGreenHue}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{75},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.7474f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::Hue{0.2491582f}}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{25},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.2424f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::Hue{0.08080808f}}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{1},
             .hasImmunity{std::nullopt},
-            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::kRedHue}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{std::nullopt},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{100},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::kGreenHue}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{120},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::kGreenHue}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{75},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.7474f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::Hue{0.2491582f}}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{25},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.2424f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::Hue{0.08080808f}}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{1},
             .hasImmunity{false},
-            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{color::kRedHue}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{std::nullopt},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{100},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{color::kGreenHue},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{120},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(color::kGreenHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{color::kGreenHue},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{75},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.7474f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{color::Hue{0.2491582f}},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{25},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(color::Hue{std::lerp(color::kRedHue, color::kGreenHue, 0.2424f)}, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{color::Hue{0.08080808f}},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{1},
             .hasImmunity{true},
-            .expectedColor{color::HSBtoRGB(color::kRedHue, outline_glow_params::kPlayerGlowSaturation, color::Brightness{1.0f}).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{color::kRedHue},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::HealthBased,
             .health{std::nullopt},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         }
     })
 ));
@@ -337,91 +348,96 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorValidColorIndex, PlayerOutlineGlowColo
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{0},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerColors.at(0).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerBlueHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{1},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerColors.at(1).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerGreenHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{2},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerColors.at(2).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerYellowHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{3},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerColors.at(3).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerOrangeHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{4},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerColors.at(4).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerPurpleHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{0},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerColors.at(0).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerBlueHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{1},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerColors.at(1).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerGreenHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{2},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerColors.at(2).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerYellowHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{3},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerColors.at(3).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerOrangeHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{4},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerColors.at(4).setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerPurpleHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{0},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerColors.at(0).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerBlueHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{1},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerColors.at(1).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerGreenHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{2},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerColors.at(2).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerYellowHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{3},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerColors.at(3).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerOrangeHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{4},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerColors.at(4).setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kPlayerPurpleHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         }
     })
 ));
@@ -433,126 +449,132 @@ INSTANTIATE_TEST_SUITE_P(PlayerOrTeamColorInvalidColorIndex, PlayerOutlineGlowCo
             .playerColorIndex{-1},
             .teamNumber = TeamNumber::TT,
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber::TT,
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{-1},
             .teamNumber = TeamNumber::CT,
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber::CT,
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{-1},
             .teamNumber = TeamNumber{},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber{},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{-1},
             .teamNumber = TeamNumber::TT,
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber::TT,
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{-1},
             .teamNumber = TeamNumber::CT,
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber::CT,
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{-1},
             .teamNumber = TeamNumber{},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber{},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{-1},
             .teamNumber = TeamNumber::TT,
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber::TT,
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{-1},
             .teamNumber = TeamNumber::CT,
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber::CT,
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{-1},
             .teamNumber = TeamNumber{},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::PlayerOrTeamColor,
             .playerColorIndex{5},
             .teamNumber = TeamNumber{},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         }
     })
 ));
@@ -563,55 +585,58 @@ INSTANTIATE_TEST_SUITE_P(TeamColor, PlayerOutlineGlowColorTest, testing::ValuesI
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber::TT,
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber::CT,
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber{},
             .hasImmunity{std::nullopt},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber::TT,
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber::CT,
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber{},
             .hasImmunity{false},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kGlowAlpha)}
+            .expectedHue{}
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber::TT,
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamT.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamTHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber::CT,
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowColorTeamCT.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{outline_glow_params::kTeamCTHue.toHueFloat()},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         },
         {
             .colorMode = PlayerOutlineGlowColorType::TeamColor,
             .teamNumber = TeamNumber{},
             .hasImmunity{true},
-            .expectedColor{outline_glow_params::kPlayerGlowFallbackColor.setAlpha(outline_glow_params::kImmunePlayerGlowAlpha)}
+            .expectedHue{},
+            .expectedColorAlpha = outline_glow_params::kImmunePlayerGlowAlpha
         }
     })
 ));

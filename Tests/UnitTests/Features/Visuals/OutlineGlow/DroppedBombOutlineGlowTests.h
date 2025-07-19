@@ -20,7 +20,7 @@ protected:
 };
 
 TEST_F(DroppedBombOutlineGlowTest, CorrectGlowColorIsReturned) {
-    EXPECT_EQ(droppedBombOutlineGlow.getGlowColor(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kDroppedBombColor);
+    EXPECT_EQ(droppedBombOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kDroppedBombHue.toHueFloat());
 }
 
 struct DroppedBombOutlineGlowConditionTestParam {

@@ -31,5 +31,5 @@ TEST_F(HostageOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
 }
 
 TEST_F(HostageOutlineGlowTest, CorrectGlowColorIsReturned) {
-    EXPECT_EQ(hostageOutlineGlow.getGlowColor(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kHostageColor);
+    EXPECT_EQ(hostageOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kHostageHue.toHueFloat());
 }
