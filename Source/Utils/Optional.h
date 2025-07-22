@@ -57,9 +57,14 @@ class Optional {
 public:
     Optional() = default;
 
+    Optional(std::nullopt_t) noexcept
+        : optional{std::nullopt}
+    {
+    }
+
     template <typename U>
         requires std::is_constructible_v<std::optional<T>, U&&>
-    Optional(U&& value) noexcept
+    explicit(!std::is_convertible_v<U, T>) Optional(U&& value) noexcept
         : optional{std::forward<U>(value)}
     {
     }
