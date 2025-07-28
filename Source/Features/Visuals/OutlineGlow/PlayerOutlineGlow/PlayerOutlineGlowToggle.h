@@ -26,6 +26,7 @@ struct PlayerOutlineGlowToggle {
         case '0': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::PlayerOrTeamColor); break;
         case '1': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::TeamColor); break;
         case '2': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::HealthBased); break;
+        case '3': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::EnemyAlly); break;
         }
     }
 

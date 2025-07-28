@@ -51,6 +51,24 @@ private:
         setDropDownSelectedIndex(mainMenu, "ticking_bomb_outline_glow", !hookContext.config().template getVariable<TickingBombOutlineGlowEnabled>());
         setDropDownSelectedIndex(mainMenu, "defuse_kit_outline_glow", !hookContext.config().template getVariable<DefuseKitOutlineGlowEnabled>());
         setDropDownSelectedIndex(mainMenu, "hostage_outline_glow", !hookContext.config().template getVariable<HostageOutlineGlowEnabled>());
+        updateHueSlider<PlayerOutlineGlowPlayerBlueHue>(mainMenu, "player_outline_glow_blue_hue");
+        updateHueSlider<PlayerOutlineGlowPlayerGreenHue>(mainMenu, "player_outline_glow_green_hue");
+        updateHueSlider<PlayerOutlineGlowPlayerYellowHue>(mainMenu, "player_outline_glow_yellow_hue");
+        updateHueSlider<PlayerOutlineGlowPlayerOrangeHue>(mainMenu, "player_outline_glow_orange_hue");
+        updateHueSlider<PlayerOutlineGlowPlayerPurpleHue>(mainMenu, "player_outline_glow_purple_hue");
+        updateHueSlider<PlayerOutlineGlowTeamTHue>(mainMenu, "player_outline_glow_t_hue");
+        updateHueSlider<PlayerOutlineGlowTeamCTHue>(mainMenu, "player_outline_glow_ct_hue");
+        updateHueSlider<PlayerOutlineGlowLowHealthHue>(mainMenu, "player_outline_glow_low_hp_hue");
+        updateHueSlider<PlayerOutlineGlowHighHealthHue>(mainMenu, "player_outline_glow_high_hp_hue");
+        updateHueSlider<PlayerOutlineGlowAllyHue>(mainMenu, "player_outline_glow_ally_hue");
+        updateHueSlider<PlayerOutlineGlowEnemyHue>(mainMenu, "player_outline_glow_enemy_hue");
+        updateHueSlider<OutlineGlowMolotovHue>(mainMenu, "outline_glow_molotov_hue");
+        updateHueSlider<OutlineGlowFlashbangHue>(mainMenu, "outline_glow_flashbang_hue");
+        updateHueSlider<OutlineGlowHEGrenadeHue>(mainMenu, "outline_glow_hegrenade_hue");
+        updateHueSlider<OutlineGlowSmokeGrenadeHue>(mainMenu, "outline_glow_smoke_hue");
+        updateHueSlider<OutlineGlowDroppedBombHue>(mainMenu, "outline_glow_dropped_bomb_hue");
+        updateHueSlider<OutlineGlowTickingBombHue>(mainMenu, "outline_glow_ticking_bomb_hue");
+        updateHueSlider<OutlineGlowDefuseKitHue>(mainMenu, "outline_glow_defuse_kit_hue");
     }
 
     void updateModelGlowTab(auto&& mainMenu) const noexcept

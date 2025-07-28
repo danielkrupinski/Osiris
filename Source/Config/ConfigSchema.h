@@ -96,6 +96,26 @@ private:
         configConversion.boolean(u8"DefuseKits", loadVariable<DefuseKitOutlineGlowEnabled>(), saveVariable<DefuseKitOutlineGlowEnabled>());
         configConversion.boolean(u8"Hostages", loadVariable<HostageOutlineGlowEnabled>(), saveVariable<HostageOutlineGlowEnabled>());
         configConversion.boolean(u8"GrenadeProjectiles", loadVariable<GrenadeProjectileOutlineGlowEnabled>(), saveVariable<GrenadeProjectileOutlineGlowEnabled>());
+        configConversion.beginObject(u8"Hues");
+        configConversion.uint(u8"PlayerBlue", loadVariable<PlayerOutlineGlowPlayerBlueHue>(), saveVariable<PlayerOutlineGlowPlayerBlueHue>());
+        configConversion.uint(u8"PlayerGreen", loadVariable<PlayerOutlineGlowPlayerGreenHue>(), saveVariable<PlayerOutlineGlowPlayerGreenHue>());
+        configConversion.uint(u8"PlayerYellow", loadVariable<PlayerOutlineGlowPlayerYellowHue>(), saveVariable<PlayerOutlineGlowPlayerYellowHue>());
+        configConversion.uint(u8"PlayerOrange", loadVariable<PlayerOutlineGlowPlayerOrangeHue>(), saveVariable<PlayerOutlineGlowPlayerOrangeHue>());
+        configConversion.uint(u8"PlayerPurple", loadVariable<PlayerOutlineGlowPlayerPurpleHue>(), saveVariable<PlayerOutlineGlowPlayerPurpleHue>());
+        configConversion.uint(u8"TeamT", loadVariable<PlayerOutlineGlowTeamTHue>(), saveVariable<PlayerOutlineGlowTeamTHue>());
+        configConversion.uint(u8"TeamCT", loadVariable<PlayerOutlineGlowTeamCTHue>(), saveVariable<PlayerOutlineGlowTeamCTHue>());
+        configConversion.uint(u8"LowHealth", loadVariable<PlayerOutlineGlowLowHealthHue>(), saveVariable<PlayerOutlineGlowLowHealthHue>());
+        configConversion.uint(u8"HighHealth", loadVariable<PlayerOutlineGlowHighHealthHue>(), saveVariable<PlayerOutlineGlowHighHealthHue>());
+        configConversion.uint(u8"Enemy", loadVariable<PlayerOutlineGlowEnemyHue>(), saveVariable<PlayerOutlineGlowEnemyHue>());
+        configConversion.uint(u8"Ally", loadVariable<PlayerOutlineGlowAllyHue>(), saveVariable<PlayerOutlineGlowAllyHue>());
+        configConversion.uint(u8"Molotov", loadVariable<OutlineGlowMolotovHue>(), saveVariable<OutlineGlowMolotovHue>());
+        configConversion.uint(u8"Flashbang", loadVariable<OutlineGlowFlashbangHue>(), saveVariable<OutlineGlowFlashbangHue>());
+        configConversion.uint(u8"HEGrenade", loadVariable<OutlineGlowHEGrenadeHue>(), saveVariable<OutlineGlowHEGrenadeHue>());
+        configConversion.uint(u8"SmokeGrenade", loadVariable<OutlineGlowSmokeGrenadeHue>(), saveVariable<OutlineGlowSmokeGrenadeHue>());
+        configConversion.uint(u8"DroppedBomb", loadVariable<OutlineGlowDroppedBombHue>(), saveVariable<OutlineGlowDroppedBombHue>());
+        configConversion.uint(u8"TickingBomb", loadVariable<OutlineGlowTickingBombHue>(), saveVariable<OutlineGlowTickingBombHue>());
+        configConversion.uint(u8"DefuseKit", loadVariable<OutlineGlowDefuseKitHue>(), saveVariable<OutlineGlowDefuseKitHue>());
+        configConversion.endObject();
         configConversion.endObject();
 
         configConversion.beginObject(u8"PlayerInfoInWorld");

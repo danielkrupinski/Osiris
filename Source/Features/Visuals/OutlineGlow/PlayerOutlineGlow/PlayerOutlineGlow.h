@@ -24,23 +24,24 @@ public:
 
     [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
     {
-        using namespace outline_glow_params;
-
-        const auto colorMode = hookContext.config().template getVariable<PlayerOutlineGlowColorMode>();
-        if (colorMode == PlayerOutlineGlowColorType::HealthBased) {
-            if (const auto playerHealth = playerPawn.health(); playerHealth.hasValue())
-                return healthColor(healthFraction(playerHealth.value()));
+        switch (getConfigVariable<PlayerOutlineGlowColorMode>()) {
+        using enum PlayerOutlineGlowColorType;
+        case EnemyAlly:
+            if (const auto hue = enemyAllyColorModeHue(playerPawn))
+                return hue->toHueFloat();
             return {};
-        } else if (colorMode == PlayerOutlineGlowColorType::PlayerOrTeamColor) {
-            if (const auto playerColorHue = getPlayerColorHue(playerPawn.playerController().playerColorIndex()))
-                return playerColorHue->toHueFloat();
+        case HealthBased:
+            return healthBasedColorModeHue(playerPawn);
+        case PlayerOrTeamColor:
+            if (const auto playerColor = getPlayerColorHue(playerPawn.playerController().playerColorIndex()))
+                return playerColor->toHueFloat();
+            [[fallthrough]];
+        case TeamColor:
+            if (const auto teamHue = teamColorModeHue(playerPawn))
+                return teamHue->toHueFloat();
+        default:
+            return {};
         }
-
-        switch (playerPawn.teamNumber()) {
-        case TeamNumber::TT: return kTeamTHue.toHueFloat();
-        case TeamNumber::CT: return kTeamCTHue.toHueFloat();
-        default: return {};
-        };
     }
 
     [[nodiscard]] std::uint8_t getGlowColorAlpha(auto&& playerPawn) const noexcept
@@ -52,7 +53,7 @@ public:
 private:
     [[nodiscard]] bool enabled() const noexcept
     {
-        return hookContext.config().template getVariable<PlayerOutlineGlowEnabled>();
+        return getConfigVariable<PlayerOutlineGlowEnabled>();
     }
 
     [[nodiscard]] bool shouldGlowPlayer(auto&& playerPawn) const noexcept
@@ -61,12 +62,38 @@ private:
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
-            && (!hookContext.config().template getVariable<PlayerOutlineGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
+            && (!getConfigVariable<PlayerOutlineGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
-    [[nodiscard]] static color::Hue healthColor(float healthFraction) noexcept
+    [[nodiscard]] std::optional<color::HueInteger> teamColorModeHue(auto&& playerPawn) const noexcept
     {
-        return color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction};
+        switch (playerPawn.teamNumber()) {
+        case TeamNumber::TT: return getConfigVariable<PlayerOutlineGlowTeamTHue>();
+        case TeamNumber::CT: return getConfigVariable<PlayerOutlineGlowTeamCTHue>();
+        default: return {};
+        }
+    }
+
+    [[nodiscard]] std::optional<color::HueInteger> enemyAllyColorModeHue(auto&& playerPawn) const noexcept
+    {
+        if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
+            return *isEnemy ? getConfigVariable<PlayerOutlineGlowEnemyHue>() : getConfigVariable<PlayerOutlineGlowAllyHue>();
+        return {};
+    }
+
+    [[nodiscard]] Optional<color::Hue> healthBasedColorModeHue(auto&& playerPawn) const noexcept
+    {
+        if (const auto healthValue = playerPawn.health(); healthValue.hasValue()) {
+            const auto fraction = healthFraction(healthValue.value());
+
+            const color::HueInteger lowHealthHue{getConfigVariable<PlayerOutlineGlowLowHealthHue>()};
+            const color::HueInteger highHealthHue{getConfigVariable<PlayerOutlineGlowHighHealthHue>()};
+            if (lowHealthHue < highHealthHue)
+                return color::Hue{(lowHealthHue + (highHealthHue - lowHealthHue) * fraction) / 360.0f};
+            else
+                return color::Hue{(lowHealthHue - (lowHealthHue - highHealthHue) * fraction) / 360.0f};
+        }
+        return {};
     }
 
     [[nodiscard]] static constexpr float healthFraction(int playerHealth) noexcept
@@ -87,14 +114,19 @@ private:
             return {};
 
         switch (playerColorIndex.value()) {
-        using namespace outline_glow_params;
-        case 0: return kPlayerBlueHue;
-        case 1: return kPlayerGreenHue;
-        case 2: return kPlayerYellowHue;
-        case 3: return kPlayerOrangeHue;
-        case 4: return kPlayerPurpleHue;
+        case 0: return getConfigVariable<PlayerOutlineGlowPlayerBlueHue>();
+        case 1: return getConfigVariable<PlayerOutlineGlowPlayerGreenHue>();
+        case 2: return getConfigVariable<PlayerOutlineGlowPlayerYellowHue>();
+        case 3: return getConfigVariable<PlayerOutlineGlowPlayerOrangeHue>();
+        case 4: return getConfigVariable<PlayerOutlineGlowPlayerPurpleHue>();
         default: return {};
         }
+    }
+
+    template <typename ConfigVariable>
+    [[nodiscard]] decltype(auto) getConfigVariable() const noexcept
+    {
+        return hookContext.config().template getVariable<ConfigVariable>();
     }
 
     HookContext& hookContext;
