@@ -20,7 +20,7 @@ public:
 
     [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& /* plantedBomb */) const noexcept
     {
-        return outline_glow_params::kTickingBombHue.toHueFloat();
+        return static_cast<color::HueInteger>(hookContext.config().template getVariable<OutlineGlowTickingBombHue>()).toHueFloat();
     }
 
 private:

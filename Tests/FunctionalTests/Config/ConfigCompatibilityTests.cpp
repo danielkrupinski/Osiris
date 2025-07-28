@@ -122,9 +122,32 @@ protected:
         get<ModelGlowDefuseKitHue>() = ModelGlowDefuseKitHue::ValueType{color::HueInteger{227}};
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV6()
     {
         setVariableExpectationsV5();
+        get<PlayerOutlineGlowPlayerBlueHue>() = PlayerOutlineGlowPlayerBlueHue::ValueType{color::HueInteger{200}};
+        get<PlayerOutlineGlowPlayerGreenHue>() = PlayerOutlineGlowPlayerGreenHue::ValueType{color::HueInteger{134}};
+        get<PlayerOutlineGlowPlayerYellowHue>() = PlayerOutlineGlowPlayerYellowHue::ValueType{color::HueInteger{57}};
+        get<PlayerOutlineGlowPlayerOrangeHue>() = PlayerOutlineGlowPlayerOrangeHue::ValueType{color::HueInteger{12}};
+        get<PlayerOutlineGlowPlayerPurpleHue>() = PlayerOutlineGlowPlayerPurpleHue::ValueType{color::HueInteger{256}};
+        get<PlayerOutlineGlowTeamTHue>() = PlayerOutlineGlowTeamTHue::ValueType{color::HueInteger{37}};
+        get<PlayerOutlineGlowTeamCTHue>() = PlayerOutlineGlowTeamCTHue::ValueType{color::HueInteger{227}};
+        get<PlayerOutlineGlowLowHealthHue>() = PlayerOutlineGlowLowHealthHue::ValueType{color::HueInteger{287}};
+        get<PlayerOutlineGlowHighHealthHue>() = PlayerOutlineGlowHighHealthHue::ValueType{color::HueInteger{171}};
+        get<PlayerOutlineGlowEnemyHue>() = PlayerOutlineGlowEnemyHue::ValueType{color::HueInteger{304}};
+        get<PlayerOutlineGlowAllyHue>() = PlayerOutlineGlowEnemyHue::ValueType{color::HueInteger{103}};
+        get<OutlineGlowMolotovHue>() = OutlineGlowMolotovHue::ValueType{color::HueInteger{60}};
+        get<OutlineGlowFlashbangHue>() = OutlineGlowFlashbangHue::ValueType{color::HueInteger{250}};
+        get<OutlineGlowHEGrenadeHue>() = OutlineGlowHEGrenadeHue::ValueType{color::HueInteger{300}};
+        get<OutlineGlowSmokeGrenadeHue>() = OutlineGlowSmokeGrenadeHue::ValueType{color::HueInteger{140}};
+        get<OutlineGlowDroppedBombHue>() = OutlineGlowDroppedBombHue::ValueType{color::HueInteger{302}};
+        get<OutlineGlowTickingBombHue>() = OutlineGlowTickingBombHue::ValueType{color::HueInteger{26}};
+        get<OutlineGlowDefuseKitHue>() = OutlineGlowDefuseKitHue::ValueType{color::HueInteger{160}};
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV6();
     }
 
     struct VariableChecker {
@@ -249,6 +272,11 @@ TEST_F(ConfigCompatibilityLoadTest, ConfigV3) {
 TEST_F(ConfigCompatibilityLoadTest, ConfigV4) {
     setVariableExpectationsV4();
     testLoadingConfigFile("config_v4.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, ConfigV5) {
+    setVariableExpectationsV5();
+    testLoadingConfigFile("config_v5.cfg");
 }
 
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {
