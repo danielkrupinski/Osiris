@@ -109,9 +109,7 @@ private:
 
     [[nodiscard]] auto getHighestEntityIndex() const noexcept
     {
-        const auto highestEntityIndex = hookContext.clientPatternSearchResults().template get<HighestEntityIndexOffset>().of(entitySystem()).get();
-        if (highestEntityIndex && highestEntityIndex->isValid())
-            return *highestEntityIndex;
+        // fixme: highest entity index was removed from entity system in the 28 July 2025 update
         return cs2::kMaxValidEntityIndex;
     }
 

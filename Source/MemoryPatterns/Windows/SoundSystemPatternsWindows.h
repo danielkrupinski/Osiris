@@ -7,6 +7,6 @@ struct SoundSystemPatterns {
     [[nodiscard]] static consteval auto addSoundSystemPatterns(auto soundSystemPatterns) noexcept
     {
         return soundSystemPatterns
-            .template addPattern<SoundChannelsPointer, CodePattern{"4C 8B 25 ? ? ? ? 4C 89 AC 24"}.add(3).abs()>();
+            .template addPattern<SoundChannelsPointer, CodePattern{"35 ? ? ? ? 41 8B F9"}.add(1).abs()>();
     }
 };

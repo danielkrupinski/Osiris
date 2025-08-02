@@ -17,10 +17,9 @@ struct Node {
 
 template <typename Key, typename Value, typename Index = int>
 struct CUtlMap {
-    std::uint8_t unknown;
+    Index size;
+    Index allocationCount;
     Node<Key, Value, Index>* memory;
-    int allocationCount;
-    int growSize;
     Index root;
     Index numElements;
 };

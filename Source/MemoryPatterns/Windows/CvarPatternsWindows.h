@@ -13,6 +13,6 @@ struct CvarPatterns {
     [[nodiscard]] static consteval auto addTier0Patterns(auto tier0Patterns) noexcept
     {
         return tier0Patterns
-            .template addPattern<OffsetToConVarList, CodePattern{"74 ? 48 8B 41 ? 44 0F B7"}.add(5).read()>();
+            .template addPattern<OffsetToConVarList, CodePattern{"48 8B ? ? 0F B7 ? 48 03 ? ? 8B ? ? ? 8B"}.add(3).read()>();
     }
 };

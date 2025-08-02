@@ -7,6 +7,6 @@ struct SliderPatterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<SliderSetValueFunction, CodePattern{"C9 F3 0F 5E CE E8 ? ? ? ?"}.add(6).abs()>();
+            .template addPattern<SliderSetValueFunction, CodePattern{"CF E8 ? ? ? ? 0F 28 74 24 ? 48 8B 74"}.add(2).abs()>();
     }
 };

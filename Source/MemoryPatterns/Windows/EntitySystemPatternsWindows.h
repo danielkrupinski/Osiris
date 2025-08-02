@@ -7,9 +7,9 @@ struct EntitySystemPatterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<EntitySystemPointer, CodePattern{"48 8B 0D ? ? ? ? 48 8D 94 24 ? ? ? ? 33 DB"}.add(3).abs()>()
-            .template addPattern<HighestEntityIndexOffset, CodePattern{"3B 8F ? ? ? ? 7E 06"}.add(2).read()>()
-            .template addPattern<EntityListOffset, CodePattern{"48 8D 4B ? E8 ? ? ? ? 8D 85"}.add(3).read()>()
-            .template addPattern<OffsetToEntityClasses, CodePattern{"49 8B 85 ? ? ? ? 44 0F"}.add(3).read()>();
+            .template addPattern<EntitySystemPointer, CodePattern{"48 89 ? ? ? ? ? 4C 63 ? ? ? ? ? 44 3B ? ? ? ? ? 0F"}.add(3).abs()>()
+          // fixme: removed .template addPattern<HighestEntityIndexOffset, CodePattern{"3B 8F ? ? ? ? 7E 06"}.add(2).read()>()
+            .template addPattern<EntityListOffset, CodePattern{"48 8D ? ? E8 ? ? ? ? 8D 85"}.add(3).read()>()
+            .template addPattern<OffsetToEntityClasses, CodePattern{"8B 86 ? ? ? ? ? 8B ? ? ? FF 15"}.add(2).read()>();
     }
 };
