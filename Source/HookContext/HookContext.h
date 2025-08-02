@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CS2/Classes/CCVar.h>
+#include <CS2/Classes/CCvar.h>
 #include <Config/Config.h>
 #include <GameClient/Entities/GameRules.h>
 #include <GameClient/Entities/PlantedC4.h>

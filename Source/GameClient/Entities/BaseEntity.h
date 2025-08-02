@@ -107,7 +107,7 @@ public:
     void applySpawnProtectionEffect(cs2::Color color) const noexcept
     {
         renderComponent().sceneObjectUpdaters().forEachSceneObject([color](auto&& sceneObject) {
-            if (!sceneObject.isPartOfViewmodel().valueOr(false)) {
+            if (!sceneObject.isCulledByFirstPersonView().valueOr(false) && !sceneObject.isPartOfViewmodel().valueOr(false)) {
                 auto&& sceneObjectAttributes = sceneObject.attributes();
                 sceneObjectAttributes.setAttributeFloat(cs2::scene_object_attribute::kSpawnInvulnerabilityHash, 1.0f);
                 sceneObjectAttributes.setAttributeColor3(cs2::scene_object_attribute::kInvulnerabilityColorHash, color);
