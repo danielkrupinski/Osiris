@@ -1,5 +1,6 @@
 #pragma once
 
+#include <CS2/Classes/CCvar.h>
 #include <Config/Config.h>
 #include <GameClient/Entities/GameRules.h>
 #include <GameClient/Entities/PlantedC4.h>
@@ -139,7 +140,9 @@ struct HookContext {
         if (!fullGlobalContext.conVars.has_value()) {
             const auto cvar = fullGlobalContext.clientPatternSearchResults.template get<CvarPointer>();
             if (cvar && *cvar && fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>()) {
-                fullGlobalContext.conVars.emplace(ConVarFinder{*fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>().of(*cvar).get()});
+                // fixme: cleanup
+                const auto offsetToConVarListMemory = std::intptr_t(fullGlobalContext.tier0PatternSearchResults.template get<OffsetToConVarList>().of(*cvar).get());
+                fullGlobalContext.conVars.emplace(ConVarFinder{*reinterpret_cast<cs2::CCvar::ConVarList*>(offsetToConVarListMemory - offsetof(cs2::CCvar::ConVarList, memory))});
             }
         }
         return ConVarAccessor{*this, *fullGlobalContext.conVars, conVarAccessorState};

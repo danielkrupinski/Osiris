@@ -13,8 +13,10 @@ struct GlobalVars {
 
     [[nodiscard]] Optional<float> frametime() const noexcept
     {
+        /* FIXME: see cs2::GlobalVars
         if (globalVars)
             return globalVars->frametime;
+        */
         return {};
     }
 

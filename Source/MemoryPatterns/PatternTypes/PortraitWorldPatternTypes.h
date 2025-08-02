@@ -7,4 +7,4 @@
 #include <Utils/StrongTypeAlias.h>
 
 STRONG_TYPE_ALIAS(OffsetToPortraitWorldEntities, FieldOffset<cs2::CCS_PortraitWorld, cs2::CCS_PortraitWorld::DynamicEntityHandles, std::int8_t>);
-STRONG_TYPE_ALIAS(OffsetToPortraitWorldMapEntities, FieldOffset<cs2::CCS_PortraitWorld, cs2::CCS_PortraitWorld::MapEntityHandles, std::int8_t>);
+STRONG_TYPE_ALIAS(OffsetToPortraitWorldMapEntities, FieldOffset<cs2::CCS_PortraitWorld, cs2::CCS_PortraitWorld::MapEntityHandles, std::int32_t>);

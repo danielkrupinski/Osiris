@@ -49,7 +49,7 @@ struct PanoramaUiPanelContext {
     {
         if (const auto style = getStyle()) {
             // FIXME: hardcoded virtual method index
-            reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::Color* color)>((*reinterpret_cast<void(***)()>(style))[56])(style, &color);
+            reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::Color* color)>((*reinterpret_cast<void(***)()>(style))[58])(style, &color);
         }
     }
 
@@ -57,7 +57,7 @@ struct PanoramaUiPanelContext {
     {
         if (const auto style = getStyle()) {
             // FIXME: hardcoded virtual method index
-            reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::Color* color)>((*reinterpret_cast<void(***)()>(style))[53])(style, &color);
+            reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::Color* color)>((*reinterpret_cast<void(***)()>(style))[55])(style, &color);
         }
     }
 

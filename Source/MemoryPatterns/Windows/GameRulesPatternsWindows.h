@@ -8,7 +8,7 @@ struct GameRulesPatterns {
     {
         return clientPatterns
             .template addPattern<GameRulesPointer, CodePattern{"48 8B 0D ? ? ? ? 48 85 C9 0F 84 ? ? ? ? 80 BE"}.add(3).abs()>()
-            .template addPattern<RoundStartTimeOffset, CodePattern{"F3 0F 10 43 ? 0F 5B C9"}.add(4).read()>()
-            .template addPattern<OffsetToRoundRestartTime, CodePattern{"F3 0F 10 71 ? 48 8B 01"}.add(4).read() > ();
+            .template addPattern<RoundStartTimeOffset, CodePattern{"41 ? 48 8B C2 F3 0F 11"}.add(1).read()>()
+            .template addPattern<OffsetToRoundRestartTime, CodePattern{"0F 84 ? ? ? ? F3 0F 10 43 ? 48 8D 55 ? F3"}.add(10).read()>();
     }
 };

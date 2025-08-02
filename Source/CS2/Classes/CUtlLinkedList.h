@@ -15,9 +15,9 @@ struct CUtlLinkedList {
 
     static constexpr auto kInvalidIndex{static_cast<IndexType>(-1)};
 
+    IndexType size;
+    IndexType allocationCount;
     UtlLinkedListElem_t* memory;
-    int allocationCount;
-    int growSize;
     IndexType m_Head;
 };
 

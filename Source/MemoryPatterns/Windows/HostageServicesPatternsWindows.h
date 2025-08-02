@@ -7,6 +7,6 @@ struct HostageServicesPatterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<OffsetToCarriedHostage, CodePattern{"8B 48 ? 83 F9 FF 74 ? 4D 85 C0"}.add(2).read()>();
+            .template addPattern<OffsetToCarriedHostage, CodePattern{"C1 44 89 47 ? 48 8B ? ? ? ? ? 41"}.add(4).read()>();
     }
 };

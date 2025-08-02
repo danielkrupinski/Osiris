@@ -42,6 +42,11 @@ public:
         return (renderableFlags() & cs2::SCENEOBJECTFLAG_PIPELINE_SPECIFIC_2).notEqual(0);
     }
 
+    [[nodiscard]] auto isPartOfViewmodel() const noexcept
+    {
+        return (renderableFlags() & cs2::SCENEOBJECTFLAG_VIEWMODEL_LAYER).notEqual(0);
+    }
+
 private:
     [[nodiscard]] auto renderableFlags() const noexcept
     {

@@ -96,7 +96,7 @@ public:
         renderComponent().sceneObjectUpdaters().forEachSceneObject([this, color, glowRange](auto&& sceneObject) {
             // this will still show glow for 1 frame when switching spectators as the flags aren't updated yet
             // todo: do player glow in player scene object updater hook to fix it
-            if (!sceneObject.isCulledByFirstPersonView().valueOr(false)) {
+            if (!sceneObject.isCulledByFirstPersonView().valueOr(false) && !sceneObject.isPartOfViewmodel().valueOr(false)) {
                 auto&& glowSceneObject = hookContext.template make<GlowSceneObjects>().getGlowSceneObject(sceneObject);
                 glowSceneObject.apply(sceneObject, color, glowRange);
                 glowSceneObject.setGlowEntity(*this);
@@ -107,9 +107,11 @@ public:
     void applySpawnProtectionEffect(cs2::Color color) const noexcept
     {
         renderComponent().sceneObjectUpdaters().forEachSceneObject([color](auto&& sceneObject) {
-            auto&& sceneObjectAttributes = sceneObject.attributes();
-            sceneObjectAttributes.setAttributeFloat(cs2::scene_object_attribute::kSpawnInvulnerabilityHash, 1.0f);
-            sceneObjectAttributes.setAttributeColor3(cs2::scene_object_attribute::kInvulnerabilityColorHash, color);
+            if (!sceneObject.isCulledByFirstPersonView().valueOr(false) && !sceneObject.isPartOfViewmodel().valueOr(false)) {
+                auto&& sceneObjectAttributes = sceneObject.attributes();
+                sceneObjectAttributes.setAttributeFloat(cs2::scene_object_attribute::kSpawnInvulnerabilityHash, 1.0f);
+                sceneObjectAttributes.setAttributeColor3(cs2::scene_object_attribute::kInvulnerabilityColorHash, color);
+            }
         });
     }
 

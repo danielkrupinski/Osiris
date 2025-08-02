@@ -109,10 +109,9 @@ private:
 
     [[nodiscard]] auto getHighestEntityIndex() const noexcept
     {
-        const auto highestEntityIndex = hookContext.clientPatternSearchResults().template get<HighestEntityIndexOffset>().of(entitySystem()).get();
-        if (highestEntityIndex && highestEntityIndex->isValid())
-            return *highestEntityIndex;
-        return cs2::kMaxValidEntityIndex;
+        // fixme: highest entity index was removed from entity system in the 28 July 2025 update
+        constexpr cs2::CEntityIndex kMaxNetworkableEntityIndex{16383};
+        return kMaxNetworkableEntityIndex;
     }
 
     HookContext& hookContext;

@@ -7,7 +7,7 @@ namespace cs2
 
 struct GlobalVars {
     PAD(48); // FIXME: get offsets to frametime and curtime dynamically
-    float frametime;
+    // FIXME: find frametime: float frametime;
     float curtime;
 };
 

@@ -32,7 +32,7 @@ public:
     [[nodiscard]] cs2::PanelHandle getPanelHandle(cs2::CUIPanel* panel) noexcept
     {
         cs2::PanelHandle handle{};
-        if (hookContext.panoramaPatternSearchResults().template get<GetPanelHandleFunctionPointer>() && thisptr()) {
+        if (panel && hookContext.panoramaPatternSearchResults().template get<GetPanelHandleFunctionPointer>() && thisptr()) {
 #if IS_WIN64()
             hookContext.panoramaPatternSearchResults().template get<GetPanelHandleFunctionPointer>()(*thisptr(), &handle, panel);
 #elif IS_LINUX()

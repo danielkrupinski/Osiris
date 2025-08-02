@@ -7,6 +7,6 @@ struct Ui3dPanelPatterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<OffsetToPortraitWorld, CodePattern{"49 8B 47 ? 48 89 B4"}.add(3).read()>();
+            .template addPattern<OffsetToPortraitWorld, CodePattern{"56 ? 8B 92"}.add(1).read()>();
     }
 };
