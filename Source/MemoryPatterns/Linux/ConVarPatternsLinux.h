@@ -7,7 +7,7 @@ struct ConVarPatterns {
     [[nodiscard]] static consteval auto addTier0Patterns(auto tier0Patterns) noexcept
     {
         return tier0Patterns
-            .template addPattern<OffsetToConVarValueType, CodePattern{"66 41 89 46 ? 66"}.add(4).read()>()
-            .template addPattern<OffsetToConVarValue, CodePattern{"31 F6 48 8D 78 ? 48"}.add(5).read()>();
+            .template addPattern<OffsetToConVarValueType, CodePattern{"? C1 E0 ? 83 C0 ? 48 98 ? 8D 04 ? 48 39 C7 74"}.read()>()
+            .template addPattern<OffsetToConVarValue, CodePattern{"49 89 C7 48 8D 40 ?"}.add(6).read()>();
     }
 };

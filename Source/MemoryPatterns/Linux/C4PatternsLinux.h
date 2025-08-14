@@ -7,6 +7,6 @@ struct C4Patterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<OffsetToIsBeingPlanted, CodePattern{"D2 74 ? 44 0F B6 B7 ? ? ? ?"}.add(7).read()>();
+            .template addPattern<OffsetToIsBeingPlanted, CodePattern{"? ? ? ? 00 75 ? 48 63 87 ? ? ? ? 48"}.read()>();
     }
 };

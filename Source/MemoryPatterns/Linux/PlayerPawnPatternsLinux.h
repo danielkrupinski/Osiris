@@ -9,11 +9,11 @@ struct PlayerPawnPatterns {
         return clientPatterns
             .template addPattern<OffsetToPlayerPawnImmunity, CodePattern{"75 ? 0F B6 83 ? ? ? ? 5B 41"}.add(5).read()>()
             .template addPattern<OffsetToWeaponServices, CodePattern{"48 8B BE ? ? ? ? 48 8D 35 ? ? ? ? E8 ? ? ? ? 48 89 C2"}.add(3).read()>()
-            .template addPattern<OffsetToPlayerController, CodePattern{"77 ? 8B 8B ? ? ? ? 83"}.add(4).read()>()
-            .template addPattern<OffsetToIsDefusing, CodePattern{"78 ? 00 75 ? 80 BB ? ? ? ?"}.add(7).read()>()
-            .template addPattern<OffsetToIsPickingUpHostage, CodePattern{"E8 ? ? ? ? 41 80 ? ? ? ? ? 00 0F 85 ? ? ? ? ? 0F B6 ? ? ? ? ?"}.add(23).read()>()
-            .template addPattern<OffsetToHostageServices, CodePattern{"C6 4C 89 C7 E8 ? ? ? ? 49 8B ? ? ? ? ?"}.add(12).read()>()
-            .template addPattern<OffsetToFlashBangEndTime, CodePattern{"F3 0F 10 87 ? ? ? ? 4D"}.add(4).read()>()
+            .template addPattern<OffsetToPlayerController, CodePattern{"D0 89 87 ? ? ? ? 48 8B 07"}.add(3).read()>()
+            .template addPattern<OffsetToIsDefusing, CodePattern{"? ? ? ? 00 75 ? 41 C6 ? ? ? ? ? 01 80"}.read()>()
+            .template addPattern<OffsetToIsPickingUpHostage, CodePattern{"? ? ? ? 00 74 ? C6 86 ? ? ? ? 00 4C"}.read()>()
+            .template addPattern<OffsetToHostageServices, CodePattern{"? ? ? ? 31 F6 E8 ? ? ? ? ? 89 ? 4C 89 ? E8 ? ? ? ? 84"}.read()>()
+            .template addPattern<OffsetToFlashBangEndTime, CodePattern{"41 0F 10 85 ? ? ? ? F3 0F 5C 05"}.add(4).read()>()
             .template addPattern<OffsetToPlayerPawnSceneObjectUpdaterHandle, CodePattern{"89 83 ? ? ? ? 48 8B BB ? ? ? ? 48 8B"}.add(2).read()>();
     }
 };
