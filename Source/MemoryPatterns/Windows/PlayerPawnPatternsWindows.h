@@ -9,7 +9,7 @@ struct PlayerPawnPatterns {
         return clientPatterns
             .template addPattern<OffsetToPlayerPawnImmunity, CodePattern{"0F B6 83 ? ? ? ? 84 C0 75 ? ? 80"}.add(3).read()>()
             .template addPattern<OffsetToWeaponServices, CodePattern{"48 8B 88 ? ? ? ? 48 8D 15 ? ? ? ? E8 ? ? ? ? 48"}.add(3).read()>()
-            .template addPattern<OffsetToPlayerController, CodePattern{"8B 89 ? ? ? ? 4C 89 60"}.add(2).read()>()
+            .template addPattern<OffsetToPlayerController, CodePattern{"8B 8B ? ? ? ? 44 88 7C"}.add(2).read()>()
             .template addPattern<OffsetToIsDefusing, CodePattern{"75 ? 80 BF ? ? ? ? 00 75 ? 48 8B"}.add(4).read()>()
             .template addPattern<OffsetToIsPickingUpHostage, CodePattern{"86 ? ? ? ? ? ? ? ? 80 BF ? ? ? ?"}.add(11).read()>()
             .template addPattern<OffsetToHostageServices, CodePattern{"0F 87 ? ? ? ? 48 8B 87 ? ? ? ?"}.add(9).read()>()
