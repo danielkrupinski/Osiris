@@ -7,7 +7,7 @@ struct EntityPatterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<OffsetToGameSceneNode, CodePattern{"BE ? ? ? ? E8 ? ? ? ? 49 8B 46"}.add(1).read()>()
+            .template addPattern<OffsetToGameSceneNode, CodePattern{"2C E0 49 8B 85 ? ? ? ?"}.add(5).read()>()
             .template addPattern<OffsetToHealth, CodePattern{"C7 87 ? ? ? ? 00 00 00 00 48 8D 35"}.add(2).read()>()
             .template addPattern<OffsetToLifeState, CodePattern{"0F B6 97 ? ? ? ? 39 F2"}.add(3).read()>()
             .template addPattern<OffsetToTeamNumber, CodePattern{"? ? ? ? 02 48 8D 05 ? ? ? ? 74 ? 48"}.read()>()
