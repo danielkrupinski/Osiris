@@ -7,9 +7,9 @@ struct GameSceneNodePatterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<OffsetToAbsOrigin, CodePattern{"43 ? F3 0F 10 83 ? ? ? ? 66"}.add(6).read()>()
-            .template addPattern<OffsetToGameSceneNodeOwner, CodePattern{"4C 8B 6F ? ? F6 ? ? 0F"}.add(3).read()>()
-            .template addPattern<OffsetToChildGameSceneNode, CodePattern{"? 48 85 DB 75 ? EB ? 0F B6"}.read()>()
-            .template addPattern<OffsetToNextSiblingGameSceneNode, CodePattern{"50 ? 48 8B 5B ? 48 85 DB 0F"}.add(5).read()>();
+            .template addPattern<OffsetToAbsOrigin, CodePattern{"11 ? ? E8 ? ? ? ? F3 0F 10 ? ? ? ? ? F3 0F 10 ? ? 0F 29 43 ? F3 0F 10 83 ? ? ? ?"}.add(29).read()>()
+            .template addPattern<OffsetToGameSceneNodeOwner, CodePattern{"? 31 D2 48 85 C0 74 ? 48 8B 40 ? 8B"}.read()>()
+            .template addPattern<OffsetToChildGameSceneNode, CodePattern{"24 ? 48 85 DB 74 ? 48 89 DF E8 ? ? ? ? 48 8B"}.add(1).read()>()
+            .template addPattern<OffsetToNextSiblingGameSceneNode, CodePattern{"? 48 85 DB 75 ? 49 8B 04 24 4C 89 E7 FF 50"}.read()>();
     }
 };

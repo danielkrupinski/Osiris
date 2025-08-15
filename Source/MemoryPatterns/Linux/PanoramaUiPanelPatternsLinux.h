@@ -8,19 +8,19 @@ struct PanoramaUiPanelPatterns {
     {
         return clientPatterns
             .template addPattern<SetParentFunctionOffset, CodePattern{"48 8B 90 ? ? ? ? 48 85 F6 74 16"}.add(3).read()>()
-            .template addPattern<SetVisibleFunctionOffset, CodePattern{"F6 48 8B 78 ? 48 8B 07 FF 90 ? ? ? ? E9 ? ? ? ? FF"}.add(10).read()>()
-            .template addPattern<GetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 41 80 BC 24 ? ? ? ? ? 48 89 C2"}.add(2).read()>()
-            .template addPattern<SetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 8B BD ? ? ? ? 85"}.add(2).read()>();
+            .template addPattern<SetVisibleFunctionOffset, CodePattern{"49 8B 84 24 ? ? ? ? 31 F6 48 8B 78 ? 48 8B 07 FF 90 ? ? ? ? 4C 89 F7 E8"}.add(19).read()>()
+            .template addPattern<GetAttributeStringFunctionOffset, CodePattern{"FF 90 ? ? ? ? 80 BB 90 ? ? ? ? 48 89 C2"}.add(2).read()>()
+            .template addPattern<SetAttributeStringFunctionOffset, CodePattern{"78 ? 48 8B 07 FF 90 ? ? ? ? 44 8B 8D"}.add(7).read()>();
     }
 
     [[nodiscard]] static consteval auto addPanoramaPatterns(auto panoramaPatterns) noexcept
     {
         return panoramaPatterns
-            .template addPattern<ChildPanelsVectorOffset, CodePattern{"0F 85 ? ? ? ? 8B ? ? 85 D2 0F 84"}.add(8).read()>()
-            .template addPattern<PanelClassesVectorOffset, CodePattern{"74 33 8B 97 ? ? ? ? 85"}.add(4).read()>()
+            .template addPattern<ChildPanelsVectorOffset, CodePattern{"A8 ? 0F 85 ? ? ? ? 8B ? ? 85 D2"}.add(10).read()>()
+            .template addPattern<PanelClassesVectorOffset, CodePattern{"97 ? ? ? ? 85 D2 7E ? 48 8B 87"}.add(1).read()>()
             .template addPattern<PanelStyleOffset, CodePattern{"E8 ? ? ? ? 48 8D 43 ? 48 8B"}.add(8).read()>()
-            .template addPattern<ParentWindowOffset, CodePattern{"4D 89 ? 24 ? 4D 85 ? 0F 84 ? ? ? ? 4C"}.add(4).read()>()
-            .template addPattern<OffsetToPanelId, CodePattern{"00 48 83 7B ? 00 74 ? 48 8D 7B ? 5B 41 5C 41"}.add(4).read()>()
-            .template addPattern<OffsetToPanelFlags, CodePattern{"D8 41 F6 85 ? ? ? ?"}.add(4).read()>();
+            .template addPattern<ParentWindowOffset, CodePattern{"11 43 ? 4D 85 F6"}.add(2).read()>()
+            .template addPattern<OffsetToPanelId, CodePattern{"49 83 7E ? 00 0F 84 ? ? ? ? 49 8D"}.add(3).read()>()
+            .template addPattern<OffsetToPanelFlags, CodePattern{"3E 41 F6 87 ? ? ? ?"}.add(4).read()>();
     }
 };
