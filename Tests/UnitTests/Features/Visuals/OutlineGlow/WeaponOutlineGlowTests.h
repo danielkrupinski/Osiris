@@ -89,10 +89,6 @@ class WeaponOutlineGlowHueTest
       public testing::WithParamInterface<WeaponOutlineGlowHueTestParam> {
 };
 
-// TEST_P(WeaponOutlineGlowColorTest, CorrectGlowColorIsReturned) {
-//     EXPECT_EQ(weaponOutlineGlow.getGlowHue(GetParam().entityTypeInfo, mockBaseEntity), GetParam().expectedHue);
-// }
-
 TEST_P(WeaponOutlineGlowHueTest, CorrectGlowHueIsReturned) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     EXPECT_CALL(mockConfig, getVariable(GetParam().configVarIndex))
@@ -257,28 +253,3 @@ INSTANTIATE_TEST_SUITE_P(NonDefaultConfigVars, WeaponOutlineGlowHueTest, testing
         }
     })
 ));
-
-// INSTANTIATE_TEST_SUITE_P(, WeaponOutlineGlowColorTest, testing::ValuesIn(
-//     std::to_array<WeaponOutlineGlowColorTestParam>({
-//         {
-//             .entityTypeInfo{},
-//             .expectedHue{},
-//         },
-//         {
-//             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_Flashbang>()},
-//             .expectedHue{outline_glow_params::kFlashbangHue.toHueFloat()},
-//         },
-//         {
-//             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenade>()},
-//             .expectedHue{outline_glow_params::kHEGrenadeHue.toHueFloat()},
-//         },
-//         {
-//             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>()},
-//             .expectedHue{outline_glow_params::kMolotovHue.toHueFloat()},
-//         },
-//         {
-//             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>()},
-//             .expectedHue{outline_glow_params::kSmokeGrenadeHue.toHueFloat()},
-//         }
-//     })
-// ));
