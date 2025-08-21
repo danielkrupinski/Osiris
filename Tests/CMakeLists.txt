@@ -6,8 +6,8 @@ if("unit" IN_LIST ENABLE_TESTS OR "functional" IN_LIST ENABLE_TESTS)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG 52eb8108c5bdec04579160ae17225d66034bd723 # v1.17.0
-    GIT_SHALLOW TRUE
+    GIT_TAG fa8438ae6b70c57010177de47a9f13d7041a6328 # v1.17.0 with fix for Clang 21 warning -Wcharacter-conversion
+    # GIT_SHALLOW TRUE # re-enable when new gtest release tag (not just a commit hash) is used above (https://gitlab.kitware.com/cmake/cmake/-/issues/23379)
   )
   FetchContent_MakeAvailable(googletest)
 
