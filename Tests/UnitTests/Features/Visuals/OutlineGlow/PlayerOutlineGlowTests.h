@@ -252,7 +252,7 @@ INSTANTIATE_TEST_SUITE_P(MinMax, PlayerOutlineGlowHealthBasedHueTest, testing::C
 INSTANTIATE_TEST_SUITE_P(MaxMin, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
         .lowHealthHue = 359,
-        .highHealthHu = 0}),
+        .highHealthHue = 0}),
     testing::ValuesIn(std::to_array<PlayerOutlineGlowHealthBasedHueParam>({
         {.health{std::nullopt}, .expectedHue{std::nullopt}},
         {.health{0}, .expectedHue{0.997222f}},
