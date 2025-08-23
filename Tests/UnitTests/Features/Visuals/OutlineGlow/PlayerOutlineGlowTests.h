@@ -657,8 +657,8 @@ TEST_P(PlayerOutlineGlowAlphaTest, CorrectGlowColorAlphaIsReturned) {
 
 INSTANTIATE_TEST_SUITE_P(, PlayerOutlineGlowAlphaTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowAlphaTestParam>({
-        {.hasImmunity{std::nullopt}, .expectedAlpha{outline_glow_params::kGlowAlpha}},
-        {.hasImmunity{false}, .expectedAlpha{outline_glow_params::kGlowAlpha}},
-        {.hasImmunity{true}, .expectedAlpha{outline_glow_params::kImmunePlayerGlowAlpha}}
+        {.hasImmunity{std::nullopt}, .expectedAlpha = outline_glow_params::kGlowAlpha},
+        {.hasImmunity{false}, .expectedAlpha = outline_glow_params::kGlowAlpha},
+        {.hasImmunity{true}, .expectedAlpha = outline_glow_params::kImmunePlayerGlowAlpha}
     }))
 );
