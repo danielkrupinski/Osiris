@@ -237,8 +237,8 @@ static_assert(PlayerOutlineGlowHighHealthHue::ValueType::kMax == 359, "Update th
 
 INSTANTIATE_TEST_SUITE_P(MinMax, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
-        .lowHealthHue{0},
-        .highHealthHue{359}}),
+        .lowHealthHue = 0,
+        .highHealthHue = 359}),
     testing::ValuesIn(std::to_array<PlayerOutlineGlowHealthBasedHueParam>({
         {.health{std::nullopt}, .expectedHue{std::nullopt}},
         {.health{0}, .expectedHue{0.0f}},
@@ -251,8 +251,8 @@ INSTANTIATE_TEST_SUITE_P(MinMax, PlayerOutlineGlowHealthBasedHueTest, testing::C
 
 INSTANTIATE_TEST_SUITE_P(MaxMin, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
-        .lowHealthHue{359},
-        .highHealthHue{0}}),
+        .lowHealthHue = 359,
+        .highHealthHu = 0}),
     testing::ValuesIn(std::to_array<PlayerOutlineGlowHealthBasedHueParam>({
         {.health{std::nullopt}, .expectedHue{std::nullopt}},
         {.health{0}, .expectedHue{0.997222f}},
@@ -266,8 +266,8 @@ INSTANTIATE_TEST_SUITE_P(MaxMin, PlayerOutlineGlowHealthBasedHueTest, testing::C
 
 INSTANTIATE_TEST_SUITE_P(MinMin, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
-        .lowHealthHue{0},
-        .highHealthHue{0}}),
+        .lowHealthHue = 0,
+        .highHealthHue = 0}),
     testing::ValuesIn(std::to_array<PlayerOutlineGlowHealthBasedHueParam>({
         {.health{std::nullopt}, .expectedHue{std::nullopt}},
         {.health{0}, .expectedHue{0.0f}},
@@ -281,8 +281,8 @@ INSTANTIATE_TEST_SUITE_P(MinMin, PlayerOutlineGlowHealthBasedHueTest, testing::C
 
 INSTANTIATE_TEST_SUITE_P(MaxMax, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
-        .lowHealthHue{359},
-        .highHealthHue{359}}),
+        .lowHealthHue = 359,
+        .highHealthHue = 359}),
     testing::ValuesIn(std::to_array<PlayerOutlineGlowHealthBasedHueParam>({
         {.health{std::nullopt}, .expectedHue{std::nullopt}},
         {.health{0}, .expectedHue{0.997222f}},
@@ -299,8 +299,8 @@ static_assert(PlayerOutlineGlowHighHealthHue::kDefaultValue == color::HueInteger
 
 INSTANTIATE_TEST_SUITE_P(Default, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
-        .lowHealthHue{0},
-        .highHealthHue{120}}),
+        .lowHealthHue = 0,
+        .highHealthHue = 120}),
     testing::ValuesIn(std::to_array<PlayerOutlineGlowHealthBasedHueParam>({
         {.health{std::nullopt}, .expectedHue{std::nullopt}},
         {.health{0}, .expectedHue{0.0f}},
@@ -314,8 +314,8 @@ INSTANTIATE_TEST_SUITE_P(Default, PlayerOutlineGlowHealthBasedHueTest, testing::
 
 INSTANTIATE_TEST_SUITE_P(NonDefault, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
-        .lowHealthHue{220},
-        .highHealthHue{280}}),
+        .lowHealthHue = 220,
+        .highHealthHue = 280}),
     testing::ValuesIn(std::to_array<PlayerOutlineGlowHealthBasedHueParam>({
         {.health{std::nullopt}, .expectedHue{std::nullopt}},
         {.health{0}, .expectedHue{0.61111111f}},
