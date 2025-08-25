@@ -192,6 +192,78 @@ private:
             handleHueSlider<ModelGlowDefuseKitHue>("model_glow_defuse_kit_hue");
         } else if (feature == "model_glow_defuse_kit_hue_text") {
             handleHueTextEntry<ModelGlowDefuseKitHue>("model_glow_defuse_kit_hue");
+        } else if (feature == "player_outline_glow_blue_hue") {
+            handleHueSlider<PlayerOutlineGlowPlayerBlueHue>("player_outline_glow_blue_hue");
+        } else if (feature == "player_outline_glow_blue_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowPlayerBlueHue>("player_outline_glow_blue_hue");
+        } else if (feature == "player_outline_glow_green_hue") {
+            handleHueSlider<PlayerOutlineGlowPlayerGreenHue>("player_outline_glow_green_hue");
+        } else if (feature == "player_outline_glow_green_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowPlayerGreenHue>("player_outline_glow_green_hue");
+        } else if (feature == "player_outline_glow_yellow_hue") {
+            handleHueSlider<PlayerOutlineGlowPlayerYellowHue>("player_outline_glow_yellow_hue");
+        } else if (feature == "player_outline_glow_yellow_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowPlayerYellowHue>("player_outline_glow_yellow_hue");
+        } else if (feature == "player_outline_glow_orange_hue") {
+            handleHueSlider<PlayerOutlineGlowPlayerOrangeHue>("player_outline_glow_orange_hue");
+        } else if (feature == "player_outline_glow_orange_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowPlayerOrangeHue>("player_outline_glow_orange_hue");
+        } else if (feature == "player_outline_glow_purple_hue") {
+            handleHueSlider<PlayerOutlineGlowPlayerPurpleHue>("player_outline_glow_purple_hue");
+        } else if (feature == "player_outline_glow_purple_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowPlayerPurpleHue>("player_outline_glow_purple_hue");
+        } else if (feature == "player_outline_glow_t_hue") {
+            handleHueSlider<PlayerOutlineGlowTeamTHue>("player_outline_glow_t_hue");
+        } else if (feature == "player_outline_glow_t_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowTeamTHue>("player_model_glow_t_hue");
+        } else if (feature == "player_outline_glow_ct_hue") {
+            handleHueSlider<PlayerOutlineGlowTeamCTHue>("player_outline_glow_ct_hue");
+        } else if (feature == "player_outline_glow_ct_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowTeamCTHue>("player_outline_glow_ct_hue");
+        } else if (feature == "player_outline_glow_low_hp_hue") {
+            handleHueSlider<PlayerOutlineGlowLowHealthHue>("player_outline_glow_low_hp_hue");
+        } else if (feature == "player_outline_glow_low_hp_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowLowHealthHue>("player_outline_glow_low_hp_hue");
+        } else if (feature == "player_outline_glow_high_hp_hue") {
+            handleHueSlider<PlayerOutlineGlowHighHealthHue>("player_outline_glow_high_hp_hue");
+        } else if (feature == "player_outline_glow_high_hp_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowHighHealthHue>("player_outline_glow_high_hp_hue");
+        } else if (feature == "player_outline_glow_enemy_hue") {
+            handleHueSlider<PlayerOutlineGlowEnemyHue>("player_outline_glow_enemy_hue");
+        } else if (feature == "player_outline_glow_enemy_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowEnemyHue>("player_outline_glow_enemy_hue");
+        } else if (feature == "player_outline_glow_ally_hue") {
+            handleHueSlider<PlayerOutlineGlowAllyHue>("player_outline_glow_ally_hue");
+        } else if (feature == "player_outline_glow_ally_hue_text") {
+            handleHueTextEntry<PlayerOutlineGlowAllyHue>("player_outline_glow_ally_hue");
+        } else if (feature == "outline_glow_molotov_hue") {
+            handleHueSlider<OutlineGlowMolotovHue>("outline_glow_molotov_hue");
+        } else if (feature == "outline_glow_molotov_hue_text") {
+            handleHueTextEntry<OutlineGlowMolotovHue>("outline_glow_molotov_hue");
+        } else if (feature == "outline_glow_flashbang_hue") {
+            handleHueSlider<OutlineGlowFlashbangHue>("outline_glow_flashbang_hue");
+        } else if (feature == "outline_glow_flashbang_hue_text") {
+            handleHueTextEntry<OutlineGlowFlashbangHue>("outline_glow_flashbang_hue");
+        } else if (feature == "outline_glow_hegrenade_hue") {
+            handleHueSlider<OutlineGlowHEGrenadeHue>("outline_glow_hegrenade_hue");
+        } else if (feature == "outline_glow_hegrenade_hue_text") {
+            handleHueTextEntry<OutlineGlowHEGrenadeHue>("outline_glow_hegrenade_hue");
+        } else if (feature == "outline_glow_smoke_hue") {
+            handleHueSlider<OutlineGlowSmokeGrenadeHue>("outline_glow_smoke_hue");
+        } else if (feature == "outline_glow_smoke_hue_text") {
+            handleHueTextEntry<OutlineGlowSmokeGrenadeHue>("outline_glow_smoke_hue");
+        } else if (feature == "outline_glow_dropped_bomb_hue") {
+            handleHueSlider<OutlineGlowDroppedBombHue>("outline_glow_dropped_bomb_hue");
+        } else if (feature == "outline_glow_dropped_bomb_hue_text") {
+            handleHueTextEntry<OutlineGlowDroppedBombHue>("outline_glow_dropped_bomb_hue");
+        } else if (feature == "outline_glow_ticking_bomb_hue") {
+            handleHueSlider<OutlineGlowTickingBombHue>("outline_glow_ticking_bomb_hue");
+        } else if (feature == "outline_glow_ticking_bomb_hue_text") {
+            handleHueTextEntry<OutlineGlowTickingBombHue>("outline_glow_ticking_bomb_hue");
+        } else if (feature == "outline_glow_defuse_kit_hue") {
+            handleHueSlider<OutlineGlowDefuseKitHue>("outline_glow_defuse_kit_hue");
+        } else if (feature == "outline_glow_defuse_kit_hue_text") {
+            handleHueTextEntry<OutlineGlowDefuseKitHue>("outline_glow_defuse_kit_hue");
         }
     }
 

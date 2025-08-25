@@ -45,16 +45,20 @@ private:
 
     [[nodiscard]] Optional<color::HueInteger> getGlowColorHue(EntityTypeInfo entityTypeInfo) const noexcept
     {
-        using namespace outline_glow_params;
-
         switch (entityTypeInfo.typeIndex) {
         case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
-        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return kMolotovHue;
-        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return kFlashbangHue;
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return kHEGrenadeHue;
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return kSmokeGrenadeHue;
+        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return getConfigVariable<OutlineGlowMolotovHue>();
+        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return getConfigVariable<OutlineGlowFlashbangHue>();
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return getConfigVariable<OutlineGlowHEGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return getConfigVariable<OutlineGlowSmokeGrenadeHue>();
         default: return {};
         }
+    }
+
+    template <typename ConfigVariable>
+    [[nodiscard]] decltype(auto) getConfigVariable() const noexcept
+    {
+        return hookContext.config().template getVariable<ConfigVariable>();
     }
 
     HookContext& hookContext;

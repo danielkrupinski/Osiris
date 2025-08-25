@@ -30,10 +30,42 @@ TEST_F(DefuseKitOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
     EXPECT_TRUE(defuseKitOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
-TEST_F(DefuseKitOutlineGlowTest, CorrectGlowColorIsReturned) {
-    EXPECT_EQ(defuseKitOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kDefuseKitHue.toHueFloat());
-}
-
 TEST_F(DefuseKitOutlineGlowTest, CorrectGlowRangeIsReturned) {
     EXPECT_EQ(defuseKitOutlineGlow.getGlowRange(), outline_glow_params::kDefuseKitGlowRange);
 }
+
+struct DefuseKitOutlineGlowHueTestParam {
+    color::HueInteger::UnderlyingType configuredHue{};
+    color::Hue::ValueType expectedHue{};
+};
+
+class DefuseKitOutlineGlowHueTest
+    : public DefuseKitOutlineGlowTest,
+      public testing::WithParamInterface<DefuseKitOutlineGlowHueTestParam> {
+};
+
+TEST_P(DefuseKitOutlineGlowHueTest, CorrectGlowHueIsReturned) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<OutlineGlowDefuseKitHue>()))
+        .WillOnce(testing::Return(OutlineGlowDefuseKitHue::ValueType{color::HueInteger{GetParam().configuredHue}}));
+
+    const auto hue = defuseKitOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity);
+    ASSERT_TRUE(hue.hasValue());
+    EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue);
+}
+
+static_assert(OutlineGlowDefuseKitHue::ValueType::kMin == 0, "Update the test below");
+INSTANTIATE_TEST_SUITE_P(MinConfigVar, DefuseKitOutlineGlowHueTest,
+                         testing::Values(DefuseKitOutlineGlowHueTestParam{.configuredHue = 0, .expectedHue = 0.0f}));
+
+static_assert(OutlineGlowDefuseKitHue::ValueType::kMax == 359, "Update the test below");
+INSTANTIATE_TEST_SUITE_P(MaxConfigVar, DefuseKitOutlineGlowHueTest,
+                         testing::Values(DefuseKitOutlineGlowHueTestParam{.configuredHue = 359, .expectedHue = 0.99722222f}));
+
+static_assert(OutlineGlowDefuseKitHue::kDefaultValue == color::HueInteger{184}, "Update the tests below");
+
+INSTANTIATE_TEST_SUITE_P(DefaultConfigVar, DefuseKitOutlineGlowHueTest,
+                         testing::Values(DefuseKitOutlineGlowHueTestParam{.configuredHue = 184, .expectedHue = 0.51111111f}));
+
+INSTANTIATE_TEST_SUITE_P(NonDefaultConfigVar, DefuseKitOutlineGlowHueTest,
+                         testing::Values(DefuseKitOutlineGlowHueTestParam{.configuredHue = 222, .expectedHue = 0.61666666f}));

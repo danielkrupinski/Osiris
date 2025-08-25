@@ -20,7 +20,7 @@ public:
 
     [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& /* defuseKit */) const noexcept
     {
-        return outline_glow_params::kDefuseKitHue.toHueFloat();
+        return static_cast<color::HueInteger>(hookContext.config().template getVariable<OutlineGlowDefuseKitHue>()).toHueFloat();
     }
 
     [[nodiscard]] int getGlowRange() const noexcept
