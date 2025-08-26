@@ -39,12 +39,12 @@ public:
 private:
     [[nodiscard]] bool isDisabled() const noexcept
     {
-        return !hookContext.config().template getVariable<GrenadeProjectileModelGlowEnabled>() && !state().grenadeProjectileModelGlowDisabling;
+        return !hookContext.config().template getVariable<model_glow_vars::GlowGrenadeProjectiles>() && !state().grenadeProjectileModelGlowDisabling;
     }
 
     [[nodiscard]] bool isEnabled() const noexcept
     {
-        return hookContext.config().template getVariable<ModelGlowEnabled>() && hookContext.config().template getVariable<GrenadeProjectileModelGlowEnabled>();
+        return hookContext.config().template getVariable<model_glow_vars::Enabled>() && hookContext.config().template getVariable<model_glow_vars::GlowGrenadeProjectiles>();
     }
 
     [[nodiscard]] auto& state() const noexcept
@@ -55,10 +55,10 @@ private:
     [[nodiscard]] std::optional<color::HueInteger> getHue(EntityTypeInfo entityTypeInfo) const noexcept
     {
         switch (entityTypeInfo.typeIndex) {
-        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return hookContext.config().template getVariable<ModelGlowFlashbangHue>();
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return hookContext.config().template getVariable<ModelGlowHEGrenadeHue>();
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return hookContext.config().template getVariable<ModelGlowSmokeGrenadeHue>();
-        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return hookContext.config().template getVariable<ModelGlowMolotovHue>();
+        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return hookContext.config().template getVariable<model_glow_vars::FlashbangHue>();
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return hookContext.config().template getVariable<model_glow_vars::HEGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return hookContext.config().template getVariable<model_glow_vars::SmokeGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return hookContext.config().template getVariable<model_glow_vars::MolotovHue>();
         default: return {};
         }
     }

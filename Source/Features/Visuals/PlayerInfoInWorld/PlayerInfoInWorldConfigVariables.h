@@ -8,17 +8,22 @@ enum class PlayerHealthTextColor : std::uint8_t {
     White
 };
 
-CONFIG_VARIABLE(PlayerInfoInWorldEnabled, bool, false);
-CONFIG_VARIABLE(PlayerInfoInWorldOnlyEnemies, bool, false);
-CONFIG_VARIABLE(PlayerInfoInWorldPlayerPositionArrowEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldPlayerPositionArrowColorMode, PlayerPositionArrowColorType, PlayerPositionArrowColorType::PlayerOrTeamColor);
-CONFIG_VARIABLE(PlayerInfoInWorldPlayerHealthEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldPlayerHealthColorMode, PlayerHealthTextColor, PlayerHealthTextColor::HealthBased);
-CONFIG_VARIABLE(PlayerInfoInWorldActiveWeaponIconEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldActiveWeaponAmmoEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldBombCarrierIconEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldBombPlantIconEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldBombDefuseIconEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldHostagePickupIconEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldHostageRescueIconEnabled, bool, true);
-CONFIG_VARIABLE(PlayerInfoInWorldBlindedIconEnabled, bool, true);
+namespace player_info_vars
+{
+
+CONFIG_VARIABLE(Enabled, bool, false);
+CONFIG_VARIABLE(OnlyEnemies, bool, false);
+CONFIG_VARIABLE(PlayerPositionArrowEnabled, bool, true);
+CONFIG_VARIABLE(PlayerPositionArrowColorMode, PlayerPositionArrowColorType, PlayerPositionArrowColorType::PlayerOrTeamColor);
+CONFIG_VARIABLE(PlayerHealthEnabled, bool, true);
+CONFIG_VARIABLE(PlayerHealthColorMode, PlayerHealthTextColor, PlayerHealthTextColor::HealthBased);
+CONFIG_VARIABLE(ActiveWeaponIconEnabled, bool, true);
+CONFIG_VARIABLE(ActiveWeaponAmmoEnabled, bool, true);
+CONFIG_VARIABLE(BombCarrierIconEnabled, bool, true);
+CONFIG_VARIABLE(BombPlantIconEnabled, bool, true);
+CONFIG_VARIABLE(BombDefuseIconEnabled, bool, true);
+CONFIG_VARIABLE(HostagePickupIconEnabled, bool, true);
+CONFIG_VARIABLE(HostageRescueIconEnabled, bool, true);
+CONFIG_VARIABLE(BlindedIconEnabled, bool, true);
+
+}

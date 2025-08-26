@@ -37,7 +37,7 @@ class DroppedBombOutlineGlowConditionTest
 };
 
 TEST_P(DroppedBombOutlineGlowConditionTest, ShouldApplyGlowWhenExpected) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<DroppedBombOutlineGlowEnabled>()))
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowDroppedBomb>()))
         .WillOnce(testing::Return(GetParam().enabled));
     if (GetParam().expectBombHasOwnerCalled)
         EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(GetParam().bombHasOwner));
@@ -64,23 +64,23 @@ class DroppedBombOutlineGlowHueTest
 };
 
 TEST_P(DroppedBombOutlineGlowHueTest, CorrectGlowHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<OutlineGlowDroppedBombHue>()))
-        .WillOnce(testing::Return(OutlineGlowDroppedBombHue::ValueType{color::HueInteger{GetParam().configuredHue}}));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::DroppedBombHue>()))
+        .WillOnce(testing::Return(outline_glow_vars::DroppedBombHue::ValueType{color::HueInteger{GetParam().configuredHue}}));
 
     const auto hue = droppedBombOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity);
     ASSERT_TRUE(hue.hasValue());
     EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue);
 }
 
-static_assert(OutlineGlowDroppedBombHue::ValueType::kMin == 0, "Update the test below");
+static_assert(outline_glow_vars::DroppedBombHue::ValueType::kMin == 0, "Update the test below");
 INSTANTIATE_TEST_SUITE_P(MinConfigVar, DroppedBombOutlineGlowHueTest,
                          testing::Values(DroppedBombOutlineGlowHueTestParam{.configuredHue = 0, .expectedHue = 0.0f}));
 
-static_assert(OutlineGlowDroppedBombHue::ValueType::kMax == 359, "Update the test below");
+static_assert(outline_glow_vars::DroppedBombHue::ValueType::kMax == 359, "Update the test below");
 INSTANTIATE_TEST_SUITE_P(MaxConfigVar, DroppedBombOutlineGlowHueTest,
                          testing::Values(DroppedBombOutlineGlowHueTestParam{.configuredHue = 359, .expectedHue = 0.99722222f}));
 
-static_assert(OutlineGlowDroppedBombHue::kDefaultValue == color::HueInteger{60}, "Update the tests below");
+static_assert(outline_glow_vars::DroppedBombHue::kDefaultValue == color::HueInteger{60}, "Update the tests below");
 
 INSTANTIATE_TEST_SUITE_P(DefaultConfigVar, DroppedBombOutlineGlowHueTest,
                          testing::Values(DroppedBombOutlineGlowHueTestParam{.configuredHue = 60, .expectedHue = 0.16666666f}));

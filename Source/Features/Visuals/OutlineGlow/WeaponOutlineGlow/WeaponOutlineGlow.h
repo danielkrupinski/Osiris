@@ -35,7 +35,7 @@ public:
 private:
     [[nodiscard]] bool enabled() const noexcept
     {
-        return hookContext.config().template getVariable<WeaponOutlineGlowEnabled>();
+        return hookContext.config().template getVariable<outline_glow_vars::GlowWeapons>();
     }
 
     [[nodiscard]] bool shouldGlowWeapon(auto&& weapon) const noexcept
@@ -47,10 +47,10 @@ private:
     {
         switch (entityTypeInfo.typeIndex) {
         case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
-        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return getConfigVariable<OutlineGlowMolotovHue>();
-        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return getConfigVariable<OutlineGlowFlashbangHue>();
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return getConfigVariable<OutlineGlowHEGrenadeHue>();
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return getConfigVariable<OutlineGlowSmokeGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return getConfigVariable<outline_glow_vars::MolotovHue>();
+        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return getConfigVariable<outline_glow_vars::FlashbangHue>();
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return getConfigVariable<outline_glow_vars::HEGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return getConfigVariable<outline_glow_vars::SmokeGrenadeHue>();
         default: return {};
         }
     }

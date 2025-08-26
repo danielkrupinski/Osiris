@@ -64,46 +64,46 @@ public:
                 hookContext.soundWatcher().template startWatching<WeaponScopeSound>();
             else
                 hookContext.soundWatcher().template stopWatching<WeaponScopeSound>();
-        } else if constexpr (std::is_same_v<ConfigVariable, ModelGlowEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::Enabled>) {
             if (!newValue)
                 hookContext.featuresStates().visualFeaturesStates.modelGlowState.modelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, DefuseKitModelGlowEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowDefuseKits>) {
             if (!newValue)
                 hookContext.featuresStates().visualFeaturesStates.modelGlowState.defuseKitModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, DroppedBombModelGlowEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowDroppedBomb>) {
             if (!newValue)
                 hookContext.featuresStates().visualFeaturesStates.modelGlowState.droppedBombModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, GrenadeProjectileModelGlowEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowGrenadeProjectiles>) {
             if (!newValue)
                 hookContext.featuresStates().visualFeaturesStates.modelGlowState.grenadeProjectileModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, PlayerModelGlowEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowPlayers>) {
             if (!newValue)
                 hookContext.featuresStates().visualFeaturesStates.modelGlowState.playerModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, TickingBombModelGlowEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowTickingBomb>) {
             if (!newValue)
                 hookContext.featuresStates().visualFeaturesStates.modelGlowState.tickingBombModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, WeaponModelGlowEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowWeapons>) {
             if (!newValue)
                 hookContext.featuresStates().visualFeaturesStates.modelGlowState.weaponModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, OutlineGlowEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, outline_glow_vars::Enabled>) {
             if (!newValue)
                 hookContext.template make<GlowSceneObjects>().clearObjects();
-        } else if constexpr (std::is_same_v<ConfigVariable, PlayerInfoInWorldBombDefuseIconEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, player_info_vars::BombDefuseIconEnabled>) {
             if (newValue)
                 hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<DefuseIconPanel>();
             else
                 hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<DefuseIconPanel>();
-        } else if constexpr (std::is_same_v<ConfigVariable, PlayerInfoInWorldHostagePickupIconEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, player_info_vars::HostagePickupIconEnabled>) {
             if (newValue)
                 hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostagePickupPanel>();
             else
                 hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<HostagePickupPanel>();
-        } else if constexpr (std::is_same_v<ConfigVariable, PlayerInfoInWorldHostageRescueIconEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, player_info_vars::HostageRescueIconEnabled>) {
             if (newValue)
                 hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostageRescuePanel>();
             else
                 hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<HostageRescuePanel>();
-        } else if constexpr (std::is_same_v<ConfigVariable, PlayerInfoInWorldBlindedIconEnabled>) {
+        } else if constexpr (std::is_same_v<ConfigVariable, player_info_vars::BlindedIconEnabled>) {
             if (newValue)
                 hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<BlindedIconPanel>();
             else

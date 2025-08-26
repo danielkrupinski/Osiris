@@ -20,13 +20,13 @@ public:
 
     [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& /* bomb */) const noexcept
     {
-        return static_cast<color::HueInteger>(hookContext.config().template getVariable<OutlineGlowDroppedBombHue>()).toHueFloat();
+        return static_cast<color::HueInteger>(hookContext.config().template getVariable<outline_glow_vars::DroppedBombHue>()).toHueFloat();
     }
 
 private:
     [[nodiscard]] bool enabled() const noexcept
     {
-        return hookContext.config().template getVariable<DroppedBombOutlineGlowEnabled>();
+        return hookContext.config().template getVariable<outline_glow_vars::GlowDroppedBomb>();
     }
 
     [[nodiscard]] bool shouldGlowBomb(auto&& bomb) const noexcept

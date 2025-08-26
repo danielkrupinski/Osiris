@@ -29,7 +29,7 @@ public:
 
     void applyGlowToEntity(EntityTypeInfo entityTypeInfo, auto&& modelEntity) noexcept
     {
-        if (!hookContext.config().template getVariable<OutlineGlowEnabled>())
+        if (!hookContext.config().template getVariable<outline_glow_vars::Enabled>())
             return;
 
         if (modelEntity.glowProperty().isGlowing().valueOr(false))

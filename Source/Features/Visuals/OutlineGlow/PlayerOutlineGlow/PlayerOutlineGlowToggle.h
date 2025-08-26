@@ -14,19 +14,19 @@ struct PlayerOutlineGlowToggle {
     void update(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.config().template setVariable<PlayerOutlineGlowEnabled>(true); hookContext.config().template setVariable<PlayerOutlineGlowOnlyEnemies>(true); break;
-        case '1': hookContext.config().template setVariable<PlayerOutlineGlowEnabled>(true); hookContext.config().template setVariable<PlayerOutlineGlowOnlyEnemies>(false); break;
-        case '2': hookContext.config().template setVariable<PlayerOutlineGlowEnabled>(false); break;
+        case '0': hookContext.config().template setVariable<outline_glow_vars::GlowPlayers>(true); hookContext.config().template setVariable<outline_glow_vars::GlowOnlyEnemies>(true); break;
+        case '1': hookContext.config().template setVariable<outline_glow_vars::GlowPlayers>(true); hookContext.config().template setVariable<outline_glow_vars::GlowOnlyEnemies>(false); break;
+        case '2': hookContext.config().template setVariable<outline_glow_vars::GlowPlayers>(false); break;
         }
     }
 
     void updateColor(char option) noexcept
     {
         switch (option) {
-        case '0': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::PlayerOrTeamColor); break;
-        case '1': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::TeamColor); break;
-        case '2': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::HealthBased); break;
-        case '3': hookContext.config().template setVariable<PlayerOutlineGlowColorMode>(PlayerOutlineGlowColorType::EnemyAlly); break;
+        case '0': hookContext.config().template setVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::PlayerOrTeamColor); break;
+        case '1': hookContext.config().template setVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::TeamColor); break;
+        case '2': hookContext.config().template setVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::HealthBased); break;
+        case '3': hookContext.config().template setVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::EnemyAlly); break;
         }
     }
 

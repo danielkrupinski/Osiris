@@ -20,7 +20,7 @@ public:
 
     void update(auto&& playerPawn, Visibility bombIconVisibility) const noexcept
     {
-        if (!context.config().template getVariable<PlayerInfoInWorldActiveWeaponIconEnabled>() || (bombIconVisibility == Visibility::Visible && playerPawn.getActiveWeapon().template is<C4>())) {
+        if (!context.config().template getVariable<player_info_vars::ActiveWeaponIconEnabled>() || (bombIconVisibility == Visibility::Visible && playerPawn.getActiveWeapon().template is<C4>())) {
             context.panel().setVisible(false);
             return;
         }

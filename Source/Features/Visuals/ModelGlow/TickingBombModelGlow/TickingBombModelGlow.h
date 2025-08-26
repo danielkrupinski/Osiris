@@ -36,17 +36,17 @@ public:
 private:
     [[nodiscard]] cs2::Color getColor() const noexcept
     {
-        return color::HSBtoRGB(hookContext.config().template getVariable<ModelGlowTickingBombHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
+        return color::HSBtoRGB(hookContext.config().template getVariable<model_glow_vars::TickingBombHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
     }
 
     [[nodiscard]] bool isDisabled() const noexcept
     {
-        return !hookContext.config().template getVariable<TickingBombModelGlowEnabled>() && !state().tickingBombModelGlowDisabling;
+        return !hookContext.config().template getVariable<model_glow_vars::GlowTickingBomb>() && !state().tickingBombModelGlowDisabling;
     }
 
     [[nodiscard]] bool isEnabled() const noexcept
     {
-        return hookContext.config().template getVariable<ModelGlowEnabled>() && hookContext.config().template getVariable<TickingBombModelGlowEnabled>();
+        return hookContext.config().template getVariable<model_glow_vars::Enabled>() && hookContext.config().template getVariable<model_glow_vars::GlowTickingBomb>();
     }
 
     [[nodiscard]] bool shouldGlowPlantedBombModel(auto&& plantedBomb) const noexcept

@@ -40,24 +40,24 @@ public:
 
     void onUnload(auto&& bomb) const noexcept
     {
-        if (hookContext.config().template getVariable<DroppedBombModelGlowEnabled>() || state().droppedBombModelGlowDisabling)
+        if (hookContext.config().template getVariable<model_glow_vars::GlowDroppedBomb>() || state().droppedBombModelGlowDisabling)
             unhookWeaponSceneObjectUpdater(bomb);
     }
 
 private:
     [[nodiscard]] cs2::Color getColor() const noexcept
     {
-        return color::HSBtoRGB(hookContext.config().template getVariable<ModelGlowDroppedBombHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
+        return color::HSBtoRGB(hookContext.config().template getVariable<model_glow_vars::DroppedBombHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
     }
 
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return hookContext.config().template getVariable<DroppedBombModelGlowEnabled>() || state().droppedBombModelGlowDisabling;
+        return hookContext.config().template getVariable<model_glow_vars::GlowDroppedBomb>() || state().droppedBombModelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return hookContext.config().template getVariable<DroppedBombModelGlowEnabled>();
+        return hookContext.config().template getVariable<model_glow_vars::GlowDroppedBomb>();
     }
 
     void hookWeaponSceneObjectUpdater(auto&& bomb) const noexcept
@@ -92,7 +92,7 @@ private:
 
     [[nodiscard]] bool shouldGlowBombModel(auto&& bomb) const noexcept
     {
-        return hookContext.config().template getVariable<ModelGlowEnabled>() && !bomb.baseWeapon().baseEntity().hasOwner().valueOr(true);
+        return hookContext.config().template getVariable<model_glow_vars::Enabled>() && !bomb.baseWeapon().baseEntity().hasOwner().valueOr(true);
     }
 
     [[nodiscard]] auto& state() const noexcept

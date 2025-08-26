@@ -32,7 +32,7 @@ public:
 private:
     [[nodiscard]] bool enabled() const noexcept
     {
-        return getConfigVariable<GrenadeProjectileOutlineGlowEnabled>();
+        return getConfigVariable<outline_glow_vars::GlowGrenadeProjectiles>();
     }
 
     [[nodiscard]] bool shouldGlowGrenadeProjectile(EntityTypeInfo entityTypeInfo, auto&& grenadeProjectile) const noexcept
@@ -43,10 +43,10 @@ private:
     [[nodiscard]] Optional<color::HueInteger> getGlowColorHue(EntityTypeInfo entityTypeInfo) const noexcept
     {
         switch (entityTypeInfo.typeIndex) {
-        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return getConfigVariable<OutlineGlowFlashbangHue>();
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return getConfigVariable<OutlineGlowHEGrenadeHue>();
-        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return getConfigVariable<OutlineGlowMolotovHue>();
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return getConfigVariable<OutlineGlowSmokeGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return getConfigVariable<outline_glow_vars::FlashbangHue>();
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return getConfigVariable<outline_glow_vars::HEGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return getConfigVariable<outline_glow_vars::MolotovHue>();
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return getConfigVariable<outline_glow_vars::SmokeGrenadeHue>();
         default: return {};
         }
     }

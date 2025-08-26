@@ -26,79 +26,79 @@ private:
     void updatePlayerInfoInWorldTab(auto&& mainMenu) const noexcept
     {
         setDropDownSelectedIndex(mainMenu, "player_information_through_walls", playerInfoDropDownIndex());
-        setDropDownSelectedIndex(mainMenu, "player_info_position", !hookContext.config().template getVariable<PlayerInfoInWorldPlayerPositionArrowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_position_color", static_cast<int>(hookContext.config().template getVariable<PlayerInfoInWorldPlayerPositionArrowColorMode>()));
-        setDropDownSelectedIndex(mainMenu, "player_info_health", !hookContext.config().template getVariable<PlayerInfoInWorldPlayerHealthEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_health_color", static_cast<int>(hookContext.config().template getVariable<PlayerInfoInWorldPlayerHealthColorMode>()));
-        setDropDownSelectedIndex(mainMenu, "player_info_weapon", !hookContext.config().template getVariable<PlayerInfoInWorldActiveWeaponIconEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_weapon_clip", !hookContext.config().template getVariable<PlayerInfoInWorldActiveWeaponAmmoEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_bomb_carrier", !hookContext.config().template getVariable<PlayerInfoInWorldBombCarrierIconEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_bomb_planting", !hookContext.config().template getVariable<PlayerInfoInWorldBombPlantIconEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_defuse", !hookContext.config().template getVariable<PlayerInfoInWorldBombDefuseIconEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_hostage_pickup", !hookContext.config().template getVariable<PlayerInfoInWorldHostagePickupIconEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_hostage_rescue", !hookContext.config().template getVariable<PlayerInfoInWorldHostageRescueIconEnabled>());
-        setDropDownSelectedIndex(mainMenu, "player_info_blinded", !hookContext.config().template getVariable<PlayerInfoInWorldBlindedIconEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_position", !hookContext.config().template getVariable<player_info_vars::PlayerPositionArrowEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_position_color", static_cast<int>(hookContext.config().template getVariable<player_info_vars::PlayerPositionArrowColorMode>()));
+        setDropDownSelectedIndex(mainMenu, "player_info_health", !hookContext.config().template getVariable<player_info_vars::PlayerHealthEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_health_color", static_cast<int>(hookContext.config().template getVariable<player_info_vars::PlayerHealthColorMode>()));
+        setDropDownSelectedIndex(mainMenu, "player_info_weapon", !hookContext.config().template getVariable<player_info_vars::ActiveWeaponIconEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_weapon_clip", !hookContext.config().template getVariable<player_info_vars::ActiveWeaponAmmoEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_bomb_carrier", !hookContext.config().template getVariable<player_info_vars::BombCarrierIconEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_bomb_planting", !hookContext.config().template getVariable<player_info_vars::BombPlantIconEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_defuse", !hookContext.config().template getVariable<player_info_vars::BombDefuseIconEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_hostage_pickup", !hookContext.config().template getVariable<player_info_vars::HostagePickupIconEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_hostage_rescue", !hookContext.config().template getVariable<player_info_vars::HostageRescueIconEnabled>());
+        setDropDownSelectedIndex(mainMenu, "player_info_blinded", !hookContext.config().template getVariable<player_info_vars::BlindedIconEnabled>());
     }
 
     void updateOutlineGlowTab(auto&& mainMenu) const noexcept
     {
-        setDropDownSelectedIndex(mainMenu, "outline_glow_enable", !hookContext.config().template getVariable<OutlineGlowEnabled>());
+        setDropDownSelectedIndex(mainMenu, "outline_glow_enable", !hookContext.config().template getVariable<outline_glow_vars::Enabled>());
         setDropDownSelectedIndex(mainMenu, "player_outline_glow", playerOutlineGlowDropDownIndex());
-        setDropDownSelectedIndex(mainMenu, "player_outline_glow_color", static_cast<int>(hookContext.config().template getVariable<PlayerOutlineGlowColorMode>()));
-        setDropDownSelectedIndex(mainMenu, "weapon_outline_glow", !hookContext.config().template getVariable<WeaponOutlineGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "grenade_proj_outline_glow", !hookContext.config().template getVariable<WeaponOutlineGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "dropped_bomb_outline_glow", !hookContext.config().template getVariable<DroppedBombOutlineGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "ticking_bomb_outline_glow", !hookContext.config().template getVariable<TickingBombOutlineGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "defuse_kit_outline_glow", !hookContext.config().template getVariable<DefuseKitOutlineGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "hostage_outline_glow", !hookContext.config().template getVariable<HostageOutlineGlowEnabled>());
-        updateHueSlider<PlayerOutlineGlowPlayerBlueHue>(mainMenu, "player_outline_glow_blue_hue");
-        updateHueSlider<PlayerOutlineGlowPlayerGreenHue>(mainMenu, "player_outline_glow_green_hue");
-        updateHueSlider<PlayerOutlineGlowPlayerYellowHue>(mainMenu, "player_outline_glow_yellow_hue");
-        updateHueSlider<PlayerOutlineGlowPlayerOrangeHue>(mainMenu, "player_outline_glow_orange_hue");
-        updateHueSlider<PlayerOutlineGlowPlayerPurpleHue>(mainMenu, "player_outline_glow_purple_hue");
-        updateHueSlider<PlayerOutlineGlowTeamTHue>(mainMenu, "player_outline_glow_t_hue");
-        updateHueSlider<PlayerOutlineGlowTeamCTHue>(mainMenu, "player_outline_glow_ct_hue");
-        updateHueSlider<PlayerOutlineGlowLowHealthHue>(mainMenu, "player_outline_glow_low_hp_hue");
-        updateHueSlider<PlayerOutlineGlowHighHealthHue>(mainMenu, "player_outline_glow_high_hp_hue");
-        updateHueSlider<PlayerOutlineGlowAllyHue>(mainMenu, "player_outline_glow_ally_hue");
-        updateHueSlider<PlayerOutlineGlowEnemyHue>(mainMenu, "player_outline_glow_enemy_hue");
-        updateHueSlider<OutlineGlowMolotovHue>(mainMenu, "outline_glow_molotov_hue");
-        updateHueSlider<OutlineGlowFlashbangHue>(mainMenu, "outline_glow_flashbang_hue");
-        updateHueSlider<OutlineGlowHEGrenadeHue>(mainMenu, "outline_glow_hegrenade_hue");
-        updateHueSlider<OutlineGlowSmokeGrenadeHue>(mainMenu, "outline_glow_smoke_hue");
-        updateHueSlider<OutlineGlowDroppedBombHue>(mainMenu, "outline_glow_dropped_bomb_hue");
-        updateHueSlider<OutlineGlowTickingBombHue>(mainMenu, "outline_glow_ticking_bomb_hue");
-        updateHueSlider<OutlineGlowDefuseKitHue>(mainMenu, "outline_glow_defuse_kit_hue");
+        setDropDownSelectedIndex(mainMenu, "player_outline_glow_color", static_cast<int>(hookContext.config().template getVariable<outline_glow_vars::PlayerGlowColorMode>()));
+        setDropDownSelectedIndex(mainMenu, "weapon_outline_glow", !hookContext.config().template getVariable<outline_glow_vars::GlowWeapons>());
+        setDropDownSelectedIndex(mainMenu, "grenade_proj_outline_glow", !hookContext.config().template getVariable<outline_glow_vars::GlowWeapons>());
+        setDropDownSelectedIndex(mainMenu, "dropped_bomb_outline_glow", !hookContext.config().template getVariable<outline_glow_vars::GlowDroppedBomb>());
+        setDropDownSelectedIndex(mainMenu, "ticking_bomb_outline_glow", !hookContext.config().template getVariable<outline_glow_vars::GlowTickingBomb>());
+        setDropDownSelectedIndex(mainMenu, "defuse_kit_outline_glow", !hookContext.config().template getVariable<outline_glow_vars::GlowDefuseKits>());
+        setDropDownSelectedIndex(mainMenu, "hostage_outline_glow", !hookContext.config().template getVariable<outline_glow_vars::GlowHostages>());
+        updateHueSlider<outline_glow_vars::PlayerBlueHue>(mainMenu, "player_outline_glow_blue_hue");
+        updateHueSlider<outline_glow_vars::PlayerGreenHue>(mainMenu, "player_outline_glow_green_hue");
+        updateHueSlider<outline_glow_vars::PlayerYellowHue>(mainMenu, "player_outline_glow_yellow_hue");
+        updateHueSlider<outline_glow_vars::PlayerOrangeHue>(mainMenu, "player_outline_glow_orange_hue");
+        updateHueSlider<outline_glow_vars::PlayerPurpleHue>(mainMenu, "player_outline_glow_purple_hue");
+        updateHueSlider<outline_glow_vars::TeamTHue>(mainMenu, "player_outline_glow_t_hue");
+        updateHueSlider<outline_glow_vars::TeamCTHue>(mainMenu, "player_outline_glow_ct_hue");
+        updateHueSlider<outline_glow_vars::LowHealthHue>(mainMenu, "player_outline_glow_low_hp_hue");
+        updateHueSlider<outline_glow_vars::HighHealthHue>(mainMenu, "player_outline_glow_high_hp_hue");
+        updateHueSlider<outline_glow_vars::AllyHue>(mainMenu, "player_outline_glow_ally_hue");
+        updateHueSlider<outline_glow_vars::EnemyHue>(mainMenu, "player_outline_glow_enemy_hue");
+        updateHueSlider<outline_glow_vars::MolotovHue>(mainMenu, "outline_glow_molotov_hue");
+        updateHueSlider<outline_glow_vars::FlashbangHue>(mainMenu, "outline_glow_flashbang_hue");
+        updateHueSlider<outline_glow_vars::HEGrenadeHue>(mainMenu, "outline_glow_hegrenade_hue");
+        updateHueSlider<outline_glow_vars::SmokeGrenadeHue>(mainMenu, "outline_glow_smoke_hue");
+        updateHueSlider<outline_glow_vars::DroppedBombHue>(mainMenu, "outline_glow_dropped_bomb_hue");
+        updateHueSlider<outline_glow_vars::TickingBombHue>(mainMenu, "outline_glow_ticking_bomb_hue");
+        updateHueSlider<outline_glow_vars::DefuseKitHue>(mainMenu, "outline_glow_defuse_kit_hue");
     }
 
     void updateModelGlowTab(auto&& mainMenu) const noexcept
     {
-        setDropDownSelectedIndex(mainMenu, "model_glow_enable", !hookContext.config().template getVariable<ModelGlowEnabled>());
+        setDropDownSelectedIndex(mainMenu, "model_glow_enable", !hookContext.config().template getVariable<model_glow_vars::Enabled>());
         setDropDownSelectedIndex(mainMenu, "player_model_glow", playerModelGlowDropDownIndex());
-        setDropDownSelectedIndex(mainMenu, "player_model_glow_color", static_cast<int>(hookContext.config().template getVariable<PlayerModelGlowColorMode>()));
-        setDropDownSelectedIndex(mainMenu, "weapon_model_glow", !hookContext.config().template getVariable<WeaponModelGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "grenade_proj_model_glow", !hookContext.config().template getVariable<GrenadeProjectileModelGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "dropped_bomb_model_glow", !hookContext.config().template getVariable<DroppedBombModelGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "ticking_bomb_model_glow", !hookContext.config().template getVariable<TickingBombModelGlowEnabled>());
-        setDropDownSelectedIndex(mainMenu, "defuse_kit_model_glow", !hookContext.config().template getVariable<DefuseKitModelGlowEnabled>());
-        updateHueSlider<PlayerModelGlowPlayerBlueHue>(mainMenu, "player_model_glow_blue_hue");
-        updateHueSlider<PlayerModelGlowPlayerGreenHue>(mainMenu, "player_model_glow_green_hue");
-        updateHueSlider<PlayerModelGlowPlayerYellowHue>(mainMenu, "player_model_glow_yellow_hue");
-        updateHueSlider<PlayerModelGlowPlayerOrangeHue>(mainMenu, "player_model_glow_orange_hue");
-        updateHueSlider<PlayerModelGlowPlayerPurpleHue>(mainMenu, "player_model_glow_purple_hue");
-        updateHueSlider<PlayerModelGlowTeamTHue>(mainMenu, "player_model_glow_t_hue");
-        updateHueSlider<PlayerModelGlowTeamCTHue>(mainMenu, "player_model_glow_ct_hue");
-        updateHueSlider<PlayerModelGlowLowHealthHue>(mainMenu, "player_model_glow_low_hp_hue");
-        updateHueSlider<PlayerModelGlowHighHealthHue>(mainMenu, "player_model_glow_high_hp_hue");
-        updateHueSlider<PlayerModelGlowAllyHue>(mainMenu, "player_model_glow_ally_hue");
-        updateHueSlider<PlayerModelGlowEnemyHue>(mainMenu, "player_model_glow_enemy_hue");
-        updateHueSlider<ModelGlowMolotovHue>(mainMenu, "model_glow_molotov_hue");
-        updateHueSlider<ModelGlowFlashbangHue>(mainMenu, "model_glow_flashbang_hue");
-        updateHueSlider<ModelGlowHEGrenadeHue>(mainMenu, "model_glow_hegrenade_hue");
-        updateHueSlider<ModelGlowSmokeGrenadeHue>(mainMenu, "model_glow_smoke_hue");
-        updateHueSlider<ModelGlowDroppedBombHue>(mainMenu, "model_glow_dropped_bomb_hue");
-        updateHueSlider<ModelGlowTickingBombHue>(mainMenu, "model_glow_ticking_bomb_hue");
-        updateHueSlider<ModelGlowDefuseKitHue>(mainMenu, "model_glow_defuse_kit_hue");
+        setDropDownSelectedIndex(mainMenu, "player_model_glow_color", static_cast<int>(hookContext.config().template getVariable<model_glow_vars::PlayerGlowColorMode>()));
+        setDropDownSelectedIndex(mainMenu, "weapon_model_glow", !hookContext.config().template getVariable<model_glow_vars::GlowWeapons>());
+        setDropDownSelectedIndex(mainMenu, "grenade_proj_model_glow", !hookContext.config().template getVariable<model_glow_vars::GlowGrenadeProjectiles>());
+        setDropDownSelectedIndex(mainMenu, "dropped_bomb_model_glow", !hookContext.config().template getVariable<model_glow_vars::GlowDroppedBomb>());
+        setDropDownSelectedIndex(mainMenu, "ticking_bomb_model_glow", !hookContext.config().template getVariable<model_glow_vars::GlowTickingBomb>());
+        setDropDownSelectedIndex(mainMenu, "defuse_kit_model_glow", !hookContext.config().template getVariable<model_glow_vars::GlowDefuseKits>());
+        updateHueSlider<model_glow_vars::PlayerBlueHue>(mainMenu, "player_model_glow_blue_hue");
+        updateHueSlider<model_glow_vars::PlayerGreenHue>(mainMenu, "player_model_glow_green_hue");
+        updateHueSlider<model_glow_vars::PlayerYellowHue>(mainMenu, "player_model_glow_yellow_hue");
+        updateHueSlider<model_glow_vars::PlayerOrangeHue>(mainMenu, "player_model_glow_orange_hue");
+        updateHueSlider<model_glow_vars::PlayerPurpleHue>(mainMenu, "player_model_glow_purple_hue");
+        updateHueSlider<model_glow_vars::TeamTHue>(mainMenu, "player_model_glow_t_hue");
+        updateHueSlider<model_glow_vars::TeamCTHue>(mainMenu, "player_model_glow_ct_hue");
+        updateHueSlider<model_glow_vars::LowHealthHue>(mainMenu, "player_model_glow_low_hp_hue");
+        updateHueSlider<model_glow_vars::HighHealthHue>(mainMenu, "player_model_glow_high_hp_hue");
+        updateHueSlider<model_glow_vars::AllyHue>(mainMenu, "player_model_glow_ally_hue");
+        updateHueSlider<model_glow_vars::EnemyHue>(mainMenu, "player_model_glow_enemy_hue");
+        updateHueSlider<model_glow_vars::MolotovHue>(mainMenu, "model_glow_molotov_hue");
+        updateHueSlider<model_glow_vars::FlashbangHue>(mainMenu, "model_glow_flashbang_hue");
+        updateHueSlider<model_glow_vars::HEGrenadeHue>(mainMenu, "model_glow_hegrenade_hue");
+        updateHueSlider<model_glow_vars::SmokeGrenadeHue>(mainMenu, "model_glow_smoke_hue");
+        updateHueSlider<model_glow_vars::DroppedBombHue>(mainMenu, "model_glow_dropped_bomb_hue");
+        updateHueSlider<model_glow_vars::TickingBombHue>(mainMenu, "model_glow_ticking_bomb_hue");
+        updateHueSlider<model_glow_vars::DefuseKitHue>(mainMenu, "model_glow_defuse_kit_hue");
     }
 
     template <typename ConfigVariable>
@@ -122,22 +122,22 @@ private:
 
     [[nodiscard]] int playerInfoDropDownIndex() const noexcept
     {
-        if (hookContext.config().template getVariable<PlayerInfoInWorldEnabled>())
-            return hookContext.config().template getVariable<PlayerInfoInWorldOnlyEnemies>() ? 0 : 1;
+        if (hookContext.config().template getVariable<player_info_vars::Enabled>())
+            return hookContext.config().template getVariable<player_info_vars::OnlyEnemies>() ? 0 : 1;
         return 2;
     }
 
     [[nodiscard]] int playerOutlineGlowDropDownIndex() const noexcept
     {
-        if (hookContext.config().template getVariable<PlayerOutlineGlowEnabled>())
-            return hookContext.config().template getVariable<PlayerOutlineGlowOnlyEnemies>() ? 0 : 1;
+        if (hookContext.config().template getVariable<outline_glow_vars::GlowPlayers>())
+            return hookContext.config().template getVariable<outline_glow_vars::GlowOnlyEnemies>() ? 0 : 1;
         return 2;
     }
 
     [[nodiscard]] int playerModelGlowDropDownIndex() const noexcept
     {
-        if (hookContext.config().template getVariable<PlayerModelGlowEnabled>())
-            return hookContext.config().template getVariable<PlayerModelGlowOnlyEnemies>() ? 0 : 1;
+        if (hookContext.config().template getVariable<model_glow_vars::GlowPlayers>())
+            return hookContext.config().template getVariable<model_glow_vars::GlowOnlyEnemies>() ? 0 : 1;
         return 2;
     }
 

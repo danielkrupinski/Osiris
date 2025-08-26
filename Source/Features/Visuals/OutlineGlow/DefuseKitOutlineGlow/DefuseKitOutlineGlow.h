@@ -15,12 +15,12 @@ public:
 
     [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& /* defuseKit */) const noexcept
     {
-        return hookContext.config().template getVariable<DefuseKitOutlineGlowEnabled>();
+        return hookContext.config().template getVariable<outline_glow_vars::GlowDefuseKits>();
     }
 
     [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& /* defuseKit */) const noexcept
     {
-        return static_cast<color::HueInteger>(hookContext.config().template getVariable<OutlineGlowDefuseKitHue>()).toHueFloat();
+        return static_cast<color::HueInteger>(hookContext.config().template getVariable<outline_glow_vars::DefuseKitHue>()).toHueFloat();
     }
 
     [[nodiscard]] int getGlowRange() const noexcept

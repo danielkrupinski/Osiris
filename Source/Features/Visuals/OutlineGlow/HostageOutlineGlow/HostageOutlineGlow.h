@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& /* hostage */) const noexcept
     {
-        return hookContext.config().template getVariable<HostageOutlineGlowEnabled>();
+        return hookContext.config().template getVariable<outline_glow_vars::GlowHostages>();
     }
 
     [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& /* hostage */) const noexcept

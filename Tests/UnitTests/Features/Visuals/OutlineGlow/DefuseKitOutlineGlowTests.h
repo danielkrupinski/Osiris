@@ -20,13 +20,13 @@ protected:
 
 TEST_F(DefuseKitOutlineGlowTest, GlowShouldNotBeAppliedWhenNotEnabled) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<DefuseKitOutlineGlowEnabled>())).WillOnce(testing::Return(false));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowDefuseKits>())).WillOnce(testing::Return(false));
     EXPECT_FALSE(defuseKitOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
 TEST_F(DefuseKitOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<DefuseKitOutlineGlowEnabled>())).WillOnce(testing::Return(true));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowDefuseKits>())).WillOnce(testing::Return(true));
     EXPECT_TRUE(defuseKitOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
@@ -46,23 +46,23 @@ class DefuseKitOutlineGlowHueTest
 
 TEST_P(DefuseKitOutlineGlowHueTest, CorrectGlowHueIsReturned) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<OutlineGlowDefuseKitHue>()))
-        .WillOnce(testing::Return(OutlineGlowDefuseKitHue::ValueType{color::HueInteger{GetParam().configuredHue}}));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::DefuseKitHue>()))
+        .WillOnce(testing::Return(outline_glow_vars::DefuseKitHue::ValueType{color::HueInteger{GetParam().configuredHue}}));
 
     const auto hue = defuseKitOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity);
     ASSERT_TRUE(hue.hasValue());
     EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue);
 }
 
-static_assert(OutlineGlowDefuseKitHue::ValueType::kMin == 0, "Update the test below");
+static_assert(outline_glow_vars::DefuseKitHue::ValueType::kMin == 0, "Update the test below");
 INSTANTIATE_TEST_SUITE_P(MinConfigVar, DefuseKitOutlineGlowHueTest,
                          testing::Values(DefuseKitOutlineGlowHueTestParam{.configuredHue = 0, .expectedHue = 0.0f}));
 
-static_assert(OutlineGlowDefuseKitHue::ValueType::kMax == 359, "Update the test below");
+static_assert(outline_glow_vars::DefuseKitHue::ValueType::kMax == 359, "Update the test below");
 INSTANTIATE_TEST_SUITE_P(MaxConfigVar, DefuseKitOutlineGlowHueTest,
                          testing::Values(DefuseKitOutlineGlowHueTestParam{.configuredHue = 359, .expectedHue = 0.99722222f}));
 
-static_assert(OutlineGlowDefuseKitHue::kDefaultValue == color::HueInteger{184}, "Update the tests below");
+static_assert(outline_glow_vars::DefuseKitHue::kDefaultValue == color::HueInteger{184}, "Update the tests below");
 
 INSTANTIATE_TEST_SUITE_P(DefaultConfigVar, DefuseKitOutlineGlowHueTest,
                          testing::Values(DefuseKitOutlineGlowHueTestParam{.configuredHue = 184, .expectedHue = 0.51111111f}));

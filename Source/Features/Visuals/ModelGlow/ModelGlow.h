@@ -87,7 +87,7 @@ public:
 
     void onUnload(EntityTypeInfo entityTypeInfo, auto&& entity) const noexcept
     {
-        if (!hookContext.config().template getVariable<ModelGlowEnabled>() && !state().modelGlowDisabling)
+        if (!hookContext.config().template getVariable<model_glow_vars::Enabled>() && !state().modelGlowDisabling)
             return;
 
         if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
@@ -107,12 +107,12 @@ public:
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return hookContext.config().template getVariable<ModelGlowEnabled>() || state().modelGlowDisabling;
+        return hookContext.config().template getVariable<model_glow_vars::Enabled>() || state().modelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return hookContext.config().template getVariable<ModelGlowEnabled>();
+        return hookContext.config().template getVariable<model_glow_vars::Enabled>();
     }
 
     [[nodiscard]] auto& state() const noexcept

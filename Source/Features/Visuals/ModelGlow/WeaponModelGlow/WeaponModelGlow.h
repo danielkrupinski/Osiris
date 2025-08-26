@@ -44,19 +44,19 @@ public:
 
     [[NOINLINE]] void onUnload(auto&& weapon) const noexcept
     {
-        if (hookContext.config().template getVariable<WeaponModelGlowEnabled>() || state().weaponModelGlowDisabling)
+        if (hookContext.config().template getVariable<model_glow_vars::GlowWeapons>() || state().weaponModelGlowDisabling)
             unhookWeaponSceneObjectUpdater(weapon);
     }
 
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return hookContext.config().template getVariable<WeaponModelGlowEnabled>() || state().weaponModelGlowDisabling;
+        return hookContext.config().template getVariable<model_glow_vars::GlowWeapons>() || state().weaponModelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return hookContext.config().template getVariable<WeaponModelGlowEnabled>();
+        return hookContext.config().template getVariable<model_glow_vars::GlowWeapons>();
     }
 
     void hookWeaponSceneObjectUpdater(auto&& weapon) const noexcept
@@ -91,7 +91,7 @@ private:
 
     [[nodiscard]] bool shouldGlowWeaponModel(auto&& weapon) const noexcept
     {
-        return hookContext.config().template getVariable<ModelGlowEnabled>() && !weapon.baseEntity().hasOwner().valueOr(true);
+        return hookContext.config().template getVariable<model_glow_vars::Enabled>() && !weapon.baseEntity().hasOwner().valueOr(true);
     }
 
     [[nodiscard]] auto& state() const noexcept
@@ -103,10 +103,10 @@ private:
     {
         switch (entityTypeInfo.typeIndex) {
         case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
-        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return hookContext.config().template getVariable<ModelGlowMolotovHue>();
-        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return hookContext.config().template getVariable<ModelGlowFlashbangHue>();
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return hookContext.config().template getVariable<ModelGlowHEGrenadeHue>();
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return hookContext.config().template getVariable<ModelGlowSmokeGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return hookContext.config().template getVariable<model_glow_vars::MolotovHue>();
+        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return hookContext.config().template getVariable<model_glow_vars::FlashbangHue>();
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return hookContext.config().template getVariable<model_glow_vars::HEGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return hookContext.config().template getVariable<model_glow_vars::SmokeGrenadeHue>();
         default: return {};
         }
     }

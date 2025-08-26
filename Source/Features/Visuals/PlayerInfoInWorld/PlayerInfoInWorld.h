@@ -20,25 +20,25 @@ struct PlayerInfoInWorldToggle {
     void update(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<PlayerInfoInWorldEnabled>(true); setVariable<PlayerInfoInWorldOnlyEnemies>(true); break;
-        case '1': setVariable<PlayerInfoInWorldEnabled>(true); setVariable<PlayerInfoInWorldOnlyEnemies>(false); break;
-        case '2': setVariable<PlayerInfoInWorldEnabled>(false); break;
+        case '0': setVariable<player_info_vars::Enabled>(true); setVariable<player_info_vars::OnlyEnemies>(true); break;
+        case '1': setVariable<player_info_vars::Enabled>(true); setVariable<player_info_vars::OnlyEnemies>(false); break;
+        case '2': setVariable<player_info_vars::Enabled>(false); break;
         }
     }
 
     void updatePlayerPositionArrowColorMode(char option) const noexcept
     {
         switch (option) {
-        case '0': hookContext.config().template setVariable<PlayerInfoInWorldPlayerPositionArrowColorMode>(PlayerPositionArrowColorType::PlayerOrTeamColor); break;
-        case '1': hookContext.config().template setVariable<PlayerInfoInWorldPlayerPositionArrowColorMode>(PlayerPositionArrowColorType::TeamColor); break;
+        case '0': hookContext.config().template setVariable<player_info_vars::PlayerPositionArrowColorMode>(PlayerPositionArrowColorType::PlayerOrTeamColor); break;
+        case '1': hookContext.config().template setVariable<player_info_vars::PlayerPositionArrowColorMode>(PlayerPositionArrowColorType::TeamColor); break;
         }
     }
 
     void updatePlayerHealthColorMode(char option) const noexcept
     {
         switch (option) {
-        case '0': hookContext.config().template setVariable<PlayerInfoInWorldPlayerHealthColorMode>(PlayerHealthTextColor::HealthBased); break;
-        case '1': hookContext.config().template setVariable<PlayerInfoInWorldPlayerHealthColorMode>(PlayerHealthTextColor::White); break;
+        case '0': hookContext.config().template setVariable<player_info_vars::PlayerHealthColorMode>(PlayerHealthTextColor::HealthBased); break;
+        case '1': hookContext.config().template setVariable<player_info_vars::PlayerHealthColorMode>(PlayerHealthTextColor::White); break;
         }
     }
 

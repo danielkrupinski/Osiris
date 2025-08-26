@@ -20,13 +20,13 @@ public:
 
     [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& /* plantedBomb */) const noexcept
     {
-        return static_cast<color::HueInteger>(hookContext.config().template getVariable<OutlineGlowTickingBombHue>()).toHueFloat();
+        return static_cast<color::HueInteger>(hookContext.config().template getVariable<outline_glow_vars::TickingBombHue>()).toHueFloat();
     }
 
 private:
     [[nodiscard]] bool enabled() const noexcept
     {
-        return hookContext.config().template getVariable<TickingBombOutlineGlowEnabled>();
+        return hookContext.config().template getVariable<outline_glow_vars::GlowTickingBomb>();
     }
 
     [[nodiscard]] bool shouldGlowPlantedBomb(auto&& plantedBomb) const noexcept

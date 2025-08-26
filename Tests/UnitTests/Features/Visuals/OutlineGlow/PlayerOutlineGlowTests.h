@@ -43,9 +43,9 @@ class PlayerOutlineGlowConditionTest
 };
 
 TEST_P(PlayerOutlineGlowConditionTest, GlowIsAppliedWhenExpected) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowEnabled>()))
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowPlayers>()))
         .WillOnce(testing::Return(GetParam().enabled));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowOnlyEnemies>()))
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowOnlyEnemies>()))
         .WillRepeatedly(testing::Return(GetParam().onlyEnemies));
 
     if (GetParam().expectPlayerPawnAccess) {
@@ -214,14 +214,14 @@ class PlayerOutlineGlowHealthBasedHueTest :
 };
 
 TEST_P(PlayerOutlineGlowHealthBasedHueTest, CorrectHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowColorMode>()))
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
         .WillOnce(testing::Return(PlayerOutlineGlowColorType::HealthBased));
 
     const auto [configVariables, param] = GetParam();
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowLowHealthHue>()))
-        .WillRepeatedly(testing::Return(PlayerOutlineGlowLowHealthHue::ValueType{color::HueInteger{configVariables.lowHealthHue}}));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowHighHealthHue>()))
-        .WillRepeatedly(testing::Return(PlayerOutlineGlowHighHealthHue::ValueType{color::HueInteger{configVariables.highHealthHue}}));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::LowHealthHue>()))
+        .WillRepeatedly(testing::Return(outline_glow_vars::LowHealthHue::ValueType{color::HueInteger{configVariables.lowHealthHue}}));
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::HighHealthHue>()))
+        .WillRepeatedly(testing::Return(outline_glow_vars::HighHealthHue::ValueType{color::HueInteger{configVariables.highHealthHue}}));
     EXPECT_CALL(mockPlayerPawn, health()).WillOnce(testing::Return(param.health));
 
     const auto hue = playerOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlayerPawn);
@@ -230,10 +230,10 @@ TEST_P(PlayerOutlineGlowHealthBasedHueTest, CorrectHueIsReturned) {
         EXPECT_FLOAT_EQ(hue.value(), param.expectedHue.value());
 }
 
-static_assert(PlayerOutlineGlowLowHealthHue::ValueType::kMin == 0, "Update the tests below");
-static_assert(PlayerOutlineGlowLowHealthHue::ValueType::kMax == 359, "Update the tests below");
-static_assert(PlayerOutlineGlowHighHealthHue::ValueType::kMin == 0, "Update the tests below");
-static_assert(PlayerOutlineGlowHighHealthHue::ValueType::kMax == 359, "Update the tests below");
+static_assert(outline_glow_vars::LowHealthHue::ValueType::kMin == 0, "Update the tests below");
+static_assert(outline_glow_vars::LowHealthHue::ValueType::kMax == 359, "Update the tests below");
+static_assert(outline_glow_vars::HighHealthHue::ValueType::kMin == 0, "Update the tests below");
+static_assert(outline_glow_vars::HighHealthHue::ValueType::kMax == 359, "Update the tests below");
 
 INSTANTIATE_TEST_SUITE_P(MinMax, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
@@ -294,8 +294,8 @@ INSTANTIATE_TEST_SUITE_P(MaxMax, PlayerOutlineGlowHealthBasedHueTest, testing::C
     }))
 ));
 
-static_assert(PlayerOutlineGlowLowHealthHue::kDefaultValue == color::HueInteger{0}, "Update the tests below");
-static_assert(PlayerOutlineGlowHighHealthHue::kDefaultValue == color::HueInteger{120}, "Update the tests below");
+static_assert(outline_glow_vars::LowHealthHue::kDefaultValue == color::HueInteger{0}, "Update the tests below");
+static_assert(outline_glow_vars::HighHealthHue::kDefaultValue == color::HueInteger{120}, "Update the tests below");
 
 INSTANTIATE_TEST_SUITE_P(Default, PlayerOutlineGlowHealthBasedHueTest, testing::Combine(
     testing::Values(PlayerOutlineGlowHealthBasedHueConfigVariables{
@@ -340,7 +340,7 @@ class PlayerOutlineGlowPlayerColorIndexHueTest
 };
 
 TEST_P(PlayerOutlineGlowPlayerColorIndexHueTest, CorrectHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowColorMode>()))
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
         .WillOnce(testing::Return(PlayerOutlineGlowColorType::PlayerOrTeamColor));
 
     EXPECT_CALL(mockConfig, getVariable(GetParam().configVariableIndex))
@@ -354,124 +354,124 @@ TEST_P(PlayerOutlineGlowPlayerColorIndexHueTest, CorrectHueIsReturned) {
     EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue);
 }
 
-static_assert(PlayerOutlineGlowPlayerBlueHue::ValueType::kMin == 191, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerGreenHue::ValueType::kMin == 110, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerYellowHue::ValueType::kMin == 47, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerOrangeHue::ValueType::kMin == 11, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerPurpleHue::ValueType::kMin == 250, "Update the test below");
+static_assert(outline_glow_vars::PlayerBlueHue::ValueType::kMin == 191, "Update the test below");
+static_assert(outline_glow_vars::PlayerGreenHue::ValueType::kMin == 110, "Update the test below");
+static_assert(outline_glow_vars::PlayerYellowHue::ValueType::kMin == 47, "Update the test below");
+static_assert(outline_glow_vars::PlayerOrangeHue::ValueType::kMin == 11, "Update the test below");
+static_assert(outline_glow_vars::PlayerPurpleHue::ValueType::kMin == 250, "Update the test below");
 
 INSTANTIATE_TEST_SUITE_P(MinConfigVars, PlayerOutlineGlowPlayerColorIndexHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowPlayerColorIndexHueTestParam>({
         {
             .playerColorIndex = 0,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerBlueHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerBlueHue::ValueType{color::HueInteger{191}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerBlueHue>(),
+            .configuredHue{outline_glow_vars::PlayerBlueHue::ValueType{color::HueInteger{191}}},
             .expectedHue = 0.53055555f
         },
         {
             .playerColorIndex = 1,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerGreenHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerGreenHue::ValueType{color::HueInteger{110}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGreenHue>(),
+            .configuredHue{outline_glow_vars::PlayerGreenHue::ValueType{color::HueInteger{110}}},
             .expectedHue = 0.30555555f
         },
         {
             .playerColorIndex = 2,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerYellowHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerYellowHue::ValueType{color::HueInteger{47}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerYellowHue>(),
+            .configuredHue{outline_glow_vars::PlayerYellowHue::ValueType{color::HueInteger{47}}},
             .expectedHue = 0.13055555f
         },
         {
             .playerColorIndex = 3,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerOrangeHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerOrangeHue::ValueType{color::HueInteger{11}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerOrangeHue>(),
+            .configuredHue{outline_glow_vars::PlayerOrangeHue::ValueType{color::HueInteger{11}}},
             .expectedHue = 0.03055555f
         },
         {
             .playerColorIndex = 4,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerPurpleHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerPurpleHue::ValueType{color::HueInteger{250}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerPurpleHue>(),
+            .configuredHue{outline_glow_vars::PlayerPurpleHue::ValueType{color::HueInteger{250}}},
             .expectedHue = 0.69444444f
         }
     })
 ));
 
-static_assert(PlayerOutlineGlowPlayerBlueHue::ValueType::kMax == 240, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerGreenHue::ValueType::kMax == 140, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerYellowHue::ValueType::kMax == 60, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerOrangeHue::ValueType::kMax == 20, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerPurpleHue::ValueType::kMax == 280, "Update the test below");
+static_assert(outline_glow_vars::PlayerBlueHue::ValueType::kMax == 240, "Update the test below");
+static_assert(outline_glow_vars::PlayerGreenHue::ValueType::kMax == 140, "Update the test below");
+static_assert(outline_glow_vars::PlayerYellowHue::ValueType::kMax == 60, "Update the test below");
+static_assert(outline_glow_vars::PlayerOrangeHue::ValueType::kMax == 20, "Update the test below");
+static_assert(outline_glow_vars::PlayerPurpleHue::ValueType::kMax == 280, "Update the test below");
 
 INSTANTIATE_TEST_SUITE_P(MaxConfigVars, PlayerOutlineGlowPlayerColorIndexHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowPlayerColorIndexHueTestParam>({
         {
             .playerColorIndex = 0,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerBlueHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerBlueHue::ValueType{color::HueInteger{240}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerBlueHue>(),
+            .configuredHue{outline_glow_vars::PlayerBlueHue::ValueType{color::HueInteger{240}}},
             .expectedHue = 0.66666666f
         },
         {
             .playerColorIndex = 1,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerGreenHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerGreenHue::ValueType{color::HueInteger{140}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGreenHue>(),
+            .configuredHue{outline_glow_vars::PlayerGreenHue::ValueType{color::HueInteger{140}}},
             .expectedHue = 0.38888888f
         },
         {
             .playerColorIndex = 2,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerYellowHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerYellowHue::ValueType{color::HueInteger{60}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerYellowHue>(),
+            .configuredHue{outline_glow_vars::PlayerYellowHue::ValueType{color::HueInteger{60}}},
             .expectedHue = 0.16666666f
         },
         {
             .playerColorIndex = 3,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerOrangeHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerOrangeHue::ValueType{color::HueInteger{20}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerOrangeHue>(),
+            .configuredHue{outline_glow_vars::PlayerOrangeHue::ValueType{color::HueInteger{20}}},
             .expectedHue = 0.05555555f
         },
         {
             .playerColorIndex = 4,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerPurpleHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerPurpleHue::ValueType{color::HueInteger{280}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerPurpleHue>(),
+            .configuredHue{outline_glow_vars::PlayerPurpleHue::ValueType{color::HueInteger{280}}},
             .expectedHue = 0.77777777f
         }
     })
 ));
 
-static_assert(PlayerOutlineGlowPlayerBlueHue::kDefaultValue == color::HueInteger{215}, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerGreenHue::kDefaultValue == color::HueInteger{125}, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerYellowHue::kDefaultValue == color::HueInteger{53}, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerOrangeHue::kDefaultValue == color::HueInteger{15}, "Update the test below");
-static_assert(PlayerOutlineGlowPlayerPurpleHue::kDefaultValue == color::HueInteger{265}, "Update the test below");
+static_assert(outline_glow_vars::PlayerBlueHue::kDefaultValue == color::HueInteger{215}, "Update the test below");
+static_assert(outline_glow_vars::PlayerGreenHue::kDefaultValue == color::HueInteger{125}, "Update the test below");
+static_assert(outline_glow_vars::PlayerYellowHue::kDefaultValue == color::HueInteger{53}, "Update the test below");
+static_assert(outline_glow_vars::PlayerOrangeHue::kDefaultValue == color::HueInteger{15}, "Update the test below");
+static_assert(outline_glow_vars::PlayerPurpleHue::kDefaultValue == color::HueInteger{265}, "Update the test below");
 
 INSTANTIATE_TEST_SUITE_P(DefaultConfigVars, PlayerOutlineGlowPlayerColorIndexHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowPlayerColorIndexHueTestParam>({
         {
             .playerColorIndex = 0,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerBlueHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerBlueHue::ValueType{color::HueInteger{215}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerBlueHue>(),
+            .configuredHue{outline_glow_vars::PlayerBlueHue::ValueType{color::HueInteger{215}}},
             .expectedHue = 0.59722222f
         },
         {
             .playerColorIndex = 1,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerGreenHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerGreenHue::ValueType{color::HueInteger{125}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGreenHue>(),
+            .configuredHue{outline_glow_vars::PlayerGreenHue::ValueType{color::HueInteger{125}}},
             .expectedHue = 0.34722222f
         },
         {
             .playerColorIndex = 2,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerYellowHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerYellowHue::ValueType{color::HueInteger{53}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerYellowHue>(),
+            .configuredHue{outline_glow_vars::PlayerYellowHue::ValueType{color::HueInteger{53}}},
             .expectedHue = 0.14722222f
         },
         {
             .playerColorIndex = 3,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerOrangeHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerOrangeHue::ValueType{color::HueInteger{15}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerOrangeHue>(),
+            .configuredHue{outline_glow_vars::PlayerOrangeHue::ValueType{color::HueInteger{15}}},
             .expectedHue = 0.04166666f
         },
         {
             .playerColorIndex = 4,
-            .configVariableIndex = ConfigVariableTypes::indexOf<PlayerOutlineGlowPlayerPurpleHue>(),
-            .configuredHue{PlayerOutlineGlowPlayerPurpleHue::ValueType{color::HueInteger{265}}},
+            .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerPurpleHue>(),
+            .configuredHue{outline_glow_vars::PlayerPurpleHue::ValueType{color::HueInteger{265}}},
             .expectedHue = 0.73611111f
         }
     })
@@ -490,15 +490,15 @@ class PlayerOutlineGlowTeamHueTest
 };
 
 TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowColorMode>()))
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
         .WillOnce(testing::Return(PlayerOutlineGlowColorType::TeamColor));
 
     if (GetParam().teamTHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowTeamTHue>()))
-            .WillRepeatedly(testing::Return(PlayerOutlineGlowTeamTHue::ValueType{color::HueInteger{GetParam().teamTHue.value()}}));
+        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TeamTHue>()))
+            .WillRepeatedly(testing::Return(outline_glow_vars::TeamTHue::ValueType{color::HueInteger{GetParam().teamTHue.value()}}));
     if (GetParam().teamCTHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowTeamCTHue>()))
-            .WillRepeatedly(testing::Return(PlayerOutlineGlowTeamCTHue::ValueType{color::HueInteger{GetParam().teamCTHue.value()}}));
+        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TeamCTHue>()))
+            .WillRepeatedly(testing::Return(outline_glow_vars::TeamCTHue::ValueType{color::HueInteger{GetParam().teamCTHue.value()}}));
 
     EXPECT_CALL(mockPlayerPawn, teamNumber()).WillRepeatedly(testing::Return(GetParam().teamNumber));
 
@@ -509,15 +509,15 @@ TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturned) {
 }
 
 TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturnedAsFallbackWhenInvalidPlayerColorIndex) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowColorMode>()))
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
         .WillOnce(testing::Return(PlayerOutlineGlowColorType::PlayerOrTeamColor));
 
     if (GetParam().teamTHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowTeamTHue>()))
-            .WillRepeatedly(testing::Return(PlayerOutlineGlowTeamTHue::ValueType{color::HueInteger{GetParam().teamTHue.value()}}));
+        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TeamTHue>()))
+            .WillRepeatedly(testing::Return(outline_glow_vars::TeamTHue::ValueType{color::HueInteger{GetParam().teamTHue.value()}}));
     if (GetParam().teamCTHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowTeamCTHue>()))
-            .WillRepeatedly(testing::Return(PlayerOutlineGlowTeamCTHue::ValueType{color::HueInteger{GetParam().teamCTHue.value()}}));
+        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TeamCTHue>()))
+            .WillRepeatedly(testing::Return(outline_glow_vars::TeamCTHue::ValueType{color::HueInteger{GetParam().teamCTHue.value()}}));
 
     EXPECT_CALL(mockPlayerPawn, teamNumber()).WillRepeatedly(testing::Return(GetParam().teamNumber));
     EXPECT_CALL(mockPlayerPawn, playerController()).WillRepeatedly(testing::ReturnRef(mockPlayerController));
@@ -532,8 +532,8 @@ TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturnedAsFallbackWhenInvalidPl
 INSTANTIATE_TEST_SUITE_P(InvalidTeam, PlayerOutlineGlowTeamHueTest,
     testing::Values(PlayerOutlineGlowTeamHueTestParam{.teamNumber{}, .expectedHue{std::nullopt}}));
 
-static_assert(PlayerOutlineGlowTeamTHue::ValueType::kMin == 30, "Update the test below");
-static_assert(PlayerOutlineGlowTeamCTHue::ValueType::kMin == 210, "Update the test below");
+static_assert(outline_glow_vars::TeamTHue::ValueType::kMin == 30, "Update the test below");
+static_assert(outline_glow_vars::TeamCTHue::ValueType::kMin == 210, "Update the test below");
 
 INSTANTIATE_TEST_SUITE_P(MinConfigVars, PlayerOutlineGlowTeamHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowTeamHueTestParam>({
@@ -542,8 +542,8 @@ INSTANTIATE_TEST_SUITE_P(MinConfigVars, PlayerOutlineGlowTeamHueTest,
     }))
 );
 
-static_assert(PlayerOutlineGlowTeamTHue::ValueType::kMax == 40, "Update the test below");
-static_assert(PlayerOutlineGlowTeamCTHue::ValueType::kMax == 230, "Update the test below");
+static_assert(outline_glow_vars::TeamTHue::ValueType::kMax == 40, "Update the test below");
+static_assert(outline_glow_vars::TeamCTHue::ValueType::kMax == 230, "Update the test below");
 
 INSTANTIATE_TEST_SUITE_P(MaxConfigVars, PlayerOutlineGlowTeamHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowTeamHueTestParam>({
@@ -552,8 +552,8 @@ INSTANTIATE_TEST_SUITE_P(MaxConfigVars, PlayerOutlineGlowTeamHueTest,
     }))
 );
 
-static_assert(PlayerOutlineGlowTeamTHue::kDefaultValue == color::HueInteger{35}, "Update the tests below");
-static_assert(PlayerOutlineGlowTeamCTHue::kDefaultValue == color::HueInteger{220}, "Update the tests below");
+static_assert(outline_glow_vars::TeamTHue::kDefaultValue == color::HueInteger{35}, "Update the tests below");
+static_assert(outline_glow_vars::TeamCTHue::kDefaultValue == color::HueInteger{220}, "Update the tests below");
 
 INSTANTIATE_TEST_SUITE_P(DefaultConfigVars, PlayerOutlineGlowTeamHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowTeamHueTestParam>({
@@ -582,15 +582,15 @@ class PlayerOutlineGlowEnemyHueTest
 };
 
 TEST_P(PlayerOutlineGlowEnemyHueTest, CorrectHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowColorMode>()))
+    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
         .WillOnce(testing::Return(PlayerOutlineGlowColorType::EnemyAlly));
 
     if (GetParam().enemyHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowEnemyHue>()))
-            .WillOnce(testing::Return(PlayerOutlineGlowEnemyHue::ValueType{color::HueInteger{GetParam().enemyHue.value()}}));
+        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::EnemyHue>()))
+            .WillOnce(testing::Return(outline_glow_vars::EnemyHue::ValueType{color::HueInteger{GetParam().enemyHue.value()}}));
     if (GetParam().allyHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PlayerOutlineGlowAllyHue>()))
-            .WillOnce(testing::Return(PlayerOutlineGlowAllyHue::ValueType{color::HueInteger{GetParam().allyHue.value()}}));
+        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::AllyHue>()))
+            .WillOnce(testing::Return(outline_glow_vars::AllyHue::ValueType{color::HueInteger{GetParam().allyHue.value()}}));
 
     EXPECT_CALL(mockPlayerPawn, isEnemy()).WillOnce(testing::Return(GetParam().isEnemy));
 
@@ -603,8 +603,8 @@ TEST_P(PlayerOutlineGlowEnemyHueTest, CorrectHueIsReturned) {
 INSTANTIATE_TEST_SUITE_P(UnknownIfIsEnemy, PlayerOutlineGlowEnemyHueTest,
     testing::Values(PlayerOutlineGlowEnemyHueTestParam{.isEnemy{std::nullopt}, .expectedHue{std::nullopt}}));
 
-static_assert(PlayerOutlineGlowEnemyHue::ValueType::kMin == 0, "Update the test below");
-static_assert(PlayerOutlineGlowAllyHue::ValueType::kMin == 0, "Update the test below");
+static_assert(outline_glow_vars::EnemyHue::ValueType::kMin == 0, "Update the test below");
+static_assert(outline_glow_vars::AllyHue::ValueType::kMin == 0, "Update the test below");
 
 INSTANTIATE_TEST_SUITE_P(MinConfigVars, PlayerOutlineGlowEnemyHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowEnemyHueTestParam>({
@@ -613,8 +613,8 @@ INSTANTIATE_TEST_SUITE_P(MinConfigVars, PlayerOutlineGlowEnemyHueTest,
     }))
 );
 
-static_assert(PlayerOutlineGlowEnemyHue::ValueType::kMax == 359, "Update the test below");
-static_assert(PlayerOutlineGlowAllyHue::ValueType::kMax == 359, "Update the test below");
+static_assert(outline_glow_vars::EnemyHue::ValueType::kMax == 359, "Update the test below");
+static_assert(outline_glow_vars::AllyHue::ValueType::kMax == 359, "Update the test below");
 
 INSTANTIATE_TEST_SUITE_P(MaxConfigVars, PlayerOutlineGlowEnemyHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowEnemyHueTestParam>({
@@ -623,8 +623,8 @@ INSTANTIATE_TEST_SUITE_P(MaxConfigVars, PlayerOutlineGlowEnemyHueTest,
     }))
 );
 
-static_assert(PlayerOutlineGlowEnemyHue::kDefaultValue == color::HueInteger{0}, "Update the tests below");
-static_assert(PlayerOutlineGlowAllyHue::kDefaultValue == color::HueInteger{120}, "Update the tests below");
+static_assert(outline_glow_vars::EnemyHue::kDefaultValue == color::HueInteger{0}, "Update the tests below");
+static_assert(outline_glow_vars::AllyHue::kDefaultValue == color::HueInteger{120}, "Update the tests below");
 
 INSTANTIATE_TEST_SUITE_P(DefaultConfigVars, PlayerOutlineGlowEnemyHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowEnemyHueTestParam>({

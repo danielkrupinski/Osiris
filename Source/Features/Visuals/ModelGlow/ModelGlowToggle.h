@@ -14,67 +14,67 @@ public:
     void updateMasterSwitch(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<ModelGlowEnabled>(true); break;
-        case '1': setVariable<ModelGlowEnabled>(false); break;
+        case '0': setVariable<model_glow_vars::Enabled>(true); break;
+        case '1': setVariable<model_glow_vars::Enabled>(false); break;
         }
     }
 
     void updatePlayerModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<PlayerModelGlowEnabled>(true); setVariable<PlayerModelGlowOnlyEnemies>(true); break;
-        case '1': setVariable<PlayerModelGlowEnabled>(true); setVariable<PlayerModelGlowOnlyEnemies>(false); break;
-        case '2': setVariable<PlayerModelGlowEnabled>(false); break;
+        case '0': setVariable<model_glow_vars::GlowPlayers>(true); setVariable<model_glow_vars::GlowOnlyEnemies>(true); break;
+        case '1': setVariable<model_glow_vars::GlowPlayers>(true); setVariable<model_glow_vars::GlowOnlyEnemies>(false); break;
+        case '2': setVariable<model_glow_vars::GlowPlayers>(false); break;
         }
     }
 
     void updatePlayerModelGlowColor(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::PlayerOrTeamColor); break;
-        case '1': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::TeamColor); break;
-        case '2': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::HealthBased); break;
-        case '3': setVariable<PlayerModelGlowColorMode>(PlayerModelGlowColorType::EnemyAlly); break;
+        case '0': setVariable<model_glow_vars::PlayerGlowColorMode>(PlayerModelGlowColorType::PlayerOrTeamColor); break;
+        case '1': setVariable<model_glow_vars::PlayerGlowColorMode>(PlayerModelGlowColorType::TeamColor); break;
+        case '2': setVariable<model_glow_vars::PlayerGlowColorMode>(PlayerModelGlowColorType::HealthBased); break;
+        case '3': setVariable<model_glow_vars::PlayerGlowColorMode>(PlayerModelGlowColorType::EnemyAlly); break;
         }
     }
 
     void updateWeaponModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<WeaponModelGlowEnabled>(true); break;
-        case '1': setVariable<WeaponModelGlowEnabled>(false); break;
+        case '0': setVariable<model_glow_vars::GlowWeapons>(true); break;
+        case '1': setVariable<model_glow_vars::GlowWeapons>(false); break;
         }
     }
 
     void updateDroppedBombModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<DroppedBombModelGlowEnabled>(true); break;
-        case '1': setVariable<DroppedBombModelGlowEnabled>(false); break;
+        case '0': setVariable<model_glow_vars::GlowDroppedBomb>(true); break;
+        case '1': setVariable<model_glow_vars::GlowDroppedBomb>(false); break;
         }
     }
 
     void updateTickingBombModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<TickingBombModelGlowEnabled>(true); break;
-        case '1': setVariable<TickingBombModelGlowEnabled>(false); break;
+        case '0': setVariable<model_glow_vars::GlowTickingBomb>(true); break;
+        case '1': setVariable<model_glow_vars::GlowTickingBomb>(false); break;
         }
     }
 
     void updateDefuseKitModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<DefuseKitModelGlowEnabled>(true); break;
-        case '1': setVariable<DefuseKitModelGlowEnabled>(false); break;
+        case '0': setVariable<model_glow_vars::GlowDefuseKits>(true); break;
+        case '1': setVariable<model_glow_vars::GlowDefuseKits>(false); break;
         }
     }
 
     void updateGrenadeProjectileModelGlowToggle(char option) noexcept
     {
         switch (option) {
-        case '0': setVariable<GrenadeProjectileModelGlowEnabled>(true); break;
-        case '1': setVariable<GrenadeProjectileModelGlowEnabled>(false); break;
+        case '0': setVariable<model_glow_vars::GlowGrenadeProjectiles>(true); break;
+        case '1': setVariable<model_glow_vars::GlowGrenadeProjectiles>(false); break;
         }
     }
 

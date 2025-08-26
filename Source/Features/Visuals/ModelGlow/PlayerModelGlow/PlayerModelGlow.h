@@ -47,19 +47,19 @@ public:
 
     void onUnload(auto&& playerPawn) const noexcept
     {
-        if (getConfigVariable<PlayerModelGlowEnabled>() || state().playerModelGlowDisabling)
+        if (getConfigVariable<model_glow_vars::GlowPlayers>() || state().playerModelGlowDisabling)
             unhookPlayerSceneObjectUpdater(playerPawn);
     }
 
 private:
     [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
     {
-        return getConfigVariable<PlayerModelGlowEnabled>() || state().playerModelGlowDisabling;
+        return getConfigVariable<model_glow_vars::GlowPlayers>() || state().playerModelGlowDisabling;
     }
 
     [[nodiscard]] bool shouldRun() const noexcept
     {
-        return getConfigVariable<PlayerModelGlowEnabled>();
+        return getConfigVariable<model_glow_vars::GlowPlayers>();
     }
 
     void hookPlayerSceneObjectUpdater(auto&& playerPawn) const noexcept
@@ -94,12 +94,12 @@ private:
 
     [[nodiscard]] bool shouldGlowPlayerModel(auto&& playerPawn) const noexcept
     {
-        return getConfigVariable<ModelGlowEnabled>()
+        return getConfigVariable<model_glow_vars::Enabled>()
             && playerPawn.isAlive().value_or(true)
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
-            && (!getConfigVariable<PlayerModelGlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
+            && (!getConfigVariable<model_glow_vars::GlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
     [[nodiscard]] auto& state() const noexcept
@@ -121,7 +121,7 @@ private:
 
     [[nodiscard]] std::optional<color::Hue> getColorHue(auto&& playerPawn) const noexcept
     {
-        switch (getConfigVariable<PlayerModelGlowColorMode>()) {
+        switch (getConfigVariable<model_glow_vars::PlayerGlowColorMode>()) {
         using enum PlayerModelGlowColorType;
         case EnemyAlly:
             return enemyAllyColorModeHue(playerPawn);
@@ -141,8 +141,8 @@ private:
     [[nodiscard]] std::optional<color::Hue> teamColorModeHue(auto&& playerPawn) const noexcept
     {
         switch (playerPawn.teamNumber()) {
-        case TeamNumber::TT: return static_cast<color::HueInteger>(getConfigVariable<PlayerModelGlowTeamTHue>()).toHueFloat();
-        case TeamNumber::CT: return static_cast<color::HueInteger>(getConfigVariable<PlayerModelGlowTeamCTHue>()).toHueFloat();
+        case TeamNumber::TT: return static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::TeamTHue>()).toHueFloat();
+        case TeamNumber::CT: return static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::TeamCTHue>()).toHueFloat();
         default: return {};
         }
     }
@@ -150,7 +150,7 @@ private:
     [[nodiscard]] std::optional<color::Hue> enemyAllyColorModeHue(auto&& playerPawn) const noexcept
     {
         if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
-            return (*isEnemy ? static_cast<color::HueInteger>(getConfigVariable<PlayerModelGlowEnemyHue>()) : static_cast<color::HueInteger>(getConfigVariable<PlayerModelGlowAllyHue>())).toHueFloat();
+            return (*isEnemy ? static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::EnemyHue>()) : static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::AllyHue>())).toHueFloat();
         return {};
     }
 
@@ -159,8 +159,8 @@ private:
         if (const auto healthValue = playerPawn.health(); healthValue.hasValue()) {
             const auto fraction = std::clamp(healthValue.value(), 0, 100) / 100.0f;
 
-            const color::HueInteger lowHealthHue{getConfigVariable<PlayerModelGlowLowHealthHue>()};
-            const color::HueInteger highHealthHue{getConfigVariable<PlayerModelGlowHighHealthHue>()};
+            const color::HueInteger lowHealthHue{getConfigVariable<model_glow_vars::LowHealthHue>()};
+            const color::HueInteger highHealthHue{getConfigVariable<model_glow_vars::HighHealthHue>()};
             if (lowHealthHue < highHealthHue)
                 return color::Hue{(lowHealthHue + (highHealthHue - lowHealthHue) * fraction) / 360.0f};
             else
@@ -175,11 +175,11 @@ private:
             return {};
 
         switch (playerColorIndex.value()) {
-        case 0: return getConfigVariable<PlayerModelGlowPlayerBlueHue>();
-        case 1: return getConfigVariable<PlayerModelGlowPlayerGreenHue>();
-        case 2: return getConfigVariable<PlayerModelGlowPlayerYellowHue>();
-        case 3: return getConfigVariable<PlayerModelGlowPlayerOrangeHue>();
-        case 4: return getConfigVariable<PlayerModelGlowPlayerPurpleHue>();
+        case 0: return getConfigVariable<model_glow_vars::PlayerBlueHue>();
+        case 1: return getConfigVariable<model_glow_vars::PlayerGreenHue>();
+        case 2: return getConfigVariable<model_glow_vars::PlayerYellowHue>();
+        case 3: return getConfigVariable<model_glow_vars::PlayerOrangeHue>();
+        case 4: return getConfigVariable<model_glow_vars::PlayerPurpleHue>();
         default: return {};
         }
     }
