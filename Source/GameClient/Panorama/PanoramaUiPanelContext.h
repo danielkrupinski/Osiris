@@ -42,7 +42,7 @@ struct PanoramaUiPanelContext {
 
     [[nodiscard]] decltype(auto) getHandle() const noexcept
     {
-        return hookContext.template make<PanoramaUiEngine>().getPanelHandle(panel);
+        return hookContext.panoramaPatternSearchResults().template get<OffsetToPanelHandle>().of(panel).valueOr(cs2::PanelHandle{});
     }
 
     void setSimpleForegroundColor(cs2::Color color) const noexcept

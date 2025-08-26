@@ -29,19 +29,6 @@ public:
         return hookContext.uiPanel(nullptr);
     }
 
-    [[nodiscard]] cs2::PanelHandle getPanelHandle(cs2::CUIPanel* panel) noexcept
-    {
-        cs2::PanelHandle handle{};
-        if (panel && hookContext.panoramaPatternSearchResults().template get<GetPanelHandleFunctionPointer>() && thisptr()) {
-#if IS_WIN64()
-            hookContext.panoramaPatternSearchResults().template get<GetPanelHandleFunctionPointer>()(*thisptr(), &handle, panel);
-#elif IS_LINUX()
-            handle = hookContext.panoramaPatternSearchResults().template get<GetPanelHandleFunctionPointer>()(*thisptr(), panel);
-#endif
-        }
-        return handle;
-    }
-
     [[NOINLINE]] void deletePanelByHandle(cs2::PanelHandle handle) noexcept
     {
         if (handle.isValid())

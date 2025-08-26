@@ -21,6 +21,7 @@ struct PanoramaUiPanelPatterns {
             .template addPattern<PanelStyleOffset, CodePattern{"E8 ? ? ? ? 48 8D 43 ? 48 8B"}.add(8).read()>()
             .template addPattern<ParentWindowOffset, CodePattern{"11 43 ? 4D 85 F6"}.add(2).read()>()
             .template addPattern<OffsetToPanelId, CodePattern{"49 83 7E ? 00 0F 84 ? ? ? ? 49 8D"}.add(3).read()>()
-            .template addPattern<OffsetToPanelFlags, CodePattern{"3E 41 F6 87 ? ? ? ?"}.add(4).read()>();
+            .template addPattern<OffsetToPanelFlags, CodePattern{"3E 41 F6 87 ? ? ? ?"}.add(4).read()>()
+            .template addPattern<OffsetToPanelHandle, CodePattern{"48 8B 86 ? ? ? ? C3"}.add(3).read()>();
     }
 };

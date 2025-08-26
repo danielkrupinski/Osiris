@@ -13,7 +13,6 @@ struct PanoramaUiEnginePatterns {
     [[nodiscard]] static consteval auto addPanoramaPatterns(auto panoramaPatterns) noexcept
     {
         return panoramaPatterns
-            .template addPattern<GetPanelHandleFunctionPointer, CodePattern{"49 8B 80 ? ? ? ? 48 89"}>()
             .template addPattern<GetPanelPointerFunctionPointer, CodePattern{"4C 63 0A 4C 8B DA"}>()
             .template addPattern<RunScriptFunctionPointer, CodePattern{"48 89 5C 24 ? 4C 89 4C 24 ? 48 89 54 24 ? 55 56 57 41 54 41 55 41 56 41 57 48 8D"}>()
             .template addPattern<MakeSymbolFunctionPointer, CodePattern{"8B D0 E8 ? ? ? ? 66"}.add(3).abs()>()

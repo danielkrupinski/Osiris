@@ -5,6 +5,7 @@
 #include <CS2/Panorama/CPanelStyle.h>
 #include <CS2/Panorama/CTopLevelWindow.h>
 #include <CS2/Panorama/CUIPanel.h>
+#include <CS2/Panorama/PanelHandle.h>
 #include <Utils/FieldOffset.h>
 #include <Utils/StrongTypeAlias.h>
 
@@ -22,3 +23,4 @@ STRONG_TYPE_ALIAS(PanelStyleOffset, PanoramaUiPanelOffset<cs2::CPanelStyle, std:
 STRONG_TYPE_ALIAS(ParentWindowOffset, PanoramaUiPanelOffset<cs2::CTopLevelWindow*, std::int8_t>);
 STRONG_TYPE_ALIAS(OffsetToPanelId, PanoramaUiPanelOffset<cs2::CUIPanel::m_pchID, std::int8_t>);
 STRONG_TYPE_ALIAS(OffsetToPanelFlags, PanoramaUiPanelOffset<cs2::CUIPanel::PanelFlags, std::int32_t>);
+STRONG_TYPE_ALIAS(OffsetToPanelHandle, PanoramaUiPanelOffset<cs2::PanelHandle, std::int32_t>);
