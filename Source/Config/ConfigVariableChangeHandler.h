@@ -25,92 +25,165 @@ public:
     template <typename ConfigVariable>
     void onConfigVariableValueChanged(ConfigVariable::ValueType newValue) const noexcept
     {
-        if constexpr (std::is_same_v<ConfigVariable, BombTimerEnabled>) {
-            if (!newValue)
-                hookContext.template make<BombTimer>().onDisable();
-        } else if constexpr (std::is_same_v<ConfigVariable, DefusingAlertEnabled>) {
-            if (!newValue)
-                hookContext.template make<DefusingAlert>().onDisable();
-        } else if constexpr (std::is_same_v<ConfigVariable, PostRoundTimerEnabled>) {
-            if (!newValue)
-                hookContext.template make<PostRoundTimer>().onDisable();
-        } else if constexpr (std::is_same_v<ConfigVariable, BombBeepSoundVisualizationEnabled>) {
-            if (newValue)
-                hookContext.soundWatcher().template startWatching<BombBeepSound>();
-            else
-                hookContext.soundWatcher().template stopWatching<BombBeepSound>();
-        } else if constexpr (std::is_same_v<ConfigVariable, BombDefuseSoundVisualizationEnabled>) {
-            if (newValue)
-                hookContext.soundWatcher().template startWatching<BombDefuseSound>();
-            else
-                hookContext.soundWatcher().template stopWatching<BombDefuseSound>();
-        } else if constexpr (std::is_same_v<ConfigVariable, BombPlantSoundVisualizationEnabled>) {
-            if (newValue)
-                hookContext.soundWatcher().template startWatching<BombPlantSound>();
-            else
-                hookContext.soundWatcher().template stopWatching<BombPlantSound>();
-        } else if constexpr (std::is_same_v<ConfigVariable, FootstepSoundVisualizationEnabled>) {
-            if (newValue)
-                hookContext.soundWatcher().template startWatching<FootstepSound>();
-            else
-                hookContext.soundWatcher().template stopWatching<FootstepSound>();
-        } else if constexpr (std::is_same_v<ConfigVariable, WeaponReloadSoundVisualizationEnabled>) {
-            if (newValue)
-                hookContext.soundWatcher().template startWatching<WeaponReloadSound>();
-            else
-                hookContext.soundWatcher().template stopWatching<WeaponReloadSound>();
-        } else if constexpr (std::is_same_v<ConfigVariable, WeaponScopeSoundVisualizationEnabled>) {
-            if (newValue)
-                hookContext.soundWatcher().template startWatching<WeaponScopeSound>();
-            else
-                hookContext.soundWatcher().template stopWatching<WeaponScopeSound>();
-        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::Enabled>) {
-            if (!newValue)
-                hookContext.featuresStates().visualFeaturesStates.modelGlowState.modelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowDefuseKits>) {
-            if (!newValue)
-                hookContext.featuresStates().visualFeaturesStates.modelGlowState.defuseKitModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowDroppedBomb>) {
-            if (!newValue)
-                hookContext.featuresStates().visualFeaturesStates.modelGlowState.droppedBombModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowGrenadeProjectiles>) {
-            if (!newValue)
-                hookContext.featuresStates().visualFeaturesStates.modelGlowState.grenadeProjectileModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowPlayers>) {
-            if (!newValue)
-                hookContext.featuresStates().visualFeaturesStates.modelGlowState.playerModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowTickingBomb>) {
-            if (!newValue)
-                hookContext.featuresStates().visualFeaturesStates.modelGlowState.tickingBombModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, model_glow_vars::GlowWeapons>) {
-            if (!newValue)
-                hookContext.featuresStates().visualFeaturesStates.modelGlowState.weaponModelGlowDisabling = true;
-        } else if constexpr (std::is_same_v<ConfigVariable, outline_glow_vars::Enabled>) {
-            if (!newValue)
-                hookContext.template make<GlowSceneObjects>().clearObjects();
-        } else if constexpr (std::is_same_v<ConfigVariable, player_info_vars::BombDefuseIconEnabled>) {
-            if (newValue)
-                hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<DefuseIconPanel>();
-            else
-                hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<DefuseIconPanel>();
-        } else if constexpr (std::is_same_v<ConfigVariable, player_info_vars::HostagePickupIconEnabled>) {
-            if (newValue)
-                hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostagePickupPanel>();
-            else
-                hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<HostagePickupPanel>();
-        } else if constexpr (std::is_same_v<ConfigVariable, player_info_vars::HostageRescueIconEnabled>) {
-            if (newValue)
-                hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostageRescuePanel>();
-            else
-                hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<HostageRescuePanel>();
-        } else if constexpr (std::is_same_v<ConfigVariable, player_info_vars::BlindedIconEnabled>) {
-            if (newValue)
-                hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<BlindedIconPanel>();
-            else
-                hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<BlindedIconPanel>();
-        }
+        onConfigVariableValueChanged(newValue, std::type_identity<ConfigVariable>{});
     }
 
 private:
+    template <typename ConfigVariable>
+    void onConfigVariableValueChanged(ConfigVariable::ValueType /* newValue */, std::type_identity<ConfigVariable>) const noexcept
+    {
+    }
+
+    #define ON_CHANGE(ConfigVariable) \
+    void onConfigVariableValueChanged(ConfigVariable::ValueType newValue, std::type_identity<ConfigVariable>) const noexcept
+
+    ON_CHANGE(BombTimerEnabled)
+    {
+        if (newValue == false)
+            hookContext.template make<BombTimer>().onDisable();
+    }
+
+    ON_CHANGE(DefusingAlertEnabled)
+    {
+        if (newValue == false)
+            hookContext.template make<DefusingAlert>().onDisable();
+    }
+
+    ON_CHANGE(PostRoundTimerEnabled)
+    {
+        if (newValue == false)
+            hookContext.template make<PostRoundTimer>().onDisable();
+    }
+
+    ON_CHANGE(BombBeepSoundVisualizationEnabled)
+    {
+        if (newValue == true)
+            hookContext.soundWatcher().template startWatching<BombBeepSound>();
+        else
+            hookContext.soundWatcher().template stopWatching<BombBeepSound>();
+    }
+
+    ON_CHANGE(BombDefuseSoundVisualizationEnabled)
+    {
+        if (newValue == true)
+            hookContext.soundWatcher().template startWatching<BombDefuseSound>();
+        else
+            hookContext.soundWatcher().template stopWatching<BombDefuseSound>();
+    }
+
+    ON_CHANGE(BombPlantSoundVisualizationEnabled)
+    {
+        if (newValue == true)
+            hookContext.soundWatcher().template startWatching<BombPlantSound>();
+        else
+            hookContext.soundWatcher().template stopWatching<BombPlantSound>();
+    }
+
+    ON_CHANGE(FootstepSoundVisualizationEnabled)
+    {
+        if (newValue == true)
+            hookContext.soundWatcher().template startWatching<FootstepSound>();
+        else
+            hookContext.soundWatcher().template stopWatching<FootstepSound>();
+    }
+
+    ON_CHANGE(WeaponReloadSoundVisualizationEnabled)
+    {
+        if (newValue == true)
+            hookContext.soundWatcher().template startWatching<WeaponReloadSound>();
+        else
+            hookContext.soundWatcher().template startWatching<WeaponReloadSound>();
+    }
+
+    ON_CHANGE(WeaponScopeSoundVisualizationEnabled)
+    {
+        if (newValue == true)
+            hookContext.soundWatcher().template startWatching<WeaponScopeSound>();
+        else
+            hookContext.soundWatcher().template startWatching<WeaponScopeSound>();
+    }
+
+    ON_CHANGE(model_glow_vars::Enabled)
+    {
+        if (newValue == false)
+            hookContext.featuresStates().visualFeaturesStates.modelGlowState.modelGlowDisabling = true;
+    }
+
+    ON_CHANGE(model_glow_vars::GlowDefuseKits)
+    {
+        if (newValue == false)
+            hookContext.featuresStates().visualFeaturesStates.modelGlowState.defuseKitModelGlowDisabling = true;
+    }
+
+    ON_CHANGE(model_glow_vars::GlowDroppedBomb)
+    {
+        if (newValue == false)
+            hookContext.featuresStates().visualFeaturesStates.modelGlowState.droppedBombModelGlowDisabling = true;
+    }
+
+    ON_CHANGE(model_glow_vars::GlowGrenadeProjectiles)
+    {
+        if (newValue == false)
+            hookContext.featuresStates().visualFeaturesStates.modelGlowState.grenadeProjectileModelGlowDisabling = true;
+    }
+
+    ON_CHANGE(model_glow_vars::GlowPlayers)
+    {
+        if (newValue == false)
+            hookContext.featuresStates().visualFeaturesStates.modelGlowState.playerModelGlowDisabling = true;
+    }
+
+    ON_CHANGE(model_glow_vars::GlowTickingBomb)
+    {
+        if (newValue == false)
+            hookContext.featuresStates().visualFeaturesStates.modelGlowState.tickingBombModelGlowDisabling = true;
+    }
+
+    ON_CHANGE(model_glow_vars::GlowWeapons)
+    {
+        if (newValue == false)
+            hookContext.featuresStates().visualFeaturesStates.modelGlowState.weaponModelGlowDisabling = true;
+    }
+
+    ON_CHANGE(outline_glow_vars::Enabled)
+    {
+        if (newValue == false)
+            hookContext.template make<GlowSceneObjects>().clearObjects();
+    }
+
+    ON_CHANGE(player_info_vars::BombDefuseIconEnabled)
+    {
+        if (newValue)
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<DefuseIconPanel>();
+        else
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<DefuseIconPanel>();
+    }
+
+    ON_CHANGE(player_info_vars::HostagePickupIconEnabled)
+    {
+        if (newValue)
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostagePickupPanel>();
+        else
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<HostagePickupPanel>();
+    }
+
+    ON_CHANGE(player_info_vars::HostageRescueIconEnabled)
+    {
+        if (newValue)
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostageRescuePanel>();
+        else
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostageRescuePanel>();
+    }
+
+    ON_CHANGE(player_info_vars::BlindedIconEnabled)
+    {
+        if (newValue)
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<BlindedIconPanel>();
+        else
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<BlindedIconPanel>();
+    }
+
+    #undef ON_CHANGE
+
     HookContext& hookContext;
 };
