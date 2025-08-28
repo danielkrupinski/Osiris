@@ -25,6 +25,7 @@
     <ClInclude Include="Config\ConfigVariableChangeHandler.h" />
     <ClInclude Include="Config\ConfigVariables.h" />
     <ClInclude Include="Config\ConfigVariableTypes.h" />
+    <ClInclude Include="Config\HueVariableParams.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_HostageServices.h" />
     <ClInclude Include="CS2\Classes\CCSPlayer_WeaponServices.h" />
     <ClInclude Include="CS2\Classes\CCSWeaponBaseVData.h" />

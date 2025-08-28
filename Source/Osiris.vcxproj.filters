@@ -1820,6 +1820,9 @@
     <ClInclude Include="MemoryPatterns\Windows\UiItem3dPanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Config\HueVariableParams.h">
+      <Filter>Config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

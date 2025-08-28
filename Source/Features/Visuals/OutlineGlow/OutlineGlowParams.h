@@ -1,11 +1,8 @@
 #pragma once
 
+#include <Config/HueVariableParams.h>
 #include <CS2/Classes/Color.h>
 #include <Utils/ColorUtils.h>
-
-struct HueVariableParams {
-    color::HueInteger::UnderlyingType min, max, def;
-};
 
 namespace outline_glow_params
 {

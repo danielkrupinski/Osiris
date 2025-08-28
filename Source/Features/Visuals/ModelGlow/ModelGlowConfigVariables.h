@@ -28,76 +28,28 @@ CONFIG_VARIABLE(GlowTickingBomb, bool, true);
 CONFIG_VARIABLE(GlowDefuseKits, bool, true);
 CONFIG_VARIABLE(GlowGrenadeProjectiles, bool, true);
 
-CONFIG_VARIABLE(PlayerBlueHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kPlayerBlueMinHue, model_glow_params::kPlayerBlueMaxHue>),
-    model_glow_params::kPlayerBlueDefaultHue);
+CONFIG_VARIABLE_HUE(PlayerBlueHue, model_glow_params::kPlayerBlueHue);
+CONFIG_VARIABLE_HUE(PlayerGreenHue, model_glow_params::kPlayerGreenHue);
+CONFIG_VARIABLE_HUE(PlayerYellowHue, model_glow_params::kPlayerYellowHue);
+CONFIG_VARIABLE_HUE(PlayerOrangeHue, model_glow_params::kPlayerOrangeHue);
+CONFIG_VARIABLE_HUE(PlayerPurpleHue, model_glow_params::kPlayerPurpleHue);
 
-CONFIG_VARIABLE(PlayerGreenHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kPlayerGreenMinHue, model_glow_params::kPlayerGreenMaxHue>),
-    model_glow_params::kPlayerGreenDefaultHue);
+CONFIG_VARIABLE_HUE(TeamTHue, model_glow_params::kTeamTHue);
+CONFIG_VARIABLE_HUE(TeamCTHue, model_glow_params::kTeamCTHue);
 
-CONFIG_VARIABLE(PlayerYellowHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kPlayerYellowMinHue, model_glow_params::kPlayerYellowMaxHue>),
-    model_glow_params::kPlayerYellowDefaultHue);
+CONFIG_VARIABLE_HUE(LowHealthHue, model_glow_params::kLowHealthHue);
+CONFIG_VARIABLE_HUE(HighHealthHue, model_glow_params::kHighHealthHue);
 
-CONFIG_VARIABLE(PlayerOrangeHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kPlayerOrangeMinHue, model_glow_params::kPlayerOrangeMaxHue>),
-    model_glow_params::kPlayerOrangeDefaultHue);
+CONFIG_VARIABLE_HUE(AllyHue, model_glow_params::kAllyHue);
+CONFIG_VARIABLE_HUE(EnemyHue, model_glow_params::kEnemyHue);
 
-CONFIG_VARIABLE(PlayerPurpleHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kPlayerPurpleMinHue, model_glow_params::kPlayerPurpleMaxHue>),
-    model_glow_params::kPlayerPurpleDefaultHue);
+CONFIG_VARIABLE_HUE(MolotovHue, model_glow_params::kMolotovHue);
+CONFIG_VARIABLE_HUE(FlashbangHue, model_glow_params::kFlashbangHue);
+CONFIG_VARIABLE_HUE(HEGrenadeHue, model_glow_params::kHEGrenadeHue);
+CONFIG_VARIABLE_HUE(SmokeGrenadeHue, model_glow_params::kSmokeGrenadeHue);
 
-CONFIG_VARIABLE(TeamTHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kTeamTMinHue, model_glow_params::kTeamTMaxHue>),
-    model_glow_params::kTeamTDefaultHue);
-
-CONFIG_VARIABLE(TeamCTHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kTeamCTMinHue, model_glow_params::kTeamCTMaxHue>),
-    model_glow_params::kTeamCTDefaultHue);
-
-CONFIG_VARIABLE(LowHealthHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kLowHealthMinHue, model_glow_params::kLowHealthMaxHue>),
-    model_glow_params::kLowHealthDefaultHue);
-
-CONFIG_VARIABLE(HighHealthHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kHighHealthMinHue, model_glow_params::kHighHealthMaxHue>),
-    model_glow_params::kHighHealthDefaultHue);
-
-CONFIG_VARIABLE(AllyHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kAllyMinHue, model_glow_params::kAllyMaxHue>),
-    model_glow_params::kAllyDefaultHue);
-
-CONFIG_VARIABLE(EnemyHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kEnemyMinHue, model_glow_params::kEnemyMaxHue>),
-    model_glow_params::kEnemyDefaultHue);
-
-CONFIG_VARIABLE(MolotovHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kMolotovMinHue, model_glow_params::kMolotovMaxHue>),
-    model_glow_params::kMolotovDefaultHue);
-
-CONFIG_VARIABLE(FlashbangHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kFlashbangMinHue, model_glow_params::kFlashbangMaxHue>),
-    model_glow_params::kFlashbangDefaultHue);
-
-CONFIG_VARIABLE(HEGrenadeHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kHEGrenadeMinHue, model_glow_params::kHEGrenadeMaxHue>),
-    model_glow_params::kHEGrenadeDefaultHue);
-
-CONFIG_VARIABLE(SmokeGrenadeHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kSmokeGrenadeMinHue, model_glow_params::kSmokeGrenadeMaxHue>),
-    model_glow_params::kSmokeGrenadeDefaultHue);
-
-CONFIG_VARIABLE(DroppedBombHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kDroppedBombMinHue, model_glow_params::kDroppedBombMaxHue>),
-    model_glow_params::kDroppedBombDefaultHue);
-
-CONFIG_VARIABLE(TickingBombHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kTickingBombMinHue, model_glow_params::kTickingBombMaxHue>),
-    model_glow_params::kTickingBombDefaultHue);
-
-CONFIG_VARIABLE(DefuseKitHue,
-    IDENTITY(InRange<color::HueInteger, model_glow_params::kDefuseKitMinHue, model_glow_params::kDefuseKitMaxHue>),
-    model_glow_params::kDefuseKitDefaultHue);
+CONFIG_VARIABLE_HUE(DroppedBombHue, model_glow_params::kDroppedBombHue);
+CONFIG_VARIABLE_HUE(TickingBombHue, model_glow_params::kTickingBombHue);
+CONFIG_VARIABLE_HUE(DefuseKitHue, model_glow_params::kDefuseKitHue);
 
 }

@@ -4,11 +4,6 @@
 #include "PlayerOutlineGlow/PlayerOutlineGlowColorType.h"
 #include "OutlineGlowParams.h"
 
-#define CONFIG_VARIABLE_HUE(name, hueParams) \
-CONFIG_VARIABLE(name, \
-    IDENTITY(InRange<color::HueInteger, color::HueInteger{hueParams.min}, color::HueInteger{hueParams.max}>), \
-    color::HueInteger{hueParams.def})
-
 namespace outline_glow_vars
 {
 
