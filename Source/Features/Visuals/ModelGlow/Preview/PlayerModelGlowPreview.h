@@ -121,7 +121,7 @@ private:
     [[nodiscard]] auto computePreviewPlayerColorIndex() const noexcept
     {
         const auto step = colorIndexAnimationStep();
-        return isPlayerColorStep(step) ? playerColorIndexFromStep(step) : -1;
+        return isPlayerColorStep(step) ? playerColorIndexFromStep(step) : cs2::PlayerColorIndex{-1};
     }
 
     [[nodiscard]] auto computeColorMode() const noexcept
@@ -173,10 +173,10 @@ private:
         return step >= kTeamColorSteps;
     }
 
-    [[nodiscard]] static cs2::CCSPlayerController::m_iCompTeammateColor playerColorIndexFromStep(int step) noexcept
+    [[nodiscard]] static cs2::PlayerColorIndex playerColorIndexFromStep(int step) noexcept
     {
         using namespace player_model_glow_preview_params::player_color_animation_params;
-        return step - kTeamColorSteps;
+        return cs2::PlayerColorIndex{step - kTeamColorSteps};
     }
 
     [[nodiscard]] int healthAnimationStepToHealthValue(int step) const noexcept

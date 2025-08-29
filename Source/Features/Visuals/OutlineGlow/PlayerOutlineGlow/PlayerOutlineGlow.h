@@ -3,6 +3,7 @@
 #include <utility>
 
 #include <CS2/Classes/Color.h>
+#include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <GameClient/Entities/EntityClassifier.h>
 #include <GameClient/Entities/TeamNumber.h>
@@ -114,11 +115,12 @@ private:
             return {};
 
         switch (playerColorIndex.value()) {
-        case 0: return getConfigVariable<outline_glow_vars::PlayerBlueHue>();
-        case 1: return getConfigVariable<outline_glow_vars::PlayerGreenHue>();
-        case 2: return getConfigVariable<outline_glow_vars::PlayerYellowHue>();
-        case 3: return getConfigVariable<outline_glow_vars::PlayerOrangeHue>();
-        case 4: return getConfigVariable<outline_glow_vars::PlayerPurpleHue>();
+        using enum cs2::PlayerColorIndex;
+        case Blue: return getConfigVariable<outline_glow_vars::PlayerBlueHue>();
+        case Green: return getConfigVariable<outline_glow_vars::PlayerGreenHue>();
+        case Yellow: return getConfigVariable<outline_glow_vars::PlayerYellowHue>();
+        case Orange: return getConfigVariable<outline_glow_vars::PlayerOrangeHue>();
+        case Purple: return getConfigVariable<outline_glow_vars::PlayerPurpleHue>();
         default: return {};
         }
     }

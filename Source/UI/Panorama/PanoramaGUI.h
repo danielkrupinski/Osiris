@@ -78,13 +78,13 @@ private:
 
     [[nodiscard]] const char* colorIndexToString() const noexcept
     {
-        // todo: add color index constants to cs2 namespace
         switch (state().previewPlayerColorIndex) {
-        case 0: return "Blue";
-        case 1: return "Green";
-        case 2: return "Yellow";
-        case 3: return "Orange";
-        case 4: return "Purple";
+        using enum cs2::PlayerColorIndex;
+        case Blue: return "Blue";
+        case Green: return "Green";
+        case Yellow: return "Yellow";
+        case Orange: return "Orange";
+        case Purple: return "Purple";
         default: return nullptr;
         }
     }

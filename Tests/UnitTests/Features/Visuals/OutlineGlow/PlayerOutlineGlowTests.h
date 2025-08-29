@@ -363,31 +363,31 @@ static_assert(outline_glow_vars::PlayerPurpleHue::ValueType::kMin == 250, "Updat
 INSTANTIATE_TEST_SUITE_P(MinConfigVars, PlayerOutlineGlowPlayerColorIndexHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowPlayerColorIndexHueTestParam>({
         {
-            .playerColorIndex = 0,
+            .playerColorIndex = cs2::PlayerColorIndex::Blue,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerBlueHue>(),
             .configuredHue{outline_glow_vars::PlayerBlueHue::ValueType{color::HueInteger{191}}},
             .expectedHue = 0.53055555f
         },
         {
-            .playerColorIndex = 1,
+            .playerColorIndex = cs2::PlayerColorIndex::Green,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGreenHue>(),
             .configuredHue{outline_glow_vars::PlayerGreenHue::ValueType{color::HueInteger{110}}},
             .expectedHue = 0.30555555f
         },
         {
-            .playerColorIndex = 2,
+            .playerColorIndex = cs2::PlayerColorIndex::Yellow,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerYellowHue>(),
             .configuredHue{outline_glow_vars::PlayerYellowHue::ValueType{color::HueInteger{47}}},
             .expectedHue = 0.13055555f
         },
         {
-            .playerColorIndex = 3,
+            .playerColorIndex = cs2::PlayerColorIndex::Orange,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerOrangeHue>(),
             .configuredHue{outline_glow_vars::PlayerOrangeHue::ValueType{color::HueInteger{11}}},
             .expectedHue = 0.03055555f
         },
         {
-            .playerColorIndex = 4,
+            .playerColorIndex = cs2::PlayerColorIndex::Purple,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerPurpleHue>(),
             .configuredHue{outline_glow_vars::PlayerPurpleHue::ValueType{color::HueInteger{250}}},
             .expectedHue = 0.69444444f
@@ -404,31 +404,31 @@ static_assert(outline_glow_vars::PlayerPurpleHue::ValueType::kMax == 280, "Updat
 INSTANTIATE_TEST_SUITE_P(MaxConfigVars, PlayerOutlineGlowPlayerColorIndexHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowPlayerColorIndexHueTestParam>({
         {
-            .playerColorIndex = 0,
+            .playerColorIndex = cs2::PlayerColorIndex::Blue,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerBlueHue>(),
             .configuredHue{outline_glow_vars::PlayerBlueHue::ValueType{color::HueInteger{240}}},
             .expectedHue = 0.66666666f
         },
         {
-            .playerColorIndex = 1,
+            .playerColorIndex = cs2::PlayerColorIndex::Green,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGreenHue>(),
             .configuredHue{outline_glow_vars::PlayerGreenHue::ValueType{color::HueInteger{140}}},
             .expectedHue = 0.38888888f
         },
         {
-            .playerColorIndex = 2,
+            .playerColorIndex = cs2::PlayerColorIndex::Yellow,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerYellowHue>(),
             .configuredHue{outline_glow_vars::PlayerYellowHue::ValueType{color::HueInteger{60}}},
             .expectedHue = 0.16666666f
         },
         {
-            .playerColorIndex = 3,
+            .playerColorIndex = cs2::PlayerColorIndex::Orange,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerOrangeHue>(),
             .configuredHue{outline_glow_vars::PlayerOrangeHue::ValueType{color::HueInteger{20}}},
             .expectedHue = 0.05555555f
         },
         {
-            .playerColorIndex = 4,
+            .playerColorIndex = cs2::PlayerColorIndex::Purple,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerPurpleHue>(),
             .configuredHue{outline_glow_vars::PlayerPurpleHue::ValueType{color::HueInteger{280}}},
             .expectedHue = 0.77777777f
@@ -445,31 +445,31 @@ static_assert(outline_glow_vars::PlayerPurpleHue::kDefaultValue == color::HueInt
 INSTANTIATE_TEST_SUITE_P(DefaultConfigVars, PlayerOutlineGlowPlayerColorIndexHueTest,
     testing::ValuesIn(std::to_array<PlayerOutlineGlowPlayerColorIndexHueTestParam>({
         {
-            .playerColorIndex = 0,
+            .playerColorIndex = cs2::PlayerColorIndex::Blue,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerBlueHue>(),
             .configuredHue{outline_glow_vars::PlayerBlueHue::ValueType{color::HueInteger{215}}},
             .expectedHue = 0.59722222f
         },
         {
-            .playerColorIndex = 1,
+            .playerColorIndex = cs2::PlayerColorIndex::Green,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGreenHue>(),
             .configuredHue{outline_glow_vars::PlayerGreenHue::ValueType{color::HueInteger{125}}},
             .expectedHue = 0.34722222f
         },
         {
-            .playerColorIndex = 2,
+            .playerColorIndex = cs2::PlayerColorIndex::Yellow,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerYellowHue>(),
             .configuredHue{outline_glow_vars::PlayerYellowHue::ValueType{color::HueInteger{53}}},
             .expectedHue = 0.14722222f
         },
         {
-            .playerColorIndex = 3,
+            .playerColorIndex = cs2::PlayerColorIndex::Orange,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerOrangeHue>(),
             .configuredHue{outline_glow_vars::PlayerOrangeHue::ValueType{color::HueInteger{15}}},
             .expectedHue = 0.04166666f
         },
         {
-            .playerColorIndex = 4,
+            .playerColorIndex = cs2::PlayerColorIndex::Purple,
             .configVariableIndex = ConfigVariableTypes::indexOf<outline_glow_vars::PlayerPurpleHue>(),
             .configuredHue{outline_glow_vars::PlayerPurpleHue::ValueType{color::HueInteger{265}}},
             .expectedHue = 0.73611111f
@@ -521,7 +521,7 @@ TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturnedAsFallbackWhenInvalidPl
 
     EXPECT_CALL(mockPlayerPawn, teamNumber()).WillRepeatedly(testing::Return(GetParam().teamNumber));
     EXPECT_CALL(mockPlayerPawn, playerController()).WillRepeatedly(testing::ReturnRef(mockPlayerController));
-    EXPECT_CALL(mockPlayerController, playerColorIndex()).WillRepeatedly(testing::Return(-1));
+    EXPECT_CALL(mockPlayerController, playerColorIndex()).WillRepeatedly(testing::Return(cs2::PlayerColorIndex{-1}));
 
     const auto hue = playerOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlayerPawn);
     EXPECT_EQ(hue.hasValue(), GetParam().expectedHue.hasValue());

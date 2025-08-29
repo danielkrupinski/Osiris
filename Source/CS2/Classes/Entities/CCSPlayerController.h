@@ -10,11 +10,21 @@
 namespace cs2
 {
 
+enum class PlayerColorIndex : std::int32_t {
+    Blue = 0,
+    Green = 1,
+    Yellow = 2,
+    Orange = 3,
+    Purple = 4
+};
+
+constexpr auto kPlayerColorIndexCount{5};
+
 struct CCSPlayerController : C_BaseEntity {
     static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCCSPlayerController@@", "19CCSPlayerController")};
 
     using m_hPlayerPawn = CEntityHandle;
-    using m_iCompTeammateColor = std::int32_t;
+    using m_iCompTeammateColor = PlayerColorIndex;
 };
 
 }

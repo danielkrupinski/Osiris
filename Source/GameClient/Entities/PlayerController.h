@@ -46,25 +46,12 @@ public:
         return hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(hookContext.template make<EntitySystem>().getEntityFromHandle(*playerPawnHandle)));
     }
 
-    [[nodiscard]] std::optional<cs2::Color> getPlayerColor() const noexcept
-    {
-        return getPlayerColor(cs2::kPlayerColors);
-    }
-
     [[nodiscard]] decltype(auto) playerColorIndex() const noexcept
     {
         return hookContext.clientPatternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).toOptional();
     }
 
 private:
-    [[nodiscard]] std::optional<cs2::Color> getPlayerColor(std::span<const cs2::Color> playerColors) const noexcept
-    {
-        const auto playerColorIndex = hookContext.clientPatternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).get();
-        if (playerColorIndex && *playerColorIndex >= 0 && std::cmp_less(*playerColorIndex, playerColors.size()))
-            return playerColors[*playerColorIndex];
-        return {};
-    }
-
     HookContext& hookContext;
     cs2::CCSPlayerController* playerControllerPointer;
 };

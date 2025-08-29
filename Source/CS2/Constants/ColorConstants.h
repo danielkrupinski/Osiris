@@ -24,14 +24,6 @@ constexpr Color kColorPlayerGreen{29, 162, 132};
 constexpr Color kColorPlayerBlue{136, 206, 245};
 constexpr Color kColorPlayerOrange{255, 155, 37};
 
-constexpr auto kPlayerColors = std::to_array<Color>({
-    kColorPlayerBlue,
-    kColorPlayerGreen,
-    kColorPlayerYellow,
-    kColorPlayerOrange,
-    kColorPlayerPurple
-});
-
 constexpr Color kColorDefuseKit{119, 221, 255};
 
 }

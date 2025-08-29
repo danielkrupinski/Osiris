@@ -175,11 +175,12 @@ private:
             return {};
 
         switch (playerColorIndex.value()) {
-        case 0: return getConfigVariable<model_glow_vars::PlayerBlueHue>();
-        case 1: return getConfigVariable<model_glow_vars::PlayerGreenHue>();
-        case 2: return getConfigVariable<model_glow_vars::PlayerYellowHue>();
-        case 3: return getConfigVariable<model_glow_vars::PlayerOrangeHue>();
-        case 4: return getConfigVariable<model_glow_vars::PlayerPurpleHue>();
+        using enum cs2::PlayerColorIndex;
+        case Blue: return getConfigVariable<model_glow_vars::PlayerBlueHue>();
+        case Green: return getConfigVariable<model_glow_vars::PlayerGreenHue>();
+        case Yellow: return getConfigVariable<model_glow_vars::PlayerYellowHue>();
+        case Orange: return getConfigVariable<model_glow_vars::PlayerOrangeHue>();
+        case Purple: return getConfigVariable<model_glow_vars::PlayerPurpleHue>();
         default: return {};
         }
     }

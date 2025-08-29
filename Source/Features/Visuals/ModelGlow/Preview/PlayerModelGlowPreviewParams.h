@@ -6,7 +6,7 @@ namespace player_model_glow_preview_params::player_color_animation_params
 {
     constexpr auto kCycleDuration{15.0f};
     constexpr auto kTeamColorSteps{1};
-    constexpr auto kPlayerColorSteps{static_cast<int>(cs2::kPlayerColors.size())};
+    constexpr auto kPlayerColorSteps{cs2::kPlayerColorIndexCount};
     constexpr auto kSteps{kTeamColorSteps + kPlayerColorSteps};
     constexpr auto kStepDuration{kCycleDuration / kSteps};
 }
