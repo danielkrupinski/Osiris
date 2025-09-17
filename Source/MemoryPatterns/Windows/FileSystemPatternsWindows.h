@@ -13,6 +13,6 @@ struct FileSystemPatterns {
     [[nodiscard]] static consteval auto addFileSystemPatterns(auto fileSystemPatterns) noexcept
     {
         return fileSystemPatterns
-            .template addPattern<FileNamesOffset, CodePattern{"E8 ? ? ? ? 48 8D 8B ? ? ? ? FF 15 ? ? ? ? 8B"}.add(8).read()>();
+            .template addPattern<FileNamesOffset, CodePattern{"? ? ? ? FF 15 ? ? ? ? 8B 83 ? ? ? ? 83"}.read()>();
     }
 };

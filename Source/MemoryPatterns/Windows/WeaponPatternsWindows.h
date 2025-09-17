@@ -8,6 +8,6 @@ struct WeaponPatterns {
     {
         return clientPatterns
             .template addPattern<OffsetToClipAmmo, CodePattern{"74 ? 83 ? ? ? ? ? 00 7C ? 8B"}.add(4).read()>()
-            .template addPattern<OffsetToWeaponSceneObjectUpdaterHandle, CodePattern{"24 ? 48 8B CB E8 ? ? ? ? 48 89 87 ? ? ? ?"}.add(13).read()>();
+            .template addPattern<OffsetToWeaponSceneObjectUpdaterHandle, CodePattern{"54 24 ? 48 8B ? E8 ? ? ? ? 48 89 ? ? ? ? ? B2"}.add(14).read()>();
     }
 };
