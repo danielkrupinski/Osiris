@@ -23,12 +23,12 @@ public:
 
         float float4[]{value, value, value, value};
 #if IS_WIN64()
-        hookContext.clientPatternSearchResults().template get<SetSceneObjectAttributeFloat4>()(&attributes->floatAttributes, attributeNameHash, float4);
+        hookContext.patternSearchResults().template get<SetSceneObjectAttributeFloat4>()(&attributes->floatAttributes, attributeNameHash, float4);
 #elif IS_LINUX()
         double temp[2];
         static_assert(sizeof(float4) == sizeof(temp));
         std::memcpy(&temp, &float4, sizeof(float4));
-        hookContext.clientPatternSearchResults().template get<SetSceneObjectAttributeFloat4>()(&attributes->floatAttributes, attributeNameHash, temp[0], temp[1]);
+        hookContext.patternSearchResults().template get<SetSceneObjectAttributeFloat4>()(&attributes->floatAttributes, attributeNameHash, temp[0], temp[1]);
 #endif
     }
 
@@ -39,12 +39,12 @@ public:
 
         float colorFloat[]{color.r() / 255.0f, color.g() / 255.0f, color.b() / 255.0f, 0.0f};
 #if IS_WIN64()
-        hookContext.clientPatternSearchResults().template get<SetSceneObjectAttributeFloat4>()(&attributes->floatAttributes, attributeNameHash, colorFloat);
+        hookContext.patternSearchResults().template get<SetSceneObjectAttributeFloat4>()(&attributes->floatAttributes, attributeNameHash, colorFloat);
 #elif IS_LINUX()
         double temp[2];
         static_assert(sizeof(colorFloat) == sizeof(temp));
         std::memcpy(&temp, &colorFloat, sizeof(colorFloat));
-        hookContext.clientPatternSearchResults().template get<SetSceneObjectAttributeFloat4>()(&attributes->floatAttributes, attributeNameHash, temp[0], temp[1]);
+        hookContext.patternSearchResults().template get<SetSceneObjectAttributeFloat4>()(&attributes->floatAttributes, attributeNameHash, temp[0], temp[1]);
 #endif
     }
 

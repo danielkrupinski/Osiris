@@ -25,7 +25,7 @@ public:
 
     [[nodiscard]] decltype(auto) isBeingPlanted() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToIsBeingPlanted>().of(c4);
+        return hookContext.patternSearchResults().template get<OffsetToIsBeingPlanted>().of(c4);
     }
 
     using RawType = cs2::C_C4;

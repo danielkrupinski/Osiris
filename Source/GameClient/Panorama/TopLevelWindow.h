@@ -19,7 +19,7 @@ public:
 
     [[nodiscard]] auto getUiScaleFactor() const noexcept
     {
-        return hookContext.panoramaPatternSearchResults().template get<UiScaleFactorOffset>().of(topLevelWindow).toOptional();
+        return hookContext.patternSearchResults().template get<UiScaleFactorOffset>().of(topLevelWindow).toOptional();
     }
 
 private:

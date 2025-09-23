@@ -27,17 +27,17 @@ public:
 private:
     [[nodiscard]] auto sceneSystem() const noexcept
     {
-        return hookContext.sceneSystemPatternSearchResults().template get<SceneSystemPointer>();
+        return hookContext.patternSearchResults().template get<SceneSystemPointer>();
     }
 
     [[nodiscard]] auto deleteSceneObjectFn() const noexcept
     {
-        return hookContext.sceneSystemPatternSearchResults().template get<DeleteSceneObjectFunctionPointer>();
+        return hookContext.patternSearchResults().template get<DeleteSceneObjectFunctionPointer>();
     }
 
     [[nodiscard]] auto allocateAttributeListFn() const noexcept
     {
-        return hookContext.sceneSystemPatternSearchResults().template get<AllocateAttributeListFunctionPointer>();
+        return hookContext.patternSearchResults().template get<AllocateAttributeListFunctionPointer>();
     }
 
     HookContext& hookContext;

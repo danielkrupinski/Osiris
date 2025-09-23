@@ -49,27 +49,27 @@ struct PanelFactory {
 private:
     [[nodiscard]] auto panelConstructor() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<PanelConstructorPointer>();
+        return hookContext.patternSearchResults().template get<PanelConstructorPointer>();
     }
 
     [[nodiscard]] auto imagePanelConstructor() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<ImagePanelConstructorPointer>();
+        return hookContext.patternSearchResults().template get<ImagePanelConstructorPointer>();
     }
 
     [[nodiscard]] auto imagePanelSize() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<ImagePanelClassSize>();
+        return hookContext.patternSearchResults().template get<ImagePanelClassSize>();
     }
 
     [[nodiscard]] auto labelPanelConstructor() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<LabelPanelConstructorPointer>();
+        return hookContext.patternSearchResults().template get<LabelPanelConstructorPointer>();
     }
 
     [[nodiscard]] auto labelPanelSize() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<LabelPanelObjectSize>();
+        return hookContext.patternSearchResults().template get<LabelPanelObjectSize>();
     }
 
     HookContext& hookContext;

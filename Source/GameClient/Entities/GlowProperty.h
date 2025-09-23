@@ -14,7 +14,7 @@ public:
 
     [[nodiscard]] decltype(auto) isGlowing() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToIsGlowing>().of(glowProperty).toOptional();
+        return hookContext.patternSearchResults().template get<OffsetToIsGlowing>().of(glowProperty).toOptional();
     }
 
 private:

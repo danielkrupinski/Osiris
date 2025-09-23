@@ -28,7 +28,7 @@ struct WorldToClipSpaceConverter {
 private:
     [[nodiscard]] auto worldToProjectionMatrix() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<WorldToProjectionMatrixPointer>();
+        return hookContext.patternSearchResults().template get<WorldToProjectionMatrixPointer>();
     }
 
     HookContext& hookContext;

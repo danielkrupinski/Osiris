@@ -36,7 +36,7 @@ struct PanoramaImagePanel {
 
     [[nodiscard]] cs2::ImageProperties* getImageProperties() const noexcept
     {
-        return context.hookContext.clientPatternSearchResults().template get<ImagePropertiesOffset>().of(context.panel).get();
+        return context.hookContext.patternSearchResults().template get<ImagePropertiesOffset>().of(context.panel).get();
     }
 
     [[nodiscard]] std::string_view getImagePath() const noexcept
@@ -68,8 +68,8 @@ struct PanoramaImagePanel {
             properties->presentSvgAttributes |= 1 << static_cast<std::size_t>(cs2::SvgAttributeType::FillColor);
         }
 
-        if (context.hookContext.clientPatternSearchResults().template get<SetImageFunctionPointer>())
-            context.hookContext.clientPatternSearchResults().template get<SetImageFunctionPointer>()(context.panel, params.imageUrl, nullptr, properties);
+        if (context.hookContext.patternSearchResults().template get<SetImageFunctionPointer>())
+            context.hookContext.patternSearchResults().template get<SetImageFunctionPointer>()(context.panel, params.imageUrl, nullptr, properties);
     }
 
 private:

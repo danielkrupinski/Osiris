@@ -1823,6 +1823,9 @@
     <ClInclude Include="Config\HueVariableParams.h">
       <Filter>Config</Filter>
     </ClInclude>
+    <ClInclude Include="MemoryPatterns\AllMemoryPatternSearchResults.h">
+      <Filter>MemoryPatterns</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

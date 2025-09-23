@@ -42,7 +42,7 @@ struct PanoramaUiPanelContext {
 
     [[nodiscard]] decltype(auto) getHandle() const noexcept
     {
-        return hookContext.panoramaPatternSearchResults().template get<OffsetToPanelHandle>().of(panel).valueOr(cs2::PanelHandle{});
+        return hookContext.patternSearchResults().template get<OffsetToPanelHandle>().of(panel).valueOr(cs2::PanelHandle{});
     }
 
     void setSimpleForegroundColor(cs2::Color color) const noexcept
@@ -78,55 +78,55 @@ struct PanoramaUiPanelContext {
         if (!style)
             return;
 
-        if (const auto setPropertyFn{hookContext.panoramaPatternSearchResults().template get<SetPanelStylePropertyFunctionPointer>()})
+        if (const auto setPropertyFn{hookContext.patternSearchResults().template get<SetPanelStylePropertyFunctionPointer>()})
             setPropertyFn(style, styleProperty, true);
     }
 
     [[nodiscard]] PanoramaUiPanelClasses classes() const noexcept
     {
-        return PanoramaUiPanelClasses{hookContext.panoramaPatternSearchResults().template get<PanelClassesVectorOffset>().of(panel).get()};
+        return PanoramaUiPanelClasses{hookContext.patternSearchResults().template get<PanelClassesVectorOffset>().of(panel).get()};
     }
 
     [[nodiscard]] auto childPanels() const noexcept
     {
-        return PanoramaUiPanelChildPanels{hookContext, hookContext.panoramaPatternSearchResults().template get<ChildPanelsVectorOffset>().of(panel).get()};
+        return PanoramaUiPanelChildPanels{hookContext, hookContext.patternSearchResults().template get<ChildPanelsVectorOffset>().of(panel).get()};
     }
 
     [[nodiscard]] decltype(auto) getParentWindow() const noexcept
     {
-        return hookContext.template make<TopLevelWindow>(hookContext.panoramaPatternSearchResults().template get<ParentWindowOffset>().of(panel).valueOr(nullptr));
+        return hookContext.template make<TopLevelWindow>(hookContext.patternSearchResults().template get<ParentWindowOffset>().of(panel).valueOr(nullptr));
     }
 
     [[nodiscard]] const char* getId() const noexcept
     {
-        if (const auto id = hookContext.panoramaPatternSearchResults().template get<OffsetToPanelId>().of(panel).get())
+        if (const auto id = hookContext.patternSearchResults().template get<OffsetToPanelId>().of(panel).get())
             return id->m_pString;
         return nullptr;
     }
 
     [[nodiscard]] Optional<bool> hasFlag(cs2::EPanelFlag flag) const noexcept
     {
-        return (hookContext.panoramaPatternSearchResults().template get<OffsetToPanelFlags>().of(panel).toOptional() & flag) != 0;
+        return (hookContext.patternSearchResults().template get<OffsetToPanelFlags>().of(panel).toOptional() & flag) != 0;
     }
 
     [[nodiscard]] auto setParent() const noexcept
     {
-        return PanoramaUiPanelMethodInvoker{panel, hookContext.clientPatternSearchResults().template get<SetParentFunctionOffset>()};
+        return PanoramaUiPanelMethodInvoker{panel, hookContext.patternSearchResults().template get<SetParentFunctionOffset>()};
     }
 
     [[nodiscard]] auto setVisible() const noexcept
     {
-        return PanoramaUiPanelMethodInvoker{panel, hookContext.clientPatternSearchResults().template get<SetVisibleFunctionOffset>()};
+        return PanoramaUiPanelMethodInvoker{panel, hookContext.patternSearchResults().template get<SetVisibleFunctionOffset>()};
     }
 
     [[nodiscard]] auto getAttributeString() const noexcept
     {
-        return PanoramaUiPanelMethodInvoker{panel, hookContext.clientPatternSearchResults().template get<GetAttributeStringFunctionOffset>()};
+        return PanoramaUiPanelMethodInvoker{panel, hookContext.patternSearchResults().template get<GetAttributeStringFunctionOffset>()};
     }
 
     [[nodiscard]] auto setAttributeString() const noexcept
     {
-        return PanoramaUiPanelMethodInvoker{panel, hookContext.clientPatternSearchResults().template get<SetAttributeStringFunctionOffset>()};
+        return PanoramaUiPanelMethodInvoker{panel, hookContext.patternSearchResults().template get<SetAttributeStringFunctionOffset>()};
     }
 
     [[nodiscard]] auto propertyFactory() const noexcept
@@ -154,7 +154,7 @@ private:
 
     [[nodiscard]] cs2::CPanelStyle* getStyle() const noexcept
     {
-        return hookContext.panoramaPatternSearchResults().template get<PanelStyleOffset>().of(panel).get();
+        return hookContext.patternSearchResults().template get<PanelStyleOffset>().of(panel).get();
     }
 
     HookContext& hookContext;

@@ -29,7 +29,7 @@ public:
 private:
     [[nodiscard]] decltype(auto) portraitWorldPointer() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToPortraitWorld>().of(ui3dPanel).valueOr(nullptr);
+        return hookContext.patternSearchResults().template get<OffsetToPortraitWorld>().of(ui3dPanel).valueOr(nullptr);
     }
 
     HookContext& hookContext;

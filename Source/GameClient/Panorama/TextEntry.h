@@ -23,7 +23,7 @@ public:
 private:
     [[nodiscard]] decltype(auto) setTextFunction() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<TextEntrySetTextFunction>();
+        return hookContext.patternSearchResults().template get<TextEntrySetTextFunction>();
     }
 
     HookContext& hookContext;

@@ -28,14 +28,14 @@ public:
 
     [[nodiscard]] bool isMapLoaded() const
     {
-        const auto entityHandles = hookContext.clientPatternSearchResults().template get<OffsetToPortraitWorldMapEntities>().of(portraitWorld).get();
+        const auto entityHandles = hookContext.patternSearchResults().template get<OffsetToPortraitWorldMapEntities>().of(portraitWorld).get();
         return entityHandles && entityHandles->size > 0;
     }
 
 private:
     [[nodiscard]] decltype(auto) findEntity(auto&& predicate) const
     {
-        const auto entityHandles = hookContext.clientPatternSearchResults().template get<OffsetToPortraitWorldEntities>().of(portraitWorld).get();
+        const auto entityHandles = hookContext.patternSearchResults().template get<OffsetToPortraitWorldEntities>().of(portraitWorld).get();
         if (!entityHandles)
             return hookContext.template make<BaseEntity>(nullptr);
 

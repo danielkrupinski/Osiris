@@ -49,7 +49,7 @@ public:
         if (!curtime.hasValue())
             return;
 
-        auto soundChannels = hookContext.soundSystemPatternSearchResults().template get<SoundChannelsPointer>();
+        auto soundChannels = hookContext.patternSearchResults().template get<SoundChannelsPointer>();
         if (!soundChannels || !*soundChannels)
             return;
 

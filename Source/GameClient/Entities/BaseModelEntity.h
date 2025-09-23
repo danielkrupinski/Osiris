@@ -30,7 +30,7 @@ public:
 
     [[nodiscard]] decltype(auto) glowProperty() const noexcept
     {
-        return hookContext.template make<GlowProperty>(hookContext.clientPatternSearchResults().template get<OffsetToGlowProperty>().of(baseModelEntity).get());
+        return hookContext.template make<GlowProperty>(hookContext.patternSearchResults().template get<OffsetToGlowProperty>().of(baseModelEntity).get());
     }
 
 private:

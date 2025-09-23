@@ -64,12 +64,12 @@ public:
 
     [[nodiscard]] decltype(auto) renderComponent() const noexcept
     {
-        return hookContext.template make<RenderComponent>(hookContext.clientPatternSearchResults().template get<OffsetToRenderComponent>().of(entity).valueOr(nullptr));
+        return hookContext.template make<RenderComponent>(hookContext.patternSearchResults().template get<OffsetToRenderComponent>().of(entity).valueOr(nullptr));
     }
 
     [[nodiscard]] decltype(auto) gameSceneNode() const noexcept
     {
-        return hookContext.template make<GameSceneNode>(hookContext.clientPatternSearchResults().template get<OffsetToGameSceneNode>().of(entity).valueOr(nullptr));
+        return hookContext.template make<GameSceneNode>(hookContext.patternSearchResults().template get<OffsetToGameSceneNode>().of(entity).valueOr(nullptr));
     }
 
     template <typename F>
@@ -136,27 +136,27 @@ public:
 
     [[nodiscard]] auto hasOwner() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToOwnerEntity>().of(entity).toOptional().notEqual(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX});
+        return hookContext.patternSearchResults().template get<OffsetToOwnerEntity>().of(entity).toOptional().notEqual(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX});
     }
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept
     {
-        return TeamNumber{hookContext.clientPatternSearchResults().template get<OffsetToTeamNumber>().of(entity).valueOr({})};
+        return TeamNumber{hookContext.patternSearchResults().template get<OffsetToTeamNumber>().of(entity).valueOr({})};
     }
 
     [[nodiscard]] auto vData() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToVData>().of(entity).toOptional();
+        return hookContext.patternSearchResults().template get<OffsetToVData>().of(entity).toOptional();
     }
 
     [[nodiscard]] auto health() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToHealth>().of(entity).toOptional();
+        return hookContext.patternSearchResults().template get<OffsetToHealth>().of(entity).toOptional();
     }
 
     [[nodiscard]] std::optional<bool> isAlive() const noexcept
     {
-        const auto lifestate = hookContext.clientPatternSearchResults().template get<OffsetToLifeState>().of(entity).get();
+        const auto lifestate = hookContext.patternSearchResults().template get<OffsetToLifeState>().of(entity).get();
         if (lifestate)
             return LifeState{*lifestate} == LifeState::Alive;
         return {};

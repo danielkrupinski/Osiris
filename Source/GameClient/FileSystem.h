@@ -14,13 +14,13 @@ public:
 
     [[nodiscard]] decltype(auto) fileNames() const noexcept
     {
-        return hookContext.template make<FileNameSymbolTable>(hookContext.fileSystemPatternSearchResults().template get<FileNamesOffset>().of(fileSystem()).get());
+        return hookContext.template make<FileNameSymbolTable>(hookContext.patternSearchResults().template get<FileNamesOffset>().of(fileSystem()).get());
     }
 
 private:
     [[nodiscard]] cs2::CBaseFileSystem* fileSystem() const noexcept
     {
-        if (const auto fileSystemPointer = hookContext.soundSystemPatternSearchResults().template get<FileSystemPointer>())
+        if (const auto fileSystemPointer = hookContext.patternSearchResults().template get<FileSystemPointer>())
             return *fileSystemPointer;
         return nullptr;
     }

@@ -18,6 +18,7 @@
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewState.h>
 #include <Features/Visuals/ModelGlow/Preview/WeaponModelGlowPreviewState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheState.h>
+#include <MemoryPatterns/AllMemoryPatternSearchResults.h>
 #include <MemoryPatterns/MemoryPatterns.h>
 #include <MemorySearch/PatternNotFoundLogger.h>
 #include "UnloadFlag.h"
@@ -42,18 +43,13 @@
 
 struct FullGlobalContext {
     FullGlobalContext(PeepEventsHook peepEventsHook, DynamicLibrary clientDLL, DynamicLibrary panoramaDLL, const MemoryPatterns& memoryPatterns, Tier0Dll tier0Dll) noexcept
-        : clientPatternSearchResults{memoryPatterns.patternFinders.clientPatternFinder.findPatterns(kClientPatterns)}
-        , sceneSystemPatternSearchResults{memoryPatterns.patternFinders.sceneSystemPatternFinder.findPatterns(kSceneSystemPatterns)}
-        , tier0PatternSearchResults{memoryPatterns.patternFinders.tier0PatternFinder.findPatterns(kTier0Patterns)}
-        , fileSystemPatternSearchResults{memoryPatterns.patternFinders.fileSystemPatternFinder.findPatterns(kFileSystemPatterns)}
-        , soundSystemPatternSearchResults{memoryPatterns.patternFinders.soundSystemPatternFinder.findPatterns(kSoundSystemPatterns)}
-        , panoramaPatternSearchResults{memoryPatterns.patternFinders.panoramaPatternFinder.findPatterns(kPanoramaPatterns)}
+        : patternSearchResults{memoryPatterns}
         , fileNameSymbolTableState{tier0Dll}
         , memAllocState{tier0Dll}
         , stylePropertySymbolsAndVMTs{StylePropertySymbolMap{memoryPatterns.panelStylePatterns().stylePropertiesSymbols()}, VmtFinder{panoramaDLL.getVmtFinderParams()}}
         , hooks{
             peepEventsHook,
-            clientPatternSearchResults.get<ViewRenderPointer>(),
+            patternSearchResults.get<ViewRenderPointer>(),
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
     {
     }
@@ -65,12 +61,7 @@ struct FullGlobalContext {
 
     OsirisDirectoryPath osirisDirectoryPath;
     ConfigState configState;
-    PatternSearchResults<decltype(kClientPatterns)> clientPatternSearchResults;
-    PatternSearchResults<decltype(kSceneSystemPatterns)> sceneSystemPatternSearchResults;
-    PatternSearchResults<decltype(kTier0Patterns)> tier0PatternSearchResults;
-    PatternSearchResults<decltype(kFileSystemPatterns)> fileSystemPatternSearchResults;
-    PatternSearchResults<decltype(kSoundSystemPatterns)> soundSystemPatternSearchResults;
-    PatternSearchResults<decltype(kPanoramaPatterns)> panoramaPatternSearchResults;
+    AllMemoryPatternSearchResults patternSearchResults;
     FileNameSymbolTableState fileNameSymbolTableState;
     GlowSceneObjectState glowSceneObjectState;
     HudState hudState;

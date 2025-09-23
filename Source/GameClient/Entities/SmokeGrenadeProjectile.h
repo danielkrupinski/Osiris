@@ -16,7 +16,7 @@ public:
 
     [[nodiscard]] auto didSmokeEffect() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToDidSmokeEffect>().of(smokeGrenadeProjectile).toOptional();
+        return hookContext.patternSearchResults().template get<OffsetToDidSmokeEffect>().of(smokeGrenadeProjectile).toOptional();
     }
 
 private:

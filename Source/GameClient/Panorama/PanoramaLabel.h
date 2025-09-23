@@ -35,7 +35,7 @@ struct PanoramaLabel {
 private:
     [[nodiscard]] auto setTextInternalFunction() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<SetLabelTextFunctionPointer>();
+        return hookContext.patternSearchResults().template get<SetLabelTextFunctionPointer>();
     }
 
     HookContext& hookContext;

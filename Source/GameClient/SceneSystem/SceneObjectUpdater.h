@@ -16,7 +16,7 @@ public:
 
     [[nodiscard]] decltype(auto) sceneObject() const noexcept
     {
-        return hookContext.template make<SceneObject>(hookContext.clientPatternSearchResults().template get<OffsetToSceneObject>().of(updater).valueOr(nullptr));
+        return hookContext.template make<SceneObject>(hookContext.patternSearchResults().template get<OffsetToSceneObject>().of(updater).valueOr(nullptr));
     }
 
 private:

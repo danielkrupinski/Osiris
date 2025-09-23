@@ -18,7 +18,7 @@ public:
         if (!deps().thisptr || !*deps().thisptr)
             return nullptr;
 
-        if (const auto fn = hookContext.clientPatternSearchResults().template get<OffsetAllocVirtualMethod>().of((*deps().thisptr)->vmt).get())
+        if (const auto fn = hookContext.patternSearchResults().template get<OffsetAllocVirtualMethod>().of((*deps().thisptr)->vmt).get())
             return (*fn)(*deps().thisptr, size);
         
         return nullptr;

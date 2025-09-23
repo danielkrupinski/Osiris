@@ -74,7 +74,7 @@ public:
 
         if (justInitialized) {
             fullCtx.entityClassifier.init(hookContext);
-            if (const auto mainMenu{fullCtx.clientPatternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
+            if (const auto mainMenu{fullCtx.patternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
                 hookContext.make<PanoramaGUI>().init(hookContext.make<PanoramaUiPanel>((*mainMenu)->uiPanel));
             hookContext.config().init();
             hookContext.config().scheduleLoad();

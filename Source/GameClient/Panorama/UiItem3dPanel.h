@@ -30,7 +30,7 @@ private:
 
     void setItemId(const char* itemIdString) const noexcept
     {
-        if (const auto setItemItemIdFunction = hookContext.clientPatternSearchResults().template get<SetItemItemIdFunction>(); setItemItemIdFunction && uiItem3dPanel)
+        if (const auto setItemItemIdFunction = hookContext.patternSearchResults().template get<SetItemItemIdFunction>(); setItemItemIdFunction && uiItem3dPanel)
             setItemItemIdFunction(uiItem3dPanel, itemIdString, "");
     }
 
@@ -42,7 +42,7 @@ private:
 
     [[nodiscard]] decltype(auto) unknownField() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToItem3dPanelUnknownField>().of(uiItem3dPanel);
+        return hookContext.patternSearchResults().template get<OffsetToItem3dPanelUnknownField>().of(uiItem3dPanel);
     }
 
     HookContext& hookContext;

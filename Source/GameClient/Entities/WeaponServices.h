@@ -20,12 +20,12 @@ public:
 
     [[nodiscard]] decltype(auto) weapons() const noexcept
     {
-        return hookContext.template make<PlayerWeapons>(hookContext.clientPatternSearchResults().template get<OffsetToWeapons>().of(weaponServices).get());
+        return hookContext.template make<PlayerWeapons>(hookContext.patternSearchResults().template get<OffsetToWeapons>().of(weaponServices).get());
     }
 
     [[nodiscard]] auto getActiveWeapon() const noexcept
     {
-        return hookContext.template make<BaseWeapon>(static_cast<cs2::C_CSWeaponBase*>(hookContext.template make<EntitySystem>().getEntityFromHandle(hookContext.clientPatternSearchResults().template get<OffsetToActiveWeapon>().of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX}))));
+        return hookContext.template make<BaseWeapon>(static_cast<cs2::C_CSWeaponBase*>(hookContext.template make<EntitySystem>().getEntityFromHandle(hookContext.patternSearchResults().template get<OffsetToActiveWeapon>().of(weaponServices).valueOr(cs2::CEntityHandle{cs2::INVALID_EHANDLE_INDEX}))));
     }
 
 private:

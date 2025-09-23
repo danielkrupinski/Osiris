@@ -347,6 +347,7 @@
     <ClInclude Include="MemoryAllocation\MemoryAllocatorBaseImpl.h" />
     <ClInclude Include="MemoryAllocation\MemoryDeleter.h" />
     <ClInclude Include="MemoryAllocation\UniquePtr.h" />
+    <ClInclude Include="MemoryPatterns\AllMemoryPatternSearchResults.h" />
     <ClInclude Include="MemoryPatterns\MemoryPatterns.h" />
     <ClInclude Include="MemoryPatterns\PatternFinders.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\BaseModelEntityPatternTypes.h" />

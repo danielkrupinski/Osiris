@@ -21,27 +21,27 @@ public:
 
     [[nodiscard]] auto blowTime() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<BombBlowTimeOffset>().of(plantedC4);
+        return hookContext.patternSearchResults().template get<BombBlowTimeOffset>().of(plantedC4);
     }
 
     [[nodiscard]] auto defuser() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<BombDefuserOffset>().of(plantedC4);
+        return hookContext.patternSearchResults().template get<BombDefuserOffset>().of(plantedC4);
     }
 
     [[nodiscard]] auto defuseEndTime() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<BombDefuseEndTimeOffset>().of(plantedC4);
+        return hookContext.patternSearchResults().template get<BombDefuseEndTimeOffset>().of(plantedC4);
     }
 
     [[nodiscard]] auto bombSite() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<BombSiteOffset>().of(plantedC4);
+        return hookContext.patternSearchResults().template get<BombSiteOffset>().of(plantedC4);
     }
 
     [[nodiscard]] auto ticking() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<BombTickingOffset>().of(plantedC4);
+        return hookContext.patternSearchResults().template get<BombTickingOffset>().of(plantedC4);
     }
 
     [[nodiscard]] decltype(auto) baseEntity() const noexcept

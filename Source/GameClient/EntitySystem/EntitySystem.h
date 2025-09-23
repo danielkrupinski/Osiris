@@ -92,19 +92,19 @@ private:
 
     [[nodiscard]] cs2::CGameEntitySystem* entitySystem() const noexcept
     {
-        if (hookContext.clientPatternSearchResults().template get<EntitySystemPointer>())
-            return *hookContext.clientPatternSearchResults().template get<EntitySystemPointer>();
+        if (hookContext.patternSearchResults().template get<EntitySystemPointer>())
+            return *hookContext.patternSearchResults().template get<EntitySystemPointer>();
         return nullptr;
     }
 
     [[nodiscard]] auto getEntityList() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<EntityListOffset>().of(entitySystem()).get();
+        return hookContext.patternSearchResults().template get<EntityListOffset>().of(entitySystem()).get();
     }
 
     [[nodiscard]] auto getEntityClasses() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToEntityClasses>().of(entitySystem()).get();
+        return hookContext.patternSearchResults().template get<OffsetToEntityClasses>().of(entitySystem()).get();
     }
 
     [[nodiscard]] auto getHighestEntityIndex() const noexcept

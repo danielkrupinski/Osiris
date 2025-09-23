@@ -39,12 +39,12 @@ public:
     [[nodiscard]] auto getName() const noexcept
     {
         const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(hookContext.template make<BaseEntity>(baseWeapon).vData().valueOr(nullptr));
-        return hookContext.clientPatternSearchResults().template get<OffsetToWeaponName>().of(vData).valueOr(nullptr);
+        return hookContext.patternSearchResults().template get<OffsetToWeaponName>().of(vData).valueOr(nullptr);
     }
 
     [[nodiscard]] auto clipAmmo() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToClipAmmo>().of(baseWeapon).toOptional();
+        return hookContext.patternSearchResults().template get<OffsetToClipAmmo>().of(baseWeapon).toOptional();
     }
 
     [[nodiscard]] auto getSceneObjectUpdater() const noexcept
@@ -61,7 +61,7 @@ public:
 private:
     [[nodiscard]] auto sceneObjectUpdaterHandle() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToWeaponSceneObjectUpdaterHandle>().of(baseWeapon).valueOr(nullptr);
+        return hookContext.patternSearchResults().template get<OffsetToWeaponSceneObjectUpdaterHandle>().of(baseWeapon).valueOr(nullptr);
     }
 
     HookContext& hookContext;

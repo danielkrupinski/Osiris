@@ -16,7 +16,7 @@ public:
 
     void setSelectedIndex(int index) const noexcept
     {
-        const auto setSelectedIndexFn = hookContext.clientPatternSearchResults().template get<SetSelectedIndexFunctionPointer>();
+        const auto setSelectedIndexFn = hookContext.patternSearchResults().template get<SetSelectedIndexFunctionPointer>();
         if (dropDown && setSelectedIndexFn)
             setSelectedIndexFn(dropDown, index);
     }

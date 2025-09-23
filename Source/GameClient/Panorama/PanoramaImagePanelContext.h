@@ -19,7 +19,7 @@ struct PanoramaImagePanelContext {
 
     [[nodiscard]] const char* getImagePath() const noexcept
     {
-        if (auto&& imagePath = hookContext.clientPatternSearchResults().template get<OffsetToImagePath>().of(panel).get())
+        if (auto&& imagePath = hookContext.patternSearchResults().template get<OffsetToImagePath>().of(panel).get())
             return imagePath->m_pString;
         return nullptr;
     }

@@ -23,7 +23,7 @@ public:
 private:
     [[nodiscard]] decltype(auto) setValueFunction() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<SliderSetValueFunction>();
+        return hookContext.patternSearchResults().template get<SliderSetValueFunction>();
     }
 
     HookContext& hookContext;

@@ -18,14 +18,14 @@ public:
         // By setting 'line' to non-zero value we disable caching so we don't have to specify different file path for different scripts
         constexpr auto originFile{'\0'};
         constexpr auto line{1};
-        if (hookContext.panoramaPatternSearchResults().template get<RunScriptFunctionPointer>() && thisptr())
-            hookContext.panoramaPatternSearchResults().template get<RunScriptFunctionPointer>()(*thisptr(), contextPanel, scriptSource, &originFile, line);
+        if (hookContext.patternSearchResults().template get<RunScriptFunctionPointer>() && thisptr())
+            hookContext.patternSearchResults().template get<RunScriptFunctionPointer>()(*thisptr(), contextPanel, scriptSource, &originFile, line);
     }
 
     [[nodiscard]] decltype(auto) getPanelFromHandle(cs2::PanelHandle handle) noexcept
     {
-        if (hookContext.panoramaPatternSearchResults().template get<GetPanelPointerFunctionPointer>() && thisptr())
-            return hookContext.uiPanel(hookContext.panoramaPatternSearchResults().template get<GetPanelPointerFunctionPointer>()(*thisptr(), &handle));
+        if (hookContext.patternSearchResults().template get<GetPanelPointerFunctionPointer>() && thisptr())
+            return hookContext.uiPanel(hookContext.patternSearchResults().template get<GetPanelPointerFunctionPointer>()(*thisptr(), &handle));
         return hookContext.uiPanel(nullptr);
     }
 
@@ -37,11 +37,11 @@ public:
 
     [[nodiscard]] cs2::CPanoramaSymbol makeSymbol(int type, const char* text) noexcept
     {
-        if (hookContext.panoramaPatternSearchResults().template get<MakeSymbolFunctionPointer>() && thisptr())
+        if (hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>() && thisptr())
 #if IS_WIN64()
-            return hookContext.panoramaPatternSearchResults().template get<MakeSymbolFunctionPointer>()(type, text);
+            return hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>()(type, text);
 #elif IS_LINUX()
-            return hookContext.panoramaPatternSearchResults().template get<MakeSymbolFunctionPointer>()(*thisptr(), type, text);
+            return hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>()(*thisptr(), type, text);
 #endif
         return -1;
     }
@@ -49,14 +49,14 @@ public:
 private:
     [[nodiscard]] auto thisptr() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<UiEnginePointer>();
+        return hookContext.patternSearchResults().template get<UiEnginePointer>();
     }
 
     void onDeletePanel(cs2::PanelHandle panelHandle) noexcept
     {
         cs2::CPanel2D* clientPanel = getPanelFromHandle(panelHandle).clientPanel();
-        if (clientPanel && hookContext.panoramaPatternSearchResults().template get<OnDeletePanelFunctionPointer>() && thisptr())
-            hookContext.panoramaPatternSearchResults().template get<OnDeletePanelFunctionPointer>()(*thisptr(), clientPanel);
+        if (clientPanel && hookContext.patternSearchResults().template get<OnDeletePanelFunctionPointer>() && thisptr())
+            hookContext.patternSearchResults().template get<OnDeletePanelFunctionPointer>()(*thisptr(), clientPanel);
     }
 
     HookContext& hookContext;

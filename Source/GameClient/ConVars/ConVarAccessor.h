@@ -33,7 +33,7 @@ struct ConVarAccessor {
         if (!conVar)
             return false;
 
-        if (!hookContext.tier0PatternSearchResults().template get<OffsetToConVarValue>() || !conVarIsBool(conVar))
+        if (!hookContext.patternSearchResults().template get<OffsetToConVarValue>() || !conVarIsBool(conVar))
             return false;
 
         state.mp_teammates_are_enemies = readConVarValue<bool>(conVar);
@@ -53,16 +53,16 @@ private:
     [[nodiscard]] T readConVarValue(cs2::ConVar* conVar) const noexcept
     {
         T value;
-        std::memcpy(&value, hookContext.tier0PatternSearchResults().template get<OffsetToConVarValue>().of(conVar).get(), sizeof(value));
+        std::memcpy(&value, hookContext.patternSearchResults().template get<OffsetToConVarValue>().of(conVar).get(), sizeof(value));
         return value;
     }
 
     [[nodiscard]] bool conVarIsBool(cs2::ConVar* conVar) const noexcept
     {
-        if (!hookContext.tier0PatternSearchResults().template get<OffsetToConVarValueType>())
+        if (!hookContext.patternSearchResults().template get<OffsetToConVarValueType>())
             return true;
 
-        return cs2::ConVarValueType{*hookContext.tier0PatternSearchResults().template get<OffsetToConVarValueType>().of(conVar).get()} == cs2::ConVarValueType::boolean;
+        return cs2::ConVarValueType{*hookContext.patternSearchResults().template get<OffsetToConVarValueType>().of(conVar).get()} == cs2::ConVarValueType::boolean;
     }
 
     HookContext& hookContext;

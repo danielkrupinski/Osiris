@@ -40,7 +40,7 @@ public:
 
     [[nodiscard]] decltype(auto) playerPawn() const noexcept
     {
-        const auto playerPawnHandle = hookContext.clientPatternSearchResults().template get<OffsetToPlayerPawnHandle>().of(playerControllerPointer).get();
+        const auto playerPawnHandle = hookContext.patternSearchResults().template get<OffsetToPlayerPawnHandle>().of(playerControllerPointer).get();
         if (!playerPawnHandle)
             return hookContext.template make<PlayerPawn>(nullptr);
         return hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(hookContext.template make<EntitySystem>().getEntityFromHandle(*playerPawnHandle)));
@@ -48,7 +48,7 @@ public:
 
     [[nodiscard]] decltype(auto) playerColorIndex() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).toOptional();
+        return hookContext.patternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).toOptional();
     }
 
 private:

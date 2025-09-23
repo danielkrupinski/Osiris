@@ -184,7 +184,7 @@ public:
 
     void updateFromConfig() noexcept
     {
-        const auto mainMenuPointer = hookContext.clientPatternSearchResults().template get<MainMenuPanelPointer>();
+        const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
         auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
         hookContext.template make<HudTab>().updateFromConfig(mainMenu);
         hookContext.template make<VisualsTab>().updateFromConfig(mainMenu);

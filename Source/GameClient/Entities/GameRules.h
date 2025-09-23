@@ -14,12 +14,12 @@ public:
 
     [[nodiscard]] auto roundStartTime() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<RoundStartTimeOffset>().of(gameRules).toOptional();
+        return hookContext.patternSearchResults().template get<RoundStartTimeOffset>().of(gameRules).toOptional();
     }
 
     [[nodiscard]] auto roundRestartTime() const noexcept
     {
-        return hookContext.clientPatternSearchResults().template get<OffsetToRoundRestartTime>().of(gameRules).toOptional();
+        return hookContext.patternSearchResults().template get<OffsetToRoundRestartTime>().of(gameRules).toOptional();
     }
 
     [[nodiscard]] bool hasScheduledRoundRestart() const noexcept
