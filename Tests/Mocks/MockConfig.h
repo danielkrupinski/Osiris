@@ -11,6 +11,12 @@ struct MockConfig {
     MOCK_METHOD(void, setVariableWithoutAutoSave, (std::size_t configVariableTypeIndex, std::any value));
 
     template <typename ConfigVariable>
+    void expectGetVariable(ConfigVariable::ValueType expectedValue)
+    {
+        EXPECT_CALL(*this, getVariable(ConfigVariableTypes::indexOf<ConfigVariable>())).WillOnce(testing::Return(expectedValue));
+    }
+
+    template <typename ConfigVariable>
     [[nodiscard]] auto getVariable()
     {
         auto&& variable = getVariable(ConfigVariableTypes::indexOf<ConfigVariable>());

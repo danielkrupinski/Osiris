@@ -18,3 +18,4 @@
 #include "Features/Visuals/OutlineGlow/PlayerOutlineGlowTests.h"
 #include "Features/Visuals/OutlineGlow/TickingBombOutlineGlowTests.h"
 #include "Features/Visuals/OutlineGlow/WeaponOutlineGlowTests.h"
+#include "Features/Visuals/OutlineGlow/OutlineGlowTests.h"

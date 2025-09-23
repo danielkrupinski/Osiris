@@ -12,6 +12,11 @@ struct MockBaseEntity {
     MOCK_METHOD(void, applyGlowRecursively, (cs2::Color color));
     MOCK_METHOD(Optional<bool>, hasOwner, ());
     MOCK_METHOD(MockSmokeGrenadeProjectile&, asSmokeGrenadeProjectile, ());
+    
+    auto& baseEntity()
+    {
+        return *this;
+    }
 
     template <template <typename> typename EntityType>
     [[nodiscard]] decltype(auto) as()
