@@ -19,14 +19,14 @@ protected:
 
 TEST_F(KillfeedPreserverTest, DoesNotRunWhenNotEnabled) {
     EXPECT_CALL(mockContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<KillfeedPreserverEnabled>())).WillOnce(testing::Return(false));
+    mockConfig.expectGetVariable<KillfeedPreserverEnabled>(false);
     EXPECT_CALL(mockContext, deathNotices()).Times(0);
     killfeedPreserver.run();
 }
 
 TEST_F(KillfeedPreserverTest, PreservesDeathNoticesWhenEnabled) {
     EXPECT_CALL(mockContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<KillfeedPreserverEnabled>())).WillOnce(testing::Return(true));
+    mockConfig.expectGetVariable<KillfeedPreserverEnabled>(true);
     EXPECT_CALL(mockContext, deathNotices()).WillOnce(testing::ReturnRef(mockDeathNotices));
 
     EXPECT_CALL(mockContext, preserveDeathNotice()).WillOnce(testing::ReturnRef(preserveDeathNoticeFunctor));

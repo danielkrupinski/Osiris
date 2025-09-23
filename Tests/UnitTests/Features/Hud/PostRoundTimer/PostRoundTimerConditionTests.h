@@ -24,13 +24,13 @@ protected:
 
 TEST_F(PostRoundTimerConditionShouldRunTest, ShouldRunIfEnabled) {
     EXPECT_CALL(mockContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PostRoundTimerEnabled>())).WillOnce(testing::Return(true));
+    mockConfig.expectGetVariable<PostRoundTimerEnabled>(true);
     EXPECT_TRUE(postRoundTimerCondition.shouldRun());
 }
 
 TEST_F(PostRoundTimerConditionShouldRunTest, ShouldNotRunIfNotEnabled) {
     EXPECT_CALL(mockContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<PostRoundTimerEnabled>())).WillOnce(testing::Return(false));
+    mockConfig.expectGetVariable<PostRoundTimerEnabled>(false);
     EXPECT_FALSE(postRoundTimerCondition.shouldRun());
 }
 

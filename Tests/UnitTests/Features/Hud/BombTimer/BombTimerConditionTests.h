@@ -19,14 +19,14 @@ protected:
 
 TEST_F(BombTimerConditionTest, ShouldRunIfEnabled) {
     EXPECT_CALL(mockBombTimerContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<BombTimerEnabled>())).WillOnce(testing::Return(true));
+    mockConfig.expectGetVariable<BombTimerEnabled>(true);
 
     EXPECT_EQ(bombTimerCondition.shouldRun(), true);
 }
 
 TEST_F(BombTimerConditionTest, ShouldNotRunIfNotEnabled) {
     EXPECT_CALL(mockBombTimerContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<BombTimerEnabled>())).WillOnce(testing::Return(false));
+    mockConfig.expectGetVariable<BombTimerEnabled>(false);
 
     EXPECT_EQ(bombTimerCondition.shouldRun(), false);
 }

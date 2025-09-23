@@ -186,7 +186,7 @@ class GrenadeProjectileOutlineGlowConditionTest : public GrenadeProjectileOutlin
 
 TEST_P(GrenadeProjectileOutlineGlowConditionTest, GlowIsAppliedAsExpected) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowGrenadeProjectiles>())).WillOnce(testing::Return(GetParam().enabled));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowGrenadeProjectiles>(GetParam().enabled);
 
     if (GetParam().expectSmokeGrenadeCheck) {
         EXPECT_CALL(mockGrenadeProjectile, asSmokeGrenadeProjectile()).WillOnce(testing::ReturnRef(mockSmokeGrenadeProjectile));

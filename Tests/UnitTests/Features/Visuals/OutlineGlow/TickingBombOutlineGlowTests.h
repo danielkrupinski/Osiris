@@ -37,8 +37,7 @@ class TickingBombOutlineGlowConditionTest
 };
 
 TEST_P(TickingBombOutlineGlowConditionTest, ShouldApplyGlowWhenExpected) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowTickingBomb>()))
-        .WillOnce(testing::Return(GetParam().enabled));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowTickingBomb>(GetParam().enabled);
     if (GetParam().expectPlantedC4Access)
         EXPECT_CALL(mockPlantedC4, isTicking()).WillOnce(testing::Return(GetParam().isTicking));
 
@@ -65,8 +64,7 @@ class TickingBombOutlineGlowHueTest
 };
 
 TEST_P(TickingBombOutlineGlowHueTest, CorrectGlowHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TickingBombHue>()))
-        .WillOnce(testing::Return(outline_glow_vars::TickingBombHue::ValueType{color::HueInteger{GetParam().configuredHue}}));
+    mockConfig.expectGetVariable<outline_glow_vars::TickingBombHue>(outline_glow_vars::TickingBombHue::ValueType{color::HueInteger{GetParam().configuredHue}});
 
     const auto hue = tickingBombOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlantedC4);
     ASSERT_TRUE(hue.hasValue());

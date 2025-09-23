@@ -43,8 +43,7 @@ class PlayerOutlineGlowConditionTest
 };
 
 TEST_P(PlayerOutlineGlowConditionTest, GlowIsAppliedWhenExpected) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowPlayers>()))
-        .WillOnce(testing::Return(GetParam().enabled));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowPlayers>(GetParam().enabled);
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowOnlyEnemies>()))
         .WillRepeatedly(testing::Return(GetParam().onlyEnemies));
 
@@ -214,8 +213,7 @@ class PlayerOutlineGlowHealthBasedHueTest :
 };
 
 TEST_P(PlayerOutlineGlowHealthBasedHueTest, CorrectHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
-        .WillOnce(testing::Return(PlayerOutlineGlowColorType::HealthBased));
+    mockConfig.expectGetVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::HealthBased);
 
     const auto [configVariables, param] = GetParam();
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::LowHealthHue>()))
@@ -340,8 +338,7 @@ class PlayerOutlineGlowPlayerColorIndexHueTest
 };
 
 TEST_P(PlayerOutlineGlowPlayerColorIndexHueTest, CorrectHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
-        .WillOnce(testing::Return(PlayerOutlineGlowColorType::PlayerOrTeamColor));
+    mockConfig.expectGetVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::PlayerOrTeamColor);
 
     EXPECT_CALL(mockConfig, getVariable(GetParam().configVariableIndex))
         .WillRepeatedly(testing::Return(GetParam().configuredHue));
@@ -490,15 +487,13 @@ class PlayerOutlineGlowTeamHueTest
 };
 
 TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
-        .WillOnce(testing::Return(PlayerOutlineGlowColorType::TeamColor));
+    mockConfig.expectGetVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::TeamColor);
 
     if (GetParam().teamTHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TeamTHue>()))
-            .WillRepeatedly(testing::Return(outline_glow_vars::TeamTHue::ValueType{color::HueInteger{GetParam().teamTHue.value()}}));
+        mockConfig.expectGetVariable<outline_glow_vars::TeamTHue>(outline_glow_vars::TeamTHue::ValueType{color::HueInteger{GetParam().teamTHue.value()}});
+
     if (GetParam().teamCTHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TeamCTHue>()))
-            .WillRepeatedly(testing::Return(outline_glow_vars::TeamCTHue::ValueType{color::HueInteger{GetParam().teamCTHue.value()}}));
+        mockConfig.expectGetVariable<outline_glow_vars::TeamCTHue>(outline_glow_vars::TeamCTHue::ValueType{color::HueInteger{GetParam().teamCTHue.value()}});
 
     EXPECT_CALL(mockPlayerPawn, teamNumber()).WillRepeatedly(testing::Return(GetParam().teamNumber));
 
@@ -509,15 +504,13 @@ TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturned) {
 }
 
 TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturnedAsFallbackWhenInvalidPlayerColorIndex) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
-        .WillOnce(testing::Return(PlayerOutlineGlowColorType::PlayerOrTeamColor));
+    mockConfig.expectGetVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::PlayerOrTeamColor);
 
     if (GetParam().teamTHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TeamTHue>()))
-            .WillRepeatedly(testing::Return(outline_glow_vars::TeamTHue::ValueType{color::HueInteger{GetParam().teamTHue.value()}}));
+        mockConfig.expectGetVariable<outline_glow_vars::TeamTHue>(outline_glow_vars::TeamTHue::ValueType{color::HueInteger{GetParam().teamTHue.value()}});
+
     if (GetParam().teamCTHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::TeamCTHue>()))
-            .WillRepeatedly(testing::Return(outline_glow_vars::TeamCTHue::ValueType{color::HueInteger{GetParam().teamCTHue.value()}}));
+        mockConfig.expectGetVariable<outline_glow_vars::TeamCTHue>(outline_glow_vars::TeamCTHue::ValueType{color::HueInteger{GetParam().teamCTHue.value()}});
 
     EXPECT_CALL(mockPlayerPawn, teamNumber()).WillRepeatedly(testing::Return(GetParam().teamNumber));
     EXPECT_CALL(mockPlayerPawn, playerController()).WillRepeatedly(testing::ReturnRef(mockPlayerController));
@@ -582,15 +575,12 @@ class PlayerOutlineGlowEnemyHueTest
 };
 
 TEST_P(PlayerOutlineGlowEnemyHueTest, CorrectHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::PlayerGlowColorMode>()))
-        .WillOnce(testing::Return(PlayerOutlineGlowColorType::EnemyAlly));
+    mockConfig.expectGetVariable<outline_glow_vars::PlayerGlowColorMode>(PlayerOutlineGlowColorType::EnemyAlly);
 
     if (GetParam().enemyHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::EnemyHue>()))
-            .WillOnce(testing::Return(outline_glow_vars::EnemyHue::ValueType{color::HueInteger{GetParam().enemyHue.value()}}));
+        mockConfig.expectGetVariable<outline_glow_vars::EnemyHue>(outline_glow_vars::EnemyHue::ValueType{color::HueInteger{GetParam().enemyHue.value()}});
     if (GetParam().allyHue.hasValue())
-        EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::AllyHue>()))
-            .WillOnce(testing::Return(outline_glow_vars::AllyHue::ValueType{color::HueInteger{GetParam().allyHue.value()}}));
+        mockConfig.expectGetVariable<outline_glow_vars::AllyHue>(outline_glow_vars::AllyHue::ValueType{color::HueInteger{GetParam().allyHue.value()}});
 
     EXPECT_CALL(mockPlayerPawn, isEnemy()).WillOnce(testing::Return(GetParam().isEnemy));
 

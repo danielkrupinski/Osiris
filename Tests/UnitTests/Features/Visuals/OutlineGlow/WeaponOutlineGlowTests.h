@@ -41,7 +41,7 @@ class WeaponOutlineGlowConditionTest : public WeaponOutlineGlowTest, public test
 
 TEST_P(WeaponOutlineGlowConditionTest, GlowShouldBeAppliedWhenExpected) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowWeapons>())).WillOnce(testing::Return(GetParam().enabled));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowWeapons>(GetParam().enabled);
 
     if (GetParam().expectWeaponAccess)
         EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(GetParam().hasOwner));

@@ -37,8 +37,7 @@ class DroppedBombOutlineGlowConditionTest
 };
 
 TEST_P(DroppedBombOutlineGlowConditionTest, ShouldApplyGlowWhenExpected) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowDroppedBomb>()))
-        .WillOnce(testing::Return(GetParam().enabled));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowDroppedBomb>(GetParam().enabled);
     if (GetParam().expectBombHasOwnerCalled)
         EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(GetParam().bombHasOwner));
     EXPECT_EQ(droppedBombOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity), GetParam().expectGlowApplied);
@@ -64,8 +63,7 @@ class DroppedBombOutlineGlowHueTest
 };
 
 TEST_P(DroppedBombOutlineGlowHueTest, CorrectGlowHueIsReturned) {
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::DroppedBombHue>()))
-        .WillOnce(testing::Return(outline_glow_vars::DroppedBombHue::ValueType{color::HueInteger{GetParam().configuredHue}}));
+    mockConfig.expectGetVariable<outline_glow_vars::DroppedBombHue>(outline_glow_vars::DroppedBombHue::ValueType{color::HueInteger{GetParam().configuredHue}});
 
     const auto hue = droppedBombOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity);
     ASSERT_TRUE(hue.hasValue());

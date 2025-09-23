@@ -20,13 +20,13 @@ protected:
 
 TEST_F(DefuseKitOutlineGlowTest, GlowShouldNotBeAppliedWhenNotEnabled) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowDefuseKits>())).WillOnce(testing::Return(false));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowDefuseKits>(false);
     EXPECT_FALSE(defuseKitOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
 TEST_F(DefuseKitOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowDefuseKits>())).WillOnce(testing::Return(true));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowDefuseKits>(true);
     EXPECT_TRUE(defuseKitOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
@@ -46,8 +46,7 @@ class DefuseKitOutlineGlowHueTest
 
 TEST_P(DefuseKitOutlineGlowHueTest, CorrectGlowHueIsReturned) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::DefuseKitHue>()))
-        .WillOnce(testing::Return(outline_glow_vars::DefuseKitHue::ValueType{color::HueInteger{GetParam().configuredHue}}));
+    mockConfig.expectGetVariable<outline_glow_vars::DefuseKitHue>(outline_glow_vars::DefuseKitHue::ValueType{color::HueInteger{GetParam().configuredHue}});
 
     const auto hue = defuseKitOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity);
     ASSERT_TRUE(hue.hasValue());

@@ -20,13 +20,13 @@ protected:
 
 TEST_F(HostageOutlineGlowTest, GlowShouldNotBeAppliedWhenNotEnabled) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowHostages>())).WillOnce(testing::Return(false));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowHostages>(false);
     EXPECT_FALSE(hostageOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
 TEST_F(HostageOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowHostages>())).WillOnce(testing::Return(true));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowHostages>(true);
     EXPECT_TRUE(hostageOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
 }
 
