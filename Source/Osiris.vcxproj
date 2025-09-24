@@ -358,6 +358,7 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\FileSystemPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GameRulesPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GameSceneNodePatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\GlobalVarsPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GlowPropertyPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GlowSceneObjectPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\HostageServicesPatternTypes.h" />
@@ -398,6 +399,7 @@
     <ClInclude Include="MemoryPatterns\Windows\FileSystemPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameRulesPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GameSceneNodePatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\GlobalVarsPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GlowPropertyPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h" />

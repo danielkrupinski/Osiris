@@ -3,6 +3,7 @@
 #include <CS2/Classes/GlobalVars.h>
 #include <Utils/Optional.h>
 
+template <typename HookContext>
 struct GlobalVars {
     [[nodiscard]] Optional<float> curtime() const noexcept
     {
@@ -13,12 +14,9 @@ struct GlobalVars {
 
     [[nodiscard]] Optional<float> frametime() const noexcept
     {
-        /* FIXME: see cs2::GlobalVars
-        if (globalVars)
-            return globalVars->frametime;
-        */
-        return {};
+        return hookContext.patternSearchResults().template get<OffsetToFrametime>().of(globalVars).toOptional();
     }
 
+    HookContext& hookContext;
     cs2::GlobalVars* globalVars;
 };

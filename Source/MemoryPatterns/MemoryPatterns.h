@@ -37,6 +37,7 @@ constexpr auto kClientPatterns = []() consteval {
         .ADD_PATTERNS(EntitySystemPatterns)
         .ADD_PATTERNS(GameRulesPatterns)
         .ADD_PATTERNS(GameSceneNodePatterns)
+        .ADD_PATTERNS(GlobalVarsPatterns)
         .ADD_PATTERNS(HostageServicesPatterns)
         .ADD_PATTERNS(GlowPropertyPatterns)
         .ADD_PATTERNS(GlowSceneObjectPatterns)

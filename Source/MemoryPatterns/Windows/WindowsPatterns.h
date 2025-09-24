@@ -11,6 +11,7 @@
 #include "HostageServicesPatternsWindows.h"
 #include "GameRulesPatternsWindows.h"
 #include "GameSceneNodePatternsWindows.h"
+#include "GlobalVarsPatternsWindows.h"
 #include "GlowPropertyPatternsWindows.h"
 #include "GlowSceneObjectPatternsWindows.h"
 #include "MemAllocPatternsWindows.h"

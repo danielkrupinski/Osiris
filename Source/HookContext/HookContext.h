@@ -111,11 +111,11 @@ struct HookContext {
         return PlayerController{*this, nullptr};
     }
 
-    [[nodiscard]] GlobalVars globalVars() noexcept
+    [[nodiscard]] auto globalVars() noexcept
     {
         if (fullGlobalContext.patternSearchResults.template get<GlobalVarsPointer>())
-            return GlobalVars{*fullGlobalContext.patternSearchResults.template get<GlobalVarsPointer>()};
-        return GlobalVars{nullptr};
+            return GlobalVars{*this, *fullGlobalContext.patternSearchResults.template get<GlobalVarsPointer>()};
+        return GlobalVars{*this, nullptr};
     }
 
     [[nodiscard]] auto gameRules() noexcept

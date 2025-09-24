@@ -10,6 +10,7 @@
 #include "FileSystemPatternsLinux.h"
 #include "GameRulesPatternsLinux.h"
 #include "GameSceneNodePatternsLinux.h"
+#include "GlobalVarsPatternsLinux.h"
 #include "GlowPropertyPatternsLinux.h"
 #include "GlowSceneObjectPatternsLinux.h"
 #include "HostageServicesPatternsLinux.h"

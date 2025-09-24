@@ -258,9 +258,6 @@
     <ClInclude Include="CS2\Constants\PanelIDs.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Features.h">
-      <Filter>Features</Filter>
-    </ClInclude>
     <ClInclude Include="Hooks\PeepEventsHook.h">
       <Filter>Hooks</Filter>
     </ClInclude>
@@ -1822,6 +1819,12 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\AllMemoryPatternSearchResults.h">
       <Filter>MemoryPatterns</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\GlobalVarsPatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\GlobalVarsPatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
