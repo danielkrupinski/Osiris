@@ -139,7 +139,7 @@ public:
             hookContext.make<PlayerModelGlowPreview>().onUnload();
             hookContext.make<WeaponModelGlowPreview>().onUnload();
 
-            hookContext.make<EntitySystem>().forEachEntityIdentity([&hookContext](const auto& entityIdentity) {
+            hookContext.make<EntitySystem>().forEachNetworkableEntityIdentity([&hookContext](const auto& entityIdentity) {
                 auto&& baseEntity = hookContext.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
                 hookContext.make<ModelGlow>().onUnload(baseEntity.classify(), baseEntity);
             });

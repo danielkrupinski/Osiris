@@ -38,22 +38,21 @@ public:
     }
     
     template <typename F>
-    void forEachEntityIdentity(F&& f) const noexcept
+    void forEachNetworkableEntityIdentity(F&& f) const noexcept
     {
         const auto entityList = getEntityList();
         if (!entityList)
             return;
 
-        const auto highestEntityIndex = getHighestEntityIndex();
-        for (int i = 0; i <= highestEntityIndex.value; ++i) {
-            const auto chunkIndex = i / cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
+        for (auto chunkIndex = 0; chunkIndex < cs2::CConcreteEntityList::kNumberOfNetworkableEntityChunks; ++chunkIndex) {
             const auto* const chunk = entityList->chunks[chunkIndex];
             if (!chunk)
                 continue;
 
-            const auto indexInChunk = i % cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
-            if (const auto& entityIndentity = (*chunk)[indexInChunk]; entityIndentity.entity && entityIndentity.handle.index().value == i)
-                f(entityIndentity);
+            for (auto indexInChunk = 0; indexInChunk < cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk; ++indexInChunk) {
+                if (const auto& entityIdentity = (*chunk)[indexInChunk]; entityIdentity.entity)
+                    f(entityIdentity);
+            }
         }
     }
 
@@ -105,13 +104,6 @@ private:
     [[nodiscard]] auto getEntityClasses() const noexcept
     {
         return hookContext.patternSearchResults().template get<OffsetToEntityClasses>().of(entitySystem()).get();
-    }
-
-    [[nodiscard]] auto getHighestEntityIndex() const noexcept
-    {
-        // fixme: highest entity index was removed from entity system in the 28 July 2025 update
-        constexpr cs2::CEntityIndex kMaxNetworkableEntityIndex{16383};
-        return kMaxNetworkableEntityIndex;
     }
 
     HookContext& hookContext;
