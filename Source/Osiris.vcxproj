@@ -244,7 +244,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanel.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelParams.h" />
-    <ClInclude Include="Features\Visuals\VisualFeatures.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="GameClient\ConVars\ConVarAccessor.h" />
     <ClInclude Include="GameClient\ConVars\ConVarFinder.h" />

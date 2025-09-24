@@ -1,6 +1,9 @@
 #pragma once
 
 #include <Features/Features.h>
+#include <Features/Visuals/ModelGlow/ModelGlowToggle.h>
+#include <Features/Visuals/OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowToggle.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 #include <GameClient/Panorama/Slider.h>
 #include <GameClient/Panorama/TextEntry.h>
 #include <Platform/Macros/FunctionAttributes.h>
@@ -61,15 +64,15 @@ private:
     void handleVisualsSection() const noexcept
     {
         if (const auto feature = parser.getLine('/'); feature == "player_information_through_walls") {
-            handleFeature(features.visualFeatures().playerInfoInWorld());
+            handleFeature(playerInfoInWorldToggle());
         } else if (feature == "player_info_position") {
             handleTogglableVariable<player_info_vars::PlayerPositionArrowEnabled>();
         } else if (feature == "player_info_position_color") {
-            features.visualFeatures().playerInfoInWorld().updatePlayerPositionArrowColorMode(parser.getChar());
+            playerInfoInWorldToggle().updatePlayerPositionArrowColorMode(parser.getChar());
         } else if (feature == "player_info_health") {
             handleTogglableVariable<player_info_vars::PlayerHealthEnabled>();
         } else if (feature == "player_info_health_color") {
-            features.visualFeatures().playerInfoInWorld().updatePlayerHealthColorMode(parser.getChar());
+            playerInfoInWorldToggle().updatePlayerHealthColorMode(parser.getChar());
         } else if (feature == "player_info_weapon") {
             handleTogglableVariable<player_info_vars::ActiveWeaponIconEnabled>();
         } else if (feature == "player_info_weapon_clip") {
@@ -87,9 +90,9 @@ private:
         } else if (feature == "player_info_bomb_planting") {
             handleTogglableVariable<player_info_vars::BombPlantIconEnabled>();
         } else if (feature == "player_outline_glow") {
-            handleFeature(features.visualFeatures().playerOutlineGlowToggle());
+            handleFeature(playerOutlineGlowToggle());
         } else if (feature == "player_outline_glow_color") {
-            features.visualFeatures().playerOutlineGlowToggle().updateColor(parser.getChar());
+            playerOutlineGlowToggle().updateColor(parser.getChar());
         } else if (feature == "outline_glow_enable") {
             handleTogglableVariable<outline_glow_vars::Enabled>();
         } else if (feature == "weapon_outline_glow") {
@@ -105,21 +108,21 @@ private:
         } else if (feature == "hostage_outline_glow") {
             handleTogglableVariable<outline_glow_vars::GlowHostages>();
         } else if (feature == "model_glow_enable") {
-            features.visualFeatures().modelGlowToggle().updateMasterSwitch(parser.getChar());
+            modelGlowToggle().updateMasterSwitch(parser.getChar());
         } else if (feature == "player_model_glow") {
-            features.visualFeatures().modelGlowToggle().updatePlayerModelGlowToggle(parser.getChar());
+            modelGlowToggle().updatePlayerModelGlowToggle(parser.getChar());
         } else if (feature == "player_model_glow_color") {
-            features.visualFeatures().modelGlowToggle().updatePlayerModelGlowColor(parser.getChar());
+            modelGlowToggle().updatePlayerModelGlowColor(parser.getChar());
         } else if (feature == "weapon_model_glow") {
-            features.visualFeatures().modelGlowToggle().updateWeaponModelGlowToggle(parser.getChar());
+            modelGlowToggle().updateWeaponModelGlowToggle(parser.getChar());
         } else if (feature == "dropped_bomb_model_glow") {
-            features.visualFeatures().modelGlowToggle().updateDroppedBombModelGlowToggle(parser.getChar());
+            modelGlowToggle().updateDroppedBombModelGlowToggle(parser.getChar());
         } else if (feature == "ticking_bomb_model_glow") {
-            features.visualFeatures().modelGlowToggle().updateTickingBombModelGlowToggle(parser.getChar());
+            modelGlowToggle().updateTickingBombModelGlowToggle(parser.getChar());
         } else if (feature == "defuse_kit_model_glow") {
-            features.visualFeatures().modelGlowToggle().updateDefuseKitModelGlowToggle(parser.getChar());
+            modelGlowToggle().updateDefuseKitModelGlowToggle(parser.getChar());
         } else if (feature == "grenade_proj_model_glow") {
-            features.visualFeatures().modelGlowToggle().updateGrenadeProjectileModelGlowToggle(parser.getChar());
+            modelGlowToggle().updateGrenadeProjectileModelGlowToggle(parser.getChar());
         } else if (feature == "player_model_glow_blue_hue") {
             handleHueSlider<model_glow_vars::PlayerBlueHue>("player_model_glow_blue_hue");
         } else if (feature == "player_model_glow_blue_hue_text") {
@@ -346,6 +349,21 @@ private:
         if (color::HueInteger::UnderlyingType underlying; parser.parseInt(underlying) && underlying >= color::HueInteger::kMin && underlying <= color::HueInteger::kMax)
             return color::HueInteger{underlying};
         return {};
+    }
+
+    [[nodiscard]] auto playerInfoInWorldToggle() const noexcept
+    {
+        return PlayerInfoInWorldToggle{hookContext};
+    }
+
+    [[nodiscard]] decltype(auto) playerOutlineGlowToggle() const noexcept
+    {
+        return hookContext.template make<PlayerOutlineGlowToggle>();
+    }
+
+    [[nodiscard]] decltype(auto) modelGlowToggle() const noexcept
+    {
+        return hookContext.template make<ModelGlowToggle>();
     }
 
     StringParser& parser;
