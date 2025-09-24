@@ -16,6 +16,7 @@
 #include <GameClient/Entities/PreviewPlayer.h>
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserver.h>
+#include <Features/Sound/SoundFeatures.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
 #include <MemorySearch/PatternNotFoundLogger.h>
 #include <MemoryAllocation/FreeMemoryRegionList.h>
@@ -113,7 +114,7 @@ public:
         hookContext.make<InWorldPanels>().updateState();
         SoundWatcher<decltype(hookContext)> soundWatcher{fullContext().soundWatcherState, hookContext};
         soundWatcher.update();
-        fullContext().features(hookContext).soundFeatures().runOnViewMatrixUpdate();
+        SoundFeatures{hookContext.soundWatcherState(), fullContext().hooks.viewRenderHook, hookContext}.runOnViewMatrixUpdate();
 
         hookContext.make<RenderingHookEntityLoop>().run();
         hookContext.make<GlowSceneObjects>().removeUnreferencedObjects();
@@ -123,7 +124,7 @@ public:
         hookContext.make<InWorldPanels>().hideUnusedPanels();
 
         UnloadFlag unloadFlag;
-        hookContext.make<PanoramaGUI>().run(fullContext().features(hookContext), unloadFlag);
+        hookContext.make<PanoramaGUI>().run(unloadFlag);
         hookContext.config().update();
         hookContext.config().performFileOperation();
 

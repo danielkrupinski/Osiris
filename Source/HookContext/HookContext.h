@@ -74,11 +74,6 @@ struct HookContext {
         return fullGlobalContext.featuresStates;
     }
 
-    [[nodiscard]] auto features() const noexcept
-    {
-        return Features{fullGlobalContext.featuresStates, fullGlobalContext.hooks, *this};
-    }
-
     [[nodiscard]] GlowSceneObjectsState& glowSceneObjectsState() const noexcept
     {
         return fullGlobalContext.glowSceneObjectsState;

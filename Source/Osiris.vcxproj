@@ -117,7 +117,6 @@
     <ClInclude Include="Features\Common\InWorldPanelsPerHookState.h" />
     <ClInclude Include="Features\Common\InWorldPanelsState.h" />
     <ClInclude Include="Features\Common\RenderingHookEntityLoop.h" />
-    <ClInclude Include="Features\Features.h" />
     <ClInclude Include="Features\FeaturesStates.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombSiteIconPanel.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimer.h" />

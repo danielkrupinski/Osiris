@@ -13,7 +13,6 @@
 #include <Features/Common/RenderingHookEntityLoop.h>
 #include <Features/Sound/Details/SoundWatcher.h>
 #include <Features/Common/InWorldPanelsState.h>
-#include <Features/Features.h>
 #include <Features/FeaturesStates.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewState.h>
 #include <Features/Visuals/ModelGlow/Preview/WeaponModelGlowPreviewState.h>
@@ -52,11 +51,6 @@ struct FullGlobalContext {
             patternSearchResults.get<ViewRenderPointer>(),
             VmtLengthCalculator{clientDLL.getCodeSection(), clientDLL.getVmtSection()}}
     {
-    }
-
-    [[nodiscard]] auto features(auto& dependencies) noexcept
-    {
-        return Features{featuresStates, hooks, dependencies};
     }
 
     OsirisDirectoryPath osirisDirectoryPath;

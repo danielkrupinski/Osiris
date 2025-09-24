@@ -5,7 +5,6 @@
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
 #include <Features/Visuals/ModelGlow/Preview/WeaponModelGlowPreview.h>
-#include <Features/Features.h>
 #include <GameClient/Entities/TeamNumber.h>
 #include <GlobalContext/UnloadFlag.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
@@ -156,7 +155,7 @@ public:
         return guiPanel.findChildInLayoutFile(panelId).clientPanel().template as<Ui3dPanel>();
     }
 
-    void run(Features<HookContext> features, UnloadFlag& unloadFlag) const noexcept
+    void run(UnloadFlag& unloadFlag) const noexcept
     {
         auto&& guiPanel = uiEngine().getPanelFromHandle(state().guiPanelHandle);
         if (!guiPanel)
@@ -170,7 +169,7 @@ public:
 
         const auto cmdSymbol = uiEngine().makeSymbol(0, "cmd");
         const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
-        PanoramaCommandDispatcher{cmd, features, unloadFlag, hookContext}();
+        PanoramaCommandDispatcher{cmd, unloadFlag, hookContext}();
         guiPanel.setAttributeString(cmdSymbol, "");
 
         hookContext.template make<PlayerModelGlowPreview>().update();

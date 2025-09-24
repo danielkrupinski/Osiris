@@ -5,6 +5,7 @@
 #include <GameClient/Panorama/PanoramaTransformations.h>
 #include <Features/Sound/Details/PlayedSound.h>
 #include <Features/Sound/Details/SoundWatcher.h>
+#include <Features/Sound/SoundVisualizationConfigVariables.h>
 #include <Features/Common/FeatureToggle.h>
 #include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
 #include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>

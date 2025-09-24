@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Features/Features.h>
 #include <Features/Visuals/ModelGlow/ModelGlowToggle.h>
 #include <Features/Visuals/OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowToggle.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
@@ -12,9 +11,8 @@
 
 template <typename HookContext>
 struct SetCommandHandler {
-    SetCommandHandler(StringParser& parser, Features<HookContext> features, HookContext& hookContext) noexcept
+    SetCommandHandler(StringParser& parser, HookContext& hookContext) noexcept
         : parser{parser}
-        , features{features}
         , hookContext{hookContext}
     {
     }
@@ -367,6 +365,5 @@ private:
     }
 
     StringParser& parser;
-    Features<HookContext> features;
     HookContext& hookContext;
 };
