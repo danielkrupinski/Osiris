@@ -11,7 +11,7 @@ struct PanelStylePatterns2 {
     [[nodiscard]] static consteval auto addPanoramaPatterns(auto panoramaPatterns) noexcept
     {
         return panoramaPatterns
-            .template addPattern<SetPanelStylePropertyFunctionPointer, CodePattern{"E8 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 45 ? EB"}.add(1).abs()>();
+            .template addPattern<SetPanelStylePropertyFunctionPointer, CodePattern{"E9 ? ? ? ? 48 8B 40 ? 48 85"}.add(1).abs()>();
     }
 };
 
