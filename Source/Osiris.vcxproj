@@ -245,9 +245,9 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelParams.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="GameClient\ConVars\ConVarAccessor.h" />
-    <ClInclude Include="GameClient\ConVars\ConVarFinder.h" />
     <ClInclude Include="GameClient\ConVars\ConVars.h" />
     <ClInclude Include="GameClient\ConVars\ConVarsBase.h" />
+    <ClInclude Include="GameClient\ConVars\CvarSystem.h" />
     <ClInclude Include="GameClient\DLLs\Tier0Dll.h" />
     <ClInclude Include="GameClient\Entities\BaseEntity.h" />
     <ClInclude Include="GameClient\Entities\BaseModelEntity.h" />

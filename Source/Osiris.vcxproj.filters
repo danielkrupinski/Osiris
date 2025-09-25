@@ -1427,9 +1427,6 @@
     <ClInclude Include="GameClient\ConVars\ConVarAccessor.h">
       <Filter>GameClient\ConVars</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\ConVars\ConVarFinder.h">
-      <Filter>GameClient\ConVars</Filter>
-    </ClInclude>
     <ClInclude Include="GameClient\ConVars\ConVars.h">
       <Filter>GameClient\ConVars</Filter>
     </ClInclude>
@@ -1825,6 +1822,9 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\GlobalVarsPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\ConVars\CvarSystem.h">
+      <Filter>GameClient\ConVars</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

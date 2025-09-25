@@ -8,9 +8,8 @@
 
 template <typename... ConVarTypes>
 struct ConVarsBase {
-    template <typename ConVarFinder>
-    explicit ConVarsBase(const ConVarFinder& conVarFinder) noexcept
-        : conVars{conVarFinder.findConVar(ConVarTypes::kName)...}
+    explicit ConVarsBase(const auto& cvarSystem) noexcept
+        : conVars{cvarSystem.findConVar(ConVarTypes::kName)...}
     {
     }
 

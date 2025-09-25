@@ -8,7 +8,7 @@
 #include <Features/Common/InWorldPanelsPerHookState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCachePerHookState.h>
 #include <GameClient/ConVars/ConVarAccessor.h>
-#include <GameClient/ConVars/ConVarFinder.h>
+#include <GameClient/ConVars/CvarSystem.h>
 #include <GameClient/FileSystem.h>
 #include <GameClient/Hud/Hud.h>
 #include <GameClient/Hud/HudContext.h>
@@ -132,12 +132,8 @@ struct HookContext {
 
     [[nodiscard]] auto getConVarAccessor() noexcept
     {
-        if (!fullGlobalContext.conVars.has_value()) {
-            const auto cvar = fullGlobalContext.patternSearchResults.template get<CvarPointer>();
-            if (cvar && *cvar && fullGlobalContext.patternSearchResults.template get<OffsetToConVarList>().of(*cvar).get()) {
-                fullGlobalContext.conVars.emplace(ConVarFinder{*fullGlobalContext.patternSearchResults.template get<OffsetToConVarList>().of(*cvar).get()});
-            }
-        }
+        if (!fullGlobalContext.conVars.has_value())
+            fullGlobalContext.conVars.emplace(CvarSystem{*this});
         return ConVarAccessor{*this, *fullGlobalContext.conVars, conVarAccessorState};
     }
 
