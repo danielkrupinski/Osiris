@@ -104,4 +104,35 @@ struct CStylePropertyDimensionsBase : CStyleProperty {
 struct CStylePropertyMargin : CStylePropertyDimensionsBase {
 };
 
+struct CFillBrush {
+    EStrokeType type;
+    union {
+        Color fillColor;
+        struct CLinearGradient* linearGradient;
+        struct CRadialGradient* radialGradient;
+    };
+    float opacity;
+};
+static_assert(offsetof(CFillBrush, fillColor) == 8);
+static_assert(sizeof(CFillBrush) == 24);
+
+struct CStylePropertyFillColor : CStyleProperty {
+    LINUX_ONLY(std::byte pad[4];)
+    int numberOfFillBrushes;
+    int growSize;
+    union {
+        CFillBrush* fillBrushes;
+        CFillBrush fillBrush;
+    };
+};
+
+struct CStylePropertyForegroundColor : CStylePropertyFillColor {
+};
+static_assert(sizeof(CStylePropertyForegroundColor) == 48);
+
+struct CStylePropertyBackgroundColor : CStylePropertyFillColor {
+    float opacity;
+};
+static_assert(sizeof(CStylePropertyBackgroundColor) == 56);
+
 };

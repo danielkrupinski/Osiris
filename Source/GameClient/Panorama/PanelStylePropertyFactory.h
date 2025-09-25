@@ -107,6 +107,33 @@ struct PanelStylePropertyFactory {
         return create<cs2::CStylePropertyTextAlign>(textAlign);
     }
 
+    [[nodiscard]] cs2::CStylePropertyForegroundColor* foregroundColor(cs2::Color color) const noexcept
+    {
+        const auto foregroundColor = create2<cs2::CStylePropertyForegroundColor>();
+        if (foregroundColor) {
+            foregroundColor->numberOfFillBrushes = 1;
+            foregroundColor->growSize = 1;
+            foregroundColor->fillBrush.type = cs2::k_EStrokeTypeFillColor;
+            foregroundColor->fillBrush.fillColor = color;
+            foregroundColor->fillBrush.opacity = 1.0f;
+        }
+        return foregroundColor;
+    }
+
+    [[nodiscard]] cs2::CStylePropertyBackgroundColor* backgroundColor(cs2::Color color) const noexcept
+    {
+        const auto backgroundColor = create2<cs2::CStylePropertyBackgroundColor>();
+        if (backgroundColor) {
+            backgroundColor->numberOfFillBrushes = 1;
+            backgroundColor->growSize = 1;
+            backgroundColor->fillBrush.type = cs2::k_EStrokeTypeFillColor;
+            backgroundColor->fillBrush.fillColor = color;
+            backgroundColor->fillBrush.opacity = 1.0f;
+            backgroundColor->opacity = -1.0f;
+        }
+        return backgroundColor;
+    }
+
 private:
     template <typename T, typename... Args>
     [[nodiscard]] T* create(Args&&... args) const noexcept
@@ -117,6 +144,23 @@ private:
         if (vmt && symbol.isValid()) {
             if (const auto memory{hookContext.template make<MemAlloc>().allocate(sizeof(T))})
                 return new (memory) T{cs2::CStyleProperty{vmt, symbol, false}, std::forward<Args>(args)...};
+        }
+        return nullptr;
+    }
+
+    template <typename T>
+    [[nodiscard]] T* create2() const noexcept
+    {
+        const auto vmt = symbolsAndVMTs.getVmt<T>();
+        const auto symbol = symbolsAndVMTs.getSymbol<T>();
+
+        if (vmt && symbol.isValid()) {
+            if (const auto memory{static_cast<T*>(hookContext.template make<MemAlloc>().allocate(sizeof(T)))}) {
+                memory->vmt = vmt;
+                memory->m_symPropertyName = symbol;
+                memory->m_bDisallowTransition = false;
+                return memory;
+            }
         }
         return nullptr;
     }
