@@ -92,7 +92,7 @@ private:
         if (newValue == true)
             hookContext.soundWatcher().template startWatching<WeaponReloadSound>();
         else
-            hookContext.soundWatcher().template startWatching<WeaponReloadSound>();
+            hookContext.soundWatcher().template stopWatching<WeaponReloadSound>();
     }
 
     ON_CHANGE(WeaponScopeSoundVisualizationEnabled)
@@ -100,7 +100,7 @@ private:
         if (newValue == true)
             hookContext.soundWatcher().template startWatching<WeaponScopeSound>();
         else
-            hookContext.soundWatcher().template startWatching<WeaponScopeSound>();
+            hookContext.soundWatcher().template stopWatching<WeaponScopeSound>();
     }
 
     ON_CHANGE(model_glow_vars::Enabled)
@@ -172,7 +172,7 @@ private:
         if (newValue)
             hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostageRescuePanel>();
         else
-            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<HostageRescuePanel>();
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<HostageRescuePanel>();
     }
 
     ON_CHANGE(player_info_vars::BlindedIconEnabled)
@@ -180,7 +180,7 @@ private:
         if (newValue)
             hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<BlindedIconPanel>();
         else
-            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<BlindedIconPanel>();
+            hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<BlindedIconPanel>();
     }
 
     #undef ON_CHANGE
