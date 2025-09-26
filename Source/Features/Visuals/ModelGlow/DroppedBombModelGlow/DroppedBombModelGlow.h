@@ -16,85 +16,37 @@ public:
     {
     }
 
-    void onEntityListTraversed() const noexcept
-    {
-        state().droppedBombModelGlowDisabling = false;
-    }
-
-    void updateSceneObjectUpdaterHook(auto&& bomb) const noexcept
-    {
-        if (!shouldUpdateSceneObjectUpdaterHook())
-            return;
-
-        if (shouldGlowBombModel(bomb))
-            hookWeaponSceneObjectUpdater(bomb);
-        else
-            unhookWeaponSceneObjectUpdater(bomb);
-    }
-
-    void applyModelGlow(auto&& bomb) const noexcept
-    {
-        if (shouldRun() && shouldGlowBombModel(bomb))
-            bomb.baseWeapon().baseEntity().applySpawnProtectionEffectRecursively(getColor());
-    }
-
-    void onUnload(auto&& bomb) const noexcept
-    {
-        if (hookContext.config().template getVariable<model_glow_vars::GlowDroppedBomb>() || state().droppedBombModelGlowDisabling)
-            unhookWeaponSceneObjectUpdater(bomb);
-    }
-
-private:
-    [[nodiscard]] cs2::Color getColor() const noexcept
-    {
-        return color::HSBtoRGB(hookContext.config().template getVariable<model_glow_vars::DroppedBombHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
-    }
-
-    [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
-    {
-        return hookContext.config().template getVariable<model_glow_vars::GlowDroppedBomb>() || state().droppedBombModelGlowDisabling;
-    }
-
-    [[nodiscard]] bool shouldRun() const noexcept
+    [[nodiscard]] bool enabled() const
     {
         return hookContext.config().template getVariable<model_glow_vars::GlowDroppedBomb>();
     }
 
-    void hookWeaponSceneObjectUpdater(auto&& bomb) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(auto&& bomb) const
     {
-        if (!hasSceneObjectUpdaterHooked(bomb)) {
-            storeOriginalSceneObjectUpdater(bomb);
-            hookSceneObjectUpdater(bomb);
-        }
+        return !bomb.baseEntity().hasOwner().valueOr(true);
     }
 
-    void unhookWeaponSceneObjectUpdater(auto&& bomb) const noexcept
+    [[nodiscard]] bool& disablingFlag() const
     {
-        if (hasSceneObjectUpdaterHooked(bomb))
-            bomb.baseWeapon().setSceneObjectUpdater(state().originalWeaponSceneObjectUpdater);
+        return state().droppedBombModelGlowDisabling;
     }
 
-    void storeOriginalSceneObjectUpdater(auto&& bomb) const noexcept
+    [[nodiscard]] auto& originalSceneObjectUpdater() const
     {
-        if (state().originalWeaponSceneObjectUpdater == nullptr)
-            state().originalWeaponSceneObjectUpdater = bomb.baseWeapon().getSceneObjectUpdater();
+        return state().originalWeaponSceneObjectUpdater;
     }
 
-    [[nodiscard]] bool hasSceneObjectUpdaterHooked(auto&& bomb) const noexcept
+    [[nodiscard]] auto replacementSceneObjectUpdater() const
     {
-        return bomb.baseWeapon().getSceneObjectUpdater() == &Weapon_sceneObjectUpdater_asm;
+        return &Weapon_sceneObjectUpdater_asm;
     }
 
-    void hookSceneObjectUpdater(auto&& bomb) const noexcept
+    [[nodiscard]] color::HueInteger getGlowHue() const noexcept
     {
-        bomb.baseWeapon().setSceneObjectUpdater(&Weapon_sceneObjectUpdater_asm);
+        return hookContext.config().template getVariable<model_glow_vars::DroppedBombHue>();
     }
 
-    [[nodiscard]] bool shouldGlowBombModel(auto&& bomb) const noexcept
-    {
-        return hookContext.config().template getVariable<model_glow_vars::Enabled>() && !bomb.baseWeapon().baseEntity().hasOwner().valueOr(true);
-    }
-
+private:
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.featuresStates().visualFeaturesStates.modelGlowState;

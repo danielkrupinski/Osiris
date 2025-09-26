@@ -20,86 +20,32 @@ public:
     {
     }
 
-    void onEntityListTraversed() const noexcept
-    {
-        state().weaponModelGlowDisabling = true;
-    }
-
-    void updateSceneObjectUpdaterHook(auto&& weapon) const noexcept
-    {
-        if (!shouldUpdateSceneObjectUpdaterHook())
-            return;
-
-        if (shouldGlowWeaponModel(weapon))
-            hookWeaponSceneObjectUpdater(weapon);
-        else
-            unhookWeaponSceneObjectUpdater(weapon);
-    }
-
-    void applyModelGlow(auto&& weapon) const noexcept
-    {
-        if (shouldRun() && shouldGlowWeaponModel(weapon))
-            weapon.baseEntity().applySpawnProtectionEffectRecursively(getColor(weapon.baseEntity().classify()));
-    }
-
-    [[NOINLINE]] void onUnload(auto&& weapon) const noexcept
-    {
-        if (hookContext.config().template getVariable<model_glow_vars::GlowWeapons>() || state().weaponModelGlowDisabling)
-            unhookWeaponSceneObjectUpdater(weapon);
-    }
-
-private:
-    [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
-    {
-        return hookContext.config().template getVariable<model_glow_vars::GlowWeapons>() || state().weaponModelGlowDisabling;
-    }
-
-    [[nodiscard]] bool shouldRun() const noexcept
+    [[nodiscard]] bool enabled() const
     {
         return hookContext.config().template getVariable<model_glow_vars::GlowWeapons>();
     }
 
-    void hookWeaponSceneObjectUpdater(auto&& weapon) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(auto&& weapon) const
     {
-        if (!hasSceneObjectUpdaterHooked(weapon)) {
-            storeOriginalSceneObjectUpdater(weapon);
-            hookSceneObjectUpdater(weapon);
-        }
+        return !weapon.baseEntity().hasOwner().valueOr(true);
     }
 
-    void unhookWeaponSceneObjectUpdater(auto&& weapon) const noexcept
+    [[nodiscard]] bool& disablingFlag() const
     {
-        if (hasSceneObjectUpdaterHooked(weapon))
-            weapon.setSceneObjectUpdater(state().originalWeaponSceneObjectUpdater);
+        return state().weaponModelGlowDisabling;
     }
 
-    void storeOriginalSceneObjectUpdater(auto&& weapon) const noexcept
+    [[nodiscard]] auto& originalSceneObjectUpdater() const
     {
-        if (state().originalWeaponSceneObjectUpdater == nullptr)
-            state().originalWeaponSceneObjectUpdater = weapon.getSceneObjectUpdater();
+        return state().originalWeaponSceneObjectUpdater;
     }
 
-    [[nodiscard]] bool hasSceneObjectUpdaterHooked(auto&& weapon) const noexcept
+    [[nodiscard]] auto replacementSceneObjectUpdater() const
     {
-        return weapon.getSceneObjectUpdater() == &Weapon_sceneObjectUpdater_asm;
+        return &Weapon_sceneObjectUpdater_asm;
     }
 
-    void hookSceneObjectUpdater(auto&& weapon) const noexcept
-    {
-        weapon.setSceneObjectUpdater(&Weapon_sceneObjectUpdater_asm);
-    }
-
-    [[nodiscard]] bool shouldGlowWeaponModel(auto&& weapon) const noexcept
-    {
-        return hookContext.config().template getVariable<model_glow_vars::Enabled>() && !weapon.baseEntity().hasOwner().valueOr(true);
-    }
-
-    [[nodiscard]] auto& state() const noexcept
-    {
-        return hookContext.featuresStates().visualFeaturesStates.modelGlowState;
-    }
-
-    [[nodiscard]] std::optional<color::HueInteger> getHue(EntityTypeInfo entityTypeInfo) const noexcept
+    [[nodiscard]] std::optional<color::HueInteger> getGlowHue(EntityTypeInfo entityTypeInfo) const
     {
         switch (entityTypeInfo.typeIndex) {
         case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
@@ -111,11 +57,10 @@ private:
         }
     }
 
-    [[nodiscard]] cs2::Color getColor(EntityTypeInfo entityTypeInfo) const noexcept
+private:
+    [[nodiscard]] auto& state() const noexcept
     {
-        if (const auto hue = getHue(entityTypeInfo); hue.has_value())
-            return color::HSBtoRGB(*hue, color::Saturation{1.0f}, color::Brightness{1.0f});
-        return model_glow_params::kDefaultWeaponColor;
+        return hookContext.featuresStates().visualFeaturesStates.modelGlowState;
     }
 
     HookContext& hookContext;

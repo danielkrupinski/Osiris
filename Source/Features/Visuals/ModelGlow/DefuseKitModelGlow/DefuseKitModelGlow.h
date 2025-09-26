@@ -12,44 +12,22 @@ public:
     {
     }
 
-    void onEntityListTraversed() const noexcept
+    [[nodiscard]] bool enabled() const
     {
-        state().defuseKitModelGlowDisabling = false;
+        return hookContext.config().template getVariable<model_glow_vars::GlowDefuseKits>();    
     }
 
-    void updateModelGlow(auto&& defuseKit) const noexcept
+    [[nodiscard]] bool& disablingFlag() const
     {
-        if (isDisabled())
-            return;
-
-        if (isEnabled())
-            defuseKit.baseEntity().applySpawnProtectionEffectRecursively(getColor());
-        else
-            defuseKit.baseEntity().removeSpawnProtectionEffectRecursively();
+        return state().defuseKitModelGlowDisabling;
     }
 
-    void onUnload(auto&& defuseKit) const noexcept
+    [[nodiscard]] color::HueInteger getGlowHue() const noexcept
     {
-        if (!isDisabled())
-            defuseKit.baseEntity().removeSpawnProtectionEffectRecursively();
+        return hookContext.config().template getVariable<model_glow_vars::DefuseKitHue>();
     }
 
 private:
-    [[nodiscard]] cs2::Color getColor() const noexcept
-    {
-        return color::HSBtoRGB(hookContext.config().template getVariable<model_glow_vars::DefuseKitHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
-    }
-
-    [[nodiscard]] bool isDisabled() const noexcept
-    {
-        return !isEnabled() && !state().defuseKitModelGlowDisabling;
-    }
-
-    [[nodiscard]] bool isEnabled() const noexcept
-    {
-        return hookContext.config().template getVariable<model_glow_vars::Enabled>() && hookContext.config().template getVariable<model_glow_vars::GlowDefuseKits>();
-    }
-
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.featuresStates().visualFeaturesStates.modelGlowState;

@@ -92,7 +92,7 @@ public:
 
         auto&& playerPawn = hookContext.make<PlayerPawn>(entity);
         if (auto&& previewPlayer = playerPawn.template cast<PreviewPlayer>(); !previewPlayer)
-            hookContext.make<ModelGlow>().applyPlayerModelGlow(playerPawn);
+            hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(PlayerModelGlow{hookContext}, playerPawn, EntityTypeInfo{});
         else
             hookContext.make<PlayerModelGlowPreview>().applyPreviewPlayerModelGlow(previewPlayer);
     
@@ -103,7 +103,10 @@ public:
     {
         HookContext hookContext{fullContext()};
         const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater(weapon, unknown, unknownBool);
-        hookContext.make<ModelGlow>().applyWeaponModelGlow(hookContext.make<BaseWeapon>(weapon));
+        if (auto&& c4 = hookContext.make<BaseWeapon>(weapon).template cast<C4>())
+            hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(DroppedBombModelGlow{hookContext}, c4.baseWeapon(), EntityTypeInfo{});
+        else
+            hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(WeaponModelGlow{hookContext}, hookContext.make<BaseWeapon>(weapon), hookContext.make<BaseWeapon>(weapon).baseEntity().classify());
         return originalReturnValue;
     }
 
@@ -142,7 +145,19 @@ public:
 
             hookContext.make<EntitySystem>().forEachNetworkableEntityIdentity([&hookContext](const auto& entityIdentity) {
                 auto&& baseEntity = hookContext.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
-                hookContext.make<ModelGlow>().onUnload(baseEntity.classify(), baseEntity);
+                const auto entityTypeInfo = baseEntity.classify();
+                if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
+                    hookContext.make<ModelGlow>().onUnload()(PlayerModelGlow{hookContext}, baseEntity.template as<PlayerPawn>());
+                else if (entityTypeInfo.is<cs2::C_C4>())
+                    hookContext.make<ModelGlow>().onUnload()(DroppedBombModelGlow{hookContext}, baseEntity.template as<BaseWeapon>());
+                else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
+                    hookContext.make<ModelGlow>().onUnload()(DefuseKitModelGlow{hookContext}, baseEntity);
+                else if (entityTypeInfo.is<cs2::CPlantedC4>())
+                    hookContext.make<ModelGlow>().onUnload()(TickingBombModelGlow{hookContext}, baseEntity.template as<PlantedC4>());
+                else if (entityTypeInfo.isGrenadeProjectile())
+                    hookContext.make<ModelGlow>().onUnload()(GrenadeProjectileModelGlow{hookContext}, baseEntity);
+                else if (entityTypeInfo.isWeapon())
+                    hookContext.make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, baseEntity.template as<BaseWeapon>());
             });
         }
         return unloadFlag;

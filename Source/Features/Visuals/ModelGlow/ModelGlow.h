@@ -26,93 +26,147 @@ public:
     {
     }
 
-    void updateSceneObjectUpdaterHook(EntityTypeInfo entityTypeInfo, auto&& entity) const noexcept
+    [[nodiscard]] auto updateInMainThread() const noexcept
     {
-        if (!shouldUpdateSceneObjectUpdaterHook())
-            return;
+        return [this](auto&& glow, auto&& entity, EntityTypeInfo entityTypeInfo) {
+            if (!hookContext.config().template getVariable<model_glow_vars::Enabled>() && !state().modelGlowDisabling)
+                return;
+            if (!glow.enabled() && !glow.disablingFlag())
+                return;
 
-        if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
-            hookContext.template make<PlayerModelGlow>().updateSceneObjectUpdaterHook(entity.template as<PlayerPawn>());
-        else if (entityTypeInfo.is<cs2::C_C4>())
-            hookContext.template make<DroppedBombModelGlow>().updateSceneObjectUpdaterHook(entity.template as<C4>());
-        else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
-            hookContext.template make<DefuseKitModelGlow>().updateModelGlow(entity);
-        else if (entityTypeInfo.is<cs2::CPlantedC4>())
-            hookContext.template make<TickingBombModelGlow>().applyModelGlow(entity.template as<PlantedC4>());
-        else if (entityTypeInfo.isGrenadeProjectile())
-            hookContext.template make<GrenadeProjectileModelGlow>().updateModelGlow(entityTypeInfo, entity);
-        else if (entityTypeInfo.isWeapon())
-            hookContext.template make<WeaponModelGlow>().updateSceneObjectUpdaterHook(entity.template as<BaseWeapon>());
+            if (hookContext.config().template getVariable<model_glow_vars::Enabled>() && glow.enabled() && shouldApplyGlow(glow, entity))
+                applyGlowInMainThread(glow, entityTypeInfo, entity);
+            else
+                removeGlowInMainThread(glow, entity);
+        };
     }
 
-    void updateSceneObjectUpdaterHook(auto&& playerPawnForModelGlowPreview) const noexcept
+    [[nodiscard]] auto updateInSceneObjectUpdater() const noexcept
     {
-        if (shouldUpdateSceneObjectUpdaterHook())
-            hookContext.template make<PlayerModelGlow>().updateSceneObjectUpdaterHook(playerPawnForModelGlowPreview);
+        return [this](auto&& glow, auto&& entity, EntityTypeInfo entityTypeInfo) {
+            if (hookContext.config().template getVariable<model_glow_vars::Enabled>() && glow.enabled() && shouldApplyGlow(glow, entity))
+                entity.baseEntity().applySpawnProtectionEffectRecursively(getGlowHue(glow, entity, entityTypeInfo));
+        };
     }
 
-    void updateWeaponSceneObjectUpdaterHook(auto&& weapon) const noexcept
+    [[nodiscard]] auto onUnload() const noexcept
     {
-        if (shouldUpdateSceneObjectUpdaterHook())
-            hookContext.template make<WeaponModelGlow>().updateSceneObjectUpdaterHook(weapon);
-    }
+        return [this](auto&& glow, auto&& entity) {
+            assert(state().modelGlowDisabling == false && "Should be already disabled");
+            assert(glow.disablingFlag() == false && "Should be already disabled");
 
-    void applyPlayerModelGlow(auto&& playerPawn) const noexcept
-    {
-        if (shouldRun())
-            hookContext.template make<PlayerModelGlow>().applyModelGlow(playerPawn);
-    }
+            if (!hookContext.config().template getVariable<model_glow_vars::Enabled>())
+                return;
 
-    void applyWeaponModelGlow(auto&& weapon) const noexcept
-    {
-        if (!shouldRun())
-            return;
-
-        if (auto&& c4 = weapon.template cast<C4>())
-            hookContext.template make<DroppedBombModelGlow>().applyModelGlow(c4);
-        else
-            hookContext.template make<WeaponModelGlow>().applyModelGlow(weapon);
+            if (glow.enabled()) {
+                if constexpr (isUsingSceneObjectUpdaterHook<decltype(glow)>()) {
+                    if (hasSceneObjectUpdaterHooked(glow, entity))
+                        entity.setSceneObjectUpdater(glow.originalSceneObjectUpdater());
+                } else {
+                    entity.baseEntity().removeSpawnProtectionEffectRecursively();
+                }
+            }
+        };
     }
 
     void onEntityListTraversed() const noexcept
     {
         state().modelGlowDisabling = false;
-        hookContext.template make<PlayerModelGlow>().onEntityListTraversed();
-        hookContext.template make<WeaponModelGlow>().onEntityListTraversed();
-        hookContext.template make<DroppedBombModelGlow>().onEntityListTraversed();
-        hookContext.template make<TickingBombModelGlow>().onEntityListTraversed();
-        hookContext.template make<DefuseKitModelGlow>().onEntityListTraversed();
-        hookContext.template make<GrenadeProjectileModelGlow>().onEntityListTraversed();
-    }
-
-    void onUnload(EntityTypeInfo entityTypeInfo, auto&& entity) const noexcept
-    {
-        if (!hookContext.config().template getVariable<model_glow_vars::Enabled>() && !state().modelGlowDisabling)
-            return;
-
-        if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
-            hookContext.template make<PlayerModelGlow>().onUnload(entity.template as<PlayerPawn>());
-        else if (entityTypeInfo.is<cs2::C_C4>())
-            hookContext.template make<DroppedBombModelGlow>().onUnload(entity.template as<C4>());
-        else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
-            hookContext.template make<DefuseKitModelGlow>().onUnload(entity);
-        else if (entityTypeInfo.is<cs2::CPlantedC4>())
-            hookContext.template make<TickingBombModelGlow>().onUnload(entity.template as<PlantedC4>());
-        else if (entityTypeInfo.isGrenadeProjectile())
-            hookContext.template make<GrenadeProjectileModelGlow>().onUnload(entity);
-        else if (entityTypeInfo.isWeapon())
-            hookContext.template make<WeaponModelGlow>().onUnload(entity.template as<BaseWeapon>());
+        hookContext.template make<PlayerModelGlow>().disablingFlag() = false;
+        hookContext.template make<WeaponModelGlow>().disablingFlag() = false;
+        hookContext.template make<DroppedBombModelGlow>().disablingFlag() = false;
+        hookContext.template make<TickingBombModelGlow>().disablingFlag() = false;
+        hookContext.template make<DefuseKitModelGlow>().disablingFlag() = false;
+        hookContext.template make<GrenadeProjectileModelGlow>().disablingFlag() = false;
     }
 
 private:
-    [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
+    [[nodiscard]] static bool shouldApplyGlow(auto&& glow, auto&& entity)
     {
-        return hookContext.config().template getVariable<model_glow_vars::Enabled>() || state().modelGlowDisabling;
+        if constexpr (requires { { glow.shouldApplyGlow(entity) } -> std::same_as<bool>; })
+            return glow.shouldApplyGlow(entity);
+        else
+            return true;
     }
 
-    [[nodiscard]] bool shouldRun() const noexcept
+    template <typename Glow>
+    [[nodiscard]] static constexpr bool isUsingSceneObjectUpdaterHook() noexcept
     {
-        return hookContext.config().template getVariable<model_glow_vars::Enabled>();
+        return requires (Glow glow) {
+            { glow.originalSceneObjectUpdater() };
+            { glow.replacementSceneObjectUpdater() };
+        };
+    }
+
+    void applyGlowInMainThread(auto&& glow, [[maybe_unused]] EntityTypeInfo entityTypeInfo, auto&& entity) const
+    {
+        if constexpr (isUsingSceneObjectUpdaterHook<decltype(glow)>()) {
+            if (!hasSceneObjectUpdaterHooked(glow, entity)) {
+                storeOriginalSceneObjectUpdater(glow, entity);
+                hookSceneObjectUpdater(glow, entity);
+            }
+        } else {
+            entity.baseEntity().applySpawnProtectionEffectRecursively(getGlowHue(glow, entity, entityTypeInfo));
+        }
+    }
+
+    void removeGlowInMainThread(auto&& glow, auto&& entity) const
+    {
+        if constexpr (isUsingSceneObjectUpdaterHook<decltype(glow)>()) {
+            if (hasSceneObjectUpdaterHooked(glow, entity))
+                entity.setSceneObjectUpdater(glow.originalSceneObjectUpdater());
+        } else {
+            entity.baseEntity().removeSpawnProtectionEffectRecursively();
+        }
+    }
+
+    template <typename Hue>
+    [[nodiscard]] cs2::Color getColor(std::optional<Hue> hue, color::Saturation saturation) const
+    {
+        if (hue.has_value())
+            return color::HSBtoRGB(*hue, saturation, color::Brightness{1.0f});
+        return model_glow_params::kFallbackColor;
+    }
+
+    [[nodiscard]] cs2::Color getColor(auto hue, color::Saturation saturation) const
+    {
+        return color::HSBtoRGB(hue, saturation, color::Brightness{1.0f});
+    }
+
+    [[nodiscard]] color::Saturation getSaturation(auto&& glow, auto&& entity) const
+    {
+        if constexpr (requires { { glow.saturation(entity) } -> std::same_as<color::Saturation>; })
+            return glow.saturation(entity);
+        else
+            return color::Saturation{1.0f};
+    }
+
+    [[nodiscard]] cs2::Color getGlowHue(auto&& glow, auto&& entity, [[maybe_unused]] EntityTypeInfo entityTypeInfo) const
+    {
+        if constexpr (requires { { glow.getGlowHue(entity) }; }) {
+            return getColor(glow.getGlowHue(entity), getSaturation(glow, entity));
+        } else if constexpr (requires { { glow.getGlowHue(entityTypeInfo) }; }) {
+            return getColor(glow.getGlowHue(entityTypeInfo), getSaturation(glow, entity));
+        } else {
+            return getColor(glow.getGlowHue(), getSaturation(glow, entity));
+        }
+    }
+
+    void hookSceneObjectUpdater(auto&& glow, auto&& entity) const noexcept
+    {
+        entity.setSceneObjectUpdater(glow.replacementSceneObjectUpdater());
+    }
+
+    [[nodiscard]] bool hasSceneObjectUpdaterHooked(auto&& glow, auto&& entity) const noexcept
+    {
+        return entity.getSceneObjectUpdater() == glow.replacementSceneObjectUpdater();
+    }
+
+    void storeOriginalSceneObjectUpdater(auto&& glow, auto&& entity) const noexcept
+    {
+        auto& originalSceneObjectUpdater = glow.originalSceneObjectUpdater();
+        if (originalSceneObjectUpdater == nullptr)
+            originalSceneObjectUpdater = entity.getSceneObjectUpdater();
     }
 
     [[nodiscard]] auto& state() const noexcept

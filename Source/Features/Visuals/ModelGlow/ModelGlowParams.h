@@ -7,7 +7,7 @@
 
 namespace model_glow_params
 {
-    constexpr cs2::Color kDefaultWeaponColor{cs2::kColorWhite};
+    constexpr cs2::Color kFallbackColor{cs2::kColorWhite};
 
     constexpr HueVariableParams kPlayerBlueHue{.min = 191, .max = 240, .def = 215};
     constexpr HueVariableParams kPlayerGreenHue{.min = 110, .max = 140, .def = 125};

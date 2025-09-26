@@ -11,49 +11,22 @@ public:
     {
     }
 
-    void onEntityListTraversed() const noexcept
+    [[nodiscard]] bool enabled() const
     {
-        state().tickingBombModelGlowDisabling = false;
+        return hookContext.config().template getVariable<model_glow_vars::GlowTickingBomb>();
     }
 
-    void applyModelGlow(auto&& plantedBomb) const noexcept
+    [[nodiscard]] bool& disablingFlag() const
     {
-        if (isDisabled())
-            return;
-
-        if (shouldGlowPlantedBombModel(plantedBomb))
-            plantedBomb.baseEntity().applySpawnProtectionEffectRecursively(getColor());
-        else
-            plantedBomb.baseEntity().removeSpawnProtectionEffectRecursively();
+        return state().tickingBombModelGlowDisabling;
     }
 
-    void onUnload(auto&& plantedBomb) const noexcept
+    [[nodiscard]] color::HueInteger getGlowHue() const
     {
-        if (!isDisabled())
-            plantedBomb.baseEntity().removeSpawnProtectionEffectRecursively();
+        return hookContext.config().template getVariable<model_glow_vars::TickingBombHue>();
     }
 
 private:
-    [[nodiscard]] cs2::Color getColor() const noexcept
-    {
-        return color::HSBtoRGB(hookContext.config().template getVariable<model_glow_vars::TickingBombHue>(), color::Saturation{1.0f}, color::Brightness{1.0f});
-    }
-
-    [[nodiscard]] bool isDisabled() const noexcept
-    {
-        return !hookContext.config().template getVariable<model_glow_vars::GlowTickingBomb>() && !state().tickingBombModelGlowDisabling;
-    }
-
-    [[nodiscard]] bool isEnabled() const noexcept
-    {
-        return hookContext.config().template getVariable<model_glow_vars::Enabled>() && hookContext.config().template getVariable<model_glow_vars::GlowTickingBomb>();
-    }
-
-    [[nodiscard]] bool shouldGlowPlantedBombModel(auto&& plantedBomb) const noexcept
-    {
-        return isEnabled() && plantedBomb.isTicking().valueOr(true);
-    }
-
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.featuresStates().visualFeaturesStates.modelGlowState;

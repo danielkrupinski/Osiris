@@ -23,76 +23,12 @@ public:
     {
     }
 
-    void onEntityListTraversed() const noexcept
+    [[nodiscard]] bool enabled() const
     {
-        state().playerModelGlowDisabling = false;
-    }
- 
-    void updateSceneObjectUpdaterHook(auto&& playerPawn) const noexcept
-    {
-        if (!shouldUpdateSceneObjectUpdaterHook())
-            return;
-
-        if (shouldGlowPlayerModel(playerPawn))
-            hookPlayerSceneObjectUpdater(playerPawn);
-        else
-            unhookPlayerSceneObjectUpdater(playerPawn);
+        return hookContext.config().template getVariable<model_glow_vars::GlowPlayers>();
     }
 
-    void applyModelGlow(auto&& playerPawn) const noexcept
-    {
-        if (shouldRun() && shouldGlowPlayerModel(playerPawn))
-            playerPawn.baseEntity().applySpawnProtectionEffectRecursively(getColor(playerPawn));
-    }
-
-    void onUnload(auto&& playerPawn) const noexcept
-    {
-        if (getConfigVariable<model_glow_vars::GlowPlayers>() || state().playerModelGlowDisabling)
-            unhookPlayerSceneObjectUpdater(playerPawn);
-    }
-
-private:
-    [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
-    {
-        return getConfigVariable<model_glow_vars::GlowPlayers>() || state().playerModelGlowDisabling;
-    }
-
-    [[nodiscard]] bool shouldRun() const noexcept
-    {
-        return getConfigVariable<model_glow_vars::GlowPlayers>();
-    }
-
-    void hookPlayerSceneObjectUpdater(auto&& playerPawn) const noexcept
-    {
-        if (!hasSceneObjectUpdaterHooked(playerPawn)) {
-            storeOriginalSceneObjectUpdater(playerPawn);
-            hookSceneObjectUpdater(playerPawn);
-        }
-    }
-
-    void unhookPlayerSceneObjectUpdater(auto&& playerPawn) const noexcept
-    {
-        if (hasSceneObjectUpdaterHooked(playerPawn))
-            playerPawn.setSceneObjectUpdater(state().originalPlayerPawnSceneObjectUpdater);
-    }
-
-    void storeOriginalSceneObjectUpdater(auto&& playerPawn) const noexcept
-    {
-        if (state().originalPlayerPawnSceneObjectUpdater == nullptr)
-            state().originalPlayerPawnSceneObjectUpdater = playerPawn.getSceneObjectUpdater();
-    }
-
-    [[nodiscard]] bool hasSceneObjectUpdaterHooked(auto&& playerPawn) const noexcept
-    {
-        return playerPawn.getSceneObjectUpdater() == &PlayerPawn_sceneObjectUpdater_asm;
-    }
-
-    void hookSceneObjectUpdater(auto&& playerPawn) const noexcept
-    {
-        playerPawn.setSceneObjectUpdater(&PlayerPawn_sceneObjectUpdater_asm);
-    }
-
-    [[nodiscard]] bool shouldGlowPlayerModel(auto&& playerPawn) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(auto&& playerPawn) const
     {
         return getConfigVariable<model_glow_vars::Enabled>()
             && playerPawn.isAlive().value_or(true)
@@ -102,40 +38,47 @@ private:
             && (!getConfigVariable<model_glow_vars::GlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
-    [[nodiscard]] auto& state() const noexcept
+    [[nodiscard]] bool& disablingFlag() const
     {
-        return hookContext.featuresStates().visualFeaturesStates.modelGlowState;
+        return state().playerModelGlowDisabling;
     }
 
-    [[nodiscard]] color::Saturation getColorSaturation(auto&& playerPawn) const noexcept
+    [[nodiscard]] auto& originalSceneObjectUpdater() const
     {
-        return playerPawn.hasImmunity().valueOr(false) ? model_glow_params::kImmunePlayerColorSaturation : model_glow_params::kNormalPlayerColorSaturation;
+        return state().originalPlayerPawnSceneObjectUpdater;
     }
 
-    [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
+    [[nodiscard]] auto replacementSceneObjectUpdater() const
     {
-        if (const auto colorHue = getColorHue(playerPawn))
-            return color::HSBtoRGB(*colorHue, getColorSaturation(playerPawn), color::Brightness{1.0f});
-        return cs2::kColorWhite;
+        return &PlayerPawn_sceneObjectUpdater_asm;
     }
 
-    [[nodiscard]] std::optional<color::Hue> getColorHue(auto&& playerPawn) const noexcept
+    [[nodiscard]] std::optional<color::Hue> getGlowHue(auto&& playerPawn) const
     {
         switch (getConfigVariable<model_glow_vars::PlayerGlowColorMode>()) {
         using enum PlayerModelGlowColorType;
-        case EnemyAlly:
-            return enemyAllyColorModeHue(playerPawn);
-        case HealthBased:
-            return healthBasedColorModeHue(playerPawn);
+        case EnemyAlly: return enemyAllyColorModeHue(playerPawn);
+        case HealthBased: return healthBasedColorModeHue(playerPawn);
         case PlayerOrTeamColor:
             if (const auto playerColor = getPlayerColorHue(playerPawn.playerController().playerColorIndex()))
                 return playerColor->toHueFloat();
             [[fallthrough]];
-        case TeamColor:
-            return teamColorModeHue(playerPawn);
-        default:
-            return {};
+        case TeamColor: return teamColorModeHue(playerPawn);
+        default: return {};
         }
+    }
+
+    [[nodiscard]] color::Saturation saturation(auto&& playerPawn) const
+    {
+        return playerPawn.hasImmunity().valueOr(false)
+            ? model_glow_params::kImmunePlayerColorSaturation
+            : model_glow_params::kNormalPlayerColorSaturation;
+    }
+
+private:
+    [[nodiscard]] auto& state() const noexcept
+    {
+        return hookContext.featuresStates().visualFeaturesStates.modelGlowState;
     }
 
     [[nodiscard]] std::optional<color::Hue> teamColorModeHue(auto&& playerPawn) const noexcept
