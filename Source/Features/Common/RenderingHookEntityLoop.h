@@ -36,13 +36,13 @@ private:
         if (entityTypeInfo.isModelEntity())
             hookContext.template make<OutlineGlow>().applyGlowToEntity(entityTypeInfo, baseEntity.template as<BaseModelEntity>());
 
-        if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
+        if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>())
             hookContext.template make<ModelGlow>().updateInMainThread()(PlayerModelGlow{hookContext}, baseEntity.template as<PlayerPawn>(), entityTypeInfo);
-        else if (entityTypeInfo.is<cs2::C_C4>())
+        else if (entityTypeInfo.template is<cs2::C_C4>())
             hookContext.template make<ModelGlow>().updateInMainThread()(DroppedBombModelGlow{hookContext}, baseEntity.template as<BaseWeapon>(), entityTypeInfo);
-        else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
+        else if (entityTypeInfo.template is<cs2::CBaseAnimGraph>())
             hookContext.template make<ModelGlow>().updateInMainThread()(DefuseKitModelGlow{hookContext}, baseEntity, entityTypeInfo);
-        else if (entityTypeInfo.is<cs2::CPlantedC4>())
+        else if (entityTypeInfo.template is<cs2::CPlantedC4>())
             hookContext.template make<ModelGlow>().updateInMainThread()(TickingBombModelGlow{hookContext}, baseEntity.template as<PlantedC4>(), entityTypeInfo);
         else if (entityTypeInfo.isGrenadeProjectile())
             hookContext.template make<ModelGlow>().updateInMainThread()(GrenadeProjectileModelGlow{hookContext}, baseEntity, entityTypeInfo);
