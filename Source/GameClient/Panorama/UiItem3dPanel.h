@@ -14,10 +14,10 @@ public:
 
     using RawType = cs2::CUI_Item3dPanel;
 
-    void createItem(const char* itemIdString) const noexcept
+    void createItem(std::uint64_t itemId) const noexcept
     {
         forceItemEntityToBeCreated();
-        setItemId(itemIdString);
+        setItemId(itemId);
         assert(unknownFieldHasDefaultValue());
     }
 
@@ -28,10 +28,10 @@ private:
         unknownField() = 0;
     }
 
-    void setItemId(const char* itemIdString) const noexcept
+    void setItemId(std::uint64_t itemId) const noexcept
     {
         if (const auto setItemItemIdFunction = hookContext.patternSearchResults().template get<SetItemItemIdFunction>(); setItemItemIdFunction && uiItem3dPanel)
-            setItemItemIdFunction(uiItem3dPanel, itemIdString, "");
+            setItemItemIdFunction(uiItem3dPanel, itemId, "");
     }
 
     [[nodiscard]] [[maybe_unused]] bool unknownFieldHasDefaultValue() const noexcept
