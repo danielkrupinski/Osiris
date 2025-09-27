@@ -45,14 +45,6 @@ struct PanoramaUiPanelContext {
         return hookContext.patternSearchResults().template get<OffsetToPanelHandle>().of(panel).valueOr(cs2::PanelHandle{});
     }
 
-    void setTransform3D(const cs2::CUtlVector<cs2::CTransform3D*>& transforms) const noexcept
-    {
-        if (const auto style = getStyle()) {
-            // FIXME: hardcoded virtual method index
-            reinterpret_cast<void(*)(cs2::CPanelStyle* thisptr, const cs2::CUtlVector<cs2::CTransform3D*>* transforms)>((*reinterpret_cast<void(***)()>(style))[17])(style, &transforms);
-        }
-    }
-
     void setProperty(cs2::CStyleProperty* styleProperty) const noexcept
     {
         if (!styleProperty)

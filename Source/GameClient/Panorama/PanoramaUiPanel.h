@@ -229,9 +229,9 @@ struct PanoramaUiPanel {
         context.setProperty(context.propertyFactory().backgroundColor(color));
     }
 
-    void setTransform3D(const cs2::CUtlVector<cs2::CTransform3D*>& transforms) const noexcept
+    void setTransform3D(std::span<cs2::CTransform3D*> transforms) const noexcept
     {
-        context.setTransform3D(transforms);
+        context.setProperty(context.propertyFactory().transform3D(transforms));
     }
 
     [[nodiscard]] decltype(auto) getUiScaleFactor() const noexcept

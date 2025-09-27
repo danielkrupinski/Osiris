@@ -10,13 +10,7 @@ template <std::size_t N>
 struct PanoramaTransformations {
     void applyTo(auto&& panel) noexcept
     {
-        cs2::CUtlVector<cs2::CTransform3D*> dummyVector;
-        dummyVector.allocationCount = N;
-        dummyVector.memory = transformations.data();
-        dummyVector.growSize = 0;
-        dummyVector.size = N;
-
-        panel.setTransform3D(dummyVector);
+        panel.setTransform3D(transformations);
     }
 
     std::array<cs2::CTransform3D*, N> transformations;

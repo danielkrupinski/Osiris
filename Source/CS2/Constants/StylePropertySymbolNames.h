@@ -23,6 +23,7 @@ constexpr auto kStylePropertySymbolNames = TypedStaticStringPool{}
     .add<CStylePropertyMixBlendMode>("-s2-mix-blend-mode")
     .add<CStylePropertyTextAlign>("text-align")
     .add<CStylePropertyForegroundColor>("color")
-    .add<CStylePropertyBackgroundColor>("background-color");
+    .add<CStylePropertyBackgroundColor>("background-color")
+    .add<CStylePropertyTransform3D>("transform");
 
 }

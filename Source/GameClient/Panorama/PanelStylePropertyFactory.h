@@ -134,6 +134,27 @@ struct PanelStylePropertyFactory {
         return backgroundColor;
     }
 
+    [[nodiscard]] cs2::CStylePropertyTransform3D* transform3D(std::span<cs2::CTransform3D*> transforms) const noexcept
+    {
+        const auto transform3D = create2<cs2::CStylePropertyTransform3D>();
+        if (transform3D) {
+            transform3D->transforms.memory = static_cast<cs2::CTransform3D**>(hookContext.template make<MemAlloc>().allocate(sizeof(cs2::CTransform3D*) * transforms.size()));
+            if (transform3D->transforms.memory) {
+                std::memcpy(transform3D->transforms.memory, transforms.data(), transforms.size() * sizeof(cs2::CTransform3D*));
+                transform3D->transforms.allocationCount = static_cast<int>(transforms.size());
+                transform3D->transforms.size = static_cast<int>(transforms.size());
+            }
+            transform3D->transforms.growSize = 1;
+            transform3D->cachedParentWidth = 0.0f;
+            transform3D->cachedParentHeight = 0.0f;
+            transform3D->dirty = true;
+            transform3D->matrix = cs2::VMatrix::identity();
+            transform3D->interpolated = false;
+            transform3D->fullySet = true;
+        }
+        return transform3D;
+    }
+
 private:
     template <typename T, typename... Args>
     [[nodiscard]] T* create(Args&&... args) const noexcept

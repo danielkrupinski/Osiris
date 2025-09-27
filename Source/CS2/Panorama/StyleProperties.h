@@ -2,6 +2,7 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Classes/CUtlString.h>
+#include <CS2/Classes/VMatrix.h>
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
 #include <Platform/Macros/PlatformSpecific.h>
@@ -134,5 +135,15 @@ struct CStylePropertyBackgroundColor : CStylePropertyFillColor {
     float opacity;
 };
 static_assert(sizeof(CStylePropertyBackgroundColor) == 56);
+
+struct CStylePropertyTransform3D : CStyleProperty {
+    CUtlVector<CTransform3D*> transforms;
+    float cachedParentWidth;
+    float cachedParentHeight;
+    bool dirty;
+    VMatrix matrix;
+    bool interpolated;
+    bool fullySet;
+};
 
 };
