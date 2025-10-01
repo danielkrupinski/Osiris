@@ -60,7 +60,7 @@ struct PanoramaImagePanel {
         if (!properties)
             return;
 
-        properties->scale = context.uiPanel().getUiScaleFactor().valueOr(1.0f);
+        properties->scale = uiScaleFactor();
         properties->textureHeight = params.textureHeight;
 
         if (params.fillColor.has_value()) {
@@ -73,5 +73,12 @@ struct PanoramaImagePanel {
     }
 
 private:
+    [[nodiscard]] decltype(auto) uiScaleFactor() const
+    {
+        const auto scale = context.uiPanel().getUiScaleFactor().valueOr(1.0f);
+        assert(scale >= 0.1f && scale <= 10.0f && "Invalid UI scale factor");
+        return scale;
+    }
+
     Context context;
 };
