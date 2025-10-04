@@ -17,6 +17,12 @@ struct MockConfig {
     }
 
     template <typename ConfigVariable>
+    [[nodiscard]] decltype(auto) expectGetVariable()
+    {
+        return EXPECT_CALL(*this, getVariable(ConfigVariableTypes::indexOf<ConfigVariable>()));
+    }
+
+    template <typename ConfigVariable>
     [[nodiscard]] auto getVariable()
     {
         auto&& variable = getVariable(ConfigVariableTypes::indexOf<ConfigVariable>());

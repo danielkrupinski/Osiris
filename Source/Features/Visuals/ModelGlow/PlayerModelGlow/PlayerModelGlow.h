@@ -23,122 +23,64 @@ public:
     {
     }
 
-    void onEntityListTraversed() const noexcept
+    [[nodiscard]] bool enabled() const
     {
-        state().playerModelGlowDisabling = false;
-    }
- 
-    void updateSceneObjectUpdaterHook(auto&& playerPawn) const noexcept
-    {
-        if (!shouldUpdateSceneObjectUpdaterHook())
-            return;
-
-        if (shouldGlowPlayerModel(playerPawn))
-            hookPlayerSceneObjectUpdater(playerPawn);
-        else
-            unhookPlayerSceneObjectUpdater(playerPawn);
+        return hookContext.config().template getVariable<model_glow_vars::GlowPlayers>();
     }
 
-    void applyModelGlow(auto&& playerPawn) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(auto&& playerPawn) const
     {
-        if (shouldRun() && shouldGlowPlayerModel(playerPawn))
-            playerPawn.baseEntity().applySpawnProtectionEffectRecursively(getColor(playerPawn));
-    }
-
-    void onUnload(auto&& playerPawn) const noexcept
-    {
-        if (getConfigVariable<model_glow_vars::GlowPlayers>() || state().playerModelGlowDisabling)
-            unhookPlayerSceneObjectUpdater(playerPawn);
-    }
-
-private:
-    [[nodiscard]] bool shouldUpdateSceneObjectUpdaterHook() const noexcept
-    {
-        return getConfigVariable<model_glow_vars::GlowPlayers>() || state().playerModelGlowDisabling;
-    }
-
-    [[nodiscard]] bool shouldRun() const noexcept
-    {
-        return getConfigVariable<model_glow_vars::GlowPlayers>();
-    }
-
-    void hookPlayerSceneObjectUpdater(auto&& playerPawn) const noexcept
-    {
-        if (!hasSceneObjectUpdaterHooked(playerPawn)) {
-            storeOriginalSceneObjectUpdater(playerPawn);
-            hookSceneObjectUpdater(playerPawn);
-        }
-    }
-
-    void unhookPlayerSceneObjectUpdater(auto&& playerPawn) const noexcept
-    {
-        if (hasSceneObjectUpdaterHooked(playerPawn))
-            playerPawn.setSceneObjectUpdater(state().originalPlayerPawnSceneObjectUpdater);
-    }
-
-    void storeOriginalSceneObjectUpdater(auto&& playerPawn) const noexcept
-    {
-        if (state().originalPlayerPawnSceneObjectUpdater == nullptr)
-            state().originalPlayerPawnSceneObjectUpdater = playerPawn.getSceneObjectUpdater();
-    }
-
-    [[nodiscard]] bool hasSceneObjectUpdaterHooked(auto&& playerPawn) const noexcept
-    {
-        return playerPawn.getSceneObjectUpdater() == &PlayerPawn_sceneObjectUpdater_asm;
-    }
-
-    void hookSceneObjectUpdater(auto&& playerPawn) const noexcept
-    {
-        playerPawn.setSceneObjectUpdater(&PlayerPawn_sceneObjectUpdater_asm);
-    }
-
-    [[nodiscard]] bool shouldGlowPlayerModel(auto&& playerPawn) const noexcept
-    {
-        return getConfigVariable<model_glow_vars::Enabled>()
-            && playerPawn.isAlive().value_or(true)
+        return playerPawn.isAlive().value_or(true)
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
             && (!getConfigVariable<model_glow_vars::GlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
     }
 
+    [[nodiscard]] bool& disablingFlag() const
+    {
+        return state().playerModelGlowDisabling;
+    }
+
+    [[nodiscard]] auto& originalSceneObjectUpdater() const
+    {
+        return state().originalPlayerPawnSceneObjectUpdater;
+    }
+
+    [[nodiscard]] auto replacementSceneObjectUpdater() const
+    {
+        return &PlayerPawn_sceneObjectUpdater_asm;
+    }
+
+    [[nodiscard]] Optional<color::Hue> hue(auto&& playerPawn) const
+    {
+        switch (getConfigVariable<model_glow_vars::PlayerGlowColorMode>()) {
+        using enum PlayerModelGlowColorType;
+        case EnemyAlly: return enemyAllyColorModeHue(playerPawn);
+        case HealthBased: return healthBasedColorModeHue(playerPawn);
+        case PlayerOrTeamColor:
+            if (const auto playerColor = getPlayerColorHue(playerPawn.playerController().playerColorIndex()); playerColor.hasValue())
+                return playerColor.value().toHueFloat();
+            [[fallthrough]];
+        case TeamColor: return teamColorModeHue(playerPawn);
+        default: return {};
+        }
+    }
+
+    [[nodiscard]] color::Saturation saturation(auto&& playerPawn) const
+    {
+        return playerPawn.hasImmunity().valueOr(false)
+            ? model_glow_params::kImmunePlayerColorSaturation
+            : model_glow_params::kNormalPlayerColorSaturation;
+    }
+
+private:
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.featuresStates().visualFeaturesStates.modelGlowState;
     }
 
-    [[nodiscard]] color::Saturation getColorSaturation(auto&& playerPawn) const noexcept
-    {
-        return playerPawn.hasImmunity().valueOr(false) ? model_glow_params::kImmunePlayerColorSaturation : model_glow_params::kNormalPlayerColorSaturation;
-    }
-
-    [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
-    {
-        if (const auto colorHue = getColorHue(playerPawn))
-            return color::HSBtoRGB(*colorHue, getColorSaturation(playerPawn), color::Brightness{1.0f});
-        return cs2::kColorWhite;
-    }
-
-    [[nodiscard]] std::optional<color::Hue> getColorHue(auto&& playerPawn) const noexcept
-    {
-        switch (getConfigVariable<model_glow_vars::PlayerGlowColorMode>()) {
-        using enum PlayerModelGlowColorType;
-        case EnemyAlly:
-            return enemyAllyColorModeHue(playerPawn);
-        case HealthBased:
-            return healthBasedColorModeHue(playerPawn);
-        case PlayerOrTeamColor:
-            if (const auto playerColor = getPlayerColorHue(playerPawn.playerController().playerColorIndex()))
-                return playerColor->toHueFloat();
-            [[fallthrough]];
-        case TeamColor:
-            return teamColorModeHue(playerPawn);
-        default:
-            return {};
-        }
-    }
-
-    [[nodiscard]] std::optional<color::Hue> teamColorModeHue(auto&& playerPawn) const noexcept
+    [[nodiscard]] Optional<color::Hue> teamColorModeHue(auto&& playerPawn) const noexcept
     {
         switch (playerPawn.teamNumber()) {
         case TeamNumber::TT: return static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::TeamTHue>()).toHueFloat();
@@ -147,17 +89,17 @@ private:
         }
     }
 
-    [[nodiscard]] std::optional<color::Hue> enemyAllyColorModeHue(auto&& playerPawn) const noexcept
+    [[nodiscard]] Optional<color::Hue> enemyAllyColorModeHue(auto&& playerPawn) const noexcept
     {
         if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
             return (*isEnemy ? static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::EnemyHue>()) : static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::AllyHue>())).toHueFloat();
         return {};
     }
 
-    [[nodiscard]] std::optional<color::Hue> healthBasedColorModeHue(auto&& playerPawn) const noexcept
+    [[nodiscard]] Optional<color::Hue> healthBasedColorModeHue(auto&& playerPawn) const noexcept
     {
         if (const auto healthValue = playerPawn.health(); healthValue.hasValue()) {
-            const auto fraction = std::clamp(healthValue.value(), 0, 100) / 100.0f;
+            const auto fraction = healthFraction(healthValue.value());
 
             const color::HueInteger lowHealthHue{getConfigVariable<model_glow_vars::LowHealthHue>()};
             const color::HueInteger highHealthHue{getConfigVariable<model_glow_vars::HighHealthHue>()};
@@ -169,7 +111,19 @@ private:
         return {};
     }
 
-    [[nodiscard]] std::optional<color::HueInteger> getPlayerColorHue(auto playerColorIndex) const noexcept
+    [[nodiscard]] static constexpr float healthFraction(int playerHealth) noexcept
+    {
+        constexpr auto kMinHealth = 1;
+        constexpr auto kMaxHealth = 100;
+
+        if (playerHealth <= kMinHealth)
+            return 0.0f;
+        if (playerHealth >= kMaxHealth)
+            return 1.0f;
+        return static_cast<float>(playerHealth - kMinHealth) / (kMaxHealth - kMinHealth); 
+    }
+
+    [[nodiscard]] Optional<color::HueInteger> getPlayerColorHue(auto playerColorIndex) const noexcept
     {
         if (!playerColorIndex.hasValue())
             return {};

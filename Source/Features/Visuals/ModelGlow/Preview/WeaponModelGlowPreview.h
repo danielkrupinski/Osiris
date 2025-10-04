@@ -14,20 +14,20 @@ public:
 
     void updateSceneObjectUpdaterHooks() const noexcept
     {
-        hookContext.template make<ModelGlow>().updateWeaponSceneObjectUpdaterHook(previewWeapon());
-        hookContext.template make<ModelGlow>().updateWeaponSceneObjectUpdaterHook(previewFlashbang());
-        hookContext.template make<ModelGlow>().updateWeaponSceneObjectUpdaterHook(previewSmokeGrenade());
-        hookContext.template make<ModelGlow>().updateWeaponSceneObjectUpdaterHook(previewHEGrenade());
-        hookContext.template make<ModelGlow>().updateWeaponSceneObjectUpdaterHook(previewIncendiary());
+        hookContext.template make<ModelGlow>().updateInMainThread()(WeaponModelGlow{hookContext}, previewWeapon(), EntityTypeInfo{});
+        hookContext.template make<ModelGlow>().updateInMainThread()(WeaponModelGlow{hookContext}, previewFlashbang(), EntityTypeInfo{});
+        hookContext.template make<ModelGlow>().updateInMainThread()(WeaponModelGlow{hookContext}, previewSmokeGrenade(), EntityTypeInfo{});
+        hookContext.template make<ModelGlow>().updateInMainThread()(WeaponModelGlow{hookContext}, previewHEGrenade(), EntityTypeInfo{});
+        hookContext.template make<ModelGlow>().updateInMainThread()(WeaponModelGlow{hookContext}, previewIncendiary(), EntityTypeInfo{});
     }
 
     void onUnload() const noexcept
     {
-        hookContext.template make<WeaponModelGlow>().onUnload(previewWeapon());
-        hookContext.template make<WeaponModelGlow>().onUnload(previewFlashbang());
-        hookContext.template make<WeaponModelGlow>().onUnload(previewSmokeGrenade());
-        hookContext.template make<WeaponModelGlow>().onUnload(previewHEGrenade());
-        hookContext.template make<WeaponModelGlow>().onUnload(previewIncendiary());
+        hookContext.template make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, previewWeapon());
+        hookContext.template make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, previewFlashbang());
+        hookContext.template make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, previewSmokeGrenade());
+        hookContext.template make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, previewHEGrenade());
+        hookContext.template make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, previewIncendiary());
     }
 
 private:

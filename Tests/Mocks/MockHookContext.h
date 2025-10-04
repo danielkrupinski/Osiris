@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gmock/gmock.h>
+#include <Features/FeaturesStates.h>
 
 struct ConfigState;
 struct MockConfig;
@@ -19,4 +20,5 @@ struct MockHookContext {
     MOCK_METHOD(ConfigState&, configState, ());
     MOCK_METHOD(OsirisDirectoryPath&, osirisDirectoryPath, ());
     MOCK_METHOD(MockGui&, gui, ());
+    MOCK_METHOD(FeaturesStates&, featuresStates, ());
 };

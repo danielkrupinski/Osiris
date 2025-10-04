@@ -58,19 +58,19 @@ public:
 
     void hookPreviewPlayersSceneObjectUpdaters() const noexcept
     {
-        hookContext.template make<ModelGlow>().updateSceneObjectUpdaterHook(previewPlayerTT());
-        hookContext.template make<ModelGlow>().updateSceneObjectUpdaterHook(previewPlayerCT());
+        hookContext.template make<ModelGlow>().updateInMainThread()(PlayerModelGlow{hookContext}, previewPlayerTT(), EntityTypeInfo{});
+        hookContext.template make<ModelGlow>().updateInMainThread()(PlayerModelGlow{hookContext}, previewPlayerCT(), EntityTypeInfo{});
     }
 
     void onUnload() const noexcept
     {
-        hookContext.template make<PlayerModelGlow>().onUnload(previewPlayerTT());
-        hookContext.template make<PlayerModelGlow>().onUnload(previewPlayerCT());
+        hookContext.template make<ModelGlow>().onUnload()(PlayerModelGlow{hookContext}, previewPlayerTT());
+        hookContext.template make<ModelGlow>().onUnload()(PlayerModelGlow{hookContext}, previewPlayerCT());
     }
 
     void applyPreviewPlayerModelGlow(auto&& previewPlayer) const noexcept
     {
-        hookContext.template make<ModelGlow>().applyPlayerModelGlow(hookContext.template make<PlayerPawnForModelGlowPreview>(previewPlayer, previewPlayerTeamNumber(previewPlayer)));
+        hookContext.template make<ModelGlow>().updateInSceneObjectUpdater()(PlayerModelGlow{hookContext}, hookContext.template make<PlayerPawnForModelGlowPreview>(previewPlayer, previewPlayerTeamNumber(previewPlayer)), EntityTypeInfo{});
     }
 
 private:

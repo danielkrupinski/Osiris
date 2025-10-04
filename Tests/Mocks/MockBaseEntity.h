@@ -10,6 +10,8 @@ struct MockSmokeGrenadeProjectile;
 struct MockBaseEntity {
     MOCK_METHOD(void, applyGlowRecursively, (cs2::Color color, int range));
     MOCK_METHOD(void, applyGlowRecursively, (cs2::Color color));
+    MOCK_METHOD(void, applySpawnProtectionEffectRecursively, (cs2::Color color));
+    MOCK_METHOD(void, removeSpawnProtectionEffectRecursively, ());
     MOCK_METHOD(Optional<bool>, hasOwner, ());
     MOCK_METHOD(MockSmokeGrenadeProjectile&, asSmokeGrenadeProjectile, ());
     
