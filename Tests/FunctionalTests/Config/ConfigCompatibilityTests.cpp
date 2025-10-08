@@ -148,9 +148,9 @@ protected:
     void setVariableExpectationsV7()
     {
         setVariableExpectationsV6();
-        get<viewmodel_modification_vars::Enabled>() = true;
-        get<viewmodel_modification_vars::ModifyFov>() = true;
-        get<viewmodel_modification_vars::Fov>() = viewmodel_modification_vars::Fov::ValueType{90};
+        get<viewmodel_mod_vars::Enabled>() = true;
+        get<viewmodel_mod_vars::ModifyFov>() = true;
+        get<viewmodel_mod_vars::Fov>() = viewmodel_mod_vars::Fov::ValueType{90};
     }
 
     void setVariableExpectationsCurrent()
