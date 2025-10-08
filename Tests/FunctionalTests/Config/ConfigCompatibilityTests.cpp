@@ -145,9 +145,17 @@ protected:
         get<outline_glow_vars::DefuseKitHue>() = outline_glow_vars::DefuseKitHue::ValueType{color::HueInteger{160}};
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV7()
     {
         setVariableExpectationsV6();
+        get<viewmodel_modification_vars::Enabled>() = true;
+        get<viewmodel_modification_vars::ModifyFov>() = true;
+        get<viewmodel_modification_vars::Fov>() = viewmodel_modification_vars::Fov::ValueType{90};
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV7();
     }
 
     struct VariableChecker {
@@ -277,6 +285,11 @@ TEST_F(ConfigCompatibilityLoadTest, ConfigV4) {
 TEST_F(ConfigCompatibilityLoadTest, ConfigV5) {
     setVariableExpectationsV5();
     testLoadingConfigFile("config_v5.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, ConfigV6) {
+    setVariableExpectationsV6();
+    testLoadingConfigFile("config_v6.cfg");
 }
 
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {

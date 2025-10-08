@@ -2,7 +2,7 @@
 
 #include <Config/ConfigState.h>
 #include <CS2/Classes/CLoopModeGame.h>
-#include <GameClient/ConVars/ConVars.h>
+#include <GameClient/ConVars/ConVarsBase.h>
 #include <GameClient/FileNameSymbolTableState.h>
 #include <GameClient/Hud/HudState.h>
 #include <GameClient/MemAllocState.h>
@@ -61,7 +61,7 @@ struct FullGlobalContext {
     HudState hudState;
     MemAllocState memAllocState;
     StylePropertiesSymbolsAndVMTs stylePropertySymbolsAndVMTs;
-    std::optional<ConVars> conVars;
+    std::optional<ConVarsBase> conVars;
     std::optional<PanoramaSymbols> panoramaSymbols;
     Hooks hooks;
     SoundWatcherState soundWatcherState;

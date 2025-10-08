@@ -29,7 +29,44 @@ public:
         return nullptr;
     }
 
+    template <typename ConVarType>
+    [[nodiscard]] auto getConVarValue() const
+    {
+        return getValue<ConVarType>(hookContext.getConVarsBase().template getConVar<ConVarType>());
+    }
+
 private:
+    template <typename ConVarType>
+    [[nodiscard]] std::optional<typename ConVarType::ValueType> getValue(cs2::ConVar* conVar) const
+    {
+        if (hookContext.patternSearchResults().template get<OffsetToConVarValueType>().of(conVar).toOptional().equal(conVarValueTypeForType<typename ConVarType::ValueType>()).valueOr(false))
+            return readValueAs<typename ConVarType::ValueType>(conVar);
+        return {};
+    }
+
+    template <typename T>
+    [[nodiscard]] static consteval auto conVarValueTypeForType() noexcept
+    {
+        if constexpr (std::is_same_v<T, bool>)
+            return cs2::ConVarValueType::boolean;
+        else if constexpr (std::is_same_v<T, float>)
+            return cs2::ConVarValueType::float32;
+        else
+            static_assert(!std::is_same_v<T, T>, "Unsupported type");
+    }
+
+    template <typename T>
+    [[nodiscard]] std::optional<T> readValueAs(cs2::ConVar* conVar) const
+    {
+        const auto pointerToValue = hookContext.patternSearchResults().template get<OffsetToConVarValue>().of(conVar).get();
+        if (!pointerToValue)
+            return {};
+
+        T value;
+        std::memcpy(&value, pointerToValue, sizeof(value));
+        return value;
+    }
+
     [[nodiscard]] cs2::CCvar::ConVarList* getConVarList() const noexcept
     {
         return hookContext.patternSearchResults().template get<OffsetToConVarList>().of(cvar()).get();

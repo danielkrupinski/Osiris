@@ -12,6 +12,7 @@
 #include <Features/Sound/Details/WeaponReloadSound.h>
 #include <Features/Sound/Details/WeaponScopeSound.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerStateIcons/PlayerStateIconsToShow.h>
+#include <Hooks/ClientModeHooks.h>
 #include <OutlineGlow/GlowSceneObjects.h>
 
 template <typename HookContext>
@@ -181,6 +182,22 @@ private:
             hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template set<BlindedIconPanel>();
         else
             hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow.template unset<BlindedIconPanel>();
+    }
+
+    ON_CHANGE(viewmodel_mod_vars::Enabled)
+    {
+        if (newValue == true && hookContext.config().template getVariable<viewmodel_mod_vars::ModifyFov>())
+            hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
+        else
+            hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
+    }
+
+    ON_CHANGE(viewmodel_mod_vars::ModifyFov)
+    {
+        if (newValue == true && hookContext.config().template getVariable<viewmodel_mod_vars::Enabled>())
+            hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
+        else
+            hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
     }
 
     #undef ON_CHANGE

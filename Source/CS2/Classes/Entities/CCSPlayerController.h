@@ -23,7 +23,7 @@ constexpr auto kPlayerColorIndexCount{5};
 struct CCSPlayerController : C_BaseEntity {
     static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCCSPlayerController@@", "19CCSPlayerController")};
 
-    using m_hPlayerPawn = CEntityHandle;
+    using m_hPawn = CEntityHandle;
     using m_iCompTeammateColor = PlayerColorIndex;
 };
 

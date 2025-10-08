@@ -8,6 +8,7 @@
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
+#include <Features/Visuals/ViewmodelMod/ViewmodelModConfigVariables.h>
 #include <Utils/TypeList.h>
 
 using ConfigVariableTypes = TypeList<
@@ -89,5 +90,8 @@ using ConfigVariableTypes = TypeList<
     player_info_vars::BombDefuseIconEnabled,
     player_info_vars::HostagePickupIconEnabled,
     player_info_vars::HostageRescueIconEnabled,
-    player_info_vars::BlindedIconEnabled
+    player_info_vars::BlindedIconEnabled,
+    viewmodel_mod_vars::Enabled,
+    viewmodel_mod_vars::ModifyFov,
+    viewmodel_mod_vars::Fov
 >;

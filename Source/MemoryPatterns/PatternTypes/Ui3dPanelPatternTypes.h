@@ -7,3 +7,4 @@
 #include <Utils/StrongTypeAlias.h>
 
 STRONG_TYPE_ALIAS(OffsetToPortraitWorld, FieldOffset<cs2::CUI_3dPanel, cs2::CUI_3dPanel::PortraitWorld, std::int8_t>);
+STRONG_TYPE_ALIAS(OffsetTo3dPanelFov, FieldOffset<cs2::CUI_3dPanel, cs2::CUI_3dPanel::Fov, std::int32_t>);

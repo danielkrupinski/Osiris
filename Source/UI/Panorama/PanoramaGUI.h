@@ -5,6 +5,7 @@
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
 #include <Features/Visuals/ModelGlow/Preview/WeaponModelGlowPreview.h>
+#include <Features/Visuals/ViewmodelMod/ViewmodelModPreview.h>
 #include <GameClient/Entities/TeamNumber.h>
 #include <GlobalContext/UnloadFlag.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
@@ -17,6 +18,7 @@
 #include "HudTab.h"
 #include "SoundTab.h"
 #include "VisualsTab.h"
+#include "Tabs/VisualsTab/ViewmodelModPreviewPanel.h"
 
 template <typename HookContext>
 class PlayerModelGlowPreviewPanel {
@@ -144,6 +146,7 @@ public:
             state().guiPanelHandle = guiPanel.getHandle();
             state().modelGlowPreviewPlayerLabelHandleTT = guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerTTLabel").getHandle();
             state().modelGlowPreviewPlayerLabelHandleCT = guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCTLabel").getHandle();
+            state().viewmodelPreviewPanelHandle = guiPanel.findChildInLayoutFile("ViewmodelPreview").getHandle();
         }
 
         updateFromConfig();
@@ -176,6 +179,9 @@ public:
         hookContext.template make<PlayerModelGlowPreview>().hookPreviewPlayersSceneObjectUpdaters();
 
         hookContext.template make<WeaponModelGlowPreview>().updateSceneObjectUpdaterHooks();
+
+        uiEngine().getPanelFromHandle(state().viewmodelPreviewPanelHandle)
+            .clientPanel().template as<ViewmodelModificationPreviewPanel>().update();
 
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleTT), TeamNumber::TT).update();
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleCT), TeamNumber::CT).update();

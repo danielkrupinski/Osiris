@@ -169,7 +169,7 @@ private:
             parsedBytes = ConfigSchema{hookContext}.performConversion(configFromString);
         } while (parsedBytes != 0 && (conversionState.nestingLevel != 0 || conversionState.indexInNestingLevel[0] != 1));
         
-        assert(conversionState.nestingLevel == 0 && conversionState.indexInNestingLevel[0] == 1);
+        assert(readBytes == 0 || (conversionState.nestingLevel == 0 && conversionState.indexInNestingLevel[0] == 1));
         hookContext.gui().updateFromConfig();
     }
 

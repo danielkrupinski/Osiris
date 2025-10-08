@@ -20,6 +20,11 @@ public:
         return hookContext.template make<PortraitWorld>(portraitWorldPointer());
     }
 
+    void setFov(float fov) const noexcept
+    {
+        hookContext.patternSearchResults().template get<OffsetTo3dPanelFov>().of(ui3dPanel) = fov;
+    }
+
     template <template <typename...> typename T>
     [[nodiscard]] decltype(auto) as() const noexcept
     {

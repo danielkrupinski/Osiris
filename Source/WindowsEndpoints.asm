@@ -3,6 +3,7 @@ EXTERN SDLHook_PeepEvents_cpp:PROC
 EXTERN ViewRenderHook_onRenderStart_cpp:PROC
 EXTERN PlayerPawn_sceneObjectUpdater_cpp:PROC
 EXTERN Weapon_sceneObjectUpdater_cpp:PROC
+EXTERN ClientModeHook_getViewmodelFov_cpp:PROC
 
 EXTERNDEF textSectionStartMarker:DWORD
 EXTERNDEF textSectionEndMarker:DWORD
@@ -151,5 +152,20 @@ Weapon_sceneObjectUpdater_asm PROC
     pop rax
     ret
 Weapon_sceneObjectUpdater_asm ENDP
+
+ClientModeHook_getViewmodelFov_asm PROC
+    push rcx ; backup volatile rcx
+    sub rsp, 32 ; allocate shadow space for function call
+    call makeTextSectionExecutable
+    mov rcx, [rsp + 32]
+    call ClientModeHook_getViewmodelFov_cpp
+    movd eax, xmm0
+    mov [rsp + 32], eax
+    call makeTextSectionNotExecutable
+    mov eax, [rsp + 32]
+    movd xmm0, eax
+    add rsp, 40
+    ret
+ClientModeHook_getViewmodelFov_asm ENDP
 
 END

@@ -8,4 +8,5 @@ struct PanoramaGuiState {
     cs2::PanelHandle settingsPanelHandle;
     cs2::PanelHandle modelGlowPreviewPlayerLabelHandleTT;
     cs2::PanelHandle modelGlowPreviewPlayerLabelHandleCT;
+    cs2::PanelHandle viewmodelPreviewPanelHandle;
 };

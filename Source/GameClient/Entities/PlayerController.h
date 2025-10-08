@@ -38,12 +38,12 @@ public:
         return baseEntity().teamNumber();
     }
 
-    [[nodiscard]] decltype(auto) playerPawn() const noexcept
+    [[nodiscard]] decltype(auto) pawn() const noexcept
     {
-        const auto playerPawnHandle = hookContext.patternSearchResults().template get<OffsetToPlayerPawnHandle>().of(playerControllerPointer).get();
+        const auto playerPawnHandle = hookContext.patternSearchResults().template get<OffsetToBasePawnHandle>().of(playerControllerPointer).get();
         if (!playerPawnHandle)
-            return hookContext.template make<PlayerPawn>(nullptr);
-        return hookContext.template make<PlayerPawn>(static_cast<cs2::C_CSPlayerPawn*>(hookContext.template make<EntitySystem>().getEntityFromHandle(*playerPawnHandle)));
+            return hookContext.template make<BaseEntity>(nullptr);
+        return hookContext.template make<EntitySystem>().getEntityFromHandle2(*playerPawnHandle);
     }
 
     [[nodiscard]] decltype(auto) playerColorIndex() const noexcept

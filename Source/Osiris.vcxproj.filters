@@ -223,6 +223,15 @@
     <Filter Include="Config">
       <UniqueIdentifier>{5526912e-3dfb-467b-a785-3785aea27537}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\Panorama\Tabs">
+      <UniqueIdentifier>{6429d97e-346b-4c1e-9e55-6cd200fbf6fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Panorama\Tabs\VisualsTab">
+      <UniqueIdentifier>{1ee66c40-65ad-4c05-8631-2f3aa7159640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visuals\ViewmodelMod">
+      <UniqueIdentifier>{63f981c9-ffe5-426e-8a58-569a43712e91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1424,12 +1433,6 @@
     <ClInclude Include="Utils\FileSlice.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\ConVars\ConVarAccessor.h">
-      <Filter>GameClient\ConVars</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClient\ConVars\ConVars.h">
-      <Filter>GameClient\ConVars</Filter>
-    </ClInclude>
     <ClInclude Include="GameClient\ConVars\ConVarsBase.h">
       <Filter>GameClient\ConVars</Filter>
     </ClInclude>
@@ -1772,9 +1775,6 @@
     <ClInclude Include="Utils\IdentityMacro.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="UI\Panorama\HueSlider.h">
-      <Filter>UI\Panorama</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Panorama\CUI_3dPanel.h">
       <Filter>CS2\Panorama</Filter>
     </ClInclude>
@@ -1811,9 +1811,6 @@
     <ClInclude Include="MemoryPatterns\Windows\UiItem3dPanelPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Config\HueVariableParams.h">
-      <Filter>Config</Filter>
-    </ClInclude>
     <ClInclude Include="MemoryPatterns\AllMemoryPatternSearchResults.h">
       <Filter>MemoryPatterns</Filter>
     </ClInclude>
@@ -1825,6 +1822,42 @@
     </ClInclude>
     <ClInclude Include="GameClient\ConVars\CvarSystem.h">
       <Filter>GameClient\ConVars</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\HueSlider.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\IntSlider.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\ViewmodelModPreviewPanel.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="Hooks\ClientModeHooks.h">
+      <Filter>Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="HookContext\HookContextMacros.h">
+      <Filter>HookContext</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\ConVars\ConVarTypes.h">
+      <Filter>GameClient\ConVars</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\RangeConstrainedVariableParams.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelMod.h">
+      <Filter>Features\Visuals\ViewmodelMod</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModConfigVariables.h">
+      <Filter>Features\Visuals\ViewmodelMod</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModParams.h">
+      <Filter>Features\Visuals\ViewmodelMod</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModPreview.h">
+      <Filter>Features\Visuals\ViewmodelMod</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModState.h">
+      <Filter>Features\Visuals\ViewmodelMod</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

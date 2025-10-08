@@ -2,11 +2,13 @@
 .globl ViewRenderHook_onRenderStart_asm
 .globl PlayerPawn_sceneObjectUpdater_asm
 .globl Weapon_sceneObjectUpdater_asm
+.globl ClientModeHook_getViewmodelFov_asm
 
 .hidden SDLHook_PeepEvents_asm
 .hidden ViewRenderHook_onRenderStart_asm
 .hidden PlayerPawn_sceneObjectUpdater_asm
 .hidden Weapon_sceneObjectUpdater_asm
+.hidden ClientModeHook_getViewmodelFov_asm
 
 SDLHook_PeepEvents_asm:
     push %rdi # backup volatile registers used in the original function
@@ -32,3 +34,6 @@ PlayerPawn_sceneObjectUpdater_asm:
 .align 2 # scene object updater is stored in a tagged pointer on Linux so we align the address to ensure the tag bit is not set
 Weapon_sceneObjectUpdater_asm:
     jmp Weapon_sceneObjectUpdater_cpp
+
+ClientModeHook_getViewmodelFov_asm:
+    jmp ClientModeHook_getViewmodelFov_cpp
