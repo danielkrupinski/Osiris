@@ -1853,11 +1853,8 @@
     <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModParams.h">
       <Filter>Features\Visuals\ViewmodelMod</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModPreview.h">
-      <Filter>Features\Visuals\ViewmodelMod</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModState.h">
-      <Filter>Features\Visuals\ViewmodelMod</Filter>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\ViewmodelModPreviewPanelState.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

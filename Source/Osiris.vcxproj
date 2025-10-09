@@ -246,8 +246,6 @@
     <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelMod.h" />
     <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModConfigVariables.h" />
     <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModParams.h" />
-    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModPreview.h" />
-    <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModState.h" />
     <ClInclude Include="Features\Visuals\VisualFeaturesStates.h" />
     <ClInclude Include="GameClient\ConVars\ConVarsBase.h" />
     <ClInclude Include="GameClient\ConVars\ConVarTypes.h" />
@@ -511,6 +509,7 @@
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\HueSlider.h" />
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\IntSlider.h" />
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\ViewmodelModPreviewPanel.h" />
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\ViewmodelModPreviewPanelState.h" />
     <ClInclude Include="UI\Panorama\VisualsTab.h" />
     <ClInclude Include="Utils\Align.h" />
     <ClInclude Include="Utils\BitFlags.h" />
