@@ -675,6 +675,7 @@ u8R"(
 
   var viewmodelFov = createSection(viewmodelTab, 'Viewmodel Fov');
   createYesNoDropDown(viewmodelFov, "Modify Viewmodel Fov", 'visuals', 'viewmodel_fov_mod');
+  separator(viewmodelFov);
   createSlider(viewmodelFov, "Fov", 'viewmodel_fov', 40, 90);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');

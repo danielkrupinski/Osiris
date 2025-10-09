@@ -116,7 +116,9 @@ public:
     {
         HookContext hookContext{fullContext()};
         const auto originalFov = hookContext.hooks().originalGetViewmodelFov(clientMode);
-        return hookContext.template make<ViewmodelMod>().viewmodelFov().value_or(originalFov);
+        if (auto&& viewmodelMod = hookContext.template make<ViewmodelMod>(); viewmodelMod.shouldModifyViewmodelFov())
+            return viewmodelMod.viewmodelFov();
+        return originalFov;
     }
 
     [[nodiscard]] UnloadFlag onRenderStartHook(cs2::CViewRender* viewRender) noexcept

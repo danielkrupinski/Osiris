@@ -1,31 +1,19 @@
 #pragma once
 
 template <typename HookContext>
-class ViewmodelModificationPreviewPanel {
+class ViewmodelModPreviewPanel {
 public:
     using RawType = cs2::CUI_Item3dPanel;
 
-    ViewmodelModificationPreviewPanel(HookContext& hookContext, cs2::CUI_Item3dPanel* item3dPanel) noexcept
+    ViewmodelModPreviewPanel(HookContext& hookContext, cs2::CUI_Item3dPanel* item3dPanel) noexcept
         : hookContext{hookContext}
         , item3dPanel{item3dPanel}
     {
     }
 
-    void update()
+    void setupPreviewModel() const
     {
         auto&& previewPanel = panel();
-        setupPreviewModel(previewPanel);
-        setFov(previewPanel);
-    }
-
-private:
-    [[nodiscard]] decltype(auto) panel()
-    {
-        return hookContext.template make<Ui3dPanel>(item3dPanel);
-    }
-
-    void setupPreviewModel(auto&& previewPanel)
-    {
         if (hookContext.template make<EntitySystem>().getEntityFromHandle2(state().previewWeaponHandle)) {
             state().hadPreviewWeaponHandle = true;
             if (state().recreatedPreviewWeapon) {
@@ -44,14 +32,33 @@ private:
         state().previewWeaponHandle = portraitWorld.findPreviewWeapon().baseEntity().handle();
     }
 
-    void setFov(auto&& previewPanel)
+    void setFov() const
     {
-        previewPanel.setFov(hookContext.template make<ViewmodelModPreview>().viewmodelFovForPreview());
+        panel().setFov(fovForPreview());
+    }
+
+private:
+    [[nodiscard]] decltype(auto) panel() const
+    {
+        return hookContext.template make<Ui3dPanel>(item3dPanel);
+    }
+
+    [[nodiscard]] float fovForPreview() const
+    {
+        auto&& viewmodelMod = hookContext.template make<ViewmodelMod>();
+        if (viewmodelMod.fovModificationActive())
+            return viewmodelMod.viewmodelFov();
+        return viewmodelFovFromConVar();
+    }
+
+    [[nodiscard]] float viewmodelFovFromConVar() const
+    {
+        return GET_CONVAR_VALUE(cs2::viewmodel_fov).value_or(viewmodel_mod_params::kPreviewFallbackFov);
     }
 
     [[nodiscard]] auto& state() const
     {
-        return hookContext.featuresStates().visualFeaturesStates.viewmodelModState;
+        return hookContext.panoramaGuiState().viewmodelModPreviewPanelState;
     }
 
     HookContext& hookContext;

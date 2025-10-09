@@ -9,6 +9,7 @@ struct MockGameRules;
 struct MockGui;
 struct MockHud;
 struct MockPanelFactory;
+struct MockPlayerController;
 
 class OsirisDirectoryPath;
 
@@ -21,4 +22,5 @@ struct MockHookContext {
     MOCK_METHOD(OsirisDirectoryPath&, osirisDirectoryPath, ());
     MOCK_METHOD(MockGui&, gui, ());
     MOCK_METHOD(FeaturesStates&, featuresStates, ());
+    MOCK_METHOD(MockPlayerController&, localPlayerController, ());
 };

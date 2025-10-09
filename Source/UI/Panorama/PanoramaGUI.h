@@ -5,7 +5,6 @@
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreviewColorMode.h>
 #include <Features/Visuals/ModelGlow/Preview/WeaponModelGlowPreview.h>
-#include <Features/Visuals/ViewmodelMod/ViewmodelModPreview.h>
 #include <GameClient/Entities/TeamNumber.h>
 #include <GlobalContext/UnloadFlag.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
@@ -180,8 +179,9 @@ public:
 
         hookContext.template make<WeaponModelGlowPreview>().updateSceneObjectUpdaterHooks();
 
-        uiEngine().getPanelFromHandle(state().viewmodelPreviewPanelHandle)
-            .clientPanel().template as<ViewmodelModificationPreviewPanel>().update();
+        auto&& viewmodelModPreviewPanel = uiEngine().getPanelFromHandle(state().viewmodelPreviewPanelHandle).clientPanel().template as<ViewmodelModPreviewPanel>();
+        viewmodelModPreviewPanel.setupPreviewModel();
+        viewmodelModPreviewPanel.setFov();
 
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleTT), TeamNumber::TT).update();
         hookContext.template make<PlayerModelGlowPreviewPanel>(uiEngine().getPanelFromHandle(state().modelGlowPreviewPlayerLabelHandleCT), TeamNumber::CT).update();

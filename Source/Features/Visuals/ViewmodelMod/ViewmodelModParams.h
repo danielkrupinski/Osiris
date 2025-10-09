@@ -7,6 +7,6 @@ namespace viewmodel_mod_params
 {
 
 constexpr auto kFov = RangeConstrainedVariableParams<std::uint8_t>{.min = 40, .max = 90, .def = 80};
-constexpr auto kFallbackFov = 54.0f;
+constexpr auto kPreviewFallbackFov = 54.0f;
 
 }
