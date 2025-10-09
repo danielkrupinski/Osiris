@@ -93,8 +93,8 @@ static_assert(viewmodel_mod_vars::Fov::kDefaultValue == 80, "Update the test bel
 
 INSTANTIATE_TEST_SUITE_P(, ViewmodelModFovTest, testing::ValuesIn(
     std::to_array<ViewmodelModFovTestParam>({
-        {.configuredFov = 40, .expectedFov{40.0f}}, 
-        {.configuredFov = 90, .expectedFov{90.0f}}, 
-        {.configuredFov = 80, .expectedFov{80.0f}}
+        {.configuredFov = 40, .expectedFov = 40.0f}, 
+        {.configuredFov = 90, .expectedFov = 90.0f}, 
+        {.configuredFov = 80, .expectedFov = 80.0f}
     })
 ));
