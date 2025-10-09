@@ -11,6 +11,7 @@ namespace cs2
 {
 
 CONVAR(mp_teammates_are_enemies, bool);
+CONVAR(viewmodel_fov, float);
 
 }
 

@@ -19,4 +19,11 @@ struct MockPlayerPawn {
     MOCK_METHOD(MockPlayerController&, playerController, ());
     MOCK_METHOD(std::uint64_t(*)(cs2::C_CSPlayerPawn*, void*, bool), getSceneObjectUpdater, ());
     MOCK_METHOD(void, setSceneObjectUpdater, (std::uint64_t(*updater)(cs2::C_CSPlayerPawn*, void*, bool)));
+    MOCK_METHOD(bool, operatorBool, (), (const));
+    MOCK_METHOD(Optional<bool>, isScoped, ());
+
+    [[nodiscard]] explicit operator bool() const
+    {
+        return operatorBool();
+    }
 };

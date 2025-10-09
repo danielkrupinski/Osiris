@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Config/HueVariableParams.h>
+#include <Config/RangeConstrainedVariableParams.h>
 #include <CS2/Classes/Color.h>
 #include <Utils/ColorUtils.h>
 

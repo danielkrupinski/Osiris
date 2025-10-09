@@ -155,7 +155,7 @@ private:
     void storeOriginalSceneObjectUpdater(auto&& glow, auto&& entity) const
     {
         auto& originalSceneObjectUpdater = glow.originalSceneObjectUpdater();
-        assert(originalSceneObjectUpdater == nullptr || originalSceneObjectUpdater == entity.getSceneObjectUpdater());
+        assert(originalSceneObjectUpdater == nullptr || entity.getSceneObjectUpdater() == nullptr || originalSceneObjectUpdater == entity.getSceneObjectUpdater());
         if (originalSceneObjectUpdater == nullptr)
             originalSceneObjectUpdater = entity.getSceneObjectUpdater();
     }

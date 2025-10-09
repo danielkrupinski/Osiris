@@ -21,6 +21,11 @@ public:
         assert(unknownFieldHasDefaultValue());
     }
 
+    void startWeaponLookAt() const noexcept
+    {
+        hookContext.patternSearchResults().template get<OffsetToStartWeaponLookAt>().of(uiItem3dPanel) = true;
+    }
+
 private:
     void forceItemEntityToBeCreated() const noexcept
     {

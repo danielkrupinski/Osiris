@@ -22,7 +22,7 @@ enum class ConVarValueType : std::uint16_t {
 struct ConVar {
     const char* name;
 
-    using ValueType = std::underlying_type_t<ConVarValueType>;
+    using ValueType = ConVarValueType;
     using Value = void;
 };
 

@@ -8,11 +8,15 @@
 
 struct Hooks {
     Hooks(PeepEventsHook peepEventsHook, cs2::CViewRender** viewRender, const VmtLengthCalculator& clientVmtLengthCalculator) noexcept
-        : peepEventsHook{peepEventsHook}
+        : clientVmtLengthCalculator{clientVmtLengthCalculator}
+        , peepEventsHook{peepEventsHook}
         , viewRenderHook{viewRender, clientVmtLengthCalculator}
     {
     }
 
+    VmtLengthCalculator clientVmtLengthCalculator;
+    VmtSwapper clientModeVmtSwapper;
+    cs2::ClientModeCSNormal::GetViewmodelFov* originalGetViewmodelFov{nullptr};
     PeepEventsHook peepEventsHook;
     ViewRenderHook viewRenderHook;
 };

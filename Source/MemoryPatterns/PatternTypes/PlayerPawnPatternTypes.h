@@ -17,3 +17,4 @@ STRONG_TYPE_ALIAS(OffsetToIsPickingUpHostage, PlayerPawnOffset<cs2::C_CSPlayerPa
 STRONG_TYPE_ALIAS(OffsetToHostageServices, PlayerPawnOffset<cs2::C_CSPlayerPawn::m_pHostageServices, std::int32_t>);
 STRONG_TYPE_ALIAS(OffsetToFlashBangEndTime, PlayerPawnOffset<cs2::C_CSPlayerPawn::m_flFlashBangTime, std::int32_t>);
 STRONG_TYPE_ALIAS(OffsetToPlayerPawnSceneObjectUpdaterHandle, PlayerPawnOffset<cs2::C_CSPlayerPawn::sceneObjectUpdaterHandle, std::int32_t>);
+STRONG_TYPE_ALIAS(OffsetToIsScoped, PlayerPawnOffset<cs2::C_CSPlayerPawn::m_bIsScoped, std::int32_t>);

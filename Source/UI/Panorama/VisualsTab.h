@@ -20,6 +20,7 @@ public:
         updatePlayerInfoInWorldTab(mainMenu);
         updateOutlineGlowTab(mainMenu);
         updateModelGlowTab(mainMenu);
+        updateViewmodelTab(mainMenu);
     }
 
 private:
@@ -99,6 +100,26 @@ private:
         updateHueSlider<model_glow_vars::DroppedBombHue>(mainMenu, "model_glow_dropped_bomb_hue");
         updateHueSlider<model_glow_vars::TickingBombHue>(mainMenu, "model_glow_ticking_bomb_hue");
         updateHueSlider<model_glow_vars::DefuseKitHue>(mainMenu, "model_glow_defuse_kit_hue");
+    }
+
+    void updateViewmodelTab(auto&& mainMenu) const noexcept
+    {
+        setDropDownSelectedIndex(mainMenu, "viewmodel_mod", !hookContext.config().template getVariable<viewmodel_mod_vars::Enabled>());
+        setDropDownSelectedIndex(mainMenu, "viewmodel_fov_mod", !hookContext.config().template getVariable<viewmodel_mod_vars::ModifyFov>());
+        updateSlider<viewmodel_mod_vars::Fov>(mainMenu, "viewmodel_fov");
+    }
+
+    template <typename ConfigVariable>
+    void updateSlider(auto&& mainMenu, const char* sliderId) const noexcept
+    {
+        updateSlider(mainMenu, sliderId, hookContext.config().template getVariable<ConfigVariable>());
+    }
+
+    void updateSlider(auto&& mainMenu, const char* sliderId, std::uint8_t value) const noexcept
+    {
+        auto&& slider = hookContext.template make<IntSlider>(mainMenu.findChildInLayoutFile(sliderId));
+        slider.updateSlider(value);
+        slider.updateTextEntry(value);
     }
 
     template <typename ConfigVariable>

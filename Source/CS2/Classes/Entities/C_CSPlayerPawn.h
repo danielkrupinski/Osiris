@@ -20,6 +20,7 @@ struct C_CSPlayerPawn : C_BaseModelEntity {
     using m_pHostageServices = CCSPlayer_HostageServices*;
     using m_flFlashBangTime = float;
     using sceneObjectUpdaterHandle = SceneObjectUpdaterHandle_t*;
+    using m_bIsScoped = bool;
 };
 
 }

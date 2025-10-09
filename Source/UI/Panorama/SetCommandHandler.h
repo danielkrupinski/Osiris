@@ -7,7 +7,8 @@
 #include <GameClient/Panorama/TextEntry.h>
 #include <Platform/Macros/FunctionAttributes.h>
 #include <Utils/StringParser.h>
-#include "HueSlider.h"
+#include "Tabs/VisualsTab/HueSlider.h"
+#include "Tabs/VisualsTab/IntSlider.h"
 
 template <typename HookContext>
 struct SetCommandHandler {
@@ -265,6 +266,14 @@ private:
             handleHueSlider<outline_glow_vars::DefuseKitHue>("outline_glow_defuse_kit_hue");
         } else if (feature == "outline_glow_defuse_kit_hue_text") {
             handleHueTextEntry<outline_glow_vars::DefuseKitHue>("outline_glow_defuse_kit_hue");
+        } else if (feature == "viewmodel_mod") {
+            handleTogglableVariable<viewmodel_mod_vars::Enabled>();
+        } else if (feature == "viewmodel_fov_mod") {
+            handleTogglableVariable<viewmodel_mod_vars::ModifyFov>();  
+        } else if (feature == "viewmodel_fov") {
+            handleIntSlider<viewmodel_mod_vars::Fov>("viewmodel_fov");
+        } else if (feature == "viewmodel_fov_text") {
+            handleIntSliderTextEntry<viewmodel_mod_vars::Fov>("viewmodel_fov");
         }
     }
 
@@ -279,6 +288,47 @@ private:
     {
         if (const auto option = parser.getChar(); option == '0' || option == '1')
             hookContext.config().template setVariable<ConfigVariable>(option == '0');
+    }
+
+    template <typename ConfigVariable>
+    void handleIntSlider(const char* sliderId) const noexcept
+    {
+        const auto newVariableValue = handleIntSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, hookContext.config().template getVariable<ConfigVariable>());
+        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
+    }
+
+    [[nodiscard]] std::uint8_t handleIntSlider(const char* sliderId, std::uint8_t min, std::uint8_t max, std::uint8_t current) const noexcept
+    {
+        std::uint8_t value{};
+        if (!parser.parseInt(value) || value == current || value < min || value > max)
+            return current;
+
+        auto&& hueSlider = getIntSlider(sliderId);
+        hueSlider.updateTextEntry(value);
+        return value;
+    }
+
+    template <typename ConfigVariable>
+    void handleIntSliderTextEntry(const char* sliderId) const noexcept
+    {
+        const auto newVariableValue = handleIntSliderTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, hookContext.config().template getVariable<ConfigVariable>());
+        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
+    }
+
+    [[nodiscard]] std::uint8_t handleIntSliderTextEntry(const char* sliderId, std::uint8_t min, std::uint8_t max, std::uint8_t current) const noexcept
+    {
+        auto&& slider = getIntSlider(sliderId);
+        std::uint8_t value{};
+        if (!parser.parseInt(value) || value < min || value > max) {
+            slider.updateTextEntry(current);
+            return current;
+        }
+
+        if (value == current)
+            return current;
+
+        slider.updateSlider(value);
+        return value;
     }
 
     template <typename ConfigVariable>
@@ -329,6 +379,13 @@ private:
         const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
         auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
         return hookContext.template make<HueSlider>(mainMenu.findChildInLayoutFile(sliderId));
+    }
+
+    [[nodiscard]] decltype(auto) getIntSlider(const char* sliderId) const noexcept
+    {
+        const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
+        auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
+        return hookContext.template make<IntSlider>(mainMenu.findChildInLayoutFile(sliderId));
     }
 
     [[nodiscard]] [[NOINLINE]] std::optional<color::HueInteger> parseHueVariable(color::HueInteger min, color::HueInteger max) const noexcept

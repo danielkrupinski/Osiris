@@ -39,6 +39,11 @@ public:
         return hookContext.template make<BaseEntity>(playerPawn);
     }
 
+    [[nodiscard]] explicit operator bool() const noexcept
+    {
+        return playerPawn != nullptr;
+    }
+
     template <template <typename...> typename EntityType>
     [[nodiscard]] decltype(auto) cast() const noexcept
     {
@@ -116,6 +121,11 @@ public:
         return hookContext.patternSearchResults().template get<OffsetToIsDefusing>().of(playerPawn).toOptional();
     }
 
+    [[nodiscard]] auto isScoped() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToIsScoped>().of(playerPawn).toOptional();
+    }
+
     [[nodiscard]] bool isRescuingHostage() const noexcept
     {
         return hostageServices().hasCarriedHostage();
@@ -173,10 +183,7 @@ private:
 
     [[nodiscard]] bool teammatesAreEnemies() const noexcept
     {
-        auto conVarAccessor = hookContext.getConVarAccessor();
-        if (!conVarAccessor.template requestConVar<cs2::mp_teammates_are_enemies>())
-            return true;
-        return conVarAccessor.template getConVarValue<cs2::mp_teammates_are_enemies>();
+        return hookContext.cvarSystem().template getConVarValue<cs2::mp_teammates_are_enemies>().value_or(true);
     }
 
     HookContext& hookContext;

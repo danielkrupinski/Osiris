@@ -7,7 +7,6 @@
 #include <GameClient/Entities/PlayerController.h>
 #include <Features/Common/InWorldPanelsPerHookState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCachePerHookState.h>
-#include <GameClient/ConVars/ConVarAccessor.h>
 #include <GameClient/ConVars/CvarSystem.h>
 #include <GameClient/FileSystem.h>
 #include <GameClient/Hud/Hud.h>
@@ -130,11 +129,16 @@ struct HookContext {
         return std::optional{make<PlantedC4<HookContext>>(getPlantedC4())};
     }
 
-    [[nodiscard]] auto getConVarAccessor() noexcept
+    [[nodiscard]] auto cvarSystem() noexcept
+    {
+        return CvarSystem{*this};
+    }
+
+    [[nodiscard]] const auto& getConVarsBase() noexcept
     {
         if (!fullGlobalContext.conVars.has_value())
             fullGlobalContext.conVars.emplace(CvarSystem{*this});
-        return ConVarAccessor{*this, *fullGlobalContext.conVars, conVarAccessorState};
+        return *fullGlobalContext.conVars;
     }
 
     template <typename T, typename... Args>
@@ -237,7 +241,6 @@ private:
     }
 
     FullGlobalContext& fullGlobalContext;
-    ConVarAccessorState conVarAccessorState;
     InWorldPanelsPerHookState _inWorldPanelsPerHookState;
     PlayerInfoPanelCachePerHookState _playerInfoPanelCachePerHookState;
 };

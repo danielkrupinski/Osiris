@@ -18,6 +18,7 @@
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserver.h>
 #include <Features/Sound/SoundFeatures.h>
 #include <Features/Visuals/ModelGlow/Preview/PlayerModelGlowPreview.h>
+#include <Features/Visuals/ViewmodelMod/ViewmodelMod.h>
 #include <MemorySearch/PatternNotFoundLogger.h>
 #include <MemoryAllocation/FreeMemoryRegionList.h>
 #include <MemorySearch/PatternFinder.h>
@@ -28,6 +29,7 @@
 #include "FullGlobalContext.h"
 #include "PartialGlobalContext.h"
 #include "HookContext/HookContext.h"
+#include <Hooks/ClientModeHooks.h>
 
 class GlobalContext {
 public:
@@ -110,6 +112,15 @@ public:
         return originalReturnValue;
     }
 
+    [[nodiscard]] float getViewmodelFovHook(cs2::ClientModeCSNormal* clientMode) noexcept
+    {
+        HookContext hookContext{fullContext()};
+        const auto originalFov = hookContext.hooks().originalGetViewmodelFov(clientMode);
+        if (auto&& viewmodelMod = hookContext.template make<ViewmodelMod>(); viewmodelMod.shouldModifyViewmodelFov())
+            return viewmodelMod.viewmodelFov();
+        return originalFov;
+    }
+
     [[nodiscard]] UnloadFlag onRenderStartHook(cs2::CViewRender* viewRender) noexcept
     {
         HookContext hookContext{fullContext()};
@@ -140,6 +151,7 @@ public:
             hookContext.make<InWorldPanels>().onUnload();
             hookContext.make<PanoramaGUI>().onUnload();
             fullContext().hooks.viewRenderHook.uninstall();
+            hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
             hookContext.make<PlayerModelGlowPreview>().onUnload();
             hookContext.make<WeaponModelGlowPreview>().onUnload();
 

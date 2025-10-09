@@ -27,3 +27,5 @@
 #include "Features/Visuals/ModelGlow/TickingBombModelGlowTests.h"
 #include "Features/Visuals/ModelGlow/WeaponModelGlowTests.h"
 #include "Features/Visuals/ModelGlow/ModelGlowTests.h"
+
+#include "Features/Visuals/ViewmodelMod/ViewmodelModTests.h"

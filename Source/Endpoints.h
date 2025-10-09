@@ -29,4 +29,9 @@ std::uint64_t Weapon_sceneObjectUpdater_cpp(cs2::C_CSWeaponBase* weapon, void* u
     return GlobalContext::instance().weaponSceneObjectUpdater(weapon, unknown, unknownBool);
 }
 
+float ClientModeHook_getViewmodelFov_cpp(cs2::ClientModeCSNormal* clientMode) noexcept
+{
+    return GlobalContext::instance().getViewmodelFovHook(clientMode);
+}
+
 }

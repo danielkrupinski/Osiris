@@ -8,6 +8,8 @@ namespace cs2
 
 struct CUI_3dPanel : CPanel2D {
     using PortraitWorld = CCS_PortraitWorld*;
+    using Fov = float;
+    using FovWeight = float;
 };
 
 }

@@ -18,3 +18,6 @@ struct UnpackConfigVariable {
 CONFIG_VARIABLE(name, \
     IDENTITY(InRange<color::HueInteger, color::HueInteger{hueParams.min}, color::HueInteger{hueParams.max}>), \
     color::HueInteger{hueParams.def})
+
+#define CONFIG_VARIABLE_RANGE(name, params) \
+CONFIG_VARIABLE(name, IDENTITY(InRange<decltype(params)::Type, params.min, params.max>), params.def)

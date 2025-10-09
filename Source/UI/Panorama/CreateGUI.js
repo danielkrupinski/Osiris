@@ -191,6 +191,14 @@ $.Osiris = (function () {
     });
 
     $.CreatePanel('Label', modelGlowTabButton, '', { text: "Model Glow" });
+  
+    var viewmodelTabButton = $.CreatePanel('RadioButton', centerContainer, 'viewmodel_button', {
+        group: "VisualsNavBar",
+        class: "content-navbar__tabs__btn",
+        onactivate: "$.Osiris.navigateToSubTab('visuals', 'viewmodel');"
+    });
+
+    $.CreatePanel('Label', viewmodelTabButton, '', { text: "Viewmodel" });
   };
 
   createNavbar();
@@ -336,6 +344,46 @@ $.Osiris = (function () {
     });
     panel.SetItemItemId(makeFauxItemId(defIndex, 0), {});
   };
+)"
+// split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
+u8R"(
+  var createSlider = function (parent, name, id, min, max) {
+    var container = $.CreatePanel('Panel', parent, '', {
+      class: "SettingsMenuDropdownContainer"
+    });
+
+    $.CreatePanel('Label', container, '', {
+      class: "half-width",
+      text: name
+    });
+
+    var sliderContainer = $.CreatePanel('Panel', container, id, {
+      style: "vertical-align: center; horizontal-align: right; flow-children: right; margin-right: 8px;"
+    });
+
+    var slider = $.CreatePanel('Slider', sliderContainer, '', {
+      class: "HorizontalSlider",
+      style: "width: 200px; vertical-align: center;",
+      direction: "horizontal"
+    });
+
+    slider.SetPanelEvent('onvaluechanged', function () { $.Osiris.sliderUpdated('visuals', id, slider); });
+    slider.min = min;
+    slider.max = max;
+    slider.increment = 1.0;
+
+    var textEntry = $.CreatePanel('TextEntry', sliderContainer, id + '_text', {
+      maxchars: "3",
+      textmode: "numeric",
+      style: "width: 75px; margin-left: 10px; padding-left: 10px; text-align: center; font-size: 20px; color: #ccccccff; font-weight: bold; font-family: Stratum2, notosans, 'Arial Unicode MS'; border: 2px solid #cccccc15;"
+    });
+
+    textEntry.SetPanelEvent('ontextentrysubmit', function () { $.Osiris.sliderTextEntryUpdated('visuals', `${id}_text`, textEntry); });
+    textEntry.SetPanelEvent('onfocus', function () { textEntry.style.backgroundColor = 'gradient(linear, 100% 0%, 0% 0%, from(#00000080), color-stop(0, #00000060), to(#00000080))'; });
+    textEntry.SetPanelEvent('onblur', function () { textEntry.style.backgroundColor = 'none'; });
+    textEntry.SetPanelEvent('onmouseover', function () { if (!textEntry.BHasKeyFocus()) textEntry.style.backgroundColor = 'gradient(linear, 100% 0%, 0% 0%, from(#000000ff), color-stop(0, #00000000), to(#00000050));'; });
+    textEntry.SetPanelEvent('onmouseout', function () { if (!textEntry.BHasKeyFocus()) textEntry.style.backgroundColor = 'none'; });
+  }
 
   var createHueSlider = function (parent, name, id, min, max) {
     var container = $.CreatePanel('Panel', parent, '', {
@@ -599,6 +647,36 @@ u8R"(
   createHueSlider(bombModelGlow, "Ticking Bomb Hue", 'model_glow_ticking_bomb_hue', 0, 359);
   separator(bombModelGlow);
   createHueSlider(bombModelGlow, "Defuse Kit Hue", 'model_glow_defuse_kit_hue', 0, 359);
+
+  var _viewmodelTab = createSubTab(visuals, 'viewmodel');
+  _viewmodelTab.style.overflow = 'squish squish';
+  _viewmodelTab.style.flowChildren = 'right';
+
+  var viewmodelPreviewContainer = $.CreatePanel('Panel', _viewmodelTab, '', { style: 'flow-children: down;' });
+  $.CreatePanel('Label', viewmodelPreviewContainer, '', { style: 'vertical-align: top; horizontal-align: center; font-size: 40;', text: 'Preview' });
+
+  var viewmodelPreview = $.CreatePanel('MapItemPreviewPanel', viewmodelPreviewContainer, 'ViewmodelPreview', {
+    map: "ui/xpshop_item",
+    camera: "camera_weapon_0",
+    "require-composition-layer": true,
+    player: false,
+    initial_entity: "item",
+    mouse_rotate: false,
+    sync_spawn_addons: true,
+    "transparent-background": true,
+    "pin-fov": "vertical",
+    style: "width: 700px; height: 400px;"
+  });
+
+  var viewmodelTab = $.CreatePanel('Panel', _viewmodelTab, '', { style: 'flow-children: down; margin-right: 40px; overflow: squish scroll;' });
+
+  var viewmodelModification = createSection(viewmodelTab, 'Viewmodel Modification');
+  createOnOffDropDown(viewmodelModification, "Master Switch", 'visuals', 'viewmodel_mod');
+
+  var viewmodelFov = createSection(viewmodelTab, 'Viewmodel Fov');
+  createYesNoDropDown(viewmodelFov, "Modify Viewmodel Fov", 'visuals', 'viewmodel_fov_mod');
+  separator(viewmodelFov);
+  createSlider(viewmodelFov, "Fov", 'viewmodel_fov', 40, 90);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 
