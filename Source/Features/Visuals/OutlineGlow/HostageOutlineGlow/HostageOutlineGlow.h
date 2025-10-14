@@ -19,7 +19,7 @@ public:
         return GET_CONFIG_VAR(outline_glow_vars::GlowHostages);
     }
 
-    [[nodiscard]] consteval color::HueInteger hue() const noexcept
+    [[nodiscard]] color::HueInteger hue() const noexcept
     {
         return outline_glow_params::kHostageHue;
     }
