@@ -24,15 +24,23 @@ protected:
     PlayerOutlineGlow<MockHookContext> playerOutlineGlow{mockHookContext};
 };
 
+TEST_F(PlayerOutlineGlowTest, Disabled) {
+    mockConfig.expectGetVariable<outline_glow_vars::GlowPlayers>(false);
+    EXPECT_FALSE(playerOutlineGlow.enabled());
+}
+
+TEST_F(PlayerOutlineGlowTest, Enabled) {
+    mockConfig.expectGetVariable<outline_glow_vars::GlowPlayers>(true);
+    EXPECT_TRUE(playerOutlineGlow.enabled());
+}
+
 struct PlayerOutlineGlowConditionTestParam {
-    bool enabled{true};
     bool onlyEnemies{true};
     std::optional<bool> isAlive{true};
     Optional<int> health{100};
     bool isControlledByLocalPlayer{false};
     bool isTTorCT{true};
     std::optional<bool> isEnemy{true};
-    bool expectPlayerPawnAccess{true};
     bool expectEnemyCheck{true};
     bool expectGlowApplied{true};
 };
@@ -43,51 +51,35 @@ class PlayerOutlineGlowConditionTest
 };
 
 TEST_P(PlayerOutlineGlowConditionTest, GlowIsAppliedWhenExpected) {
-    mockConfig.expectGetVariable<outline_glow_vars::GlowPlayers>(GetParam().enabled);
     EXPECT_CALL(mockConfig, getVariable(ConfigVariableTypes::indexOf<outline_glow_vars::GlowOnlyEnemies>()))
         .WillRepeatedly(testing::Return(GetParam().onlyEnemies));
 
-    if (GetParam().expectPlayerPawnAccess) {
-        EXPECT_CALL(mockPlayerPawn, isAlive()).WillRepeatedly(testing::Return(GetParam().isAlive));
-        EXPECT_CALL(mockPlayerPawn, health()).WillRepeatedly(testing::Return(GetParam().health));
-        EXPECT_CALL(mockPlayerPawn, isControlledByLocalPlayer()).WillRepeatedly(testing::Return(GetParam().isControlledByLocalPlayer));
-        EXPECT_CALL(mockPlayerPawn, isTTorCT()).WillRepeatedly(testing::Return(GetParam().isTTorCT));
+    EXPECT_CALL(mockPlayerPawn, isAlive()).WillRepeatedly(testing::Return(GetParam().isAlive));
+    EXPECT_CALL(mockPlayerPawn, health()).WillRepeatedly(testing::Return(GetParam().health));
+    EXPECT_CALL(mockPlayerPawn, isControlledByLocalPlayer()).WillRepeatedly(testing::Return(GetParam().isControlledByLocalPlayer));
+    EXPECT_CALL(mockPlayerPawn, isTTorCT()).WillRepeatedly(testing::Return(GetParam().isTTorCT));
 
-        if (GetParam().expectEnemyCheck)
-            EXPECT_CALL(mockPlayerPawn, isEnemy()).WillRepeatedly(testing::Return(GetParam().isEnemy));
-    }
+    if (GetParam().expectEnemyCheck)
+        EXPECT_CALL(mockPlayerPawn, isEnemy()).WillRepeatedly(testing::Return(GetParam().isEnemy));
 
     EXPECT_EQ(playerOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockPlayerPawn), GetParam().expectGlowApplied);
 }
 
-INSTANTIATE_TEST_SUITE_P(Disabled, PlayerOutlineGlowConditionTest, testing::Values(
-    PlayerOutlineGlowConditionTestParam
-    {
-        .enabled = false,
-        .expectPlayerPawnAccess = false,
-        .expectEnemyCheck = false,
-        .expectGlowApplied = false 
-    }
-));
-
 INSTANTIATE_TEST_SUITE_P(OnlyEnemies, PlayerOutlineGlowConditionTest, testing::ValuesIn(
     std::to_array<PlayerOutlineGlowConditionTestParam>({
         {
-            .enabled = true,
             .onlyEnemies = true,
             .isEnemy{true},
             .expectEnemyCheck = true,
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .onlyEnemies = true,
             .isEnemy{false},
             .expectEnemyCheck = true,
             .expectGlowApplied = false
         },
         {
-            .enabled = true,
             .onlyEnemies = true,
             .isEnemy{std::nullopt},
             .expectEnemyCheck = true,
@@ -99,21 +91,18 @@ INSTANTIATE_TEST_SUITE_P(OnlyEnemies, PlayerOutlineGlowConditionTest, testing::V
 INSTANTIATE_TEST_SUITE_P(NotOnlyEnemies, PlayerOutlineGlowConditionTest, testing::ValuesIn(
     std::to_array<PlayerOutlineGlowConditionTestParam>({
         {
-            .enabled = true,
             .onlyEnemies = false,
             .isEnemy{true},
             .expectEnemyCheck = false,
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .onlyEnemies = false,
             .isEnemy{false},
             .expectEnemyCheck = false,
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .onlyEnemies = false,
             .isEnemy{std::nullopt},
             .expectEnemyCheck = false,
@@ -125,17 +114,14 @@ INSTANTIATE_TEST_SUITE_P(NotOnlyEnemies, PlayerOutlineGlowConditionTest, testing
 INSTANTIATE_TEST_SUITE_P(IsAlive, PlayerOutlineGlowConditionTest, testing::ValuesIn(
     std::to_array<PlayerOutlineGlowConditionTestParam>({
         {
-            .enabled = true,
             .isAlive{true},
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .isAlive{false},
             .expectGlowApplied = false
         },
         {
-            .enabled = true,
             .isAlive{std::nullopt},
             .expectGlowApplied = true
         }
@@ -145,22 +131,18 @@ INSTANTIATE_TEST_SUITE_P(IsAlive, PlayerOutlineGlowConditionTest, testing::Value
 INSTANTIATE_TEST_SUITE_P(Health, PlayerOutlineGlowConditionTest, testing::ValuesIn(
     std::to_array<PlayerOutlineGlowConditionTestParam>({
         {
-            .enabled = true,
             .health{100},
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .health{120},
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .health{0},
             .expectGlowApplied = false
         },
         {
-            .enabled = true,
             .health{std::nullopt},
             .expectGlowApplied = true
         }
@@ -170,12 +152,10 @@ INSTANTIATE_TEST_SUITE_P(Health, PlayerOutlineGlowConditionTest, testing::Values
 INSTANTIATE_TEST_SUITE_P(IsControlledByLocalPlayer, PlayerOutlineGlowConditionTest, testing::ValuesIn(
     std::to_array<PlayerOutlineGlowConditionTestParam>({
         {
-            .enabled = true,
             .isControlledByLocalPlayer = false,
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .isControlledByLocalPlayer = true,
             .expectGlowApplied = false
         }
@@ -185,12 +165,10 @@ INSTANTIATE_TEST_SUITE_P(IsControlledByLocalPlayer, PlayerOutlineGlowConditionTe
 INSTANTIATE_TEST_SUITE_P(IsTTorCT, PlayerOutlineGlowConditionTest, testing::ValuesIn(
     std::to_array<PlayerOutlineGlowConditionTestParam>({
         {
-            .enabled = true,
             .isTTorCT = true,
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .isTTorCT = false,
             .expectGlowApplied = false
         }
@@ -222,7 +200,7 @@ TEST_P(PlayerOutlineGlowHealthBasedHueTest, CorrectHueIsReturned) {
         .WillRepeatedly(testing::Return(outline_glow_vars::HighHealthHue::ValueType{color::HueInteger{configVariables.highHealthHue}}));
     EXPECT_CALL(mockPlayerPawn, health()).WillOnce(testing::Return(param.health));
 
-    const auto hue = playerOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlayerPawn);
+    const auto hue = playerOutlineGlow.hue(EntityTypeInfo{}, mockPlayerPawn);
     EXPECT_EQ(hue.hasValue(), param.expectedHue.hasValue());
     if (hue.hasValue() && param.expectedHue.hasValue())
         EXPECT_FLOAT_EQ(hue.value(), param.expectedHue.value());
@@ -346,7 +324,7 @@ TEST_P(PlayerOutlineGlowPlayerColorIndexHueTest, CorrectHueIsReturned) {
     EXPECT_CALL(mockPlayerPawn, playerController()).WillOnce(testing::ReturnRef(mockPlayerController));
     EXPECT_CALL(mockPlayerController, playerColorIndex()).WillOnce(testing::Return(GetParam().playerColorIndex));
 
-    const auto hue = playerOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlayerPawn);
+    const auto hue = playerOutlineGlow.hue(EntityTypeInfo{}, mockPlayerPawn);
     ASSERT_TRUE(hue.hasValue());
     EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue);
 }
@@ -497,7 +475,7 @@ TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturned) {
 
     EXPECT_CALL(mockPlayerPawn, teamNumber()).WillRepeatedly(testing::Return(GetParam().teamNumber));
 
-    const auto hue = playerOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlayerPawn);
+    const auto hue = playerOutlineGlow.hue(EntityTypeInfo{}, mockPlayerPawn);
     EXPECT_EQ(hue.hasValue(), GetParam().expectedHue.hasValue());
     if (hue.hasValue() && GetParam().expectedHue.hasValue())
         EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue.value());
@@ -516,7 +494,7 @@ TEST_P(PlayerOutlineGlowTeamHueTest, CorrectHueIsReturnedAsFallbackWhenInvalidPl
     EXPECT_CALL(mockPlayerPawn, playerController()).WillRepeatedly(testing::ReturnRef(mockPlayerController));
     EXPECT_CALL(mockPlayerController, playerColorIndex()).WillRepeatedly(testing::Return(cs2::PlayerColorIndex{-1}));
 
-    const auto hue = playerOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlayerPawn);
+    const auto hue = playerOutlineGlow.hue(EntityTypeInfo{}, mockPlayerPawn);
     EXPECT_EQ(hue.hasValue(), GetParam().expectedHue.hasValue());
     if (hue.hasValue() && GetParam().expectedHue.hasValue())
         EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue.value());
@@ -584,7 +562,7 @@ TEST_P(PlayerOutlineGlowEnemyHueTest, CorrectHueIsReturned) {
 
     EXPECT_CALL(mockPlayerPawn, isEnemy()).WillOnce(testing::Return(GetParam().isEnemy));
 
-    const auto hue = playerOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlayerPawn);
+    const auto hue = playerOutlineGlow.hue(EntityTypeInfo{}, mockPlayerPawn);
     EXPECT_EQ(hue.hasValue(), GetParam().expectedHue.hasValue());
     if (hue.hasValue() && GetParam().expectedHue.hasValue())
         EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue.value());

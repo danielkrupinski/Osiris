@@ -7,6 +7,7 @@
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/C_Hostage.h>
 #include <CS2/Classes/Entities/WeaponEntities.h>
+#include <GameClient/Entities/BaseModelEntity.h>
 #include <GameClient/Entities/PlantedC4.h>
 #include <GameClient/Entities/PlayerPawn.h>
 #include <GameClient/Entities/EntityClassifier.h>
@@ -27,28 +28,18 @@ public:
     {
     }
 
-    void applyGlowToEntity(EntityTypeInfo entityTypeInfo, auto&& modelEntity)
+    [[nodiscard]] auto applyGlow() const noexcept
     {
-        if (!hookContext.config().template getVariable<outline_glow_vars::Enabled>())
-            return;
+        return [this](auto&& glow, auto&& entity, EntityTypeInfo entityTypeInfo) {
+            if (!GET_CONFIG_VAR(outline_glow_vars::Enabled) || !glow.enabled())
+                return;
 
-        if (modelEntity.glowProperty().isGlowing().valueOr(false))
-            return;
+            if (!entityTypeInfo.isModelEntity() || entity.baseEntity().template as<BaseModelEntity>().glowProperty().isGlowing().valueOr(false))
+                return;
 
-        if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
-            applyGlow(entityTypeInfo, PlayerOutlineGlow{hookContext}, modelEntity.template as<PlayerPawn>());
-        else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
-            applyGlow(entityTypeInfo, DefuseKitOutlineGlow{hookContext}, modelEntity.baseEntity());
-        else if (entityTypeInfo.is<cs2::CPlantedC4>())
-            applyGlow(entityTypeInfo, TickingBombOutlineGlow{hookContext}, modelEntity.template as<PlantedC4>());
-        else if (entityTypeInfo.is<cs2::C_C4>())
-            applyGlow(entityTypeInfo, DroppedBombOutlineGlow{hookContext}, modelEntity.baseEntity());
-        else if (entityTypeInfo.is<cs2::C_Hostage>())
-            applyGlow(entityTypeInfo, HostageOutlineGlow{hookContext}, modelEntity.baseEntity());
-        else if (entityTypeInfo.isGrenadeProjectile())
-            applyGlow(entityTypeInfo, GrenadeProjectileOutlineGlow{hookContext}, modelEntity.baseEntity());
-        else if (entityTypeInfo.isWeapon())
-            applyGlow(entityTypeInfo, WeaponOutlineGlow{hookContext}, modelEntity.baseEntity());
+            if (shouldApplyGlow(glow, entityTypeInfo, entity))
+                entity.baseEntity().applyGlowRecursively(getGlowColor(glow, entity, entityTypeInfo), getGlowRange(glow));
+        };
     }
 
     void onUnload() const noexcept
@@ -57,19 +48,40 @@ public:
     }
 
 private:
-    static void applyGlow(EntityTypeInfo entityTypeInfo, auto&& glow, auto&& entity)
+    [[nodiscard]] static bool shouldApplyGlow(auto&& glow, EntityTypeInfo entityTypeInfo, auto&& entity)
     {
-        if (glow.shouldApplyGlow(entityTypeInfo, entity))
-            entity.baseEntity().applyGlowRecursively(getGlowColor(entityTypeInfo, glow, entity), getGlowRange(glow));
+        if constexpr (requires { { glow.shouldApplyGlow(entityTypeInfo, entity) } -> std::same_as<bool>; })
+            return glow.shouldApplyGlow(entityTypeInfo, entity);
+        else
+            return true;
     }
 
-    [[nodiscard]] static cs2::Color getGlowColor(EntityTypeInfo entityTypeInfo, auto&& glow, auto&& entity)
+    template <typename Hue>
+    [[nodiscard]] static cs2::Color colorFromHue(Optional<Hue> hue) noexcept
     {
         using namespace outline_glow_params;
-        const auto alpha = getGlowColorAlpha(glow, entity);
-        if (const auto hue = glow.getGlowHue(entityTypeInfo, entity); hue.hasValue())
-            return color::HSBtoRGB(hue.value(), kSaturation, kBrightness).setAlpha(alpha);
-        return kFallbackColor.setAlpha(alpha);
+        if (hue.hasValue())
+            return color::HSBtoRGB(hue.value(), kSaturation, kBrightness);
+        return kFallbackColor;
+    }
+
+    [[nodiscard]] static cs2::Color colorFromHue(auto hue) noexcept
+    {
+        using namespace outline_glow_params;
+        return color::HSBtoRGB(hue, kSaturation, kBrightness);
+    }
+
+    [[nodiscard]] static auto getGlowHue(auto&& glow, auto&& entity, EntityTypeInfo entityTypeInfo)
+    {
+        if constexpr (requires { { glow.hue(entityTypeInfo, entity) }; })
+            return glow.hue(entityTypeInfo, entity);
+        else
+            return glow.hue();
+    }
+
+    [[nodiscard]] static auto getGlowColor(auto&& glow, auto&& entity, EntityTypeInfo entityTypeInfo)
+    {
+        return colorFromHue(getGlowHue(glow, entity, entityTypeInfo)).setAlpha(getGlowColorAlpha(glow, entity));
     }
 
     [[nodiscard]] static std::uint8_t getGlowColorAlpha(auto&& glow, auto&& entity) noexcept

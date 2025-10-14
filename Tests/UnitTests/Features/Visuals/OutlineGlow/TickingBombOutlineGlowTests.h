@@ -12,11 +12,6 @@
 
 class TickingBombOutlineGlowTest : public testing::Test {
 protected:
-    TickingBombOutlineGlowTest()
-    {
-        EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    }
-
     testing::StrictMock<MockConfig> mockConfig;
     testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockPlantedC4> mockPlantedC4;
@@ -24,10 +19,20 @@ protected:
     TickingBombOutlineGlow<MockHookContext> tickingBombOutlineGlow{mockHookContext};
 };
 
+TEST_F(TickingBombOutlineGlowTest, Disabled) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowTickingBomb>(false);
+    EXPECT_FALSE(tickingBombOutlineGlow.enabled());
+}
+
+TEST_F(TickingBombOutlineGlowTest, Enabled) {
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    mockConfig.expectGetVariable<outline_glow_vars::GlowTickingBomb>(true);
+    EXPECT_TRUE(tickingBombOutlineGlow.enabled());
+}
+
 struct TickingBombOutlineGlowConditionTestParam {
-    bool enabled{};
     Optional<bool> isTicking{};
-    bool expectPlantedC4Access{};
     bool expectGlowApplied{};
 };
 
@@ -37,52 +42,36 @@ class TickingBombOutlineGlowConditionTest
 };
 
 TEST_P(TickingBombOutlineGlowConditionTest, ShouldApplyGlowWhenExpected) {
-    mockConfig.expectGetVariable<outline_glow_vars::GlowTickingBomb>(GetParam().enabled);
-    if (GetParam().expectPlantedC4Access)
-        EXPECT_CALL(mockPlantedC4, isTicking()).WillOnce(testing::Return(GetParam().isTicking));
-
+    EXPECT_CALL(mockPlantedC4, isTicking()).WillOnce(testing::Return(GetParam().isTicking));
     EXPECT_EQ(tickingBombOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockPlantedC4), GetParam().expectGlowApplied);
 }
 
 INSTANTIATE_TEST_SUITE_P(, TickingBombOutlineGlowConditionTest, testing::ValuesIn(
     std::to_array<TickingBombOutlineGlowConditionTestParam>({
-        {.enabled = false, .expectPlantedC4Access = false, .expectGlowApplied = false},
-        {.enabled = true, .isTicking{true}, .expectPlantedC4Access = true, .expectGlowApplied = true},
-        {.enabled = true, .isTicking{false}, .expectPlantedC4Access = true, .expectGlowApplied = false},
-        {.enabled = true, .isTicking{std::nullopt}, .expectPlantedC4Access = true, .expectGlowApplied = true}
+        {.isTicking{true}, .expectGlowApplied = true},
+        {.isTicking{false}, .expectGlowApplied = false},
+        {.isTicking{std::nullopt}, .expectGlowApplied = true}
     })
 ));
 
-struct TickingBombOutlineGlowHueTestParam {
-    color::HueInteger::UnderlyingType configuredHue{};
-    color::Hue::ValueType expectedHue{};
-};
-
 class TickingBombOutlineGlowHueTest
     : public TickingBombOutlineGlowTest,
-      public testing::WithParamInterface<TickingBombOutlineGlowHueTestParam> {
+      public testing::WithParamInterface<color::HueInteger> {
 };
 
 TEST_P(TickingBombOutlineGlowHueTest, CorrectGlowHueIsReturned) {
-    mockConfig.expectGetVariable<outline_glow_vars::TickingBombHue>(outline_glow_vars::TickingBombHue::ValueType{color::HueInteger{GetParam().configuredHue}});
-
-    const auto hue = tickingBombOutlineGlow.getGlowHue(EntityTypeInfo{}, mockPlantedC4);
-    ASSERT_TRUE(hue.hasValue());
-    EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue);
+    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
+    mockConfig.expectGetVariable<outline_glow_vars::TickingBombHue>(outline_glow_vars::TickingBombHue::ValueType{color::HueInteger{GetParam()}});
+    EXPECT_EQ(tickingBombOutlineGlow.hue(), GetParam());
 }
 
 static_assert(outline_glow_vars::TickingBombHue::ValueType::kMin == 0, "Update the test below");
-INSTANTIATE_TEST_SUITE_P(MinConfigVar, TickingBombOutlineGlowHueTest,
-                         testing::Values(TickingBombOutlineGlowHueTestParam{.configuredHue = 0, .expectedHue = 0.0f}));
+INSTANTIATE_TEST_SUITE_P(MinConfigVar, TickingBombOutlineGlowHueTest, testing::Values(color::HueInteger{0}));
 
 static_assert(outline_glow_vars::TickingBombHue::ValueType::kMax == 359, "Update the test below");
-INSTANTIATE_TEST_SUITE_P(MaxConfigVar, TickingBombOutlineGlowHueTest,
-                         testing::Values(TickingBombOutlineGlowHueTestParam{.configuredHue = 359, .expectedHue = 0.99722222f}));
+INSTANTIATE_TEST_SUITE_P(MaxConfigVar, TickingBombOutlineGlowHueTest, testing::Values(color::HueInteger{359}));
 
 static_assert(outline_glow_vars::TickingBombHue::kDefaultValue == color::HueInteger{0}, "Update the tests below");
 
-INSTANTIATE_TEST_SUITE_P(DefaultConfigVar, TickingBombOutlineGlowHueTest,
-                         testing::Values(TickingBombOutlineGlowHueTestParam{.configuredHue = 0, .expectedHue = 0.0f}));
-
-INSTANTIATE_TEST_SUITE_P(NonDefaultConfigVar, TickingBombOutlineGlowHueTest,
-                         testing::Values(TickingBombOutlineGlowHueTestParam{.configuredHue = 123, .expectedHue = 0.34166666f}));
+INSTANTIATE_TEST_SUITE_P(DefaultConfigVar, TickingBombOutlineGlowHueTest, testing::Values(color::HueInteger{0}));
+INSTANTIATE_TEST_SUITE_P(NonDefaultConfigVar, TickingBombOutlineGlowHueTest, testing::Values(color::HueInteger{123}));

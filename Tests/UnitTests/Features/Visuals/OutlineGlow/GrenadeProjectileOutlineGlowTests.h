@@ -24,7 +24,7 @@ struct GrenadeProjectileOutlineGlowHueTestParam {
     EntityTypeInfo entityTypeInfo{};
     std::size_t configVarIndex{};
     std::any configuredHue{};
-    color::Hue::ValueType expectedHue{};
+    color::HueInteger::UnderlyingType expectedHue{};
 };
 
 class GrenadeProjectileOutlineGlowHueTest
@@ -37,9 +37,9 @@ TEST_P(GrenadeProjectileOutlineGlowHueTest, CorrectGlowHueIsReturned) {
     EXPECT_CALL(mockConfig, getVariable(GetParam().configVarIndex))
         .WillOnce(testing::Return(GetParam().configuredHue));
 
-    const auto hue = grenadeProjectileOutlineGlow.getGlowHue(GetParam().entityTypeInfo, mockGrenadeProjectile);
+    const auto hue = grenadeProjectileOutlineGlow.hue(GetParam().entityTypeInfo, mockGrenadeProjectile);
     ASSERT_TRUE(hue.hasValue());
-    EXPECT_FLOAT_EQ(hue.value(), GetParam().expectedHue);
+    EXPECT_EQ(hue.value(), GetParam().expectedHue);
 }
 
 static_assert(outline_glow_vars::FlashbangHue::ValueType::kMin == 191, "Update the test below");
@@ -53,25 +53,25 @@ INSTANTIATE_TEST_SUITE_P(MinConfigVars, GrenadeProjectileOutlineGlowHueTest, tes
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::FlashbangHue>(),
             .configuredHue{outline_glow_vars::FlashbangHue::ValueType{color::HueInteger{191}}},
-            .expectedHue = 0.53055555f
+            .expectedHue = 191
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::HEGrenadeHue>(),
             .configuredHue{outline_glow_vars::HEGrenadeHue::ValueType{color::HueInteger{300}}},
-            .expectedHue = 0.83333333f
+            .expectedHue = 300
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::MolotovHue>(),
             .configuredHue{outline_glow_vars::MolotovHue::ValueType{color::HueInteger{20}}},
-            .expectedHue = 0.05555555f
+            .expectedHue = 20
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::SmokeGrenadeHue>(),
             .configuredHue{outline_glow_vars::SmokeGrenadeHue::ValueType{color::HueInteger{110}}},
-            .expectedHue = 0.30555555f
+            .expectedHue = 110
         }
     })
 ));
@@ -87,25 +87,25 @@ INSTANTIATE_TEST_SUITE_P(MaxConfigVars, GrenadeProjectileOutlineGlowHueTest, tes
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::FlashbangHue>(),
             .configuredHue{outline_glow_vars::FlashbangHue::ValueType{color::HueInteger{250}}},
-            .expectedHue = 0.69444444f
+            .expectedHue = 250
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::HEGrenadeHue>(),
             .configuredHue{outline_glow_vars::HEGrenadeHue::ValueType{color::HueInteger{359}}},
-            .expectedHue = 0.99722222f
+            .expectedHue = 359
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::MolotovHue>(),
             .configuredHue{outline_glow_vars::MolotovHue::ValueType{color::HueInteger{60}}},
-            .expectedHue = 0.16666666f
+            .expectedHue = 60
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::SmokeGrenadeHue>(),
             .configuredHue{outline_glow_vars::SmokeGrenadeHue::ValueType{color::HueInteger{140}}},
-            .expectedHue = 0.38888888f
+            .expectedHue = 140
         }
     })
 ));
@@ -121,25 +121,25 @@ INSTANTIATE_TEST_SUITE_P(DefaultConfigVars, GrenadeProjectileOutlineGlowHueTest,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::FlashbangHue>(),
             .configuredHue{outline_glow_vars::FlashbangHue::ValueType{color::HueInteger{219}}},
-            .expectedHue = 0.60833333f
+            .expectedHue = 219
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::HEGrenadeHue>(),
             .configuredHue{outline_glow_vars::HEGrenadeHue::ValueType{color::HueInteger{359}}},
-            .expectedHue = 0.99722222f
+            .expectedHue = 359
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::MolotovHue>(),
             .configuredHue{outline_glow_vars::MolotovHue::ValueType{color::HueInteger{40}}},
-            .expectedHue = 0.11111111f
+            .expectedHue = 40
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::SmokeGrenadeHue>(),
             .configuredHue{outline_glow_vars::SmokeGrenadeHue::ValueType{color::HueInteger{120}}},
-            .expectedHue = 0.33333333f
+            .expectedHue = 120
         }
     })
 ));
@@ -150,44 +150,42 @@ INSTANTIATE_TEST_SUITE_P(NonDefaultConfigVars, GrenadeProjectileOutlineGlowHueTe
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::FlashbangHue>(),
             .configuredHue{outline_glow_vars::FlashbangHue::ValueType{color::HueInteger{222}}},
-            .expectedHue = 0.61666666f
+            .expectedHue = 222
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::HEGrenadeHue>(),
             .configuredHue{outline_glow_vars::HEGrenadeHue::ValueType{color::HueInteger{333}}},
-            .expectedHue = 0.925f
+            .expectedHue = 333
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::MolotovHue>(),
             .configuredHue{outline_glow_vars::MolotovHue::ValueType{color::HueInteger{55}}},
-            .expectedHue = 0.15277777f
+            .expectedHue = 55
         },
         {
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .configVarIndex = ConfigVariableTypes::indexOf<outline_glow_vars::SmokeGrenadeHue>(),
             .configuredHue{outline_glow_vars::SmokeGrenadeHue::ValueType{color::HueInteger{111}}},
-            .expectedHue = 0.30833333f
+            .expectedHue = 111
         }
     })
 ));
 
 struct GrenadeProjectileOutlineGlowConditionTestParam {
-    bool enabled{};
     EntityTypeInfo entityTypeInfo{};
     bool expectSmokeGrenadeCheck{};
     Optional<bool> didSmokeEffect{};
     bool expectGlowApplied{};
 };
 
-class GrenadeProjectileOutlineGlowConditionTest : public GrenadeProjectileOutlineGlowTest, public testing::WithParamInterface<GrenadeProjectileOutlineGlowConditionTestParam> {
+class GrenadeProjectileOutlineGlowConditionTest
+    : public GrenadeProjectileOutlineGlowTest,
+      public testing::WithParamInterface<GrenadeProjectileOutlineGlowConditionTestParam> {
 };
 
 TEST_P(GrenadeProjectileOutlineGlowConditionTest, GlowIsAppliedAsExpected) {
-    EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    mockConfig.expectGetVariable<outline_glow_vars::GlowGrenadeProjectiles>(GetParam().enabled);
-
     if (GetParam().expectSmokeGrenadeCheck) {
         EXPECT_CALL(mockGrenadeProjectile, asSmokeGrenadeProjectile()).WillOnce(testing::ReturnRef(mockSmokeGrenadeProjectile));
         EXPECT_CALL(mockSmokeGrenadeProjectile, didSmokeEffect()).WillOnce(testing::Return(GetParam().didSmokeEffect));
@@ -199,40 +197,30 @@ TEST_P(GrenadeProjectileOutlineGlowConditionTest, GlowIsAppliedAsExpected) {
 INSTANTIATE_TEST_SUITE_P(, GrenadeProjectileOutlineGlowConditionTest, testing::ValuesIn(
     std::to_array<GrenadeProjectileOutlineGlowConditionTestParam>({
         {
-            .enabled = false,
-            .expectGlowApplied = false
-        },
-        {
-            .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>()},
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>()},
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>()},
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .expectSmokeGrenadeCheck = true,
             .didSmokeEffect{std::nullopt},
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .expectSmokeGrenadeCheck = true,
             .didSmokeEffect{false},
             .expectGlowApplied = true
         },
         {
-            .enabled = true,
             .entityTypeInfo{EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>()},
             .expectSmokeGrenadeCheck = true,
             .didSmokeEffect{true},
