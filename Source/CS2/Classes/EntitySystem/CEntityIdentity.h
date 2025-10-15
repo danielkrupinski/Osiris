@@ -14,9 +14,9 @@ struct CEntityIdentity {
     CEntityInstance* entity;
     CEntityClass* entityClass;
     CEntityHandle handle;
-    PAD(100);
+    PAD(92);
 };
 
-static_assert(sizeof(CEntityIdentity) == 120);
+static_assert(sizeof(CEntityIdentity) == 112);
 
 }

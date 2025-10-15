@@ -47,7 +47,12 @@ private:
 
     [[nodiscard]] decltype(auto) unknownField() const noexcept
     {
-        return hookContext.patternSearchResults().template get<OffsetToItem3dPanelUnknownField>().of(uiItem3dPanel);
+        return hookContext.patternSearchResults().template get<OffsetToItem3dPanelUnknownField>().of(properties());
+    }
+
+    [[nodiscard]] decltype(auto) properties() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToItem3dPanelProperties>().of(uiItem3dPanel).get();
     }
 
     HookContext& hookContext;
