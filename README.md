@@ -84,10 +84,9 @@ You can simply run the following script in the directory containing **libOsiris.
 ```
 
 And the `.so` file is located in:
-
 ```
 build/Source/libOsiris.so
-```
+
 
 ---
 
@@ -113,8 +112,6 @@ sudo gdb -batch -n -q -p $(pidof cs2) -ex "call (void*)dlopen(\"$(realpath build
 sudo gdb -batch-silent -p $(pidof cs2) -ex "call (void*)dlopen(\"$PWD/build/Source/libOsiris.so\", 2)"
 ```
 
----
-
 ###  **Launch-Time Injection Methods**
 
 #### 5. **Using LD_PRELOAD on fresh launch**
@@ -132,7 +129,10 @@ sudo gdb -batch -n -q --args ./cs2 -ex "set environment LD_PRELOAD=$PWD/build/So
 Let me know if you'd like a script to wrap these into a menu or automate detection of the `cs2` PID.
 
 ```
+```
 However, this injection method might be detected by VAC as gdb is visible under **TracerPid** in `/proc/$(pidof cs2)/status` for the duration of the injection.
+
+sudo gdb -batch-silent -p $(pidof cs2) -ex "call (void*)dlopen(\"$PWD/build/Source/libOsiris.so\", 2)"
 
 ## FAQ
 
