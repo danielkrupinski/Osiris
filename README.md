@@ -124,12 +124,6 @@ LD_PRELOAD="$PWD/build/Source/libOsiris.so" ./cs2
 sudo gdb -batch -n -q --args ./cs2 -ex "set environment LD_PRELOAD=$PWD/build/Source/libOsiris.so" -ex run
 ```
 
----
-
-Let me know if you'd like a script to wrap these into a menu or automate detection of the `cs2` PID.
-
-```
-```
 However, this injection method might be detected by VAC as gdb is visible under **TracerPid** in `/proc/$(pidof cs2)/status` for the duration of the injection.
 
 sudo gdb -batch-silent -p $(pidof cs2) -ex "call (void*)dlopen(\"$PWD/build/Source/libOsiris.so\", 2)"
