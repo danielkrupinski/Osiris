@@ -48,7 +48,7 @@ public:
     }
 
 private:
-    [[nodiscard]] static bool shouldApplyGlow(auto&& glow, EntityTypeInfo entityTypeInfo, auto&& entity)
+    [[nodiscard]] static bool shouldApplyGlow(auto&& glow, [[maybe_unused]] EntityTypeInfo entityTypeInfo, auto&& entity)
     {
         if constexpr (requires { { glow.shouldApplyGlow(entityTypeInfo, entity) } -> std::same_as<bool>; })
             return glow.shouldApplyGlow(entityTypeInfo, entity);
@@ -71,7 +71,7 @@ private:
         return color::HSBtoRGB(hue, kSaturation, kBrightness);
     }
 
-    [[nodiscard]] static auto getGlowHue(auto&& glow, auto&& entity, EntityTypeInfo entityTypeInfo)
+    [[nodiscard]] static auto getGlowHue(auto&& glow, auto&& entity, [[maybe_unused]] EntityTypeInfo entityTypeInfo)
     {
         if constexpr (requires { { glow.hue(entityTypeInfo, entity) }; })
             return glow.hue(entityTypeInfo, entity);
