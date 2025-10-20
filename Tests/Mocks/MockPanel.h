@@ -6,6 +6,7 @@
 #include <Utils/Optional.h>
 
 struct PanelFontParams;
+struct PanelAlignmentParams;
 
 struct MockPanel {
     MOCK_METHOD(void, setParent, (const MockPanel& parent));
@@ -17,4 +18,9 @@ struct MockPanel {
     MOCK_METHOD(void, setMixBlendMode, (cs2::EMixBlendMode mode));
     MOCK_METHOD(void, setTextAlign, (cs2::ETextAlign textAlign));
     MOCK_METHOD(void, setFont, (const PanelFontParams& params));
+    MOCK_METHOD(void, setVisible, (bool visible));
+    MOCK_METHOD(void, setBorderRadius, (cs2::CUILength radius));
+    MOCK_METHOD(void, setAlign, (const PanelAlignmentParams& alignmentParams));
+    MOCK_METHOD(void, setBackgroundColor, (cs2::Color color));
+    MOCK_METHOD(void, setBorder, (cs2::CUILength borderWidth, cs2::Color color));
 };

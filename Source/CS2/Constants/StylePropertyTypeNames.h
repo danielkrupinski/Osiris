@@ -25,6 +25,8 @@ constexpr auto kStylePropertyTypeNames = TypedStaticStringPool{}
     .add<CStylePropertyTextAlign>(WIN64_LINUX(".?AVCStylePropertyTextAlign@panorama@@", "N8panorama23CStylePropertyTextAlignE"))
     .add<CStylePropertyForegroundColor>(WIN64_LINUX(".?AVCStylePropertyForegroundColor@panorama@@", "N8panorama29CStylePropertyForegroundColorE"))
     .add<CStylePropertyBackgroundColor>(WIN64_LINUX(".?AVCStylePropertyBackgroundColor@panorama@@", "N8panorama29CStylePropertyBackgroundColorE"))
-    .add<CStylePropertyTransform3D>(WIN64_LINUX(".?AVCStylePropertyTransform3D@panorama@@", "N8panorama25CStylePropertyTransform3DE"));
+    .add<CStylePropertyTransform3D>(WIN64_LINUX(".?AVCStylePropertyTransform3D@panorama@@", "N8panorama25CStylePropertyTransform3DE"))
+    .add<CStylePropertyBorder>(WIN64_LINUX(".?AVCStylePropertyBorder@panorama@@", "N8panorama20CStylePropertyBorderE"))
+    .add<CStylePropertyBorderRadius>(WIN64_LINUX(".?AVCStylePropertyBorderRadius@panorama@@", "N8panorama26CStylePropertyBorderRadiusE"));
 
 }

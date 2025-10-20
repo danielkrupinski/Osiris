@@ -29,6 +29,11 @@ struct CUILength {
         return CUILength{value, k_EUILengthFillParentFlow};
     }
 
+    [[nodiscard]] static constexpr CUILength heightPercentage(float value) noexcept
+    {
+        return CUILength{value, k_EUILengthHeightPercentage};
+    }
+
     constexpr bool operator==(const CUILength&) const = default;
 
     float m_flValue;

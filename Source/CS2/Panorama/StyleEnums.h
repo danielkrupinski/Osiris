@@ -72,4 +72,8 @@ enum EStrokeType : std::uint32_t {
     k_EStrokeTypeRadialGradient
 };
 
+enum EBorderStyle : std::int8_t {
+    k_EBorderStyleSolid = 1
+};
+
 }

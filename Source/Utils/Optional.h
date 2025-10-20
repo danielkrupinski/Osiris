@@ -138,6 +138,22 @@ private:
 };
 
 template <typename T, typename U>
+[[nodiscard]] auto operator+(const Optional<T>& lhs, const Optional<U>& rhs) noexcept -> Optional<decltype(lhs.value() + rhs.value())> 
+{
+    if (lhs.hasValue() && rhs.hasValue())
+        return lhs.value() + rhs.value();
+    return {};
+}
+
+template <typename T, typename U>
+[[nodiscard]] auto operator+(const Optional<T>& optional, const U& value) noexcept -> Optional<decltype(optional.value() + value)>
+{
+    if (optional.hasValue())
+        return optional.value() + value;
+    return {};
+}
+
+template <typename T, typename U>
 [[nodiscard]] auto operator-(const Optional<T>& lhs, const Optional<U>& rhs) noexcept -> Optional<decltype(lhs.value() - rhs.value())> 
 {
     if (lhs.hasValue() && rhs.hasValue())

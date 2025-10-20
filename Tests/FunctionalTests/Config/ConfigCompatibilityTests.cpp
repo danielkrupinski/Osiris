@@ -153,9 +153,15 @@ protected:
         get<viewmodel_mod_vars::Fov>() = viewmodel_mod_vars::Fov::ValueType{90};
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV8()
     {
         setVariableExpectationsV7();
+        get<no_scope_inaccuracy_vis_vars::Enabled>() = true;
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV8();
     }
 
     struct VariableChecker {
@@ -290,6 +296,11 @@ TEST_F(ConfigCompatibilityLoadTest, ConfigV5) {
 TEST_F(ConfigCompatibilityLoadTest, ConfigV6) {
     setVariableExpectationsV6();
     testLoadingConfigFile("config_v6.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, ConfigV7) {
+    setVariableExpectationsV7();
+    testLoadingConfigFile("config_v7.cfg");
 }
 
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {

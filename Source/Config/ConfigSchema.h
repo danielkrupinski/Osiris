@@ -15,6 +15,7 @@ public:
     [[nodiscard]] decltype(auto) performConversion(auto&& configConversion)
     {
         configConversion.beginRoot();
+        combatObject(configConversion);
         hudObject(configConversion);
         visualsObject(configConversion);
         soundObject(configConversion);
@@ -22,6 +23,17 @@ public:
     }
 
 private:
+    void combatObject(auto&& configConversion)
+    {
+        configConversion.beginObject(u8"Combat");
+
+        configConversion.beginObject(u8"NoScopeInaccuracyVis");
+        configConversion.boolean(u8"Enabled", loadVariable<no_scope_inaccuracy_vis_vars::Enabled>(), saveVariable<no_scope_inaccuracy_vis_vars::Enabled>());
+        configConversion.endObject();
+
+        configConversion.endObject();
+    }
+
     void hudObject(auto&& configConversion)
     {
         configConversion.beginObject(u8"Hud");

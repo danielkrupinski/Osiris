@@ -2,20 +2,35 @@
 
 #include <CS2/Classes/VMatrix.h>
 #include <CS2/Constants/AspectRatio.h>
+#include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 
-struct ViewToProjectionMatrix {
-    explicit ViewToProjectionMatrix(const cs2::VMatrix* viewToProjectionMatrix) noexcept
-        : viewToProjectionMatrix{viewToProjectionMatrix}
+template <typename HookContext>
+class ViewToProjectionMatrix {
+public:
+    explicit ViewToProjectionMatrix(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     [[nodiscard]] float getFovScale() const noexcept
     {
-        if (viewToProjectionMatrix)
-            return viewToProjectionMatrix->m[1][1] / cs2::kDefaultAspectRatio;
+        if (matrix())
+            return matrix()->m[1][1] / cs2::kDefaultAspectRatio;
         return 1.0f;
     }
 
+    [[nodiscard]] std::optional<float> transformY(float yInViewSpace) const noexcept
+    {
+        if (matrix())
+            return yInViewSpace * matrix()->m[1][1];
+        return {};
+    }
+
 private:
-    const cs2::VMatrix* viewToProjectionMatrix;
+    [[nodiscard]] decltype(auto) matrix() const
+    {
+        return hookContext.patternSearchResults().template get<ViewToProjectionMatrixPointer>();
+    }
+
+    HookContext& hookContext;
 };

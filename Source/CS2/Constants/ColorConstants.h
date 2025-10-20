@@ -26,4 +26,10 @@ constexpr Color kColorPlayerOrange{255, 155, 37};
 
 constexpr Color kColorDefuseKit{119, 221, 255};
 
+constexpr Color kColorCrosshairRed{250, 50, 50};
+constexpr Color kColorCrosshairGreen{50, 250, 50};
+constexpr Color kColorCrosshairYellow{250, 250, 50};
+constexpr Color kColorCrosshairBlue{50, 50, 250};
+constexpr Color kColorCrosshairCyan{50, 250, 250};
+
 }
