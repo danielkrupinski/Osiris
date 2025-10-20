@@ -223,25 +223,25 @@ INSTANTIATE_TEST_SUITE_P(, NoScopeInaccuracyVisHeightTest, testing::ValuesIn(
     std::to_array<NoScopeInaccuracyVisHeightTestParam>({
         {
             .localPlayerBulletInaccuracy{std::nullopt},
-            .expectedInaccuracyToTransform{0.0f},
+            .expectedInaccuracyToTransform = 0.0f,
             .transformedInaccuracy{std::nullopt},
             .expectedHeight{cs2::CUILength::percent(0)}
         },
         {
             .localPlayerBulletInaccuracy{0.1f},
-            .expectedInaccuracyToTransform{0.1f},
+            .expectedInaccuracyToTransform = 0.1f,
             .transformedInaccuracy{std::nullopt},
             .expectedHeight{cs2::CUILength::percent(0)}
         },
         {
             .localPlayerBulletInaccuracy{0.1f},
-            .expectedInaccuracyToTransform{0.1f},
+            .expectedInaccuracyToTransform = 0.1f,
             .transformedInaccuracy{0.133f},
             .expectedHeight{cs2::CUILength::percent(13.3f)}
         },
         {
             .localPlayerBulletInaccuracy{1.0f},
-            .expectedInaccuracyToTransform{1.0f},
+            .expectedInaccuracyToTransform = 1.0f,
             .transformedInaccuracy{1.33f},
             .expectedHeight{cs2::CUILength::percent(133.0f)}
         }
