@@ -170,6 +170,11 @@ public:
             sceneObjectUpdaterHandle()->updaterFunction = reinterpret_cast<std::uint64_t(*)(void*, void*, bool)>(x);
     }
 
+    [[nodiscard]] decltype(auto) isUsingSniperRifle() const
+    {
+        return getActiveWeapon().isSniperRifle();
+    }
+
 private:
     [[nodiscard]] auto sceneObjectUpdaterHandle() const noexcept
     {

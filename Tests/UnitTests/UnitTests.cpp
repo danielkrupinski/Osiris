@@ -29,3 +29,4 @@
 #include "Features/Visuals/ModelGlow/ModelGlowTests.h"
 
 #include "Features/Visuals/ViewmodelMod/ViewmodelModTests.h"
+#include "Features/Combat/SniperRifles/NoScopeInaccuracyVisTests.h"

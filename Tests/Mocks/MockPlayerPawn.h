@@ -5,6 +5,7 @@
 #include <Utils/Optional.h>
 
 struct MockBaseEntity;
+struct MockBaseWeapon;
 struct MockPlayerController;
 
 struct MockPlayerPawn {
@@ -21,6 +22,8 @@ struct MockPlayerPawn {
     MOCK_METHOD(void, setSceneObjectUpdater, (std::uint64_t(*updater)(cs2::C_CSPlayerPawn*, void*, bool)));
     MOCK_METHOD(bool, operatorBool, (), (const));
     MOCK_METHOD(Optional<bool>, isScoped, ());
+    MOCK_METHOD(MockBaseWeapon&, getActiveWeapon, ());
+    MOCK_METHOD(bool, isUsingSniperRifle, ());
 
     [[nodiscard]] explicit operator bool() const
     {

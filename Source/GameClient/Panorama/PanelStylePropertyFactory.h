@@ -155,6 +155,32 @@ struct PanelStylePropertyFactory {
         return transform3D;
     }
 
+    [[nodiscard]] cs2::CStylePropertyBorder* border(cs2::CUILength width, cs2::Color color) const noexcept
+    {
+        const auto styleProperty = create2<cs2::CStylePropertyBorder>();
+        if (styleProperty) {
+            for (int i = 0; i < 4; ++i) {
+                styleProperty->m_rgBorderStyle[i] = cs2::k_EBorderStyleSolid;
+                styleProperty->m_rgBorderWidth[i] = width;
+                styleProperty->m_rgColorsSet[i] = true;
+                styleProperty->m_rgBorderColor[i] = color;
+            }
+        }
+        return styleProperty;
+    }
+
+    [[nodiscard]] cs2::CStylePropertyBorderRadius* borderRadius(cs2::CUILength radius) const noexcept
+    {
+        const auto styleProperty = create2<cs2::CStylePropertyBorderRadius>();
+        if (styleProperty) {
+            for (auto& corner : styleProperty->m_rgCornerRaddi) {
+                corner.horizontalRadius = radius;
+                corner.verticalRadius = radius;
+            }
+        }
+        return styleProperty;
+    }
+
 private:
     template <typename T, typename... Args>
     [[nodiscard]] T* create(Args&&... args) const noexcept

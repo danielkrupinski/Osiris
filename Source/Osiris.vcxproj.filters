@@ -232,6 +232,15 @@
     <Filter Include="Features\Visuals\ViewmodelMod">
       <UniqueIdentifier>{63f981c9-ffe5-426e-8a58-569a43712e91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Combat">
+      <UniqueIdentifier>{a7e69fbf-3ca6-470a-abde-6380959510c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Combat\SniperRifles">
+      <UniqueIdentifier>{4abe2bc9-1abb-4667-8119-82968a9df3d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis">
+      <UniqueIdentifier>{41ddf56e-4385-4ce4-9df4-99654e07fac9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1855,6 +1864,27 @@
     </ClInclude>
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\ViewmodelModPreviewPanelState.h">
       <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\CrosshairColorIndex.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVis.h">
+      <Filter>Features\Combat\SniperRifles\NoScopeInaccuracyVis</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisConfigVariables.h">
+      <Filter>Features\Combat\SniperRifles\NoScopeInaccuracyVis</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisParams.h">
+      <Filter>Features\Combat\SniperRifles\NoScopeInaccuracyVis</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisState.h">
+      <Filter>Features\Combat\SniperRifles\NoScopeInaccuracyVis</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Crosshair.h">
+      <Filter>GameClient</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\CombatTab.h">
+      <Filter>UI\Panorama</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -231,6 +231,16 @@ struct HookContext {
         return PanoramaUiPanel<HookContext>{*this, panel};
     }
 
+    [[nodiscard]] decltype(auto) activeLocalPlayerPawn() noexcept
+    {
+        return localPlayerController().pawn().template cast<PlayerPawn>();
+    }
+
+    [[nodiscard]] decltype(auto) localPlayerBulletInaccuracy() noexcept
+    {
+        return activeLocalPlayerPawn().getActiveWeapon().bulletInaccuracy();
+    }
+
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {
