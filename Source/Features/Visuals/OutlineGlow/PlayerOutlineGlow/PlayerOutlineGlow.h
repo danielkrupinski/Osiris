@@ -7,6 +7,7 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <GameClient/Entities/EntityClassifier.h>
 #include <GameClient/Entities/TeamNumber.h>
+#include <HookContext/HookContextMacros.h>
 #include <Utils/ColorUtils.h>
 #include "PlayerOutlineGlowColorType.h"
 
@@ -18,14 +19,23 @@ public:
     {
     }
 
-    [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
+    [[nodiscard]] bool enabled() const
     {
-        return enabled() && shouldGlowPlayer(playerPawn);
+        return GET_CONFIG_VAR(outline_glow_vars::GlowPlayers);
     }
 
-    [[nodiscard]] Optional<color::Hue> getGlowHue(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
+    [[nodiscard]] bool shouldApplyGlow(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
     {
-        switch (getConfigVariable<outline_glow_vars::PlayerGlowColorMode>()) {
+        return playerPawn.isAlive().value_or(true)
+            && playerPawn.health().greaterThan(0).valueOr(true)
+            && !playerPawn.isControlledByLocalPlayer()
+            && playerPawn.isTTorCT()
+            && (!GET_CONFIG_VAR(outline_glow_vars::GlowOnlyEnemies) || playerPawn.isEnemy().value_or(true));
+    }
+
+    [[nodiscard]] Optional<color::Hue> hue(EntityTypeInfo /* entityTypeInfo */, auto&& playerPawn) const noexcept
+    {
+        switch (GET_CONFIG_VAR(outline_glow_vars::PlayerGlowColorMode)) {
         using enum PlayerOutlineGlowColorType;
         case EnemyAlly:
             if (const auto hue = enemyAllyColorModeHue(playerPawn))
@@ -52,25 +62,11 @@ public:
     }
 
 private:
-    [[nodiscard]] bool enabled() const noexcept
-    {
-        return getConfigVariable<outline_glow_vars::GlowPlayers>();
-    }
-
-    [[nodiscard]] bool shouldGlowPlayer(auto&& playerPawn) const noexcept
-    {
-        return playerPawn.isAlive().value_or(true)
-            && playerPawn.health().greaterThan(0).valueOr(true)
-            && !playerPawn.isControlledByLocalPlayer()
-            && playerPawn.isTTorCT()
-            && (!getConfigVariable<outline_glow_vars::GlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
-    }
-
     [[nodiscard]] std::optional<color::HueInteger> teamColorModeHue(auto&& playerPawn) const noexcept
     {
         switch (playerPawn.teamNumber()) {
-        case TeamNumber::TT: return getConfigVariable<outline_glow_vars::TeamTHue>();
-        case TeamNumber::CT: return getConfigVariable<outline_glow_vars::TeamCTHue>();
+        case TeamNumber::TT: return GET_CONFIG_VAR(outline_glow_vars::TeamTHue);
+        case TeamNumber::CT: return GET_CONFIG_VAR(outline_glow_vars::TeamCTHue);
         default: return {};
         }
     }
@@ -78,7 +74,7 @@ private:
     [[nodiscard]] std::optional<color::HueInteger> enemyAllyColorModeHue(auto&& playerPawn) const noexcept
     {
         if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
-            return *isEnemy ? getConfigVariable<outline_glow_vars::EnemyHue>() : getConfigVariable<outline_glow_vars::AllyHue>();
+            return *isEnemy ? GET_CONFIG_VAR(outline_glow_vars::EnemyHue) : GET_CONFIG_VAR(outline_glow_vars::AllyHue);
         return {};
     }
 
@@ -87,8 +83,8 @@ private:
         if (const auto healthValue = playerPawn.health(); healthValue.hasValue()) {
             const auto fraction = healthFraction(healthValue.value());
 
-            const color::HueInteger lowHealthHue{getConfigVariable<outline_glow_vars::LowHealthHue>()};
-            const color::HueInteger highHealthHue{getConfigVariable<outline_glow_vars::HighHealthHue>()};
+            const color::HueInteger lowHealthHue{GET_CONFIG_VAR(outline_glow_vars::LowHealthHue)};
+            const color::HueInteger highHealthHue{GET_CONFIG_VAR(outline_glow_vars::HighHealthHue)};
             if (lowHealthHue < highHealthHue)
                 return color::Hue{(lowHealthHue + (highHealthHue - lowHealthHue) * fraction) / 360.0f};
             else
@@ -116,19 +112,13 @@ private:
 
         switch (playerColorIndex.value()) {
         using enum cs2::PlayerColorIndex;
-        case Blue: return getConfigVariable<outline_glow_vars::PlayerBlueHue>();
-        case Green: return getConfigVariable<outline_glow_vars::PlayerGreenHue>();
-        case Yellow: return getConfigVariable<outline_glow_vars::PlayerYellowHue>();
-        case Orange: return getConfigVariable<outline_glow_vars::PlayerOrangeHue>();
-        case Purple: return getConfigVariable<outline_glow_vars::PlayerPurpleHue>();
+        case Blue: return GET_CONFIG_VAR(outline_glow_vars::PlayerBlueHue);
+        case Green: return GET_CONFIG_VAR(outline_glow_vars::PlayerGreenHue);
+        case Yellow: return GET_CONFIG_VAR(outline_glow_vars::PlayerYellowHue);
+        case Orange: return GET_CONFIG_VAR(outline_glow_vars::PlayerOrangeHue);
+        case Purple: return GET_CONFIG_VAR(outline_glow_vars::PlayerPurpleHue);
         default: return {};
         }
-    }
-
-    template <typename ConfigVariable>
-    [[nodiscard]] decltype(auto) getConfigVariable() const noexcept
-    {
-        return hookContext.config().template getVariable<ConfigVariable>();
     }
 
     HookContext& hookContext;

@@ -2,12 +2,14 @@
 
 #include <type_traits>
 #include <CS2/Classes/Color.h>
+#include <GameClient/Entities/BaseModelEntity.h>
 #include <GameClient/Entities/PlayerPawn.h>
 #include <GameClient/Entities/SmokeGrenadeProjectile.h>
 #include <Utils/Optional.h>
 
 #include "MockPlayerPawn.h"
 
+struct MockModelEntity;
 struct MockSmokeGrenadeProjectile;
 
 struct MockBaseEntity {
@@ -17,6 +19,7 @@ struct MockBaseEntity {
     MOCK_METHOD(void, removeSpawnProtectionEffectRecursively, ());
     MOCK_METHOD(Optional<bool>, hasOwner, ());
     MOCK_METHOD(MockSmokeGrenadeProjectile&, asSmokeGrenadeProjectile, ());
+    MOCK_METHOD(MockModelEntity&, asModelEntity, ());
     MOCK_METHOD(MockPlayerPawn&, castToPlayerPawn, ());
     
     auto& baseEntity()
@@ -29,6 +32,8 @@ struct MockBaseEntity {
     {
         if constexpr (std::is_same_v<EntityType<MockHookContext>, SmokeGrenadeProjectile<MockHookContext>>) {
             return asSmokeGrenadeProjectile();
+        } else if constexpr (std::is_same_v<EntityType<MockHookContext>, BaseModelEntity<MockHookContext>>) {
+            return asModelEntity();
         }
     }
 

@@ -18,18 +18,18 @@ protected:
     HostageOutlineGlow<MockHookContext> hostageOutlineGlow{mockHookContext};
 };
 
-TEST_F(HostageOutlineGlowTest, GlowShouldNotBeAppliedWhenNotEnabled) {
+TEST_F(HostageOutlineGlowTest, Disabled) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     mockConfig.expectGetVariable<outline_glow_vars::GlowHostages>(false);
-    EXPECT_FALSE(hostageOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
+    EXPECT_FALSE(hostageOutlineGlow.enabled());
 }
 
-TEST_F(HostageOutlineGlowTest, GlowShouldBeAppliedWhenEnabled) {
+TEST_F(HostageOutlineGlowTest, Enabled) {
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
     mockConfig.expectGetVariable<outline_glow_vars::GlowHostages>(true);
-    EXPECT_TRUE(hostageOutlineGlow.shouldApplyGlow(EntityTypeInfo{}, mockBaseEntity));
+    EXPECT_TRUE(hostageOutlineGlow.enabled());
 }
 
-TEST_F(HostageOutlineGlowTest, CorrectGlowColorIsReturned) {
-    EXPECT_EQ(hostageOutlineGlow.getGlowHue(EntityTypeInfo{}, mockBaseEntity), outline_glow_params::kHostageHue.toHueFloat());
+TEST_F(HostageOutlineGlowTest, CorrectGlowHueIsReturned) {
+    EXPECT_EQ(hostageOutlineGlow.hue(), outline_glow_params::kHostageHue);
 }
