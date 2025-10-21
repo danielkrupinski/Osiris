@@ -30,31 +30,40 @@ private:
         const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(entityIdentity.entityClass);
         auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
 
-        auto&& updateModelGlow = hookContext.template make<ModelGlow>().updateInMainThread();
-        auto&& applyOutlineGlow = hookContext.template make<OutlineGlow>().applyGlow();
-
         if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
             hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(baseEntity.template as<PlayerPawn>());
-            updateModelGlow(PlayerModelGlow{hookContext}, baseEntity.template as<PlayerPawn>(), entityTypeInfo);
-            applyOutlineGlow(PlayerOutlineGlow{hookContext}, baseEntity.template as<PlayerPawn>(), entityTypeInfo);
+            updateModelGlow<PlayerModelGlow>(baseEntity.template as<PlayerPawn>(), entityTypeInfo);
+            applyOutlineGlow<PlayerOutlineGlow>(baseEntity.template as<PlayerPawn>(), entityTypeInfo);
         } else if (entityTypeInfo.template is<cs2::C_C4>()) {
-            updateModelGlow(DroppedBombModelGlow{hookContext}, baseEntity.template as<BaseWeapon>(), entityTypeInfo);
-            applyOutlineGlow(DroppedBombOutlineGlow{hookContext}, baseEntity, entityTypeInfo);
+            updateModelGlow<DroppedBombModelGlow>(baseEntity.template as<BaseWeapon>(), entityTypeInfo);
+            applyOutlineGlow<DroppedBombOutlineGlow>(baseEntity, entityTypeInfo);
         } else if (entityTypeInfo.template is<cs2::CBaseAnimGraph>()) {
-            updateModelGlow(DefuseKitModelGlow{hookContext}, baseEntity, entityTypeInfo);
-            applyOutlineGlow(DefuseKitOutlineGlow{hookContext}, baseEntity, entityTypeInfo);
+            updateModelGlow<DefuseKitModelGlow>(baseEntity, entityTypeInfo);
+            applyOutlineGlow<DefuseKitOutlineGlow>(baseEntity, entityTypeInfo);
         } else if (entityTypeInfo.template is<cs2::CPlantedC4>()) {
-            updateModelGlow(TickingBombModelGlow{hookContext}, baseEntity.template as<PlantedC4>(), entityTypeInfo);
-            applyOutlineGlow(TickingBombOutlineGlow{hookContext}, baseEntity.template as<PlantedC4>(), entityTypeInfo);
+            updateModelGlow<TickingBombModelGlow>(baseEntity.template as<PlantedC4>(), entityTypeInfo);
+            applyOutlineGlow<TickingBombOutlineGlow>(baseEntity.template as<PlantedC4>(), entityTypeInfo);
         }  else if (entityTypeInfo.template is<cs2::C_Hostage>()) {
-            applyOutlineGlow(HostageOutlineGlow{hookContext}, baseEntity, entityTypeInfo);
+            applyOutlineGlow<HostageOutlineGlow>(baseEntity, entityTypeInfo);
         } else if (entityTypeInfo.isGrenadeProjectile()) {
-            updateModelGlow(GrenadeProjectileModelGlow{hookContext}, baseEntity, entityTypeInfo);
-            applyOutlineGlow(GrenadeProjectileOutlineGlow{hookContext}, baseEntity, entityTypeInfo);
+            updateModelGlow<GrenadeProjectileModelGlow>(baseEntity, entityTypeInfo);
+            applyOutlineGlow<GrenadeProjectileOutlineGlow>(baseEntity, entityTypeInfo);
         } else if (entityTypeInfo.isWeapon()) {
-            updateModelGlow(WeaponModelGlow{hookContext}, baseEntity.template as<BaseWeapon>(), entityTypeInfo);
-            applyOutlineGlow(WeaponOutlineGlow{hookContext}, baseEntity, entityTypeInfo);
+            updateModelGlow<WeaponModelGlow>(baseEntity.template as<BaseWeapon>(), entityTypeInfo);
+            applyOutlineGlow<WeaponOutlineGlow>(baseEntity, entityTypeInfo);
         }
+    }
+
+    template <template <typename> typename Glow, typename... Args>
+    void updateModelGlow(Args&&... args) const
+    {
+        hookContext.template make<ModelGlow>().updateInMainThread()(Glow{hookContext}, std::forward<Args>(args)...);
+    }
+
+    template <template <typename> typename Glow, typename... Args>
+    void applyOutlineGlow(Args&&... args) const
+    {
+        hookContext.template make<OutlineGlow>().applyGlow()(Glow{hookContext}, std::forward<Args>(args)...);
     }
 
     HookContext& hookContext;
