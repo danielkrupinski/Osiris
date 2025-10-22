@@ -91,6 +91,9 @@
     <ClInclude Include="CS2\Constants\StylePropertySymbolNames.h" />
     <ClInclude Include="CS2\Constants\StylePropertyTypeNames.h" />
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h" />
+    <ClInclude Include="CS2\Econ\ItemDefinitionIndex.h" />
+    <ClInclude Include="CS2\Econ\ItemId.h" />
+    <ClInclude Include="CS2\Econ\PaintKitIndex.h" />
     <ClInclude Include="CS2\Panorama\CDropDown.h" />
     <ClInclude Include="CS2\Panorama\CImagePanel.h" />
     <ClInclude Include="CS2\Panorama\CLabel.h" />
@@ -257,6 +260,7 @@
     <ClInclude Include="GameClient\ConVars\CvarSystem.h" />
     <ClInclude Include="GameClient\Crosshair.h" />
     <ClInclude Include="GameClient\DLLs\Tier0Dll.h" />
+    <ClInclude Include="GameClient\Econ\FauxItemId.h" />
     <ClInclude Include="GameClient\Entities\BaseEntity.h" />
     <ClInclude Include="GameClient\Entities\BaseModelEntity.h" />
     <ClInclude Include="GameClient\Entities\BaseWeapon.h" />
@@ -549,6 +553,7 @@
     <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\StringParser.h" />
     <ClInclude Include="Utils\StrongTypeAlias.h" />
+    <ClInclude Include="Utils\ToUnderlying.h" />
     <ClInclude Include="Utils\TypeBitFlags.h" />
     <ClInclude Include="Utils\TypedStaticStringPool.h" />
     <ClInclude Include="Utils\TypeIndex.h" />

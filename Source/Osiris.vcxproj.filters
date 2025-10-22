@@ -241,6 +241,12 @@
     <Filter Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis">
       <UniqueIdentifier>{41ddf56e-4385-4ce4-9df4-99654e07fac9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CS2\Econ">
+      <UniqueIdentifier>{d789bb17-c27a-4136-aee2-4543b073ba4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameClient\Econ">
+      <UniqueIdentifier>{35bace02-0818-4944-bcb2-9e49c247e922}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1885,6 +1891,21 @@
     </ClInclude>
     <ClInclude Include="UI\Panorama\CombatTab.h">
       <Filter>UI\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Econ\ItemDefinitionIndex.h">
+      <Filter>CS2\Econ</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Econ\ItemId.h">
+      <Filter>CS2\Econ</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Econ\PaintKitIndex.h">
+      <Filter>CS2\Econ</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ToUnderlying.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Econ\FauxItemId.h">
+      <Filter>GameClient\Econ</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

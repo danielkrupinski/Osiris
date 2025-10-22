@@ -3,6 +3,7 @@
 #include <GameClient/EntitySystem/EntityHandle.h>
 #include <GameClient/Panorama/UiItem3dPanel.h>
 #include <Platform/Macros/FunctionAttributes.h>
+#include <GameClient/Econ/FauxItemId.h>
 
 template <typename HookContext>
 class WeaponModelGlowPreview {
@@ -31,7 +32,7 @@ public:
     }
 
 private:
-    [[nodiscard]] [[NOINLINE]] decltype(auto) previewWeapon(cs2::CEntityHandle& handle, bool& hadHandle, const char* panelId, std::uint64_t itemId) const noexcept
+    [[nodiscard]] [[NOINLINE]] decltype(auto) previewWeapon(cs2::CEntityHandle& handle, bool& hadHandle, const char* panelId, cs2::ItemId itemId) const noexcept
     {
         auto&& entityIdentity = hookContext.template make<EntityHandle>(handle).getOrInit(
             [&hadHandle] { hadHandle = true; },
@@ -49,27 +50,27 @@ private:
 
     [[nodiscard]] decltype(auto) previewWeapon() const noexcept
     {
-        return previewWeapon(state().previewWeaponHandle, state().hadPreviewWeaponHandle, "ModelGlowPreviewWeapon", 17293822569119416336ull);
+        return previewWeapon(state().previewWeaponHandle, state().hadPreviewWeaponHandle, "ModelGlowPreviewWeapon", FauxItemId{cs2::ItemDefinitionIndex::M4A4, cs2::PaintKitIndex::AsiimovM4A4});
     }
 
     [[nodiscard]] decltype(auto) previewFlashbang() const noexcept
     {
-        return previewWeapon(state().previewFlashbangHandle, state().hadPreviewFlashbangHandle, "ModelGlowPreviewFlashbang", 17293822569102704683ull);
+        return previewWeapon(state().previewFlashbangHandle, state().hadPreviewFlashbangHandle, "ModelGlowPreviewFlashbang", FauxItemId{cs2::ItemDefinitionIndex::Flashbang});
     }
 
     [[nodiscard]] decltype(auto) previewHEGrenade() const noexcept
     {
-        return previewWeapon(state().previewHEGrenadeHandle, state().hadPreviewHEGrenadeHandle, "ModelGlowPreviewHEGrenade", 17293822569102704684ull);
+        return previewWeapon(state().previewHEGrenadeHandle, state().hadPreviewHEGrenadeHandle, "ModelGlowPreviewHEGrenade", FauxItemId{cs2::ItemDefinitionIndex::HEGrenade});
     }
 
     [[nodiscard]] decltype(auto) previewSmokeGrenade() const noexcept
     {
-        return previewWeapon(state().previewSmokeGrenadeHandle, state().hadPreviewSmokeGrenadeHandle, "ModelGlowPreviewSmoke", 17293822569102704685ull);
+        return previewWeapon(state().previewSmokeGrenadeHandle, state().hadPreviewSmokeGrenadeHandle, "ModelGlowPreviewSmoke", FauxItemId{cs2::ItemDefinitionIndex::SmokeGrenade});
     }
 
     [[nodiscard]] decltype(auto) previewIncendiary() const noexcept
     {
-        return previewWeapon(state().previewIncendiaryHandle, state().hadPreviewIncendiaryHandle, "ModelGlowPreviewIncendiary", 17293822569102704688ull);
+        return previewWeapon(state().previewIncendiaryHandle, state().hadPreviewIncendiaryHandle, "ModelGlowPreviewIncendiary", FauxItemId{cs2::ItemDefinitionIndex::Incendiary});
     }
 
     [[nodiscard]] auto& state() const noexcept
