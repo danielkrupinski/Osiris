@@ -1,6 +1,7 @@
 #pragma once
 
 #include <gmock/gmock.h>
+#include <CS2/Classes/Color.h>
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
 #include <Utils/Optional.h>

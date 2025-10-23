@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PostRoundTimerConfigVariables.h"
+
 template <typename Context>
 struct PostRoundTimerCondition {
     explicit PostRoundTimerCondition(Context context) noexcept

@@ -5,6 +5,7 @@
 #include <CS2/Classes/Color.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Constants/ColorConstants.h>
+#include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <GameClient/Entities/EntityClassifier.h>
 #include <GameClient/Entities/TeamNumber.h>
 #include <HookContext/HookContextMacros.h>

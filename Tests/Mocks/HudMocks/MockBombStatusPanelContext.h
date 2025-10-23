@@ -4,6 +4,8 @@
 
 #include <Common/Visibility.h>
 
+struct MockPanel;
+
 struct MockBombStatusPanelContext {
     MOCK_METHOD(MockPanel&, bombStatusPanel, ());
     MOCK_METHOD(MockPanel&, scoreAndTimeAndBombPanel, ());

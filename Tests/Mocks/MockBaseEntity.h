@@ -9,6 +9,7 @@
 
 #include "MockPlayerPawn.h"
 
+struct MockHookContext;
 struct MockModelEntity;
 struct MockSmokeGrenadeProjectile;
 
