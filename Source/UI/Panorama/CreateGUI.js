@@ -594,6 +594,8 @@ u8R"(
 
   var hostageOutlineGlow = createSection(outlineGlowTab, 'Hostages');
   createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow');
+  separator(hostageOutlineGlow);
+  createHueSlider(hostageOutlineGlow, "Hostage Hue", 'outline_glow_hostage_hue', 0, 359);
 
   var _modelGlowTab = createSubTab(visuals, 'model_glow');
   _modelGlowTab.style.overflow = 'squish squish';

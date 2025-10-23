@@ -78,6 +78,7 @@ using ConfigVariableTypes = TypeList<
     outline_glow_vars::DroppedBombHue,
     outline_glow_vars::TickingBombHue,
     outline_glow_vars::DefuseKitHue,
+    outline_glow_vars::HostageHue,
     player_info_vars::Enabled,
     player_info_vars::OnlyEnemies,
     player_info_vars::PlayerPositionArrowEnabled,

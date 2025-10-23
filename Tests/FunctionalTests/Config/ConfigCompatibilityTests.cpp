@@ -159,9 +159,15 @@ protected:
         get<no_scope_inaccuracy_vis_vars::Enabled>() = true;
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV9()
     {
         setVariableExpectationsV8();
+        get<outline_glow_vars::HostageHue>() = outline_glow_vars::HostageHue::ValueType{color::HueInteger{334}};
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV9();
     }
 
     struct VariableChecker {
@@ -301,6 +307,11 @@ TEST_F(ConfigCompatibilityLoadTest, ConfigV6) {
 TEST_F(ConfigCompatibilityLoadTest, ConfigV7) {
     setVariableExpectationsV7();
     testLoadingConfigFile("config_v7.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, ConfigV8) {
+    setVariableExpectationsV8();
+    testLoadingConfigFile("config_v8.cfg");
 }
 
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {

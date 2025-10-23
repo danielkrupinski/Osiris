@@ -126,8 +126,8 @@ TEST_F(OutlineGlowActiveTest, GrenadeProjectile) {
 }
 
 TEST_F(OutlineGlowActiveTest, Hostage) {
-    static_assert(outline_glow_params::kHostageHue == 50, "Update this test");
     mockConfig.expectGetVariable<outline_glow_vars::GlowHostages>(true);
+    mockConfig.expectGetVariable<outline_glow_vars::HostageHue>(outline_glow_vars::HostageHue::ValueType{color::HueInteger{50}});
     EXPECT_CALL(mockBaseEntity, applyGlowRecursively(cs2::Color{255, 233, 127, outline_glow_params::kGlowAlpha}, 0));
     outlineGlow.applyGlow()(HostageOutlineGlow{mockHookContext}, mockBaseEntity, EntityTypeInfo{EntityTypeInfo::indexOf<cs2::C_Hostage>()});
 }

@@ -19,9 +19,9 @@ public:
         return GET_CONFIG_VAR(outline_glow_vars::GlowHostages);
     }
 
-    [[nodiscard]] color::HueInteger hue() const noexcept
+    [[nodiscard]] color::HueInteger hue() const
     {
-        return outline_glow_params::kHostageHue;
+        return GET_CONFIG_VAR(outline_glow_vars::HostageHue);
     }
 
 private:

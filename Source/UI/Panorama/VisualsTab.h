@@ -70,6 +70,7 @@ private:
         updateHueSlider<outline_glow_vars::DroppedBombHue>(mainMenu, "outline_glow_dropped_bomb_hue");
         updateHueSlider<outline_glow_vars::TickingBombHue>(mainMenu, "outline_glow_ticking_bomb_hue");
         updateHueSlider<outline_glow_vars::DefuseKitHue>(mainMenu, "outline_glow_defuse_kit_hue");
+        updateHueSlider<outline_glow_vars::HostageHue>(mainMenu, "outline_glow_hostage_hue");
     }
 
     void updateModelGlowTab(auto&& mainMenu) const noexcept

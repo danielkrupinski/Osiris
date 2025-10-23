@@ -276,6 +276,10 @@ private:
             handleHueSlider<outline_glow_vars::DefuseKitHue>("outline_glow_defuse_kit_hue");
         } else if (feature == "outline_glow_defuse_kit_hue_text") {
             handleHueTextEntry<outline_glow_vars::DefuseKitHue>("outline_glow_defuse_kit_hue");
+        } else if (feature == "outline_glow_hostage_hue") {
+            handleHueSlider<outline_glow_vars::HostageHue>("outline_glow_hostage_hue");
+        } else if (feature == "outline_glow_hostage_hue_text") {
+            handleHueTextEntry<outline_glow_vars::HostageHue>("outline_glow_hostage_hue");
         } else if (feature == "viewmodel_mod") {
             handleTogglableVariable<viewmodel_mod_vars::Enabled>();
         } else if (feature == "viewmodel_fov_mod") {

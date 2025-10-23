@@ -14,7 +14,7 @@ namespace outline_glow_params
     constexpr color::Saturation kSaturation{0.5f};
     constexpr color::Brightness kBrightness{1.0f};
 
-    constexpr color::HueInteger kHostageHue{50};
+    constexpr HueVariableParams kHostageHue{.min = 0, .max = 359, .def = 50};
 
     constexpr HueVariableParams kPlayerBlueHue{.min = 191, .max = 240, .def = 215};
     constexpr HueVariableParams kPlayerGreenHue{.min = 110, .max = 140, .def = 125};
