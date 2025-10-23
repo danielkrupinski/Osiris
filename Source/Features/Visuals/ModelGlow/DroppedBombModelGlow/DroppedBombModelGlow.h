@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
+#include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Utils/ColorUtils.h>
+#include <Utils/IdentityMacro.h>
 #include <Utils/InRange.h>
 
 #define CONFIG_VARIABLE(name, type, defaultValue) \

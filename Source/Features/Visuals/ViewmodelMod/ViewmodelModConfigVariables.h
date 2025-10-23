@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Config/ConfigVariable.h>
 #include "ViewmodelModParams.h"
 
 namespace viewmodel_mod_vars

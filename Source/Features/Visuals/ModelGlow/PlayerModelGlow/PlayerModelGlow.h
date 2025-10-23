@@ -8,10 +8,13 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
+#include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <GameClient/Entities/TeamNumber.h>
+#include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 #include <Utils/ColorUtils.h>
+#include <Utils/Optional.h>
 
 extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_asm(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept;
 

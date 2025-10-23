@@ -3,6 +3,8 @@
 #include <any>
 #include <cstddef>
 
+#include <gmock/gmock.h>
+
 #include <Config/ConfigVariableTypes.h>
 
 struct MockConfig {
