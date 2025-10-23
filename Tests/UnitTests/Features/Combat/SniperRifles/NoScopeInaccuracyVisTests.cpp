@@ -80,7 +80,6 @@ TEST_F(NoScopeInaccuracyVisTest, PanelIsCreatedWhenDoesNotExist) {
     noScopeInaccuracyVis.update();
 }
 
-
 class NoScopeInaccuracyVisOnUnloadTest
     : public NoScopeInaccuracyVisTest,
       public testing::WithParamInterface<cs2::PanelHandle> {
