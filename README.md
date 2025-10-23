@@ -7,6 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 23 October 2025
+    * Hostage Outline Glow hue is now customizable
+
 * 20 October 2025
     * Added "No Scope Inaccuracy Visualization" feature
 
@@ -23,9 +26,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 19 July 2025
     * Adjusted allowed value range of "Team T Hue" Model Glow setting
-
-* 12 July 2025
-    * Reduced saturation of health-based player outline glow
 
 ## Technical features
 
