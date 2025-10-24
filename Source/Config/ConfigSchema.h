@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "ConfigVariableTypes.h"
+#include <HookContext/HookContextMacros.h>
 
 template <typename HookContext>
 class ConfigSchema {
@@ -237,15 +238,15 @@ private:
     {
         if constexpr (IsRangeConstrained<typename ConfigVariable::ValueType>::value) {
             return [this] {
-                return static_cast<typename ConfigVariable::ValueType::ValueType>(hookContext.config().template getVariable<ConfigVariable>());
+                return static_cast<typename ConfigVariable::ValueType::ValueType>(GET_CONFIG_VAR(ConfigVariable));
             };
         } else if constexpr (std::is_enum_v<typename ConfigVariable::ValueType>) {
             return [this] {
-                return static_cast<std::underlying_type_t<typename ConfigVariable::ValueType>>(hookContext.config().template getVariable<ConfigVariable>());
+                return static_cast<std::underlying_type_t<typename ConfigVariable::ValueType>>(GET_CONFIG_VAR(ConfigVariable));
             };
         } else {
             return [this] {
-                return hookContext.config().template getVariable<ConfigVariable>();
+                return GET_CONFIG_VAR(ConfigVariable);
             };
         }
     }

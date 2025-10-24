@@ -76,7 +76,7 @@ public:
 private:
     [[nodiscard]] bool previewActive() const noexcept
     {
-        return getConfigVariable<model_glow_vars::Enabled>() && getConfigVariable<model_glow_vars::GlowPlayers>();
+        return GET_CONFIG_VAR(model_glow_vars::Enabled) && GET_CONFIG_VAR(model_glow_vars::GlowPlayers);
     }
 
     void updateAnimationProgress() const noexcept
@@ -98,10 +98,10 @@ private:
 
     [[nodiscard]] auto computeEnemyTeam() const noexcept
     {
-        if (getConfigVariable<model_glow_vars::GlowPlayers>() && getConfigVariable<model_glow_vars::GlowOnlyEnemies>())
+        if (GET_CONFIG_VAR(model_glow_vars::GlowPlayers) && GET_CONFIG_VAR(model_glow_vars::GlowOnlyEnemies))
             return EnemyTeam::Both;
 
-        if (getConfigVariable<model_glow_vars::PlayerGlowColorMode>() == PlayerModelGlowColorType::EnemyAlly)
+        if (GET_CONFIG_VAR(model_glow_vars::PlayerGlowColorMode) == PlayerModelGlowColorType::EnemyAlly)
             return enemyTeamAnimationStep() == 0 ? EnemyTeam::T : EnemyTeam::CT;
 
         return EnemyTeam::None;
@@ -129,7 +129,7 @@ private:
         if (!previewActive())
             return PlayerModelGlowPreviewColorMode::None;
 
-        switch (getConfigVariable<model_glow_vars::PlayerGlowColorMode>()) {
+        switch (GET_CONFIG_VAR(model_glow_vars::PlayerGlowColorMode)) {
         case PlayerModelGlowColorType::HealthBased: return PlayerModelGlowPreviewColorMode::HealthBased;
         case PlayerModelGlowColorType::PlayerOrTeamColor: return PlayerModelGlowPreviewColorMode::PlayerOrTeamColor;
         case PlayerModelGlowColorType::TeamColor: return PlayerModelGlowPreviewColorMode::TeamColor;
@@ -212,12 +212,6 @@ private:
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.playerModelGlowPreviewState();
-    }
-
-    template <typename ConfigVariable>
-    [[nodiscard]] decltype(auto) getConfigVariable() const noexcept
-    {
-        return hookContext.config().template getVariable<ConfigVariable>(); 
     }
 
     HookContext& hookContext;

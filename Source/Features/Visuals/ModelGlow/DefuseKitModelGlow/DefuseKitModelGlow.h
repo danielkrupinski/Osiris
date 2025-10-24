@@ -3,6 +3,7 @@
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
+#include <HookContext/HookContextMacros.h>
 
 template <typename HookContext>
 class DefuseKitModelGlow {
@@ -14,7 +15,7 @@ public:
 
     [[nodiscard]] bool enabled() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::GlowDefuseKits>();    
+        return GET_CONFIG_VAR(model_glow_vars::GlowDefuseKits);    
     }
 
     [[nodiscard]] bool& disablingFlag() const
@@ -24,7 +25,7 @@ public:
 
     [[nodiscard]] color::HueInteger hue() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::DefuseKitHue>();
+        return GET_CONFIG_VAR(model_glow_vars::DefuseKitHue);
     }
 
 private:

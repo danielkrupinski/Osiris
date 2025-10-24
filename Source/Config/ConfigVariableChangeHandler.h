@@ -187,7 +187,7 @@ private:
 
     ON_CHANGE(viewmodel_mod_vars::Enabled)
     {
-        if (newValue == true && hookContext.config().template getVariable<viewmodel_mod_vars::ModifyFov>())
+        if (newValue == true && GET_CONFIG_VAR(viewmodel_mod_vars::ModifyFov))
             hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
         else
             hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
@@ -195,7 +195,7 @@ private:
 
     ON_CHANGE(viewmodel_mod_vars::ModifyFov)
     {
-        if (newValue == true && hookContext.config().template getVariable<viewmodel_mod_vars::Enabled>())
+        if (newValue == true && GET_CONFIG_VAR(viewmodel_mod_vars::Enabled))
             hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
         else
             hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();

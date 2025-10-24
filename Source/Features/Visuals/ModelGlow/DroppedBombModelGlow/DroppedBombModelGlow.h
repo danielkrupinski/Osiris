@@ -6,6 +6,7 @@
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
+#include <HookContext/HookContextMacros.h>
 
 extern "C" std::uint64_t Weapon_sceneObjectUpdater_asm(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
 
@@ -19,7 +20,7 @@ public:
 
     [[nodiscard]] bool enabled() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::GlowDroppedBomb>();
+        return GET_CONFIG_VAR(model_glow_vars::GlowDroppedBomb);
     }
 
     [[nodiscard]] bool shouldApplyGlow(auto&& bomb) const
@@ -44,7 +45,7 @@ public:
 
     [[nodiscard]] color::HueInteger hue() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::DroppedBombHue>();
+        return GET_CONFIG_VAR(model_glow_vars::DroppedBombHue);
     }
 
 private:

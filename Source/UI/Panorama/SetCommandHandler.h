@@ -307,7 +307,7 @@ private:
     template <typename ConfigVariable>
     void handleIntSlider(const char* sliderId) const noexcept
     {
-        const auto newVariableValue = handleIntSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, hookContext.config().template getVariable<ConfigVariable>());
+        const auto newVariableValue = handleIntSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
         hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
     }
 
@@ -325,7 +325,7 @@ private:
     template <typename ConfigVariable>
     void handleIntSliderTextEntry(const char* sliderId) const noexcept
     {
-        const auto newVariableValue = handleIntSliderTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, hookContext.config().template getVariable<ConfigVariable>());
+        const auto newVariableValue = handleIntSliderTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
         hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
     }
 
@@ -348,7 +348,7 @@ private:
     template <typename ConfigVariable>
     void handleHueSlider(const char* sliderId) const noexcept
     {
-        const auto newVariableValue = handleHueSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, hookContext.config().template getVariable<ConfigVariable>());
+        const auto newVariableValue = handleHueSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
         hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
     }
 
@@ -367,7 +367,7 @@ private:
     template <typename ConfigVariable>
     void handleHueTextEntry(const char* sliderId) const noexcept
     {
-        const auto newVariableValue = handleHueTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, hookContext.config().template getVariable<ConfigVariable>());
+        const auto newVariableValue = handleHueTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
         hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
     }
 

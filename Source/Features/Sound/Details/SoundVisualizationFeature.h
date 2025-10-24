@@ -63,17 +63,17 @@ private:
     [[nodiscard]] auto enabled() noexcept
     {
         if constexpr (std::is_same_v<SoundType, BombBeepSound>)
-            return hookContext.config().template getVariable<BombBeepSoundVisualizationEnabled>();
+            return GET_CONFIG_VAR(BombBeepSoundVisualizationEnabled);
         else if constexpr (std::is_same_v<SoundType, BombDefuseSound>)
-            return hookContext.config().template getVariable<BombBeepSoundVisualizationEnabled>();
+            return GET_CONFIG_VAR(BombBeepSoundVisualizationEnabled);
         else if constexpr (std::is_same_v<SoundType, BombPlantSound>)
-            return hookContext.config().template getVariable<BombPlantSoundVisualizationEnabled>();
+            return GET_CONFIG_VAR(BombPlantSoundVisualizationEnabled);
         else if constexpr (std::is_same_v<SoundType, FootstepSound>)
-            return hookContext.config().template getVariable<FootstepSoundVisualizationEnabled>();
+            return GET_CONFIG_VAR(FootstepSoundVisualizationEnabled);
         else if constexpr (std::is_same_v<SoundType, WeaponReloadSound>)
-            return hookContext.config().template getVariable<WeaponReloadSoundVisualizationEnabled>();
+            return GET_CONFIG_VAR(WeaponReloadSoundVisualizationEnabled);
         else if constexpr (std::is_same_v<SoundType, WeaponScopeSound>)
-            return hookContext.config().template getVariable<WeaponScopeSoundVisualizationEnabled>();
+            return GET_CONFIG_VAR(WeaponScopeSoundVisualizationEnabled);
         else
             static_assert(!std::is_same_v<SoundType, SoundType>, "Unknown type");
     }

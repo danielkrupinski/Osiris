@@ -167,7 +167,7 @@ private:
 
     [[nodiscard]] bool modelGlowEnabled() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::Enabled>();
+        return GET_CONFIG_VAR(model_glow_vars::Enabled);
     }
 
     HookContext& hookContext;

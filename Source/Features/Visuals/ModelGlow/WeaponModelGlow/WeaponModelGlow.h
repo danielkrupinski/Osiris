@@ -9,6 +9,7 @@
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
+#include <HookContext/HookContextMacros.h>
 #include <Platform/Macros/FunctionAttributes.h>
 
 extern "C" std::uint64_t Weapon_sceneObjectUpdater_asm(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
@@ -23,7 +24,7 @@ public:
 
     [[nodiscard]] bool enabled() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::GlowWeapons>();
+        return GET_CONFIG_VAR(model_glow_vars::GlowWeapons);
     }
 
     [[nodiscard]] bool shouldApplyGlow(auto&& weapon) const
@@ -50,10 +51,10 @@ public:
     {
         switch (entityTypeInfo.typeIndex) {
         case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
-        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return hookContext.config().template getVariable<model_glow_vars::MolotovHue>();
-        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return hookContext.config().template getVariable<model_glow_vars::FlashbangHue>();
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return hookContext.config().template getVariable<model_glow_vars::HEGrenadeHue>();
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return hookContext.config().template getVariable<model_glow_vars::SmokeGrenadeHue>();
+        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return GET_CONFIG_VAR(model_glow_vars::MolotovHue);
+        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return GET_CONFIG_VAR(model_glow_vars::FlashbangHue);
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return GET_CONFIG_VAR(model_glow_vars::HEGrenadeHue);
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return GET_CONFIG_VAR(model_glow_vars::SmokeGrenadeHue);
         default: return {};
         }
     }
