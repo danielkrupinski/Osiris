@@ -42,4 +42,6 @@ CONFIG_VARIABLE_HUE(DroppedBombHue, outline_glow_params::kDroppedBombHue);
 CONFIG_VARIABLE_HUE(TickingBombHue, outline_glow_params::kTickingBombHue);
 CONFIG_VARIABLE_HUE(DefuseKitHue, outline_glow_params::kDefuseKitHue);
 
+CONFIG_VARIABLE_HUE(HostageHue, outline_glow_params::kHostageHue);
+
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GameClient/Econ/FauxItemId.h>
+
 template <typename HookContext>
 class ViewmodelModPreviewPanel {
 public:
@@ -25,7 +27,7 @@ public:
 
         auto&& portraitWorld = previewPanel.portraitWorld();
         if (state().hadPreviewWeaponHandle && portraitWorld.isMapLoaded()) {
-            previewPanel.template as<UiItem3dPanel>().createItem(17293822569129771516ull);
+            previewPanel.template as<UiItem3dPanel>().createItem(FauxItemId{cs2::ItemDefinitionIndex::M9Bayonet, cs2::PaintKitIndex::MarbleFade});
             state().hadPreviewWeaponHandle = false;
             state().recreatedPreviewWeapon = true;
         }

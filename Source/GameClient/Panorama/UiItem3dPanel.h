@@ -14,7 +14,7 @@ public:
 
     using RawType = cs2::CUI_Item3dPanel;
 
-    void createItem(std::uint64_t itemId) const noexcept
+    void createItem(cs2::ItemId itemId) const noexcept
     {
         forceItemEntityToBeCreated();
         setItemId(itemId);
@@ -33,7 +33,7 @@ private:
         unknownField() = 0;
     }
 
-    void setItemId(std::uint64_t itemId) const noexcept
+    void setItemId(cs2::ItemId itemId) const noexcept
     {
         if (const auto setItemItemIdFunction = hookContext.patternSearchResults().template get<SetItemItemIdFunction>(); setItemItemIdFunction && uiItem3dPanel)
             setItemItemIdFunction(uiItem3dPanel, itemId, "");

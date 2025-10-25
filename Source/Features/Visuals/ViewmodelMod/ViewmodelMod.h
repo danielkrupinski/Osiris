@@ -1,6 +1,7 @@
 #pragma once
 
 #include <optional>
+#include <GameClient/Entities/PlayerPawn.h>
 #include <HookContext/HookContextMacros.h>
 #include "ViewmodelModConfigVariables.h"
 

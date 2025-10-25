@@ -116,6 +116,14 @@ $.Osiris = (function () {
       class: "content-navbar__tabs__center-container",
     });
 
+    var combatTabButton = $.CreatePanel('RadioButton', centerContainer, 'combat_button', {
+      group: "SettingsNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToTab('combat');"
+    });
+
+    $.CreatePanel('Label', combatTabButton, '', { text: "Combat" });
+
     var hudTabButton = $.CreatePanel('RadioButton', centerContainer, 'hud_button', {
       group: "SettingsNavBar",
       class: "content-navbar__tabs__btn",
@@ -201,6 +209,24 @@ $.Osiris = (function () {
     $.CreatePanel('Label', viewmodelTabButton, '', { text: "Viewmodel" });
   };
 
+  var createCombatNavbar = function () {
+    var navbar = $.CreatePanel('Panel', $.Osiris.rootPanel.FindChildInLayoutFile('combat'), '', {
+      class: "content-navbar__tabs content-navbar__tabs--dark content-navbar__tabs--noflow"
+    });
+
+    var centerContainer = $.CreatePanel('Panel', navbar, '', {
+      class: "content-navbar__tabs__center-container",
+    });
+
+    var sniperRiflesTabButton = $.CreatePanel('RadioButton', centerContainer, 'sniper_rifles_button', {
+      group: "CombatNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToSubTab('combat', 'sniper_rifles');"
+    });
+
+    $.CreatePanel('Label', sniperRiflesTabButton, '', { text: "Sniper rifles" });
+  };
+
   createNavbar();
 
   var settingContent = $.CreatePanel('Panel', $.Osiris.rootPanel, 'SettingsMenuContent', {
@@ -227,6 +253,21 @@ $.Osiris = (function () {
     });
 
     createVisualsNavbar();
+
+    var content = $.CreatePanel('Panel', tab, '', {
+      class: "full-width full-height"
+    });
+  
+    return content;
+  };
+
+  var createCombatTab = function() {
+    var tab = $.CreatePanel('Panel', settingContent, 'combat', {
+      useglobalcontext: "true",
+      class: "SettingsMenuTab"
+    });
+
+    createCombatNavbar();
 
     var content = $.CreatePanel('Panel', tab, '', {
       class: "full-width full-height"
@@ -429,6 +470,14 @@ u8R"(
 )"
 // split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
 u8R"(
+  var combat = createCombatTab();
+  var sniperRiflesTab = createSubTab(combat, 'sniper_rifles');
+  var noScope = createSection(sniperRiflesTab, 'No scope');
+  separator(noScope);
+  createYesNoDropDown(noScope, "Visualize Inaccuracy When Not Using a Scope", 'combat', 'no_scope_inacc_vis');
+
+  $.Osiris.navigateToSubTab('combat', 'sniper_rifles');
+
   var hud = createTab('hud');
   
   var bomb = createSection(hud, 'Bomb');
@@ -545,6 +594,8 @@ u8R"(
 
   var hostageOutlineGlow = createSection(outlineGlowTab, 'Hostages');
   createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow');
+  separator(hostageOutlineGlow);
+  createHueSlider(hostageOutlineGlow, "Hostage Hue", 'outline_glow_hostage_hue', 0, 359);
 
   var _modelGlowTab = createSubTab(visuals, 'model_glow');
   _modelGlowTab.style.overflow = 'squish squish';

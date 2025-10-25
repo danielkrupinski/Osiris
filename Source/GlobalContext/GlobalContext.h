@@ -14,6 +14,7 @@
 #include <GameClient/Entities/BaseWeapon.h>
 #include <GameClient/Entities/PlayerPawn.h>
 #include <GameClient/Entities/PreviewPlayer.h>
+#include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVis.h>
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserver.h>
 #include <Features/Sound/SoundFeatures.h>
@@ -130,6 +131,7 @@ public:
         soundWatcher.update();
         SoundFeatures{hookContext.soundWatcherState(), fullContext().hooks.viewRenderHook, hookContext}.runOnViewMatrixUpdate();
 
+        hookContext.make<NoScopeInaccuracyVis>().update();
         hookContext.make<RenderingHookEntityLoop>().run();
         hookContext.make<GlowSceneObjects>().removeUnreferencedObjects();
         hookContext.make<DefusingAlert>().run();
@@ -154,6 +156,7 @@ public:
             hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
             hookContext.make<PlayerModelGlowPreview>().onUnload();
             hookContext.make<WeaponModelGlowPreview>().onUnload();
+            hookContext.make<NoScopeInaccuracyVis>().onUnload();
 
             hookContext.make<EntitySystem>().forEachNetworkableEntityIdentity([&hookContext](const auto& entityIdentity) {
                 auto&& baseEntity = hookContext.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));

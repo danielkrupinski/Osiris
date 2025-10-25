@@ -14,6 +14,7 @@
 #include <Utils/StringBuilder.h>
 
 #include "PanoramaCommandDispatcher.h"
+#include "CombatTab.h"
 #include "HudTab.h"
 #include "SoundTab.h"
 #include "VisualsTab.h"
@@ -191,6 +192,7 @@ public:
     {
         const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
         auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
+        hookContext.template make<CombatTab>().updateFromConfig(mainMenu);
         hookContext.template make<HudTab>().updateFromConfig(mainMenu);
         hookContext.template make<VisualsTab>().updateFromConfig(mainMenu);
         hookContext.template make<SoundTab>().updateFromConfig(mainMenu);

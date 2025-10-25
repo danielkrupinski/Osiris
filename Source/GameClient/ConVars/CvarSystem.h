@@ -51,6 +51,8 @@ private:
             return cs2::ConVarValueType::boolean;
         else if constexpr (std::is_same_v<T, float>)
             return cs2::ConVarValueType::float32;
+        else if constexpr (std::is_same_v<T, int>)
+            return cs2::ConVarValueType::int32;
         else
             static_assert(!std::is_same_v<T, T>, "Unsupported type");
     }

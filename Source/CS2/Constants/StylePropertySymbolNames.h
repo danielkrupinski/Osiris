@@ -24,6 +24,8 @@ constexpr auto kStylePropertySymbolNames = TypedStaticStringPool{}
     .add<CStylePropertyTextAlign>("text-align")
     .add<CStylePropertyForegroundColor>("color")
     .add<CStylePropertyBackgroundColor>("background-color")
-    .add<CStylePropertyTransform3D>("transform");
+    .add<CStylePropertyTransform3D>("transform")
+    .add<CStylePropertyBorder>("border")
+    .add<CStylePropertyBorderRadius>("border-radius");
 
 }

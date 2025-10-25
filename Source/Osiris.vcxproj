@@ -79,6 +79,7 @@
     <ClInclude Include="CS2\Constants\AspectRatio.h" />
     <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
     <ClInclude Include="CS2\Constants\ColorConstants.h" />
+    <ClInclude Include="CS2\Constants\CrosshairColorIndex.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
     <ClInclude Include="CS2\Constants\EntityClasses.h" />
@@ -90,6 +91,9 @@
     <ClInclude Include="CS2\Constants\StylePropertySymbolNames.h" />
     <ClInclude Include="CS2\Constants\StylePropertyTypeNames.h" />
     <ClInclude Include="CS2\Constants\TeamNumberConstants.h" />
+    <ClInclude Include="CS2\Econ\ItemDefinitionIndex.h" />
+    <ClInclude Include="CS2\Econ\ItemId.h" />
+    <ClInclude Include="CS2\Econ\PaintKitIndex.h" />
     <ClInclude Include="CS2\Panorama\CDropDown.h" />
     <ClInclude Include="CS2\Panorama\CImagePanel.h" />
     <ClInclude Include="CS2\Panorama\CLabel.h" />
@@ -110,6 +114,10 @@
     <ClInclude Include="CS2\Panorama\StyleProperties.h" />
     <ClInclude Include="CS2\Panorama\Transform3D.h" />
     <ClInclude Include="Endpoints.h" />
+    <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVis.h" />
+    <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisConfigVariables.h" />
+    <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisParams.h" />
+    <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisState.h" />
     <ClInclude Include="Features\Common\FeatureToggle.h" />
     <ClInclude Include="Features\Common\InWorldPanelIndex.h" />
     <ClInclude Include="Features\Common\InWorldPanelListEntry.h" />
@@ -250,7 +258,9 @@
     <ClInclude Include="GameClient\ConVars\ConVarsBase.h" />
     <ClInclude Include="GameClient\ConVars\ConVarTypes.h" />
     <ClInclude Include="GameClient\ConVars\CvarSystem.h" />
+    <ClInclude Include="GameClient\Crosshair.h" />
     <ClInclude Include="GameClient\DLLs\Tier0Dll.h" />
+    <ClInclude Include="GameClient\Econ\FauxItemId.h" />
     <ClInclude Include="GameClient\Entities\BaseEntity.h" />
     <ClInclude Include="GameClient\Entities\BaseModelEntity.h" />
     <ClInclude Include="GameClient\Entities\BaseWeapon.h" />
@@ -500,6 +510,7 @@
     <ClInclude Include="SDL\SdlConstants.h" />
     <ClInclude Include="SDL\SdlDll.h" />
     <ClInclude Include="SDL\SdlFunctions.h" />
+    <ClInclude Include="UI\Panorama\CombatTab.h" />
     <ClInclude Include="UI\Panorama\HudTab.h" />
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
     <ClInclude Include="UI\Panorama\PanoramaGUI.h" />
@@ -542,6 +553,7 @@
     <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\StringParser.h" />
     <ClInclude Include="Utils\StrongTypeAlias.h" />
+    <ClInclude Include="Utils\ToUnderlying.h" />
     <ClInclude Include="Utils\TypeBitFlags.h" />
     <ClInclude Include="Utils\TypedStaticStringPool.h" />
     <ClInclude Include="Utils\TypeIndex.h" />

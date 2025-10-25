@@ -234,6 +234,16 @@ struct PanoramaUiPanel {
         context.setProperty(context.propertyFactory().transform3D(transforms));
     }
 
+    void setBorder(cs2::CUILength width, cs2::Color color) const noexcept
+    {
+        context.setProperty(context.propertyFactory().border(width, color));
+    }
+
+    void setBorderRadius(cs2::CUILength radius) const noexcept
+    {
+        context.setProperty(context.propertyFactory().borderRadius(radius));
+    }
+
     [[nodiscard]] decltype(auto) getUiScaleFactor() const noexcept
     {
         return context.getParentWindow().getUiScaleFactor();

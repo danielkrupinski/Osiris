@@ -6,6 +6,7 @@
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
 #include <CS2/Classes/Entities/WeaponEntities.h>
 #include <GameClient/Entities/EntityClassifier.h>
+#include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 #include <Platform/Macros/FunctionAttributes.h>

@@ -2,6 +2,7 @@
 
 #include <type_traits>
 
+#include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVis.h>
 #include <Features/Hud/BombTimer/BombTimer.h>
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
 #include <Features/Hud/PostRoundTimer/PostRoundTimer.h>
@@ -198,6 +199,12 @@ private:
             hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
         else
             hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
+    }
+
+    ON_CHANGE(no_scope_inaccuracy_vis_vars::Enabled)
+    {
+        if (newValue == false)
+            hookContext.template make<NoScopeInaccuracyVis>().onDisable();
     }
 
     #undef ON_CHANGE

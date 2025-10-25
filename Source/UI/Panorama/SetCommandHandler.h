@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowToggle.h>
 #include <Features/Visuals/OutlineGlow/PlayerOutlineGlow/PlayerOutlineGlowToggle.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
@@ -20,7 +21,9 @@ struct SetCommandHandler {
 
     void operator()() noexcept
     {
-        if (const auto section = parser.getLine('/'); section == "hud") {
+        if (const auto section = parser.getLine('/'); section == "combat") {
+            handleCombatSection();
+        } else if (section == "hud") {
             handleHudSection();
         } else if (section == "visuals") {
             handleVisualsSection();
@@ -30,6 +33,13 @@ struct SetCommandHandler {
     }
 
 private:
+    void handleCombatSection() noexcept
+    {
+        if (const auto feature = parser.getLine('/'); feature == "no_scope_inacc_vis") {
+            handleTogglableVariable<no_scope_inaccuracy_vis_vars::Enabled>();
+        }
+    }
+
     void handleHudSection() const noexcept
     {
         if (const auto feature = parser.getLine('/'); feature == "bomb_timer") {
@@ -266,6 +276,10 @@ private:
             handleHueSlider<outline_glow_vars::DefuseKitHue>("outline_glow_defuse_kit_hue");
         } else if (feature == "outline_glow_defuse_kit_hue_text") {
             handleHueTextEntry<outline_glow_vars::DefuseKitHue>("outline_glow_defuse_kit_hue");
+        } else if (feature == "outline_glow_hostage_hue") {
+            handleHueSlider<outline_glow_vars::HostageHue>("outline_glow_hostage_hue");
+        } else if (feature == "outline_glow_hostage_hue_text") {
+            handleHueTextEntry<outline_glow_vars::HostageHue>("outline_glow_hostage_hue");
         } else if (feature == "viewmodel_mod") {
             handleTogglableVariable<viewmodel_mod_vars::Enabled>();
         } else if (feature == "viewmodel_fov_mod") {

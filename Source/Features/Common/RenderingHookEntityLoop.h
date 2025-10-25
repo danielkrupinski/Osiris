@@ -30,24 +30,40 @@ private:
         const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(entityIdentity.entityClass);
         auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
 
-        if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>())
+        if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
             hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(baseEntity.template as<PlayerPawn>());
+            updateModelGlow<PlayerModelGlow>(baseEntity.template as<PlayerPawn>(), entityTypeInfo);
+            applyOutlineGlow<PlayerOutlineGlow>(baseEntity.template as<PlayerPawn>(), entityTypeInfo);
+        } else if (entityTypeInfo.template is<cs2::C_C4>()) {
+            updateModelGlow<DroppedBombModelGlow>(baseEntity.template as<BaseWeapon>(), entityTypeInfo);
+            applyOutlineGlow<DroppedBombOutlineGlow>(baseEntity, entityTypeInfo);
+        } else if (entityTypeInfo.template is<cs2::CBaseAnimGraph>()) {
+            updateModelGlow<DefuseKitModelGlow>(baseEntity, entityTypeInfo);
+            applyOutlineGlow<DefuseKitOutlineGlow>(baseEntity, entityTypeInfo);
+        } else if (entityTypeInfo.template is<cs2::CPlantedC4>()) {
+            updateModelGlow<TickingBombModelGlow>(baseEntity.template as<PlantedC4>(), entityTypeInfo);
+            applyOutlineGlow<TickingBombOutlineGlow>(baseEntity.template as<PlantedC4>(), entityTypeInfo);
+        }  else if (entityTypeInfo.template is<cs2::C_Hostage>()) {
+            applyOutlineGlow<HostageOutlineGlow>(baseEntity, entityTypeInfo);
+        } else if (entityTypeInfo.isGrenadeProjectile()) {
+            updateModelGlow<GrenadeProjectileModelGlow>(baseEntity, entityTypeInfo);
+            applyOutlineGlow<GrenadeProjectileOutlineGlow>(baseEntity, entityTypeInfo);
+        } else if (entityTypeInfo.isWeapon()) {
+            updateModelGlow<WeaponModelGlow>(baseEntity.template as<BaseWeapon>(), entityTypeInfo);
+            applyOutlineGlow<WeaponOutlineGlow>(baseEntity, entityTypeInfo);
+        }
+    }
 
-        if (entityTypeInfo.isModelEntity())
-            hookContext.template make<OutlineGlow>().applyGlowToEntity(entityTypeInfo, baseEntity.template as<BaseModelEntity>());
+    template <template <typename> typename Glow, typename... Args>
+    void updateModelGlow(Args&&... args) const
+    {
+        hookContext.template make<ModelGlow>().updateInMainThread()(Glow{hookContext}, std::forward<Args>(args)...);
+    }
 
-        if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>())
-            hookContext.template make<ModelGlow>().updateInMainThread()(PlayerModelGlow{hookContext}, baseEntity.template as<PlayerPawn>(), entityTypeInfo);
-        else if (entityTypeInfo.template is<cs2::C_C4>())
-            hookContext.template make<ModelGlow>().updateInMainThread()(DroppedBombModelGlow{hookContext}, baseEntity.template as<BaseWeapon>(), entityTypeInfo);
-        else if (entityTypeInfo.template is<cs2::CBaseAnimGraph>())
-            hookContext.template make<ModelGlow>().updateInMainThread()(DefuseKitModelGlow{hookContext}, baseEntity, entityTypeInfo);
-        else if (entityTypeInfo.template is<cs2::CPlantedC4>())
-            hookContext.template make<ModelGlow>().updateInMainThread()(TickingBombModelGlow{hookContext}, baseEntity.template as<PlantedC4>(), entityTypeInfo);
-        else if (entityTypeInfo.isGrenadeProjectile())
-            hookContext.template make<ModelGlow>().updateInMainThread()(GrenadeProjectileModelGlow{hookContext}, baseEntity, entityTypeInfo);
-        else if (entityTypeInfo.isWeapon())
-            hookContext.template make<ModelGlow>().updateInMainThread()(WeaponModelGlow{hookContext}, baseEntity.template as<BaseWeapon>(), entityTypeInfo);
+    template <template <typename> typename Glow, typename... Args>
+    void applyOutlineGlow(Args&&... args) const
+    {
+        hookContext.template make<OutlineGlow>().applyGlow()(Glow{hookContext}, std::forward<Args>(args)...);
     }
 
     HookContext& hookContext;

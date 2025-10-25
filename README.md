@@ -7,6 +7,14 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 23 October 2025
+    * Hostage Outline Glow hue is now customizable
+
+* 20 October 2025
+    * Added "No Scope Inaccuracy Visualization" feature
+
+    <img height="300" alt="no scope inaccuracy visualization" src="https://github.com/user-attachments/assets/860c944a-00b1-4b67-9d41-6f43e46f4252" />
+
 * 09 October 2025
     * Added viewmodel fov modification
 
@@ -18,14 +26,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 * 19 July 2025
     * Adjusted allowed value range of "Team T Hue" Model Glow setting
-
-* 12 July 2025
-    * Reduced saturation of health-based player outline glow
-
-* 11 July 2025
-    * Dropped/ticking bomb and defuse kit color hues are now customizable in Model Glow settings
-
-    ![Bomb and Defuse Kit model glow color customization](https://github.com/user-attachments/assets/e5e174a9-b145-4f1b-b14d-14811d6e5635)
 
 ## Technical features
 

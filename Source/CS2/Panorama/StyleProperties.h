@@ -146,4 +146,20 @@ struct CStylePropertyTransform3D : CStyleProperty {
     bool fullySet;
 };
 
+struct CStylePropertyBorder : CStyleProperty {
+    EBorderStyle m_rgBorderStyle[4];
+    CUILength m_rgBorderWidth[4];
+    bool m_rgColorsSet[4];
+    Color m_rgBorderColor[4];
+};
+
+struct CornerRadii_t {
+    CUILength horizontalRadius;
+    CUILength verticalRadius;
+};
+
+struct CStylePropertyBorderRadius : CStyleProperty {
+    CornerRadii_t m_rgCornerRaddi[4];
+};
+
 };
