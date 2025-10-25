@@ -24,4 +24,5 @@ struct MockPanel {
     MOCK_METHOD(void, setAlign, (const PanelAlignmentParams& alignmentParams));
     MOCK_METHOD(void, setBackgroundColor, (cs2::Color color));
     MOCK_METHOD(void, setBorder, (cs2::CUILength borderWidth, cs2::Color color));
+    MOCK_METHOD(void, setColor, (cs2::Color color));
 };

@@ -5,12 +5,13 @@
 #include <CS2/Constants/ColorConstants.h>
 #include <Features/Hud/DefusingAlert/DefusingCountdownTextPanel.h>
 #include <Mocks/MockLabelPanel.h>
+#include <Mocks/MockPanel.h>
 #include <Utils/Optional.h>
 
 class DefusingCountdownTextPanelTest : public testing::Test {
 protected:
     testing::StrictMock<MockLabelPanel> mockLabelPanel;
-    testing::StrictMock<MockUiPanel> mockUiPanel;
+    testing::StrictMock<MockPanel> mockUiPanel;
     DefusingCountdownTextPanel<MockLabelPanel&> defusingCountdownTextPanel{mockLabelPanel};
 };
 
