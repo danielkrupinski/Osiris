@@ -270,9 +270,6 @@
     <ClInclude Include="CS2\Classes\GlobalVars.h">
       <Filter>CS2\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="CS2\Constants\BombSiteIndex.h">
-      <Filter>CS2\Constants</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Constants\DllNames.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
@@ -1906,6 +1903,21 @@
     </ClInclude>
     <ClInclude Include="GameClient\Econ\FauxItemId.h">
       <Filter>GameClient\Econ</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_CSPlayerResource.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\BombsiteIndex.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\PlayerResource.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\PlayerResourcePatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\PlayerResourcePatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

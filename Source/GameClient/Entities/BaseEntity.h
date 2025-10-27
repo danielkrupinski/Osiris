@@ -32,6 +32,11 @@ public:
         return *this;
     }
 
+    [[nodiscard]] decltype(auto) absOrigin() const noexcept
+    {
+        return gameSceneNode().absOrigin();
+    }
+
     [[nodiscard]] decltype(auto) entityIdentity() const noexcept
     {
         return hookContext.template make<EntityIdentity>(entity ? entity->identity : nullptr);

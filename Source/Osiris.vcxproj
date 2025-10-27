@@ -58,6 +58,7 @@
     <ClInclude Include="CS2\Classes\Entities\C_BaseModelEntity.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSGO_PreviewPlayer.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSPlayerPawn.h" />
+    <ClInclude Include="CS2\Classes\Entities\C_CSPlayerResource.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSWeaponBase.h" />
     <ClInclude Include="CS2\Classes\Entities\C_Hostage.h" />
     <ClInclude Include="CS2\Classes\Entities\GrenadeProjectiles.h" />
@@ -77,7 +78,7 @@
     <ClInclude Include="CS2\Classes\Vector.h" />
     <ClInclude Include="CS2\Classes\VMatrix.h" />
     <ClInclude Include="CS2\Constants\AspectRatio.h" />
-    <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
+    <ClInclude Include="CS2\Constants\BombsiteIndex.h" />
     <ClInclude Include="CS2\Constants\ColorConstants.h" />
     <ClInclude Include="CS2\Constants\CrosshairColorIndex.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
@@ -273,6 +274,7 @@
     <ClInclude Include="GameClient\Entities\PlantedC4.h" />
     <ClInclude Include="GameClient\Entities\PlayerController.h" />
     <ClInclude Include="GameClient\Entities\PlayerPawn.h" />
+    <ClInclude Include="GameClient\Entities\PlayerResource.h" />
     <ClInclude Include="GameClient\Entities\PlayerWeapons.h" />
     <ClInclude Include="GameClient\Entities\PreviewPlayer.h" />
     <ClInclude Include="GameClient\Entities\RenderComponent.h" />
@@ -386,6 +388,7 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\PlantedC4PatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PlayerControllerPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PlayerPawnPatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\PlayerResourcePatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PortraitWorldPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\RenderComponentPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\SceneObjectPatternTypes.h" />
@@ -417,6 +420,7 @@
     <ClInclude Include="MemoryPatterns\Windows\GlowPropertyPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PlayerResourcePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PortraitWorldPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />

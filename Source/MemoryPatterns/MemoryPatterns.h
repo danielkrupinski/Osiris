@@ -51,6 +51,7 @@ constexpr auto kClientPatterns = []() consteval {
         .ADD_PATTERNS(PlantedC4Patterns)
         .ADD_PATTERNS(PlayerControllerPatterns)
         .ADD_PATTERNS(PlayerPawnPatterns)
+        .ADD_PATTERNS(PlayerResourcePatterns)
         .ADD_PATTERNS(PortraitWorldPatterns)
         .ADD_PATTERNS(RenderComponentPatterns)
         .ADD_PATTERNS(SceneObjectUpdaterPatterns)

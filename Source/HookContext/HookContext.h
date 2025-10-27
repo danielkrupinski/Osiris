@@ -8,6 +8,7 @@
 #include <Features/Common/InWorldPanelsPerHookState.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCachePerHookState.h>
 #include <GameClient/ConVars/CvarSystem.h>
+#include <GameClient/Entities/PlayerResource.h>
 #include <GameClient/FileSystem.h>
 #include <GameClient/Hud/Hud.h>
 #include <GameClient/Hud/HudContext.h>
@@ -239,6 +240,13 @@ struct HookContext {
     [[nodiscard]] decltype(auto) localPlayerBulletInaccuracy() noexcept
     {
         return activeLocalPlayerPawn().getActiveWeapon().bulletInaccuracy();
+    }
+
+    [[nodiscard]] decltype(auto) playerResource()
+    {
+        if (fullGlobalContext.patternSearchResults.template get<PointerToPlayerResource>())
+            return PlayerResource{*this, *fullGlobalContext.patternSearchResults.template get<PointerToPlayerResource>()};
+        return PlayerResource{*this, nullptr};
     }
 
 private:

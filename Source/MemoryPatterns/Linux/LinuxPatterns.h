@@ -25,6 +25,7 @@
 #include "PlantedC4PatternsLinux.h"
 #include "PlayerControllerPatternsLinux.h"
 #include "PlayerPawnPatternsLinux.h"
+#include "PlayerResourcePatternsLinux.h"
 #include "PortraitWorldPatternsLinux.h"
 #include "RenderComponentPatternsLinux.h"
 #include "SceneObjectPatternsLinux.h"
