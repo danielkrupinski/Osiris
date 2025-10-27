@@ -1,0 +1,6 @@
+HeaderFilterRegex: '.*'
+Checks: >
+    -*,
+    readability-function-cognitive-complexity
+WarningsAsErrors: >
+    readability-function-cognitive-complexity
