@@ -2,6 +2,7 @@
 
 #include <gmock/gmock.h>
 #include <Features/FeaturesStates.h>
+#include <Features/Hud/BombPlantAlert/BombPlantAlertPanelFactory.h>
 #include <GameClient/Panorama/PanelHandle.h>
 #include <GameClient/Crosshair.h>
 #include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
@@ -19,6 +20,7 @@ struct MockPanoramaUiEngine;
 struct MockPlayerController;
 struct MockPlayerPawn;
 struct MockViewToProjectionMatrix;
+struct MockBombPlantAlertPanelFactory;
 
 class OsirisDirectoryPath;
 
@@ -38,6 +40,7 @@ struct MockHookContext {
     MOCK_METHOD(MockPlayerPawn&, activeLocalPlayerPawn, ());
     MOCK_METHOD(MockCrosshair&, makeCrosshair, ());
     MOCK_METHOD(MockPanoramaUiEngine&, makePanoramaUiEngine, ());
+    MOCK_METHOD(MockBombPlantAlertPanelFactory&, makeBombPlantAlertPanelFactory, ());
     MOCK_METHOD(Optional<float>, localPlayerBulletInaccuracy, ());
 
     template <template <typename> typename T, typename... Args>
@@ -51,6 +54,8 @@ struct MockHookContext {
             return makeCrosshair(std::forward<Args>(args)...);
         } else if constexpr (std::is_same_v<T<MockHookContext>, PanoramaUiEngine<MockHookContext>>) {
             return makePanoramaUiEngine(std::forward<Args>(args)...);
+        } else if constexpr (std::is_same_v<T<MockHookContext>, BombPlantAlertPanelFactory<MockHookContext>>) {
+            return makeBombPlantAlertPanelFactory(std::forward<Args>(args)...);
         }
     }
 };

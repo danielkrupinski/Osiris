@@ -118,6 +118,7 @@ struct C_DecoyGrenade : C_CSWeaponBase {
 
 struct C_C4 : C_CSWeaponBase {
     using m_bStartedArming = bool;
+    using m_fArmedTime = float;
 };
 
 struct C_Item_Healthshot : C_CSWeaponBase {

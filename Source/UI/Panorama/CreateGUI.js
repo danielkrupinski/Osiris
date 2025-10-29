@@ -484,7 +484,9 @@ u8R"(
   createYesNoDropDown(bomb, "Show Bomb Explosion Countdown And Site", 'hud', 'bomb_timer');
   separator(bomb);
   createYesNoDropDown(bomb, "Show Bomb Defuse Countdown", 'hud', 'defusing_alert');
-  
+  separator(bomb);
+  createYesNoDropDown(bomb, "Show Bomb Plant Alert", 'hud', 'bomb_plant_alert');
+
   var killfeed = createSection(hud, 'Killfeed');
   separator(killfeed);
   createYesNoDropDown(killfeed, "Preserve My Killfeed During The Round", 'hud', 'preserve_killfeed');

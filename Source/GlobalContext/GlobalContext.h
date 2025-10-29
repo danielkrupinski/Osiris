@@ -157,6 +157,7 @@ public:
             hookContext.make<PlayerModelGlowPreview>().onUnload();
             hookContext.make<WeaponModelGlowPreview>().onUnload();
             hookContext.make<NoScopeInaccuracyVis>().onUnload();
+            hookContext.make<BombPlantAlert>().onUnload();
 
             hookContext.make<EntitySystem>().forEachNetworkableEntityIdentity([&hookContext](const auto& entityIdentity) {
                 auto&& baseEntity = hookContext.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
