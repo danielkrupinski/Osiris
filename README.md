@@ -7,6 +7,13 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 30 October 2025
+    * Added Bomb Plant Alert feature
+        * Green color means the bomb will be planted before the end of the round if uninterrupted
+        * Red color means the bomb can not be planted before the end of the round
+
+    <img width="201" height="146" alt="Bomb Plant Alert" src="https://github.com/user-attachments/assets/21c0f8fb-a20d-42df-9857-f578cfc9b9f9" />
+
 * 23 October 2025
     * Hostage Outline Glow hue is now customizable
 
@@ -23,9 +30,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 * 25 August 2025
     * Outline Glow hues are now customizable
     * Added `Enemy/Ally` color mode to Player Outline Glow
-
-* 19 July 2025
-    * Adjusted allowed value range of "Team T Hue" Model Glow setting
 
 ## Technical features
 
