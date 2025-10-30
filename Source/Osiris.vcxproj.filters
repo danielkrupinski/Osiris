@@ -247,6 +247,9 @@
     <Filter Include="GameClient\Econ">
       <UniqueIdentifier>{35bace02-0818-4944-bcb2-9e49c247e922}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Hud\BombPlantAlert">
+      <UniqueIdentifier>{93348815-91fe-4209-910f-aba93d67345a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1918,6 +1921,27 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\PlayerResourcePatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\RoundWinStatus.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlert.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertConfigVariables.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertPanelFactory.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertPanelParams.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertParams.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertState.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

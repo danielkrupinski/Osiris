@@ -3,11 +3,14 @@
 #include <gmock/gmock.h>
 #include <CS2/Classes/Color.h>
 #include <CS2/Panorama/CUILength.h>
+#include <CS2/Panorama/PanelHandle.h>
 #include <CS2/Panorama/StyleEnums.h>
 #include <Utils/Optional.h>
 
+struct MockClientPanel;
 struct PanelFontParams;
 struct PanelAlignmentParams;
+struct PanelMarginParams;
 
 struct MockPanel {
     MOCK_METHOD(void, setParent, (const MockPanel& parent));
@@ -25,4 +28,9 @@ struct MockPanel {
     MOCK_METHOD(void, setBackgroundColor, (cs2::Color color));
     MOCK_METHOD(void, setBorder, (cs2::CUILength borderWidth, cs2::Color color));
     MOCK_METHOD(void, setColor, (cs2::Color color));
+    MOCK_METHOD(void, setFlowChildren, (cs2::EFlowDirection flowDirection));
+    MOCK_METHOD(void, setPosition, (cs2::CUILength x, cs2::CUILength y));
+    MOCK_METHOD(void, setMargin, (const PanelMarginParams& params));
+    MOCK_METHOD(cs2::PanelHandle, getHandle, ());
+    MOCK_METHOD(MockClientPanel&, clientPanel, ());
 };

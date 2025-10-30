@@ -28,9 +28,31 @@ public:
         return hookContext.patternSearchResults().template get<OffsetToIsBeingPlanted>().of(c4);
     }
 
+    [[nodiscard]] decltype(auto) armingEndTime() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToArmingEndTime>().of(c4).toOptional();
+    }
+
+    [[nodiscard]] decltype(auto) nearestBombsiteIndex() const
+    {
+        return baseWeapon().baseEntity().absOrigin().andThen(toNearestBombsiteIndex());
+    }
+
+    [[nodiscard]] decltype(auto) timeToArmingEnd() const
+    {
+        return armingEndTime() - hookContext.globalVars().curtime();
+    }
+
     using RawType = cs2::C_C4;
 
 private:
+    [[nodiscard]] auto toNearestBombsiteIndex() const noexcept
+    {
+        return [this](const auto& position) {
+            return hookContext.playerResource().nearestBombsiteIndex(position);
+        };
+    }
+
     HookContext& hookContext;
     cs2::C_C4* c4;
 };

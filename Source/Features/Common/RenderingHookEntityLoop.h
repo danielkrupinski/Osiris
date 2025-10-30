@@ -9,6 +9,7 @@
 #include <Features/Visuals/OutlineGlow/OutlineGlow.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
+#include <Features/Hud/BombPlantAlert/BombPlantAlert.h>
 
 template <typename HookContext>
 class RenderingHookEntityLoop {
@@ -20,20 +21,26 @@ public:
 
     void run() const noexcept
     {
-        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this](const auto& entityIdentity) { handleEntityIdentity(entityIdentity); });
+        auto bombPlantAlertVisibility = Visibility::Hidden;
+        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this, &bombPlantAlertVisibility](const auto& entityIdentity) { handleEntityIdentity(entityIdentity, bombPlantAlertVisibility); });
         hookContext.template make<ModelGlow>().postUpdateInMainThread();
+        if (bombPlantAlertVisibility == Visibility::Hidden)
+            hookContext.template make<BombPlantAlert>().hide();
     }
 
 private:
-    void handleEntityIdentity(const cs2::CEntityIdentity& entityIdentity) const noexcept
+    void handleEntityIdentity(const cs2::CEntityIdentity& entityIdentity, Visibility& bombPlantAlertVisibility) const noexcept
     {
         const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(entityIdentity.entityClass);
         auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
 
         if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
-            hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(baseEntity.template as<PlayerPawn>());
-            updateModelGlow<PlayerModelGlow>(baseEntity.template as<PlayerPawn>(), entityTypeInfo);
-            applyOutlineGlow<PlayerOutlineGlow>(baseEntity.template as<PlayerPawn>(), entityTypeInfo);
+            auto&& playerPawn = baseEntity.template as<PlayerPawn>();
+            hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(playerPawn);
+            updateModelGlow<PlayerModelGlow>(playerPawn, entityTypeInfo);
+            applyOutlineGlow<PlayerOutlineGlow>(playerPawn, entityTypeInfo);
+            if (bombPlantAlertVisibility != Visibility::Visible)
+                bombPlantAlertVisibility = hookContext.template make<BombPlantAlert>().show(playerPawn);
         } else if (entityTypeInfo.template is<cs2::C_C4>()) {
             updateModelGlow<DroppedBombModelGlow>(baseEntity.template as<BaseWeapon>(), entityTypeInfo);
             applyOutlineGlow<DroppedBombOutlineGlow>(baseEntity, entityTypeInfo);

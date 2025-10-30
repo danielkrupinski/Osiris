@@ -50,6 +50,8 @@ private:
             handleTogglableVariable<KillfeedPreserverEnabled>();
         } else if (feature == "postround_timer") {
             handleTogglableVariable<PostRoundTimerEnabled>();
+        } else if (feature == "bomb_plant_alert") {
+            handleTogglableVariable<BombPlantAlertEnabled>();
         }
     }
 

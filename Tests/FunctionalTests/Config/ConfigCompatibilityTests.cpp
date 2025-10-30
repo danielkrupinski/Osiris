@@ -165,9 +165,15 @@ protected:
         get<outline_glow_vars::HostageHue>() = outline_glow_vars::HostageHue::ValueType{color::HueInteger{334}};
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV10()
     {
         setVariableExpectationsV9();
+        get<BombPlantAlertEnabled>() = true;
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV10();
     }
 
     struct VariableChecker {
@@ -312,6 +318,11 @@ TEST_F(ConfigCompatibilityLoadTest, ConfigV7) {
 TEST_F(ConfigCompatibilityLoadTest, ConfigV8) {
     setVariableExpectationsV8();
     testLoadingConfigFile("config_v8.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, ConfigV9) {
+    setVariableExpectationsV9();
+    testLoadingConfigFile("config_v9.cfg");
 }
 
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {

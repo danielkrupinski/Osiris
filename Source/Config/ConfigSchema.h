@@ -55,6 +55,10 @@ private:
         configConversion.boolean(u8"Enabled", loadVariable<PostRoundTimerEnabled>(), saveVariable<PostRoundTimerEnabled>());
         configConversion.endObject();
 
+        configConversion.beginObject(u8"BombPlantAlert");
+        configConversion.boolean(u8"Enabled", loadVariable<BombPlantAlertEnabled>(), saveVariable<BombPlantAlertEnabled>());
+        configConversion.endObject();
+
         configConversion.endObject();
     }
 

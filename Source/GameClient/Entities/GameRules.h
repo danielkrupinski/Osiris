@@ -32,7 +32,27 @@ public:
         return roundRestartTime() - hookContext.globalVars().curtime();
     }
 
+    [[nodiscard]] auto roundEndTime() const noexcept
+    {
+        return roundStartTime() + roundLength();
+    }
+
+    [[nodiscard]] auto isRoundOver() const
+    {
+        return roundWinStatus().notEqual(cs2::RoundWinStatus::None);
+    }
+
 private:
+    [[nodiscard]] auto roundWinStatus() const
+    {
+        return hookContext.patternSearchResults().template get<OffsetToRoundWinStatus>().of(gameRules).toOptional();
+    }
+
+    [[nodiscard]] auto roundLength() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToRoundLength>().of(gameRules).toOptional();
+    }
+
     HookContext& hookContext;
     cs2::C_CSGameRules* gameRules;
 };
