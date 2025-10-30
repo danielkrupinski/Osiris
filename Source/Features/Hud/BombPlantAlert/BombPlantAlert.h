@@ -116,7 +116,7 @@ private:
     {
         return [this] () -> decltype(auto) {
             auto&& factory = hookContext.template make<BombPlantAlertPanelFactory>();
-            auto&& container = factory.createContainerPanel();
+            auto&& container = factory.createContainerPanel(hookContext.hud().scoreAndTimeAndBomb());
             state().containerPanelHandle = container.getHandle();
             state().bombsiteAIconPanelHandle = factory.createBombsiteIconPanel(container, cs2::kBombsiteAPlantingIconUrl).getHandle();
             state().bombsiteBIconPanelHandle = factory.createBombsiteIconPanel(container, cs2::kBombsiteBPlantingIconUrl).getHandle();

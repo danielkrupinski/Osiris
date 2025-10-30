@@ -1,7 +1,8 @@
 #pragma once
 
 #include "BombPlantAlertPanelParams.h"
-#include <GameClient/Panorama/PanoramaImagePanel.h>
+#include <GameClient/Panorama/PanoramaUiEngine.h>
+#include <Utils/Lvalue.h>
 
 template <typename HookContext>
 class BombPlantAlertPanelFactory {
@@ -11,17 +12,18 @@ public:
     {
     }
 
-    decltype(auto) createContainerPanel() const
+    decltype(auto) createContainerPanel(auto&& parentPanel) const
     {
-        auto&& container = hookContext.panelFactory().createPanel(hookContext.hud().scoreAndTimeAndBomb(), "BombPlantAlert").uiPanel();
-        container.setVisible(false);
-        container.setFlowChildren(cs2::k_EFlowRight);
-        container.setWidth(cs2::CUILength::percent(100));
-        container.setHeight(cs2::CUILength::pixels(40));
-        container.setPosition(cs2::CUILength::pixels(0), cs2::CUILength::pixels(100));
-        container.setBorderRadius(cs2::CUILength::pixels(5));
+        using namespace bomb_plant_alert_panel_params::container_panel_params;
+
+        auto&& container = hookContext.panelFactory().createPanel(parentPanel, "BombPlantAlert").uiPanel();
+        container.setFlowChildren(kChildrenFlow);
+        container.setWidth(kWidth);
+        container.setHeight(kHeight);
+        container.setPosition(kPositionX, kPositionY);
+        container.setBorderRadius(kBorderRadius);
         // todo: implement setting below style properties in C++
-        hookContext.template make<PanoramaUiEngine>().runScript(hookContext.hud().hudTeamCounter(),
+        hookContext.template make<PanoramaUiEngine>().runScript(parentPanel,
             R"(
 (function() {
   var panel = $.GetContextPanel().FindChildInLayoutFile('BombPlantAlert');
@@ -34,12 +36,12 @@ public:
         return utils::lvalue<decltype(container)>(container);
     }
 
-    decltype(auto) createBombsiteIconPanel(auto&& containerPanel, const char* imageUrl) const noexcept
+    decltype(auto) createBombsiteIconPanel(auto&& containerPanel, const char* imageUrl) const
     {
         using namespace bomb_plant_alert_panel_params::bombsite_icon_panel_params;
 
         auto&& imagePanel = hookContext.panelFactory().createImagePanel(containerPanel);
-        imagePanel.setImageSvg(SvgImageParams{.imageUrl = imageUrl, .textureHeight = kTextureHeight});
+        imagePanel.setImageSvg(imageUrl, kTextureHeight);
     
         auto&& uiPanel = imagePanel.uiPanel();
         uiPanel.setAlign(kAlignment);
@@ -47,7 +49,7 @@ public:
         return utils::lvalue<decltype(uiPanel)>(uiPanel);
     }
 
-    decltype(auto) createTimerPanel(auto&& containerPanel) const noexcept
+    decltype(auto) createTimerPanel(auto&& containerPanel) const
     {
         using namespace bomb_plant_alert_panel_params::timer_panel_params;
 

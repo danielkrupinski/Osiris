@@ -12,7 +12,10 @@ namespace bomb_plant_alert_panel_params::container_panel_params
 {
     constexpr auto kChildrenFlow = cs2::k_EFlowRight;
     constexpr auto kWidth = cs2::CUILength::percent(100);
-    constexpr auto kHeight = cs2::CUILength::pixels(32);
+    constexpr auto kHeight = cs2::CUILength::pixels(40);
+    constexpr auto kPositionX = cs2::CUILength::pixels(0);
+    constexpr auto kPositionY = cs2::CUILength::pixels(100);
+    constexpr auto kBorderRadius = cs2::CUILength::pixels(5);
 }
 
 namespace bomb_plant_alert_panel_params::bombsite_icon_panel_params
