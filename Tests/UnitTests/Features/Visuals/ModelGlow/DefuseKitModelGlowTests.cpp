@@ -26,9 +26,8 @@ TEST_F(DefuseKitModelGlowTest, Enabled) {
     EXPECT_TRUE(defuseKitModelGlow.enabled());
 }
 
-TEST_F(DefuseKitModelGlowTest, CorrectDisablingFlagIsReturned) {
-    EXPECT_CALL(mockHookContext, featuresStates()).WillOnce(testing::ReturnRef(featuresStates));
-    EXPECT_THAT(defuseKitModelGlow.disablingFlag(), testing::Ref(featuresStates.visualFeaturesStates.modelGlowState.defuseKitModelGlowDisabling));
+TEST_F(DefuseKitModelGlowTest, CorrectDeactivationFlagIsReturned) {
+    EXPECT_EQ(defuseKitModelGlow.deactivationFlag(), ModelGlowDeactivationFlags::DefuseKitModelGlowDeactivating);
 }
 
 class DefuseKitModelGlowHueTest

@@ -27,9 +27,8 @@ TEST_F(TickingBombModelGlowTest, Enabled) {
     EXPECT_TRUE(tickingBombModelGlow.enabled());
 }
 
-TEST_F(TickingBombModelGlowTest, CorrectDisablingFlagIsReturned) {
-    EXPECT_CALL(mockHookContext, featuresStates()).WillOnce(testing::ReturnRef(featuresStates));
-    EXPECT_THAT(tickingBombModelGlow.disablingFlag(), testing::Ref(featuresStates.visualFeaturesStates.modelGlowState.tickingBombModelGlowDisabling));
+TEST_F(TickingBombModelGlowTest, CorrectDeactivationFlagIsReturned) {
+    EXPECT_EQ(tickingBombModelGlow.deactivationFlag(), ModelGlowDeactivationFlags::TickingBombModelGlowDeactivating);
 }
 
 class TickingBombModelGlowHueTest

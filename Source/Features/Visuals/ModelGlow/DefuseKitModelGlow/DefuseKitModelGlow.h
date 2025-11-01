@@ -18,9 +18,9 @@ public:
         return GET_CONFIG_VAR(model_glow_vars::GlowDefuseKits);    
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().defuseKitModelGlowDisabling;
+        return ModelGlowDeactivationFlags::DefuseKitModelGlowDeactivating;
     }
 
     [[nodiscard]] color::HueInteger hue() const

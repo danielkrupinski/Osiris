@@ -29,9 +29,7 @@ public:
     [[nodiscard]] auto updateInMainThread() const noexcept
     {
         return [this](auto&& glow, auto&& entity, EntityTypeInfo entityTypeInfo) {
-            if (!modelGlowEnabled() && !state().modelGlowDisabling)
-                return;
-            if (!glow.enabled() && !glow.disablingFlag())
+            if (isModelGlowDeactivated() || isModelGlowDeactivated(glow))
                 return;
 
             if (modelGlowEnabled() && glow.enabled() && shouldApplyGlow(glow, entity))
@@ -53,8 +51,8 @@ public:
     [[nodiscard]] auto onUnload() const noexcept
     {
         return [this](auto&& glow, auto&& entity) {
-            assert(state().modelGlowDisabling == false && "Should be already disabled");
-            assert(glow.disablingFlag() == false && "Should be already disabled");
+            assert(!state().deactivationFlags.has(ModelGlowDeactivationFlags::ModelGlowDeactivating) && "Should be already deactivated");
+            assert(!state().deactivationFlags.has(glow.deactivationFlag()) && "Should be already deactivated");
 
             if (modelGlowEnabled() && glow.enabled())
                 removeGlowInMainThread(glow, entity);
@@ -63,16 +61,20 @@ public:
 
     void postUpdateInMainThread() const
     {
-        state().modelGlowDisabling = false;
-        state().playerModelGlowDisabling = false;
-        state().weaponModelGlowDisabling = false;
-        state().droppedBombModelGlowDisabling = false;
-        state().tickingBombModelGlowDisabling = false;
-        state().defuseKitModelGlowDisabling = false;
-        state().grenadeProjectileModelGlowDisabling = false;
+        state().deactivationFlags.clear();
     }
 
 private:
+    [[nodiscard]] bool isModelGlowDeactivated() const
+    {
+        return !modelGlowEnabled() && !state().deactivationFlags.has(ModelGlowDeactivationFlags::ModelGlowDeactivating);
+    }
+
+    [[nodiscard]] bool isModelGlowDeactivated(auto&& glow) const
+    {
+        return !glow.enabled() && !state().deactivationFlags.has(glow.deactivationFlag());
+    }
+
     [[nodiscard]] static bool shouldApplyGlow(auto&& glow, auto&& entity)
     {
         if constexpr (requires { { glow.shouldApplyGlow(entity) } -> std::same_as<bool>; })

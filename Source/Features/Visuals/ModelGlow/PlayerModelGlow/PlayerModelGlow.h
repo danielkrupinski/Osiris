@@ -41,9 +41,9 @@ public:
             && (!GET_CONFIG_VAR(model_glow_vars::GlowOnlyEnemies) || playerPawn.isEnemy().value_or(true));
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().playerModelGlowDisabling;
+        return ModelGlowDeactivationFlags::PlayerModelGlowDeactivating;
     }
 
     [[nodiscard]] auto& originalSceneObjectUpdater() const

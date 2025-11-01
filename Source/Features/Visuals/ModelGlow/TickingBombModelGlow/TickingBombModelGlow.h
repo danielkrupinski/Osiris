@@ -23,9 +23,9 @@ public:
         return plantedBomb.isTicking().valueOr(true);
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().tickingBombModelGlowDisabling;
+        return ModelGlowDeactivationFlags::TickingBombModelGlowDeactivating;
     }
 
     [[nodiscard]] color::HueInteger hue() const

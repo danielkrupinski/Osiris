@@ -37,9 +37,8 @@ TEST_F(PlayerModelGlowTest, Enabled) {
     EXPECT_TRUE(playerModelGlow.enabled());
 }
 
-TEST_F(PlayerModelGlowTest, CorrectDisablingFlagIsReturned) {
-    EXPECT_CALL(mockHookContext, featuresStates()).WillOnce(testing::ReturnRef(featuresStates));
-    EXPECT_THAT(playerModelGlow.disablingFlag(), testing::Ref(featuresStates.visualFeaturesStates.modelGlowState.playerModelGlowDisabling));
+TEST_F(PlayerModelGlowTest, CorrectDeactivationFlagIsReturned) {
+    EXPECT_EQ(playerModelGlow.deactivationFlag(), ModelGlowDeactivationFlags::PlayerModelGlowDeactivating);
 }
 
 TEST_F(PlayerModelGlowTest, CorrectOriginalSceneObjectUpdaterIsReturned) {

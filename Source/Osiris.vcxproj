@@ -195,6 +195,7 @@
     <ClInclude Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow\GrenadeProjectileModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowConfigVariables.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowDeactivationFlags.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowParams.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h" />
@@ -540,6 +541,7 @@
     <ClInclude Include="Utils\ColorUtils.h" />
     <ClInclude Include="Utils\CString.h" />
     <ClInclude Include="Utils\DynamicArray.h" />
+    <ClInclude Include="Utils\EnumFlags.h" />
     <ClInclude Include="Utils\FieldFieldOffset.h" />
     <ClInclude Include="Utils\FieldOffset.h" />
     <ClInclude Include="Utils\FileSlice.h" />
