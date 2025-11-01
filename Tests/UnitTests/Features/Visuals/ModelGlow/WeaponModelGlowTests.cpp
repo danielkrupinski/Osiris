@@ -26,9 +26,8 @@ TEST_F(WeaponModelGlowTest, Enabled) {
     EXPECT_TRUE(weaponModelGlow.enabled());
 }
 
-TEST_F(WeaponModelGlowTest, CorrectDisablingFlagIsReturned) {
-    EXPECT_CALL(mockHookContext, featuresStates()).WillOnce(testing::ReturnRef(featuresStates));
-    EXPECT_THAT(weaponModelGlow.disablingFlag(), testing::Ref(featuresStates.visualFeaturesStates.modelGlowState.weaponModelGlowDisabling));
+TEST_F(WeaponModelGlowTest, CorrectDeactivationFlagIsReturned) {
+    EXPECT_EQ(weaponModelGlow.deactivationFlag(), ModelGlowDeactivationFlags::WeaponModelGlowDeactivating);
 }
 
 TEST_F(WeaponModelGlowTest, CorrectOriginalSceneObjectUpdaterIsReturned) {

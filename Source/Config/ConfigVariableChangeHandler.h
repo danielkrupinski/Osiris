@@ -13,6 +13,7 @@
 #include <Features/Sound/Details/FootstepSound.h>
 #include <Features/Sound/Details/WeaponReloadSound.h>
 #include <Features/Sound/Details/WeaponScopeSound.h>
+#include <Features/Visuals/ModelGlow/ModelGlowDeactivationFlags.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerStateIcons/PlayerStateIconsToShow.h>
 #include <Hooks/ClientModeHooks.h>
 #include <OutlineGlow/GlowSceneObjects.h>
@@ -109,43 +110,43 @@ private:
     ON_CHANGE(model_glow_vars::Enabled)
     {
         if (newValue == false)
-            hookContext.featuresStates().visualFeaturesStates.modelGlowState.modelGlowDisabling = true;
+            modelGlowDeactivationFlags().set(ModelGlowDeactivationFlags::ModelGlowDeactivating);
     }
 
     ON_CHANGE(model_glow_vars::GlowDefuseKits)
     {
         if (newValue == false)
-            hookContext.featuresStates().visualFeaturesStates.modelGlowState.defuseKitModelGlowDisabling = true;
+            modelGlowDeactivationFlags().set(ModelGlowDeactivationFlags::DefuseKitModelGlowDeactivating);
     }
 
     ON_CHANGE(model_glow_vars::GlowDroppedBomb)
     {
         if (newValue == false)
-            hookContext.featuresStates().visualFeaturesStates.modelGlowState.droppedBombModelGlowDisabling = true;
+            modelGlowDeactivationFlags().set(ModelGlowDeactivationFlags::DroppedBombModelGlowDeactivating);
     }
 
     ON_CHANGE(model_glow_vars::GlowGrenadeProjectiles)
     {
         if (newValue == false)
-            hookContext.featuresStates().visualFeaturesStates.modelGlowState.grenadeProjectileModelGlowDisabling = true;
+            modelGlowDeactivationFlags().set(ModelGlowDeactivationFlags::GrenadeProjectileModelGlowDeactivating);
     }
 
     ON_CHANGE(model_glow_vars::GlowPlayers)
     {
         if (newValue == false)
-            hookContext.featuresStates().visualFeaturesStates.modelGlowState.playerModelGlowDisabling = true;
+            modelGlowDeactivationFlags().set(ModelGlowDeactivationFlags::PlayerModelGlowDeactivating);
     }
 
     ON_CHANGE(model_glow_vars::GlowTickingBomb)
     {
         if (newValue == false)
-            hookContext.featuresStates().visualFeaturesStates.modelGlowState.tickingBombModelGlowDisabling = true;
+            modelGlowDeactivationFlags().set(ModelGlowDeactivationFlags::TickingBombModelGlowDeactivating);
     }
 
     ON_CHANGE(model_glow_vars::GlowWeapons)
     {
         if (newValue == false)
-            hookContext.featuresStates().visualFeaturesStates.modelGlowState.weaponModelGlowDisabling = true;
+            modelGlowDeactivationFlags().set(ModelGlowDeactivationFlags::WeaponModelGlowDeactivating);
     }
 
     ON_CHANGE(outline_glow_vars::Enabled)
@@ -215,6 +216,11 @@ private:
     }
 
     #undef ON_CHANGE
+
+    [[nodiscard]] auto& modelGlowDeactivationFlags() const
+    {
+        return hookContext.featuresStates().visualFeaturesStates.modelGlowState.deactivationFlags;
+    }
 
     HookContext& hookContext;
 };

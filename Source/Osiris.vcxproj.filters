@@ -1943,6 +1943,12 @@
     <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertState.h">
       <Filter>Features\Hud\BombPlantAlert</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowDeactivationFlags.h">
+      <Filter>Features\Visuals\ModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\EnumFlags.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">

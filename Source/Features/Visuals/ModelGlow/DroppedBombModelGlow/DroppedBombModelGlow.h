@@ -28,9 +28,9 @@ public:
         return !bomb.baseEntity().hasOwner().valueOr(true);
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().droppedBombModelGlowDisabling;
+        return ModelGlowDeactivationFlags::DroppedBombModelGlowDeactivating;
     }
 
     [[nodiscard]] auto& originalSceneObjectUpdater() const

@@ -32,9 +32,9 @@ public:
         return !weapon.baseEntity().hasOwner().valueOr(true);
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().weaponModelGlowDisabling;
+        return ModelGlowDeactivationFlags::WeaponModelGlowDeactivating;
     }
 
     [[nodiscard]] auto& originalSceneObjectUpdater() const

@@ -21,9 +21,9 @@ public:
         return GET_CONFIG_VAR(model_glow_vars::GlowGrenadeProjectiles);
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().grenadeProjectileModelGlowDisabling;
+        return ModelGlowDeactivationFlags::GrenadeProjectileModelGlowDeactivating;
     }
 
     [[nodiscard]] Optional<color::HueInteger> hue(EntityTypeInfo entityTypeInfo) const

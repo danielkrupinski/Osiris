@@ -25,9 +25,8 @@ TEST_F(GrenadeProjectileModelGlowTest, Enabled) {
     EXPECT_TRUE(grenadeProjectileModelGlow.enabled());
 }
 
-TEST_F(GrenadeProjectileModelGlowTest, CorrectDisablingFlagIsReturned) {
-    EXPECT_CALL(mockHookContext, featuresStates()).WillOnce(testing::ReturnRef(featuresStates));
-    EXPECT_THAT(grenadeProjectileModelGlow.disablingFlag(), testing::Ref(featuresStates.visualFeaturesStates.modelGlowState.grenadeProjectileModelGlowDisabling));
+TEST_F(GrenadeProjectileModelGlowTest, CorrectDeactivationFlagIsReturned) {
+    EXPECT_EQ(grenadeProjectileModelGlow.deactivationFlag(), ModelGlowDeactivationFlags::GrenadeProjectileModelGlowDeactivating);
 }
 
 struct GrenadeProjectileModelGlowHueTestParam {

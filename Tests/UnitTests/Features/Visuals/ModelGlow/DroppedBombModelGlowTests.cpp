@@ -31,9 +31,8 @@ TEST_F(DroppedBombModelGlowTest, Enabled) {
     EXPECT_TRUE(droppedBombModelGlow.enabled());
 }
 
-TEST_F(DroppedBombModelGlowTest, CorrectDisablingFlagIsReturned) {
-    EXPECT_CALL(mockHookContext, featuresStates()).WillOnce(testing::ReturnRef(featuresStates));
-    EXPECT_THAT(droppedBombModelGlow.disablingFlag(), testing::Ref(featuresStates.visualFeaturesStates.modelGlowState.droppedBombModelGlowDisabling));
+TEST_F(DroppedBombModelGlowTest, CorrectDeactivationFlagIsReturned) {
+    EXPECT_EQ(droppedBombModelGlow.deactivationFlag(), ModelGlowDeactivationFlags::DroppedBombModelGlowDeactivating);
 }
 
 TEST_F(DroppedBombModelGlowTest, CorrectOriginalSceneObjectUpdaterIsReturned) {
