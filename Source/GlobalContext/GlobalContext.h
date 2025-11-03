@@ -24,6 +24,7 @@
 #include <MemoryAllocation/FreeMemoryRegionList.h>
 #include <MemorySearch/PatternFinder.h>
 #include <Platform/DynamicLibrary.h>
+#include <Platform/Macros/FunctionAttributes.h>
 #include <SDL/SdlDll.h>
 
 #include "DeferredCompleteObject.h"
@@ -71,20 +72,16 @@ public:
 
     [[nodiscard]] PeepEventsHookResult peepEventsHook() noexcept
     {
-        const auto justInitialized = initializeCompleteContextFromGameThread();
+        const auto initInProgress = !deferredCompleteContext.isComplete();
+        if (initInProgress)
+            initCompleteContextFromGameThread();
 
         auto& fullCtx = fullContext();
         HookContext hookContext{fullCtx};
 
-        if (justInitialized) {
-            fullCtx.entityClassifier.init(hookContext);
-            if (const auto mainMenu{fullCtx.patternSearchResults.get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
-                hookContext.make<PanoramaGUI>().init(hookContext.make<PanoramaUiPanel>((*mainMenu)->uiPanel));
-            hookContext.config().init();
-            hookContext.config().scheduleLoad();
-            fullCtx.hooks.peepEventsHook.disable();
-            fullCtx.hooks.viewRenderHook.install();
-        }
+        if (initInProgress)
+            finishInit(hookContext);
+
         return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original};
     }
 
@@ -144,49 +141,49 @@ public:
         hookContext.config().update();
         hookContext.config().performFileOperation();
 
-        if (unloadFlag) {
-            hookContext.make<BombTimer>().onUnload();
-            hookContext.make<DefusingAlert>().onUnload();
-            hookContext.make<PostRoundTimer>().onUnload();
-            hookContext.make<OutlineGlow>().onUnload();
-            hookContext.make<BombStatusPanel>().onUnload();
-            hookContext.make<InWorldPanels>().onUnload();
-            hookContext.make<PanoramaGUI>().onUnload();
-            fullContext().hooks.viewRenderHook.uninstall();
-            hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
-            hookContext.make<PlayerModelGlowPreview>().onUnload();
-            hookContext.make<WeaponModelGlowPreview>().onUnload();
-            hookContext.make<NoScopeInaccuracyVis>().onUnload();
-            hookContext.make<BombPlantAlert>().onUnload();
-
-            hookContext.make<EntitySystem>().forEachNetworkableEntityIdentity([&hookContext](const auto& entityIdentity) {
-                auto&& baseEntity = hookContext.make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
-                const auto entityTypeInfo = baseEntity.classify();
-                if (entityTypeInfo.is<cs2::C_CSPlayerPawn>())
-                    hookContext.make<ModelGlow>().onUnload()(PlayerModelGlow{hookContext}, baseEntity.template as<PlayerPawn>());
-                else if (entityTypeInfo.is<cs2::C_C4>())
-                    hookContext.make<ModelGlow>().onUnload()(DroppedBombModelGlow{hookContext}, baseEntity.template as<BaseWeapon>());
-                else if (entityTypeInfo.is<cs2::CBaseAnimGraph>())
-                    hookContext.make<ModelGlow>().onUnload()(DefuseKitModelGlow{hookContext}, baseEntity);
-                else if (entityTypeInfo.is<cs2::CPlantedC4>())
-                    hookContext.make<ModelGlow>().onUnload()(TickingBombModelGlow{hookContext}, baseEntity.template as<PlantedC4>());
-                else if (entityTypeInfo.isGrenadeProjectile())
-                    hookContext.make<ModelGlow>().onUnload()(GrenadeProjectileModelGlow{hookContext}, baseEntity);
-                else if (entityTypeInfo.isWeapon())
-                    hookContext.make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, baseEntity.template as<BaseWeapon>());
-            });
-        }
+        if (unloadFlag)
+            unload(hookContext);
         return unloadFlag;
     }
 
 private:
-    bool initializeCompleteContextFromGameThread() noexcept
+    [[NOINLINE]] void unload(auto& hookContext) noexcept
     {
-        if (deferredCompleteContext.isComplete())
-            return false;
+        hookContext.template make<BombTimer>().onUnload();
+        hookContext.template make<DefusingAlert>().onUnload();
+        hookContext.template make<PostRoundTimer>().onUnload();
+        hookContext.template make<OutlineGlow>().onUnload();
+        hookContext.template make<BombStatusPanel>().onUnload();
+        hookContext.template make<InWorldPanels>().onUnload();
+        hookContext.template make<PanoramaGUI>().onUnload();
+        hookContext.hooks().viewRenderHook.uninstall();
+        hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
+        hookContext.template make<PlayerModelGlowPreview>().onUnload();
+        hookContext.template make<WeaponModelGlowPreview>().onUnload();
+        hookContext.template make<NoScopeInaccuracyVis>().onUnload();
+        hookContext.template make<BombPlantAlert>().onUnload();
 
+        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([&hookContext](const auto& entityIdentity) {
+            auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
+            const auto entityTypeInfo = baseEntity.classify();
+            if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>())
+                hookContext.template make<ModelGlow>().onUnload()(PlayerModelGlow{hookContext}, baseEntity.template as<PlayerPawn>());
+            else if (entityTypeInfo.template is<cs2::C_C4>())
+                hookContext.template make<ModelGlow>().onUnload()(DroppedBombModelGlow{hookContext}, baseEntity.template as<BaseWeapon>());
+            else if (entityTypeInfo.template is<cs2::CBaseAnimGraph>())
+                hookContext.template make<ModelGlow>().onUnload()(DefuseKitModelGlow{hookContext}, baseEntity);
+            else if (entityTypeInfo.template is<cs2::CPlantedC4>())
+                hookContext.template make<ModelGlow>().onUnload()(TickingBombModelGlow{hookContext}, baseEntity.template as<PlantedC4>());
+            else if (entityTypeInfo.isGrenadeProjectile())
+                hookContext.template make<ModelGlow>().onUnload()(GrenadeProjectileModelGlow{hookContext}, baseEntity);
+            else if (entityTypeInfo.isWeapon())
+                hookContext.template make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, baseEntity.template as<BaseWeapon>());
+        });
+    }
+
+    [[NOINLINE]] void initCompleteContextFromGameThread() noexcept
+    {
         const auto partialContext = deferredCompleteContext.partial();
-
         deferredCompleteContext.makeComplete(
             partialContext.peepEventsHook,
             partialContext.clientDLL,
@@ -194,8 +191,17 @@ private:
             MemoryPatterns{partialContext.patternFinders},
             Tier0Dll{}
         );
+    }
 
-        return true;
+    [[NOINLINE]] static void finishInit(auto& hookContext)
+    {
+        hookContext.entityClassifier().init(hookContext);
+        if (const auto mainMenu{hookContext.patternSearchResults().template get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
+            hookContext.template make<PanoramaGUI>().init(hookContext.template make<PanoramaUiPanel>((*mainMenu)->uiPanel));
+        hookContext.config().init();
+        hookContext.config().scheduleLoad();
+        hookContext.hooks().peepEventsHook.disable();
+        hookContext.hooks().viewRenderHook.install();
     }
 
     FreeMemoryRegionList _freeRegionList;
