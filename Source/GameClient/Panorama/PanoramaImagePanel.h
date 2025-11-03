@@ -10,39 +10,36 @@
 #include <CS2/Panorama/CImagePanel.h>
 #include <MemoryPatterns/PatternTypes/PanoramaImagePanelPatternTypes.h>
 
-#include "PanoramaImagePanelContext.h"
-
 struct SvgImageParams {
     const char* imageUrl;
     int textureHeight{-1};
     std::optional<cs2::Color> fillColor{};
 };
 
-template <typename HookContext, typename Context = PanoramaImagePanelContext<HookContext>>
+template <typename HookContext>
 struct PanoramaImagePanel {
     using RawType = cs2::CImagePanel;
 
-    template <typename... Args>
-        requires std::is_constructible_v<Context, Args...>
-    PanoramaImagePanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    PanoramaImagePanel(HookContext& hookContext, cs2::CImagePanel* panel) noexcept
+        : hookContext{hookContext}
+        , panel{panel}
     {
     }
 
     [[nodiscard]] decltype(auto) uiPanel() const noexcept
     {
-        return context.uiPanel();
+        return hookContext.uiPanel(panel ? panel->uiPanel : nullptr);
     }
 
     [[nodiscard]] cs2::ImageProperties* getImageProperties() const noexcept
     {
-        return context.hookContext.patternSearchResults().template get<ImagePropertiesOffset>().of(context.panel).get();
+        return hookContext.patternSearchResults().template get<ImagePropertiesOffset>().of(panel).get();
     }
 
     [[nodiscard]] std::string_view getImagePath() const noexcept
     {
-        if (auto&& imagePath = context.getImagePath())
-            return imagePath;
+        if (auto&& imagePath = hookContext.patternSearchResults().template get<OffsetToImagePath>().of(panel).get(); imagePath && imagePath->m_pString)
+            return imagePath->m_pString;
         return {};
     }
 
@@ -53,9 +50,6 @@ struct PanoramaImagePanel {
 
     void setImageSvg(const SvgImageParams& params) const noexcept
     {
-        if (context.panel == nullptr)
-            return;
-
         const auto properties{getImageProperties()};
         if (!properties)
             return;
@@ -68,17 +62,18 @@ struct PanoramaImagePanel {
             properties->presentSvgAttributes |= 1 << static_cast<std::size_t>(cs2::SvgAttributeType::FillColor);
         }
 
-        if (context.hookContext.patternSearchResults().template get<SetImageFunctionPointer>())
-            context.hookContext.patternSearchResults().template get<SetImageFunctionPointer>()(context.panel, params.imageUrl, nullptr, properties);
+        if (hookContext.patternSearchResults().template get<SetImageFunctionPointer>())
+            hookContext.patternSearchResults().template get<SetImageFunctionPointer>()(panel, params.imageUrl, nullptr, properties);
     }
 
 private:
     [[nodiscard]] decltype(auto) uiScaleFactor() const
     {
-        const auto scale = context.uiPanel().getUiScaleFactor().valueOr(1.0f);
+        const auto scale = uiPanel().getUiScaleFactor().valueOr(1.0f);
         assert(scale >= 0.1f && scale <= 10.0f && "Invalid UI scale factor");
         return scale;
     }
 
-    Context context;
+    HookContext& hookContext;
+    cs2::CImagePanel* panel;
 };

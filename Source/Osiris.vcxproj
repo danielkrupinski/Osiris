@@ -321,7 +321,6 @@
     <ClInclude Include="GameClient\Panorama\PanelStylePropertyFactory.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaDropDown.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaImagePanel.h" />
-    <ClInclude Include="GameClient\Panorama\PanoramaImagePanelContext.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaLabel.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaSymbols.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaTransformations.h" />

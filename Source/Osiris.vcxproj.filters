@@ -1571,9 +1571,6 @@
     <ClInclude Include="GameClient\Panorama\PanoramaImagePanel.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\Panorama\PanoramaImagePanelContext.h">
-      <Filter>GameClient\Panorama</Filter>
-    </ClInclude>
     <ClInclude Include="GameClient\Panorama\PanoramaLabel.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
