@@ -146,102 +146,102 @@ struct PanoramaUiPanel {
 
     void setOpacity(float opacity) const noexcept
     {
-        context.setProperty(context.propertyFactory().opacity(opacity));
+        setStyleProperty(context.propertyFactory().opacity(opacity));
     }
 
     void setWidth(cs2::CUILength width) const noexcept
     {
-        context.setProperty(context.propertyFactory().width(width));
+        setStyleProperty(context.propertyFactory().width(width));
     }
 
     void setHeight(cs2::CUILength height) const noexcept
     {
-        context.setProperty(context.propertyFactory().height(height));
+        setStyleProperty(context.propertyFactory().height(height));
     }
 
     void setZIndex(float zIndex) const noexcept
     {
-        context.setProperty(context.propertyFactory().zIndex(zIndex));
+        setStyleProperty(context.propertyFactory().zIndex(zIndex));
     }
 
     void setImageShadow(const PanelShadowParams& params) const noexcept
     {
-        context.setProperty(context.propertyFactory().imageShadow(params));
+        setStyleProperty(context.propertyFactory().imageShadow(params));
     }
 
     void setPosition(cs2::CUILength x, cs2::CUILength y) const noexcept
     {
-        context.setProperty(context.propertyFactory().position(x, y));
+        setStyleProperty(context.propertyFactory().position(x, y));
     }
 
     void setTransformOrigin(cs2::CUILength x, cs2::CUILength y) const noexcept
     {
-        context.setProperty(context.propertyFactory().transformOrigin(x, y));
+        setStyleProperty(context.propertyFactory().transformOrigin(x, y));
     }
 
     void setAlign(const PanelAlignmentParams& params) const noexcept
     {
-        context.setProperty(context.propertyFactory().align(params));
+        setStyleProperty(context.propertyFactory().align(params));
     }
 
     void setWashColor(cs2::Color color) const noexcept
     {
-        context.setProperty(context.propertyFactory().washColor(color));
+        setStyleProperty(context.propertyFactory().washColor(color));
     }
 
     void setFlowChildren(cs2::EFlowDirection flowDirection) const noexcept
     {
-        context.setProperty(context.propertyFactory().flowChildren(flowDirection));
+        setStyleProperty(context.propertyFactory().flowChildren(flowDirection));
     }
 
     void setFont(const PanelFontParams& params) const noexcept
     {
-        context.setProperty(context.propertyFactory().font(params));
+        setStyleProperty(context.propertyFactory().font(params));
     }
 
     void setTextShadow(const PanelShadowParams& params) const noexcept
     {
-        context.setProperty(context.propertyFactory().textShadow(params));
+        setStyleProperty(context.propertyFactory().textShadow(params));
     }
 
     void setMargin(const PanelMarginParams& params) const noexcept
     {
-        context.setProperty(context.propertyFactory().margin(params));
+        setStyleProperty(context.propertyFactory().margin(params));
     }
 
     void setMixBlendMode(cs2::EMixBlendMode mode) const noexcept
     {
-        context.setProperty(context.propertyFactory().mixBlendMode(mode));
+        setStyleProperty(context.propertyFactory().mixBlendMode(mode));
     }
 
     void setTextAlign(cs2::ETextAlign textAlign) const noexcept
     {
-        context.setProperty(context.propertyFactory().textAlign(textAlign));
+        setStyleProperty(context.propertyFactory().textAlign(textAlign));
     }
 
     void setColor(cs2::Color color) const noexcept
     {
-        context.setProperty(context.propertyFactory().foregroundColor(color));
+        setStyleProperty(context.propertyFactory().foregroundColor(color));
     }
     
     void setBackgroundColor(cs2::Color color) const noexcept
     {
-        context.setProperty(context.propertyFactory().backgroundColor(color));
+        setStyleProperty(context.propertyFactory().backgroundColor(color));
     }
 
     void setTransform3D(std::span<cs2::CTransform3D*> transforms) const noexcept
     {
-        context.setProperty(context.propertyFactory().transform3D(transforms));
+        setStyleProperty(context.propertyFactory().transform3D(transforms));
     }
 
     void setBorder(cs2::CUILength width, cs2::Color color) const noexcept
     {
-        context.setProperty(context.propertyFactory().border(width, color));
+        setStyleProperty(context.propertyFactory().border(width, color));
     }
 
     void setBorderRadius(cs2::CUILength radius) const noexcept
     {
-        context.setProperty(context.propertyFactory().borderRadius(radius));
+        setStyleProperty(context.propertyFactory().borderRadius(radius));
     }
 
     [[nodiscard]] decltype(auto) getUiScaleFactor() const noexcept
@@ -250,5 +250,12 @@ struct PanoramaUiPanel {
     }
 
 private:
+    template <typename StyleProperty>
+    void setStyleProperty(std::optional<StyleProperty> styleProperty) const
+    {
+        if (styleProperty.has_value())
+            context.setProperty(&*styleProperty);
+    }
+
     Context context;
 };
