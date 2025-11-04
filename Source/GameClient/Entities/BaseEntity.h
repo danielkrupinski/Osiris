@@ -32,9 +32,11 @@ public:
         return *this;
     }
 
-    [[nodiscard]] decltype(auto) absOrigin() const noexcept
+    [[nodiscard]] Optional<cs2::Vector> absOrigin() const noexcept
     {
-        return gameSceneNode().absOrigin();
+        if (entity && hookContext.patternSearchResults().template get<GetAbsOriginFunction>())
+            return *hookContext.patternSearchResults().template get<GetAbsOriginFunction>()(entity);
+        return {};
     }
 
     [[nodiscard]] decltype(auto) entityIdentity() const noexcept

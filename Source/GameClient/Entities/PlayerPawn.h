@@ -92,7 +92,7 @@ public:
 
     [[nodiscard]] decltype(auto) absOrigin() const noexcept
     {
-        return baseEntity().gameSceneNode().absOrigin();
+        return baseEntity().absOrigin();
     }
 
     [[nodiscard]] bool isControlledByLocalPlayer() const noexcept
