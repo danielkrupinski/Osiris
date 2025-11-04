@@ -7,6 +7,9 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 04 November 2025
+    * Improved smoothness of "Player Info in World" on moving players
+
 * 30 October 2025
     * Added Bomb Plant Alert feature
         * Green color means the bomb will be planted before the end of the round if uninterrupted
@@ -26,10 +29,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added viewmodel fov modification
 
     ![Viewmodel fov modification](https://github.com/user-attachments/assets/3b9d6bde-a68c-4739-913c-d3b6caba4117)
-
-* 25 August 2025
-    * Outline Glow hues are now customizable
-    * Added `Enemy/Ally` color mode to Player Outline Glow
 
 ## Technical features
 
