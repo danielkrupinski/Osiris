@@ -31,7 +31,12 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyWidth>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyWidth>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyWidth{cs2::CStyleProperty{vmt, symbol, false}, width};
+            return cs2::CStylePropertyWidth{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_Length = width
+            };
         return {};
     }
 
@@ -40,7 +45,12 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyOpacity>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyOpacity>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyOpacity{cs2::CStyleProperty{vmt, symbol, false}, opacity};
+            return cs2::CStylePropertyOpacity{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .opacity = opacity
+            };
         return {};
     }
 
@@ -49,7 +59,12 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyZIndex>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyZIndex>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyZIndex{cs2::CStyleProperty{vmt, symbol, false}, zIndex};
+            return cs2::CStylePropertyZIndex{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .zindex = zIndex
+            };
         return {};
     }
 
@@ -58,7 +73,12 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyHeight>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyHeight>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyHeight{cs2::CStyleProperty{vmt, symbol, false}, height};
+            return cs2::CStylePropertyHeight{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_Height = height
+            };
         return {};
     }
 
@@ -67,7 +87,17 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyImageShadow>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyImageShadow>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyImageShadow{cs2::CStyleProperty{vmt, symbol, false}, true, params.horizontalOffset, params.verticalOffset, params.blurRadius, params.strength, params.color};
+            return cs2::CStylePropertyImageShadow{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .fullySet = true,
+                .horizontalOffset = params.horizontalOffset,
+                .verticalOffset = params.verticalOffset,
+                .blurRadius = params.blurRadius,
+                .strength = params.strength,
+                .color = params.color
+            };
         return {};
     }
 
@@ -76,7 +106,14 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyPosition>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyPosition>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyPosition{cs2::CStyleProperty{vmt, symbol, false}, x, y, cs2::CUILength::pixels(0)};
+            return cs2::CStylePropertyPosition{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .x = x,
+                .y = y,
+                .z = cs2::CUILength::pixels(0)
+            };
         return {};
     }
 
@@ -85,7 +122,14 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyTransformOrigin>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyTransformOrigin>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyTransformOrigin{cs2::CStyleProperty{vmt, symbol, false}, x, y, false};
+            return cs2::CStylePropertyTransformOrigin{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .x = x,
+                .y = y,
+                .m_bParentRelative = false
+            };
         return {};
     }
 
@@ -94,7 +138,13 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyAlign>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyAlign>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyAlign{cs2::CStyleProperty{vmt, symbol, false}, params.horizontalAlignment, params.verticalAlignment};
+            return cs2::CStylePropertyAlign{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_eHorizontalAlignment = params.horizontalAlignment,
+                .m_eVerticalAlignment = params.verticalAlignment
+            };
         return {};
     }
 
@@ -103,7 +153,13 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyWashColor>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyWashColor>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyWashColor{cs2::CStyleProperty{vmt, symbol, false}, color, true};
+            return cs2::CStylePropertyWashColor{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .color = color,
+                .fullySet = true
+            };
         return {};
     }
 
@@ -112,7 +168,12 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyFlowChildren>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyFlowChildren>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyFlowChildren{cs2::CStyleProperty{vmt, symbol, false}, flowDirection};
+            return cs2::CStylePropertyFlowChildren{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_eFlowDirection = flowDirection
+            };
         return {};
     }
 
@@ -128,7 +189,16 @@ struct PanelStylePropertyFactory {
                     fontFamilyString.m_pString[params.fontFamily.length()] = '\0';
                 }
             }
-            return cs2::CStylePropertyFont{cs2::CStyleProperty{vmt, symbol, false}, fontFamilyString, params.fontSize, cs2::k_EFontStyleUnset, params.fontWeight, cs2::k_EFontStretchUnset};
+            return cs2::CStylePropertyFont{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_strFontFamily = fontFamilyString,
+                .m_flFontSize = params.fontSize,
+                .m_eFontStyle = cs2::k_EFontStyleUnset,
+                .m_eFontWeight = params.fontWeight,
+                .m_eFontStretch = cs2::k_EFontStretchUnset
+            };
         }
         return {};
     }
@@ -138,7 +208,17 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyTextShadow>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyTextShadow>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyTextShadow{cs2::CStyleProperty{vmt, symbol, false}, true, params.horizontalOffset, params.verticalOffset, params.blurRadius, params.strength, params.color};
+            return cs2::CStylePropertyTextShadow{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .fullySet = true, 
+                .horizontalOffset = params.horizontalOffset, 
+                .verticalOffset = params.verticalOffset,
+                .blurRadius = params.blurRadius,
+                .strength = params.strength,
+                .color = params.color
+            };
         return {};
     }
 
@@ -147,7 +227,15 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyMargin>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyMargin>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyMargin{cs2::CStyleProperty{vmt, symbol, false}, params.marginLeft, params.marginTop, params.marginRight, params.marginBottom};
+            return cs2::CStylePropertyMargin{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_left = params.marginLeft,
+                .m_top = params.marginTop,
+                .m_right = params.marginRight,
+                .m_bottom = params.marginBottom
+            };
         return {};
     }
 
@@ -156,7 +244,13 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyMixBlendMode>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyMixBlendMode>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyMixBlendMode{cs2::CStyleProperty{vmt, symbol, false}, mode, true};
+            return cs2::CStylePropertyMixBlendMode{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_eMixBlendMode = mode,
+                .m_bSet = true
+            };
         return {};
     }
 
@@ -165,7 +259,12 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyTextAlign>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyTextAlign>();
         if (vmt && symbol.isValid())
-            return cs2::CStylePropertyTextAlign{cs2::CStyleProperty{vmt, symbol, false}, textAlign};
+            return cs2::CStylePropertyTextAlign{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_eAlign = textAlign
+            };
         return {};
     }
 
@@ -174,20 +273,20 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyForegroundColor>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyForegroundColor>();
         if (vmt && symbol.isValid()) {
-#if defined(CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-field-initializers"
-#endif
-            auto foregroundColor = cs2::CStylePropertyForegroundColor{cs2::CStyleProperty{vmt, symbol, false}};
-#if defined(CLANG)
-#pragma clang diagnostic pop
-#endif
-            foregroundColor.numberOfFillBrushes = 1;
-            foregroundColor.growSize = 1;
-            foregroundColor.fillBrush.type = cs2::k_EStrokeTypeFillColor;
-            foregroundColor.fillBrush.fillColor = color;
-            foregroundColor.fillBrush.opacity = 1.0f;
-            return foregroundColor;
+            return cs2::CStylePropertyForegroundColor{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .fillBrushes{
+                    .numberOfElements = 1,
+                    .growSize = 1,
+                    .element{
+                        .type = cs2::k_EStrokeTypeFillColor,
+                        .fillColor = color,
+                        .opacity = 1.0f
+                    }
+                }
+            };
         }
         return {};
     }
@@ -197,22 +296,21 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyBackgroundColor>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyBackgroundColor>();
         if (vmt && symbol.isValid()) {
-#if defined(CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-field-initializers"
-#pragma clang diagnostic ignored "-Wmissing-braces"
-#endif
-            auto backgroundColor = cs2::CStylePropertyBackgroundColor{cs2::CStyleProperty{vmt, symbol, false}};
-#if defined(CLANG)
-#pragma clang diagnostic pop
-#endif
-            backgroundColor.numberOfFillBrushes = 1;
-            backgroundColor.growSize = 1;
-            backgroundColor.fillBrush.type = cs2::k_EStrokeTypeFillColor;
-            backgroundColor.fillBrush.fillColor = color;
-            backgroundColor.fillBrush.opacity = 1.0f;
-            backgroundColor.opacity = -1.0f;
-            return backgroundColor;
+            return cs2::CStylePropertyBackgroundColor{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .fillBrushes{
+                    .numberOfElements = 1,
+                    .growSize = 1,
+                    .element{
+                        .type = cs2::k_EStrokeTypeFillColor,
+                        .fillColor = color,
+                        .opacity = 1.0f
+                    },
+                },
+                .opacity = -1.0f
+            };
         }
         return {};
     }
@@ -222,28 +320,18 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyTransform3D>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyTransform3D>();
         if (vmt && symbol.isValid()) {
-#if defined(CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-field-initializers"
-#endif
-            auto transform3D = cs2::CStylePropertyTransform3D{cs2::CStyleProperty{vmt, symbol, false}};
-#if defined(CLANG)
-#pragma clang diagnostic pop
-#endif
-            transform3D.transforms.memory = static_cast<cs2::CTransform3D**>(hookContext.template make<MemAlloc>().allocate(sizeof(cs2::CTransform3D*) * transforms.size()));
-            if (transform3D.transforms.memory) {
-                std::memcpy(transform3D.transforms.memory, transforms.data(), transforms.size() * sizeof(cs2::CTransform3D*));
-                transform3D.transforms.allocationCount = static_cast<int>(transforms.size());
-                transform3D.transforms.size = static_cast<int>(transforms.size());
-            }
-            transform3D.transforms.growSize = 1;
-            transform3D.cachedParentWidth = 0.0f;
-            transform3D.cachedParentHeight = 0.0f;
-            transform3D.dirty = true;
-            transform3D.matrix = cs2::VMatrix::identity();
-            transform3D.interpolated = false;
-            transform3D.fullySet = true;
-            return transform3D;
+            return cs2::CStylePropertyTransform3D{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .transforms{createTransformVector(transforms)},
+                .cachedParentWidth = 0.0f,
+                .cachedParentHeight = 0.0f,
+                .dirty = true,
+                .matrix = cs2::VMatrix::identity(),
+                .interpolated = false,
+                .fullySet = true
+            };
         }
         return {};
     }
@@ -254,11 +342,13 @@ struct PanelStylePropertyFactory {
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyBorder>();
         if (vmt && symbol.isValid()) {
             return cs2::CStylePropertyBorder{
-                cs2::CStyleProperty{vmt, symbol, false},
-                {cs2::k_EBorderStyleSolid, cs2::k_EBorderStyleSolid, cs2::k_EBorderStyleSolid, cs2::k_EBorderStyleSolid},
-                {width, width, width, width},
-                {true, true, true, true},
-                {color, color, color, color}
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_rgBorderStyle{cs2::k_EBorderStyleSolid, cs2::k_EBorderStyleSolid, cs2::k_EBorderStyleSolid, cs2::k_EBorderStyleSolid},
+                .m_rgBorderWidth{width, width, width, width},
+                .m_rgColorsSet{true, true, true, true},
+                .m_rgBorderColor{color, color, color, color}
             };
         }
         return {};
@@ -269,24 +359,35 @@ struct PanelStylePropertyFactory {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyBorderRadius>();
         const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyBorderRadius>();
         if (vmt && symbol.isValid()) {
-#if defined(CLANG)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-field-initializers"
-#endif
-            auto styleProperty = cs2::CStylePropertyBorderRadius{cs2::CStyleProperty{vmt, symbol, false}};
-#if defined(CLANG)
-#pragma clang diagnostic pop
-#endif
-            for (auto& corner : styleProperty.m_rgCornerRaddi) {
-                corner.horizontalRadius = radius;
-                corner.verticalRadius = radius;
-            }
-            return styleProperty;
+            return cs2::CStylePropertyBorderRadius{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_rgCornerRaddi{
+                    {.horizontalRadius = radius, .verticalRadius = radius},
+                    {.horizontalRadius = radius, .verticalRadius = radius},
+                    {.horizontalRadius = radius, .verticalRadius = radius},
+                    {.horizontalRadius = radius, .verticalRadius = radius}
+                }
+            };
         }
         return {};
     }
 
 private:
+    [[nodiscard]] auto createTransformVector(std::span<cs2::CTransform3D*> transforms) const
+    {
+        cs2::CUtlVector<cs2::CTransform3D*> vec{};
+        vec.memory = static_cast<cs2::CTransform3D**>(hookContext.template make<MemAlloc>().allocate(sizeof(cs2::CTransform3D*) * transforms.size()));
+        if (vec.memory) {
+            std::memcpy(vec.memory, transforms.data(), transforms.size() * sizeof(cs2::CTransform3D*));
+            vec.allocationCount = static_cast<int>(transforms.size());
+            vec.size = static_cast<int>(transforms.size());
+        }
+        vec.growSize = 1;
+        return vec;
+    }
+
     HookContext& hookContext;
     const StylePropertiesSymbolsAndVMTs& symbolsAndVMTs;
 };
