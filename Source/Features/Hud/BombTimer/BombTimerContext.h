@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GameClient/Panorama/PanoramaImagePanel.h>
+#include <GameClient/Panorama/ImagePanel.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
 #include <GameClient/Panorama/PanoramaUiEngine.h>
 #include <Utils/Lvalue.h>
@@ -55,7 +55,7 @@ struct BombTimerContext {
 
     [[nodiscard]] auto bombSiteIconPanel() const noexcept
     {
-        return BombSiteIconPanel{uiEngine().getPanelFromHandle(state().bombSiteIconPanelHandle).clientPanel().template as<PanoramaImagePanel>()};
+        return BombSiteIconPanel{uiEngine().getPanelFromHandle(state().bombSiteIconPanelHandle).clientPanel().template as<ImagePanel>()};
     }
 
     [[nodiscard]] auto bombTimerTextPanel() const noexcept

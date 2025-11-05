@@ -4,7 +4,7 @@
 
 #include <Common/Visibility.h>
 #include <GameClient/Entities/C4.h>
-#include <GameClient/Panorama/PanoramaImagePanel.h>
+#include <GameClient/Panorama/ImagePanel.h>
 #include <Utils/CString.h>
 #include <Utils/StringBuilder.h>
 #include "PlayerActiveWeaponIconPanelContext.h"
@@ -37,7 +37,7 @@ public:
         weaponIconPathBuilder.put("s2r://panorama/images/icons/equipment/", weaponName.string, ".svg");
         const auto weaponIconPath = weaponIconPathBuilder.cstring();
 
-        auto&& weaponIconImagePanel = context.panel().clientPanel().template as<PanoramaImagePanel>();
+        auto&& weaponIconImagePanel = context.panel().clientPanel().template as<ImagePanel>();
         if (shouldUpdateImagePanel(weaponIconImagePanel, weaponIconPath))
             weaponIconImagePanel.setImageSvg(weaponIconPath, 24);
     }

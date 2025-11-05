@@ -17,10 +17,11 @@ struct SvgImageParams {
 };
 
 template <typename HookContext>
-struct PanoramaImagePanel {
+class ImagePanel {
+public:
     using RawType = cs2::CImagePanel;
 
-    PanoramaImagePanel(HookContext& hookContext, cs2::CImagePanel* panel) noexcept
+    ImagePanel(HookContext& hookContext, cs2::CImagePanel* panel) noexcept
         : hookContext{hookContext}
         , panel{panel}
     {

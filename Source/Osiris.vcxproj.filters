@@ -1568,9 +1568,6 @@
     <ClInclude Include="GameClient\Panorama\PanoramaDropDown.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\Panorama\PanoramaImagePanel.h">
-      <Filter>GameClient\Panorama</Filter>
-    </ClInclude>
     <ClInclude Include="GameClient\Panorama\PanoramaLabel.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
@@ -1942,6 +1939,9 @@
     </ClInclude>
     <ClInclude Include="Utils\EnumFlags.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\ImagePanel.h">
+      <Filter>GameClient\Panorama</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

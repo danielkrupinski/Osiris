@@ -311,6 +311,7 @@
     <ClInclude Include="GameClient\MemAlloc.h" />
     <ClInclude Include="GameClient\MemAllocState.h" />
     <ClInclude Include="GameClient\Panorama\ClientPanel.h" />
+    <ClInclude Include="GameClient\Panorama\ImagePanel.h" />
     <ClInclude Include="GameClient\Panorama\Ui3dPanel.h" />
     <ClInclude Include="GameClient\Panorama\PanelAlignmentParams.h" />
     <ClInclude Include="GameClient\Panorama\PanelFactory.h" />
@@ -320,7 +321,6 @@
     <ClInclude Include="GameClient\Panorama\PanelShadowParams.h" />
     <ClInclude Include="GameClient\Panorama\PanelStylePropertyFactory.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaDropDown.h" />
-    <ClInclude Include="GameClient\Panorama\PanoramaImagePanel.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaLabel.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaSymbols.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaTransformations.h" />
