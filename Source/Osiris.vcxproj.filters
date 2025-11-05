@@ -1595,9 +1595,6 @@
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelClasses.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelContext.h">
-      <Filter>GameClient\Panorama</Filter>
-    </ClInclude>
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelIterator.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>

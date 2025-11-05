@@ -8,6 +8,7 @@
 #include <Platform/Macros/PlatformSpecific.h>
 
 #include "CStyleSymbol.h"
+#include "Transform3D.h"
 
 namespace cs2
 {

@@ -329,7 +329,6 @@
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanel.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelChildPanels.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelClasses.h" />
-    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelContext.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelIterator.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelMethodInvoker.h" />
     <ClInclude Include="GameClient\Panorama\Slider.h" />
