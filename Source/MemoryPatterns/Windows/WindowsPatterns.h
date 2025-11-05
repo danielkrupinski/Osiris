@@ -25,6 +25,7 @@
 #include "PlantedC4PatternsWindows.h"
 #include "PlayerControllerPatternsWindows.h"
 #include "PlayerPawnPatternsWindows.h"
+#include "PlayerResourcePatternsWindows.h"
 #include "PortraitWorldPatternsWindows.h"
 #include "RenderComponentPatternsWindows.h"
 #include "SceneObjectPatternsWindows.h"

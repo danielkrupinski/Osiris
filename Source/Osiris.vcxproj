@@ -58,6 +58,7 @@
     <ClInclude Include="CS2\Classes\Entities\C_BaseModelEntity.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSGO_PreviewPlayer.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSPlayerPawn.h" />
+    <ClInclude Include="CS2\Classes\Entities\C_CSPlayerResource.h" />
     <ClInclude Include="CS2\Classes\Entities\C_CSWeaponBase.h" />
     <ClInclude Include="CS2\Classes\Entities\C_Hostage.h" />
     <ClInclude Include="CS2\Classes\Entities\GrenadeProjectiles.h" />
@@ -77,7 +78,7 @@
     <ClInclude Include="CS2\Classes\Vector.h" />
     <ClInclude Include="CS2\Classes\VMatrix.h" />
     <ClInclude Include="CS2\Constants\AspectRatio.h" />
-    <ClInclude Include="CS2\Constants\BombSiteIndex.h" />
+    <ClInclude Include="CS2\Constants\BombsiteIndex.h" />
     <ClInclude Include="CS2\Constants\ColorConstants.h" />
     <ClInclude Include="CS2\Constants\CrosshairColorIndex.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
@@ -86,6 +87,7 @@
     <ClInclude Include="CS2\Constants\IconURLs.h" />
     <ClInclude Include="CS2\Constants\LifeStateConstants.h" />
     <ClInclude Include="CS2\Constants\PanelIDs.h" />
+    <ClInclude Include="CS2\Constants\RoundWinStatus.h" />
     <ClInclude Include="CS2\Constants\SceneObjectAttributeNames.h" />
     <ClInclude Include="CS2\Constants\SoundNames.h" />
     <ClInclude Include="CS2\Constants\StylePropertySymbolNames.h" />
@@ -126,6 +128,12 @@
     <ClInclude Include="Features\Common\InWorldPanelsState.h" />
     <ClInclude Include="Features\Common\RenderingHookEntityLoop.h" />
     <ClInclude Include="Features\FeaturesStates.h" />
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlert.h" />
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertConfigVariables.h" />
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertPanelFactory.h" />
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertPanelParams.h" />
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertParams.h" />
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertState.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombSiteIconPanel.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimer.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerCondition.h" />
@@ -187,6 +195,7 @@
     <ClInclude Include="Features\Visuals\ModelGlow\GrenadeProjectileModelGlow\GrenadeProjectileModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowConfigVariables.h" />
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowDeactivationFlags.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowParams.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h" />
@@ -273,6 +282,7 @@
     <ClInclude Include="GameClient\Entities\PlantedC4.h" />
     <ClInclude Include="GameClient\Entities\PlayerController.h" />
     <ClInclude Include="GameClient\Entities\PlayerPawn.h" />
+    <ClInclude Include="GameClient\Entities\PlayerResource.h" />
     <ClInclude Include="GameClient\Entities\PlayerWeapons.h" />
     <ClInclude Include="GameClient\Entities\PreviewPlayer.h" />
     <ClInclude Include="GameClient\Entities\RenderComponent.h" />
@@ -301,6 +311,7 @@
     <ClInclude Include="GameClient\MemAlloc.h" />
     <ClInclude Include="GameClient\MemAllocState.h" />
     <ClInclude Include="GameClient\Panorama\ClientPanel.h" />
+    <ClInclude Include="GameClient\Panorama\ImagePanel.h" />
     <ClInclude Include="GameClient\Panorama\Ui3dPanel.h" />
     <ClInclude Include="GameClient\Panorama\PanelAlignmentParams.h" />
     <ClInclude Include="GameClient\Panorama\PanelFactory.h" />
@@ -310,8 +321,6 @@
     <ClInclude Include="GameClient\Panorama\PanelShadowParams.h" />
     <ClInclude Include="GameClient\Panorama\PanelStylePropertyFactory.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaDropDown.h" />
-    <ClInclude Include="GameClient\Panorama\PanoramaImagePanel.h" />
-    <ClInclude Include="GameClient\Panorama\PanoramaImagePanelContext.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaLabel.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaSymbols.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaTransformations.h" />
@@ -320,7 +329,6 @@
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanel.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelChildPanels.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelClasses.h" />
-    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelContext.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelIterator.h" />
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelMethodInvoker.h" />
     <ClInclude Include="GameClient\Panorama\Slider.h" />
@@ -386,6 +394,7 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\PlantedC4PatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PlayerControllerPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PlayerPawnPatternTypes.h" />
+    <ClInclude Include="MemoryPatterns\PatternTypes\PlayerResourcePatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PortraitWorldPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\RenderComponentPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\SceneObjectPatternTypes.h" />
@@ -417,6 +426,7 @@
     <ClInclude Include="MemoryPatterns\Windows\GlowPropertyPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\GlowSceneObjectPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\HostageServicesPatternsWindows.h" />
+    <ClInclude Include="MemoryPatterns\Windows\PlayerResourcePatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PortraitWorldPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\MemAllocPatternsWindows.h" />
     <ClInclude Include="MemoryPatterns\Windows\PanelPatternsWindows.h" />
@@ -529,6 +539,7 @@
     <ClInclude Include="Utils\ColorUtils.h" />
     <ClInclude Include="Utils\CString.h" />
     <ClInclude Include="Utils\DynamicArray.h" />
+    <ClInclude Include="Utils\EnumFlags.h" />
     <ClInclude Include="Utils\FieldFieldOffset.h" />
     <ClInclude Include="Utils\FieldOffset.h" />
     <ClInclude Include="Utils\FileSlice.h" />

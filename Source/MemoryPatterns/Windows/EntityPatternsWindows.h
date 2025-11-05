@@ -13,6 +13,7 @@ struct EntityPatterns {
             .template addPattern<OffsetToTeamNumber, CodePattern{"44 0F B6 89 ? ? ? ? 41 3B"}.add(4).read()>()
             .template addPattern<OffsetToVData, CodePattern{"89 ? ? ? ? 48 85 C9 74 ? 48 8B 49 ? 48"}.add(1).read()>()
             .template addPattern<OffsetToRenderComponent, CodePattern{"8B ? ? ? ? ? 48 85 C0 74 ? 39 ? ? 7E"}.add(2).read()>()
-            .template addPattern<OffsetToOwnerEntity, CodePattern{"8B 81 ? ? ? ? 4C 8B DA"}.add(2).read()>();
+            .template addPattern<OffsetToOwnerEntity, CodePattern{"8B 81 ? ? ? ? 4C 8B DA"}.add(2).read()>()
+            .template addPattern<GetAbsOriginFunction, CodePattern{"F8 ? 75 ? E8 ? ? ? ? F3"}.add(5).abs()>();
     }
 };

@@ -7,6 +7,16 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 04 November 2025
+    * Improved smoothness of "Player Info in World" on moving players
+
+* 30 October 2025
+    * Added Bomb Plant Alert feature
+        * Green color means the bomb will be planted before the end of the round if uninterrupted
+        * Red color means the bomb can not be planted before the end of the round
+
+    <img width="201" height="146" alt="Bomb Plant Alert" src="https://github.com/user-attachments/assets/21c0f8fb-a20d-42df-9857-f578cfc9b9f9" />
+
 * 23 October 2025
     * Hostage Outline Glow hue is now customizable
 
@@ -19,13 +29,6 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
     * Added viewmodel fov modification
 
     ![Viewmodel fov modification](https://github.com/user-attachments/assets/3b9d6bde-a68c-4739-913c-d3b6caba4117)
-
-* 25 August 2025
-    * Outline Glow hues are now customizable
-    * Added `Enemy/Ally` color mode to Player Outline Glow
-
-* 19 July 2025
-    * Adjusted allowed value range of "Team T Hue" Model Glow setting
 
 ## Technical features
 
@@ -47,7 +50,7 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 #### Linux
 
 * **CMake 3.24** or newer
-* **g++ 11 or newer** or **clang++ 17 or newer**
+* **g++ 11 or newer** or **clang++ 18 or newer**
 
 ### Compiling from source
 

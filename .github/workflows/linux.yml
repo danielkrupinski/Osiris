@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-24.04]
-        compiler: [g++-11, g++-12, g++-13, g++-14, g++-15, clang++-17, clang++-18, clang++-19, clang++-20, clang++-21]
+        compiler: [g++-11, g++-12, g++-13, g++-14, g++-15, clang++-18, clang++-19, clang++-20, clang++-21]
         configuration: [Debug, Release]
         exclude:
           - os: ubuntu-22.04
@@ -17,8 +17,6 @@ jobs:
             compiler: g++-14
           - os: ubuntu-22.04
             compiler: g++-15
-          - os: ubuntu-22.04
-            compiler: clang++-17
           - os: ubuntu-22.04
             compiler: clang++-18
           - os: ubuntu-22.04
@@ -64,7 +62,7 @@ jobs:
         apt update
         apt install -y cmake git g++-15
     - name: configure
-      run: CXX=${{ matrix.compiler }} cmake -Werror=dev -D CMAKE_BUILD_TYPE=${{ matrix.configuration }} -D ENABLE_TESTS="unit;functional" -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -B build
+      run: CXX=${{ matrix.compiler }} cmake -Werror=dev -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DENABLE_TESTS="unit;functional" -DCMAKE_COMPILE_WARNING_AS_ERROR=1 -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=4 -B build
     - name: build source
       run: cmake --build build --target Osiris -j $(nproc --all)
     - name: build unit tests

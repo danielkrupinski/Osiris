@@ -2,7 +2,7 @@
 
 #include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUIPanel.h>
-#include <GameClient/Panorama/PanoramaImagePanel.h>
+#include <GameClient/Panorama/ImagePanel.h>
 #include <GameClient/Panorama/PanoramaTransformations.h>
 #include <Utils/Lvalue.h>
 

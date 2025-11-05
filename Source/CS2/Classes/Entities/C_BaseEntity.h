@@ -11,6 +11,7 @@ namespace cs2
 struct CEntitySubclassVDataBase;
 struct CGameSceneNode;
 struct CRenderComponent;
+struct Vector;
 
 struct C_BaseEntity : CEntityInstance {
     using m_pGameSceneNode = CGameSceneNode*;
@@ -20,6 +21,7 @@ struct C_BaseEntity : CEntityInstance {
     using m_pSubclassVData = CEntitySubclassVDataBase*;
     using m_pRenderComponent = CRenderComponent*;
     using m_hOwnerEntity = CEntityHandle;
+    using GetAbsOrigin = Vector*(C_BaseEntity* thisptr);
 };
 
 }

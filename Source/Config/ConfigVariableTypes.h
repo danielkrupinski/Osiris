@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
+#include <Features/Hud/BombPlantAlert/BombPlantAlertConfigVariables.h>
 #include <Features/Hud/BombTimer/BombTimerConfigVariables.h>
 #include <Features/Hud/DefusingAlert/DefusingAlertConfigVariables.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserverConfigVariables.h>
@@ -96,5 +97,6 @@ using ConfigVariableTypes = TypeList<
     viewmodel_mod_vars::Enabled,
     viewmodel_mod_vars::ModifyFov,
     viewmodel_mod_vars::Fov,
-    no_scope_inaccuracy_vis_vars::Enabled
+    no_scope_inaccuracy_vis_vars::Enabled,
+    BombPlantAlertEnabled
 >;

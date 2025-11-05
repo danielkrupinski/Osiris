@@ -3,7 +3,7 @@
 #include <CS2/Panorama/CUILength.h>
 #include <CS2/Panorama/StyleEnums.h>
 #include <GameClient/Panorama/PanelMarginParams.h>
-#include <GameClient/Panorama/PanoramaImagePanel.h>
+#include <GameClient/Panorama/ImagePanel.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
 #include <GameClient/Panorama/PanoramaUiEngine.h>
 #include <Utils/Lvalue.h>

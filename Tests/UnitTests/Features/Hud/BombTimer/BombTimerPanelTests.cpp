@@ -28,7 +28,8 @@ TEST_F(BombTimerPanelTest, HidesContainerPanel) {
 }
 
 struct BombTimerPanelTestParam {
-    const char* bombSiteIconUrl{cs2::kBombSiteAIconUrl};
+    Optional<cs2::BombsiteIndex> bombsiteIndex{cs2::BombsiteIndex::BombsiteA};
+    const char* expectedBombsiteIconUrl{cs2::kBombSiteAIconUrl};
     float timeToExplosion{12.0f};
 };
 
@@ -43,8 +44,8 @@ TEST_P(BombTimerPanelTestWithParam, ShowsContainerPanelAndSetsBombSiteIconAndTim
 
     EXPECT_CALL(mockBombTimerContainerPanel, show());
 
-    EXPECT_CALL(mockPlantedC4, getBombSiteIconUrl()).WillOnce(testing::Return(GetParam().bombSiteIconUrl));
-    EXPECT_CALL(mockBombSiteIconPanel, setIcon(GetParam().bombSiteIconUrl));
+    EXPECT_CALL(mockPlantedC4, bombsiteIndex()).WillOnce(testing::Return(GetParam().bombsiteIndex));
+    EXPECT_CALL(mockBombSiteIconPanel, setIcon(GetParam().expectedBombsiteIconUrl));
 
     EXPECT_CALL(mockPlantedC4, getTimeToExplosion()).WillOnce(testing::Return(GetParam().timeToExplosion));
     EXPECT_CALL(mockBombTimerTextPanel, setTimeToExplosion(GetParam().timeToExplosion));
@@ -53,9 +54,9 @@ TEST_P(BombTimerPanelTestWithParam, ShowsContainerPanelAndSetsBombSiteIconAndTim
 }
 
 INSTANTIATE_TEST_SUITE_P(, BombTimerPanelTestWithParam, testing::Values(
-    BombTimerPanelTestParam{.bombSiteIconUrl = cs2::kBombSiteAIconUrl},
-    BombTimerPanelTestParam{.bombSiteIconUrl = cs2::kBombSiteBIconUrl},
-    BombTimerPanelTestParam{.bombSiteIconUrl = nullptr},
+    BombTimerPanelTestParam{.bombsiteIndex{cs2::BombsiteIndex::BombsiteA}, .expectedBombsiteIconUrl = cs2::kBombSiteAIconUrl},
+    BombTimerPanelTestParam{.bombsiteIndex{cs2::BombsiteIndex::BombsiteB}, .expectedBombsiteIconUrl = cs2::kBombSiteBIconUrl},
+    BombTimerPanelTestParam{.bombsiteIndex{std::nullopt}, .expectedBombsiteIconUrl = nullptr},
 
     BombTimerPanelTestParam{.timeToExplosion = 40.0f},
     BombTimerPanelTestParam{.timeToExplosion = 15.234f}

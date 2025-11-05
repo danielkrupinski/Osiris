@@ -6,6 +6,7 @@
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
+#include <HookContext/HookContextMacros.h>
 
 template <typename HookContext>
 class GrenadeProjectileModelGlow {
@@ -17,21 +18,21 @@ public:
 
     [[nodiscard]] bool enabled() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::GlowGrenadeProjectiles>();
+        return GET_CONFIG_VAR(model_glow_vars::GlowGrenadeProjectiles);
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().grenadeProjectileModelGlowDisabling;
+        return ModelGlowDeactivationFlags::GrenadeProjectileModelGlowDeactivating;
     }
 
     [[nodiscard]] Optional<color::HueInteger> hue(EntityTypeInfo entityTypeInfo) const
     {
         switch (entityTypeInfo.typeIndex) {
-        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return hookContext.config().template getVariable<model_glow_vars::FlashbangHue>();
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return hookContext.config().template getVariable<model_glow_vars::HEGrenadeHue>();
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return hookContext.config().template getVariable<model_glow_vars::SmokeGrenadeHue>();
-        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return hookContext.config().template getVariable<model_glow_vars::MolotovHue>();
+        case EntityTypeInfo::indexOf<cs2::C_FlashbangProjectile>(): return GET_CONFIG_VAR(model_glow_vars::FlashbangHue);
+        case EntityTypeInfo::indexOf<cs2::C_HEGrenadeProjectile>(): return GET_CONFIG_VAR(model_glow_vars::HEGrenadeHue);
+        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenadeProjectile>(): return GET_CONFIG_VAR(model_glow_vars::SmokeGrenadeHue);
+        case EntityTypeInfo::indexOf<cs2::C_MolotovProjectile>(): return GET_CONFIG_VAR(model_glow_vars::MolotovHue);
         default: return {};
         }
     }

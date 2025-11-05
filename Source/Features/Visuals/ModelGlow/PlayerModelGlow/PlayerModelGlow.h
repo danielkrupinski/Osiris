@@ -13,6 +13,7 @@
 #include <GameClient/Entities/TeamNumber.h>
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
+#include <HookContext/HookContextMacros.h>
 #include <Utils/ColorUtils.h>
 #include <Utils/Optional.h>
 
@@ -28,7 +29,7 @@ public:
 
     [[nodiscard]] bool enabled() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::GlowPlayers>();
+        return GET_CONFIG_VAR(model_glow_vars::GlowPlayers);
     }
 
     [[nodiscard]] bool shouldApplyGlow(auto&& playerPawn) const
@@ -37,12 +38,12 @@ public:
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
-            && (!getConfigVariable<model_glow_vars::GlowOnlyEnemies>() || playerPawn.isEnemy().value_or(true));
+            && (!GET_CONFIG_VAR(model_glow_vars::GlowOnlyEnemies) || playerPawn.isEnemy().value_or(true));
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().playerModelGlowDisabling;
+        return ModelGlowDeactivationFlags::PlayerModelGlowDeactivating;
     }
 
     [[nodiscard]] auto& originalSceneObjectUpdater() const
@@ -57,7 +58,7 @@ public:
 
     [[nodiscard]] Optional<color::Hue> hue(auto&& playerPawn) const
     {
-        switch (getConfigVariable<model_glow_vars::PlayerGlowColorMode>()) {
+        switch (GET_CONFIG_VAR(model_glow_vars::PlayerGlowColorMode)) {
         using enum PlayerModelGlowColorType;
         case EnemyAlly: return enemyAllyColorModeHue(playerPawn);
         case HealthBased: return healthBasedColorModeHue(playerPawn);
@@ -86,8 +87,8 @@ private:
     [[nodiscard]] Optional<color::Hue> teamColorModeHue(auto&& playerPawn) const noexcept
     {
         switch (playerPawn.teamNumber()) {
-        case TeamNumber::TT: return static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::TeamTHue>()).toHueFloat();
-        case TeamNumber::CT: return static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::TeamCTHue>()).toHueFloat();
+        case TeamNumber::TT: return static_cast<color::HueInteger>(GET_CONFIG_VAR(model_glow_vars::TeamTHue)).toHueFloat();
+        case TeamNumber::CT: return static_cast<color::HueInteger>(GET_CONFIG_VAR(model_glow_vars::TeamCTHue)).toHueFloat();
         default: return {};
         }
     }
@@ -95,7 +96,7 @@ private:
     [[nodiscard]] Optional<color::Hue> enemyAllyColorModeHue(auto&& playerPawn) const noexcept
     {
         if (const auto isEnemy = playerPawn.isEnemy(); isEnemy.has_value())
-            return (*isEnemy ? static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::EnemyHue>()) : static_cast<color::HueInteger>(getConfigVariable<model_glow_vars::AllyHue>())).toHueFloat();
+            return (*isEnemy ? static_cast<color::HueInteger>(GET_CONFIG_VAR(model_glow_vars::EnemyHue)) : static_cast<color::HueInteger>(GET_CONFIG_VAR(model_glow_vars::AllyHue))).toHueFloat();
         return {};
     }
 
@@ -104,8 +105,8 @@ private:
         if (const auto healthValue = playerPawn.health(); healthValue.hasValue()) {
             const auto fraction = healthFraction(healthValue.value());
 
-            const color::HueInteger lowHealthHue{getConfigVariable<model_glow_vars::LowHealthHue>()};
-            const color::HueInteger highHealthHue{getConfigVariable<model_glow_vars::HighHealthHue>()};
+            const color::HueInteger lowHealthHue{GET_CONFIG_VAR(model_glow_vars::LowHealthHue)};
+            const color::HueInteger highHealthHue{GET_CONFIG_VAR(model_glow_vars::HighHealthHue)};
             if (lowHealthHue < highHealthHue)
                 return color::Hue{(lowHealthHue + (highHealthHue - lowHealthHue) * fraction) / 360.0f};
             else
@@ -133,19 +134,13 @@ private:
 
         switch (playerColorIndex.value()) {
         using enum cs2::PlayerColorIndex;
-        case Blue: return getConfigVariable<model_glow_vars::PlayerBlueHue>();
-        case Green: return getConfigVariable<model_glow_vars::PlayerGreenHue>();
-        case Yellow: return getConfigVariable<model_glow_vars::PlayerYellowHue>();
-        case Orange: return getConfigVariable<model_glow_vars::PlayerOrangeHue>();
-        case Purple: return getConfigVariable<model_glow_vars::PlayerPurpleHue>();
+        case Blue: return GET_CONFIG_VAR(model_glow_vars::PlayerBlueHue);
+        case Green: return GET_CONFIG_VAR(model_glow_vars::PlayerGreenHue);
+        case Yellow: return GET_CONFIG_VAR(model_glow_vars::PlayerYellowHue);
+        case Orange: return GET_CONFIG_VAR(model_glow_vars::PlayerOrangeHue);
+        case Purple: return GET_CONFIG_VAR(model_glow_vars::PlayerPurpleHue);
         default: return {};
         }
-    }
-
-    template <typename ConfigVariable>
-    [[nodiscard]] decltype(auto) getConfigVariable() const noexcept
-    {
-        return hookContext.config().template getVariable<ConfigVariable>();
     }
 
     HookContext& hookContext;

@@ -32,6 +32,13 @@ public:
         return *this;
     }
 
+    [[nodiscard]] Optional<cs2::Vector> absOrigin() const noexcept
+    {
+        if (entity && hookContext.patternSearchResults().template get<GetAbsOriginFunction>())
+            return *hookContext.patternSearchResults().template get<GetAbsOriginFunction>()(entity);
+        return {};
+    }
+
     [[nodiscard]] decltype(auto) entityIdentity() const noexcept
     {
         return hookContext.template make<EntityIdentity>(entity ? entity->identity : nullptr);

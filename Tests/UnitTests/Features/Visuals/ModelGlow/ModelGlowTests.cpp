@@ -21,25 +21,13 @@ protected:
 };
 
 TEST_F(ModelGlowTest, DisablingFlagsAreClearedAfterUpdateInMainThread) {
-    auto& modelGlowState = featuresStates.visualFeaturesStates.modelGlowState;
-    modelGlowState.modelGlowDisabling = true;
-    modelGlowState.defuseKitModelGlowDisabling = true;
-    modelGlowState.droppedBombModelGlowDisabling = true;
-    modelGlowState.grenadeProjectileModelGlowDisabling = true;
-    modelGlowState.playerModelGlowDisabling = true;
-    modelGlowState.tickingBombModelGlowDisabling = true;
-    modelGlowState.weaponModelGlowDisabling = true;
+    auto& deactivationFlags = featuresStates.visualFeaturesStates.modelGlowState.deactivationFlags;
+    deactivationFlags.setAll();
 
     EXPECT_CALL(mockHookContext, featuresStates()).WillRepeatedly(testing::ReturnRef(featuresStates));
     modelGlow.postUpdateInMainThread();
 
-    EXPECT_FALSE(modelGlowState.modelGlowDisabling);
-    EXPECT_FALSE(modelGlowState.defuseKitModelGlowDisabling);
-    EXPECT_FALSE(modelGlowState.droppedBombModelGlowDisabling);
-    EXPECT_FALSE(modelGlowState.grenadeProjectileModelGlowDisabling);
-    EXPECT_FALSE(modelGlowState.playerModelGlowDisabling);
-    EXPECT_FALSE(modelGlowState.tickingBombModelGlowDisabling);
-    EXPECT_FALSE(modelGlowState.weaponModelGlowDisabling);
+    EXPECT_FALSE(deactivationFlags.hasAny());
 }
 
 struct ModelGlowInactiveTestParam {
@@ -57,13 +45,11 @@ protected:
         EXPECT_CALL(mockHookContext, featuresStates()).WillRepeatedly(testing::ReturnRef(featuresStates));
 
         mockConfig.expectGetVariable<model_glow_vars::Enabled>(GetParam().modelGlowEnabled);
-        featuresStates.visualFeaturesStates.modelGlowState.modelGlowDisabling = false;
     }
 };
 
 TEST_P(ModelGlowInactiveTest, DefuseKitUpdateInMainThread) {
     mockConfig.expectGetVariable<model_glow_vars::GlowDefuseKits>().WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.defuseKitModelGlowDisabling = false;
     modelGlow.updateInMainThread()(
         DefuseKitModelGlow{mockHookContext},
         mockBaseEntity,
@@ -73,7 +59,6 @@ TEST_P(ModelGlowInactiveTest, DefuseKitUpdateInMainThread) {
 TEST_P(ModelGlowInactiveTest, DroppedBombUpdateInMainThread) {
     mockConfig.expectGetVariable<model_glow_vars::GlowDroppedBomb>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.droppedBombModelGlowDisabling = false;
     modelGlow.updateInMainThread()(
         DroppedBombModelGlow{mockHookContext},
         mockBaseWeapon,
@@ -83,7 +68,6 @@ TEST_P(ModelGlowInactiveTest, DroppedBombUpdateInMainThread) {
 TEST_P(ModelGlowInactiveTest, GrenadeProjectileUpdateInMainThread) {
     mockConfig.expectGetVariable<model_glow_vars::GlowGrenadeProjectiles>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.grenadeProjectileModelGlowDisabling = false;
     modelGlow.updateInMainThread()(
         GrenadeProjectileModelGlow{mockHookContext},
         mockBaseEntity,
@@ -93,7 +77,6 @@ TEST_P(ModelGlowInactiveTest, GrenadeProjectileUpdateInMainThread) {
 TEST_P(ModelGlowInactiveTest, PlayerUpdateInMainThread) {
     mockConfig.expectGetVariable<model_glow_vars::GlowPlayers>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.playerModelGlowDisabling = false;
     modelGlow.updateInMainThread()(
         PlayerModelGlow{mockHookContext},
         mockPlayerPawn,
@@ -103,7 +86,6 @@ TEST_P(ModelGlowInactiveTest, PlayerUpdateInMainThread) {
 TEST_P(ModelGlowInactiveTest, TickingBombUpdateInMainThread) {
     mockConfig.expectGetVariable<model_glow_vars::GlowTickingBomb>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.tickingBombModelGlowDisabling = false;
     modelGlow.updateInMainThread()(
         TickingBombModelGlow{mockHookContext},
         mockPlantedC4,
@@ -113,7 +95,6 @@ TEST_P(ModelGlowInactiveTest, TickingBombUpdateInMainThread) {
 TEST_P(ModelGlowInactiveTest, WeaponUpdateInMainThread) {
     mockConfig.expectGetVariable<model_glow_vars::GlowWeapons>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.weaponModelGlowDisabling = false;
     modelGlow.updateInMainThread()(
         WeaponModelGlow{mockHookContext},
         mockBaseWeapon,
@@ -123,7 +104,6 @@ TEST_P(ModelGlowInactiveTest, WeaponUpdateInMainThread) {
 TEST_P(ModelGlowInactiveTest, DroppedBombUpdateInSceneObjectUpdater) {
     mockConfig.expectGetVariable<model_glow_vars::GlowDroppedBomb>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.droppedBombModelGlowDisabling = false;
     modelGlow.updateInSceneObjectUpdater()(
         DroppedBombModelGlow{mockHookContext},
         mockBaseWeapon,
@@ -133,7 +113,6 @@ TEST_P(ModelGlowInactiveTest, DroppedBombUpdateInSceneObjectUpdater) {
 TEST_P(ModelGlowInactiveTest, PlayerUpdateInSceneObjectUpdater) {
     mockConfig.expectGetVariable<model_glow_vars::GlowPlayers>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.playerModelGlowDisabling = false;
     modelGlow.updateInSceneObjectUpdater()(
         PlayerModelGlow{mockHookContext},
         mockPlayerPawn,
@@ -143,7 +122,6 @@ TEST_P(ModelGlowInactiveTest, PlayerUpdateInSceneObjectUpdater) {
 TEST_P(ModelGlowInactiveTest, WeaponUpdateInSceneObjectUpdater) {
     mockConfig.expectGetVariable<model_glow_vars::GlowWeapons>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.weaponModelGlowDisabling = false;
     modelGlow.updateInSceneObjectUpdater()(
         WeaponModelGlow{mockHookContext},
         mockBaseWeapon,
@@ -152,42 +130,36 @@ TEST_P(ModelGlowInactiveTest, WeaponUpdateInSceneObjectUpdater) {
 
 TEST_P(ModelGlowInactiveTest, DefuseKitOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowDefuseKits>().WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.defuseKitModelGlowDisabling = false;
     modelGlow.onUnload()(DefuseKitModelGlow{mockHookContext}, mockBaseEntity);
 }
 
 TEST_P(ModelGlowInactiveTest, DroppedBombOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowDroppedBomb>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.droppedBombModelGlowDisabling = false;
     modelGlow.onUnload()(DroppedBombModelGlow{mockHookContext}, mockBaseWeapon);
 }
 
 TEST_P(ModelGlowInactiveTest, GrenadeProjectileOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowGrenadeProjectiles>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.grenadeProjectileModelGlowDisabling = false;
     modelGlow.onUnload()(GrenadeProjectileModelGlow{mockHookContext}, mockBaseEntity);
 }
 
 TEST_P(ModelGlowInactiveTest, PlayerOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowPlayers>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.playerModelGlowDisabling = false;
     modelGlow.onUnload()(PlayerModelGlow{mockHookContext}, mockPlayerPawn);
 }
 
 TEST_P(ModelGlowInactiveTest, TickingBombOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowTickingBomb>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.tickingBombModelGlowDisabling = false;
     modelGlow.onUnload()(TickingBombModelGlow{mockHookContext}, mockPlantedC4);
 }
 
 TEST_P(ModelGlowInactiveTest, WeaponOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowWeapons>()
         .WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    featuresStates.visualFeaturesStates.modelGlowState.weaponModelGlowDisabling = false;
     modelGlow.onUnload()(WeaponModelGlow{mockHookContext}, mockBaseWeapon);
 }
 

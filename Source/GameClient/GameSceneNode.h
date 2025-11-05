@@ -21,11 +21,6 @@ public:
         return gameSceneNode != nullptr;
     }
 
-    [[nodiscard]] auto absOrigin() const noexcept
-    {
-        return hookContext->patternSearchResults().template get<OffsetToAbsOrigin>().of(gameSceneNode).toOptional();
-    }
-
     [[nodiscard]] decltype(auto) owner() const noexcept
     {
         return hookContext->template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(hookContext->patternSearchResults().template get<OffsetToGameSceneNodeOwner>().of(gameSceneNode).valueOr(nullptr)));

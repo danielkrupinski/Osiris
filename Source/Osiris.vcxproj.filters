@@ -247,6 +247,9 @@
     <Filter Include="GameClient\Econ">
       <UniqueIdentifier>{35bace02-0818-4944-bcb2-9e49c247e922}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Hud\BombPlantAlert">
+      <UniqueIdentifier>{93348815-91fe-4209-910f-aba93d67345a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -269,9 +272,6 @@
     </ClInclude>
     <ClInclude Include="CS2\Classes\GlobalVars.h">
       <Filter>CS2\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="CS2\Constants\BombSiteIndex.h">
-      <Filter>CS2\Constants</Filter>
     </ClInclude>
     <ClInclude Include="CS2\Constants\DllNames.h">
       <Filter>CS2\Constants</Filter>
@@ -1568,12 +1568,6 @@
     <ClInclude Include="GameClient\Panorama\PanoramaDropDown.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\Panorama\PanoramaImagePanel.h">
-      <Filter>GameClient\Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClient\Panorama\PanoramaImagePanelContext.h">
-      <Filter>GameClient\Panorama</Filter>
-    </ClInclude>
     <ClInclude Include="GameClient\Panorama\PanoramaLabel.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
@@ -1596,9 +1590,6 @@
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelClasses.h">
-      <Filter>GameClient\Panorama</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClient\Panorama\PanoramaUiPanelContext.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Panorama\PanoramaUiPanelIterator.h">
@@ -1906,6 +1897,51 @@
     </ClInclude>
     <ClInclude Include="GameClient\Econ\FauxItemId.h">
       <Filter>GameClient\Econ</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\Entities\C_CSPlayerResource.h">
+      <Filter>CS2\Classes\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\BombsiteIndex.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\PlayerResource.h">
+      <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\PatternTypes\PlayerResourcePatternTypes.h">
+      <Filter>MemoryPatterns\PatternTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryPatterns\Windows\PlayerResourcePatternsWindows.h">
+      <Filter>MemoryPatterns\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Constants\RoundWinStatus.h">
+      <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlert.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertConfigVariables.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertPanelFactory.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertPanelParams.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertParams.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertState.h">
+      <Filter>Features\Hud\BombPlantAlert</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowDeactivationFlags.h">
+      <Filter>Features\Visuals\ModelGlow</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\EnumFlags.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Panorama\ImagePanel.h">
+      <Filter>GameClient\Panorama</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -42,6 +42,14 @@ public:
         return defaultValue;
     }
 
+    template <typename F>
+    [[nodiscard]] auto transform(F&& f) const -> Optional<decltype(f(value()))>
+    {
+        if (hasValue())
+            return f(value());
+        return {};
+    }
+
 private:
     enum class Value : std::uint8_t {
         Unknown,
@@ -115,6 +123,22 @@ public:
     [[nodiscard]] Optional<bool> lessEqual(const U& other) const noexcept
     {
         return compare(other, std::less_equal{});
+    }
+
+    template <typename F>
+    [[nodiscard]] auto transform(F&& f) const -> Optional<decltype(f(value()))>
+    {
+        if (hasValue())
+            return f(value());
+        return {};
+    }
+
+    template <typename F>
+    [[nodiscard]] auto andThen(F&& f) const -> decltype(f(value()))
+    {
+        if (hasValue())
+            return f(value());
+        return {};
     }
 
 private:

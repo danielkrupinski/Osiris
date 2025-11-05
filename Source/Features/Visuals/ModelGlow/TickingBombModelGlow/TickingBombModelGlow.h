@@ -3,6 +3,7 @@
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
+#include <HookContext/HookContextMacros.h>
 
 template <typename HookContext>
 class TickingBombModelGlow {
@@ -14,7 +15,7 @@ public:
 
     [[nodiscard]] bool enabled() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::GlowTickingBomb>();
+        return GET_CONFIG_VAR(model_glow_vars::GlowTickingBomb);
     }
 
     [[nodiscard]] bool shouldApplyGlow(auto&& plantedBomb) const
@@ -22,14 +23,14 @@ public:
         return plantedBomb.isTicking().valueOr(true);
     }
 
-    [[nodiscard]] bool& disablingFlag() const
+    [[nodiscard]] auto deactivationFlag() const noexcept
     {
-        return state().tickingBombModelGlowDisabling;
+        return ModelGlowDeactivationFlags::TickingBombModelGlowDeactivating;
     }
 
     [[nodiscard]] color::HueInteger hue() const
     {
-        return hookContext.config().template getVariable<model_glow_vars::TickingBombHue>();
+        return GET_CONFIG_VAR(model_glow_vars::TickingBombHue);
     }
 
 private:
