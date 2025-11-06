@@ -22,8 +22,6 @@
 #include "PatternSearchResultsView.h"
 #include "PatternStringWildcard.h"
 
-enum class OffsetHint : std::size_t {};
-
 template <typename NotFoundHandler>
 struct PatternFinder {
 public:
@@ -74,14 +72,6 @@ public:
         return makeResult(found, pattern.length());
     }
 
-    [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(BytePattern pattern, OffsetHint offsetHint) const noexcept
-    {
-        const auto foundWithHint = HybridPatternFinder{getSliceForHint(offsetHint), pattern}.findNextOccurrence();
-        if (foundWithHint)
-            return makeResult(foundWithHint, pattern.length());
-        return operator()(pattern);
-    }
-
     template <std::size_t PatternLength>
     [[nodiscard]] PatternSearchResult matchPatternAtAddress(GenericPointer address, BytePatternView<PatternLength> patternView) const noexcept
     {
@@ -99,11 +89,6 @@ private:
     [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(const char* pattern, std::size_t size) const noexcept
     {
         return operator()(BytePattern{{pattern, size}, kPatternStringWildcard});
-    }
-
-    [[nodiscard]] std::span<const std::byte> getSliceForHint(OffsetHint offsetHint) const noexcept
-    {
-        return SpanSlice<20'000, const std::byte>{bytes, static_cast<std::size_t>(offsetHint)}();
     }
 
     [[nodiscard]] bool matchesPatternAtAddress(GenericPointer address, BytePattern pattern) const noexcept
