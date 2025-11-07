@@ -24,14 +24,14 @@ struct FieldOffset {
 
     [[nodiscard]] explicit operator bool() const noexcept
     {
-        return offset != OffsetType{};
+        return offset > 0;
     }
 
     [[nodiscard]] OptionalPointee<FieldType> of(ClassType* thisptr) const noexcept
     {
         using BytePointer = std::byte*;
         using FieldPointer = FieldType*;
-        if (thisptr != nullptr && offset != OffsetType{})
+        if (thisptr != nullptr && offset > 0)
             return OptionalPointee{ FieldPointer(BytePointer(thisptr) + offset) };
         return {};
     }
