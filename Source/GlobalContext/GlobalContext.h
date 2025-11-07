@@ -41,6 +41,8 @@ public:
     {
     }
 
+    using Complete = FullGlobalContext;
+
     static void initializeInstance() noexcept
     {
         if (!globalContext.isInitialized()) {
@@ -76,18 +78,17 @@ public:
         if (initInProgress)
             initCompleteContextFromGameThread();
 
-        auto& fullCtx = fullContext();
-        HookContext hookContext{fullCtx};
+        HookContext<GlobalContext> hookContext;
 
         if (initInProgress)
             finishInit(hookContext);
 
-        return PeepEventsHookResult{fullCtx.hooks.peepEventsHook.original};
+        return PeepEventsHookResult{hookContext.hooks().peepEventsHook.original};
     }
 
     [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* entity, void* unknown, bool unknownBool) noexcept
     {
-        HookContext hookContext{fullContext()};
+        HookContext<GlobalContext> hookContext;
         const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(entity, unknown, unknownBool);
 
         auto&& playerPawn = hookContext.make<PlayerPawn>(entity);
@@ -101,7 +102,7 @@ public:
 
     [[nodiscard]] std::uint64_t weaponSceneObjectUpdater(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept
     {
-        HookContext hookContext{fullContext()};
+        HookContext<GlobalContext> hookContext;
         const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater(weapon, unknown, unknownBool);
         if (auto&& c4 = hookContext.make<BaseWeapon>(weapon).template cast<C4>())
             hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(DroppedBombModelGlow{hookContext}, c4.baseWeapon(), EntityTypeInfo{});
@@ -112,7 +113,7 @@ public:
 
     [[nodiscard]] float getViewmodelFovHook(cs2::ClientModeCSNormal* clientMode) noexcept
     {
-        HookContext hookContext{fullContext()};
+        HookContext<GlobalContext> hookContext;
         const auto originalFov = hookContext.hooks().originalGetViewmodelFov(clientMode);
         if (auto&& viewmodelMod = hookContext.template make<ViewmodelMod>(); viewmodelMod.shouldModifyViewmodelFov())
             return viewmodelMod.viewmodelFov();
@@ -121,7 +122,7 @@ public:
 
     [[nodiscard]] UnloadFlag onRenderStartHook(cs2::CViewRender* viewRender) noexcept
     {
-        HookContext hookContext{fullContext()};
+        HookContext<GlobalContext> hookContext;
         fullContext().hooks.viewRenderHook.getOriginalOnRenderStart()(viewRender);
         hookContext.make<InWorldPanels>().updateState();
         SoundWatcher<decltype(hookContext)> soundWatcher{fullContext().soundWatcherState, hookContext};

@@ -27,10 +27,10 @@ struct GlowSceneObjectsState;
 struct Hooks;
 class EntityClassifier;
 
-template <typename FullGlobalContext>
+template <typename GlobalContext>
 struct HookContext {
-    HookContext(FullGlobalContext& fullGlobalContext) noexcept
-        : fullGlobalContext{fullGlobalContext}
+    HookContext() noexcept
+        : fullGlobalContext{GlobalContext::instance().fullContext()}
     {
     }
 
@@ -258,7 +258,7 @@ private:
         return nullptr;
     }
 
-    FullGlobalContext& fullGlobalContext;
+    GlobalContext::Complete& fullGlobalContext;
     InWorldPanelsPerHookState _inWorldPanelsPerHookState;
     PlayerInfoPanelCachePerHookState _playerInfoPanelCachePerHookState;
 };
