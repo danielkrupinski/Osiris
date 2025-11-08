@@ -6,6 +6,7 @@
 #include <GameClient/Panorama/Slider.h>
 #include <GameClient/Panorama/TextEntry.h>
 #include <Platform/Macros/FunctionAttributes.h>
+#include <EntryPoints/GuiEntryPoints.h>
 
 template <typename HookContext>
 class VisualsTab {
@@ -13,6 +14,12 @@ public:
     explicit VisualsTab(HookContext& hookContext) noexcept
         : hookContext{hookContext}
     {
+    }
+
+    void init(auto&& guiPanel) const noexcept
+    {
+        initModelGlowTab(guiPanel);
+        initOutlineGlowTab(guiPanel);
     }
 
     void updateFromConfig(auto&& mainMenu) const noexcept
@@ -24,6 +31,59 @@ public:
     }
 
 private:
+    void initModelGlowTab(auto&& guiPanel) const
+    {
+        registerHueSliderUpdateHandler<model_glow_vars::PlayerBlueHue, "player_model_glow_blue_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::PlayerGreenHue, "player_model_glow_green_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::PlayerYellowHue, "player_model_glow_yellow_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::PlayerOrangeHue, "player_model_glow_orange_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::PlayerPurpleHue, "player_model_glow_purple_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::TeamTHue, "player_model_glow_t_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::TeamCTHue, "player_model_glow_ct_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::LowHealthHue, "player_model_glow_low_hp_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::HighHealthHue, "player_model_glow_high_hp_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::EnemyHue, "player_model_glow_enemy_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::AllyHue, "player_model_glow_ally_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::MolotovHue, "model_glow_molotov_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::FlashbangHue, "model_glow_flashbang_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::HEGrenadeHue, "model_glow_hegrenade_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::SmokeGrenadeHue, "model_glow_smoke_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::DroppedBombHue, "model_glow_dropped_bomb_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::TickingBombHue, "model_glow_ticking_bomb_hue">(guiPanel);
+        registerHueSliderUpdateHandler<model_glow_vars::DefuseKitHue, "model_glow_defuse_kit_hue">(guiPanel);
+    }
+
+    void initOutlineGlowTab(auto&& guiPanel) const
+    {
+        registerHueSliderUpdateHandler<outline_glow_vars::PlayerBlueHue, "player_outline_glow_blue_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::PlayerGreenHue, "player_outline_glow_green_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::PlayerYellowHue, "player_outline_glow_yellow_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::PlayerOrangeHue, "player_outline_glow_orange_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::PlayerPurpleHue, "player_outline_glow_purple_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::TeamTHue, "player_outline_glow_t_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::TeamCTHue, "player_outline_glow_ct_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::LowHealthHue, "player_outline_glow_low_hp_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::HighHealthHue, "player_outline_glow_high_hp_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::EnemyHue, "player_outline_glow_enemy_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::AllyHue, "player_outline_glow_ally_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::MolotovHue, "outline_glow_molotov_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::FlashbangHue, "outline_glow_flashbang_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::HEGrenadeHue, "outline_glow_hegrenade_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::SmokeGrenadeHue, "outline_glow_smoke_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::DroppedBombHue, "outline_glow_dropped_bomb_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::TickingBombHue, "outline_glow_ticking_bomb_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::DefuseKitHue, "outline_glow_defuse_kit_hue">(guiPanel);
+        registerHueSliderUpdateHandler<outline_glow_vars::HostageHue, "outline_glow_hostage_hue">(guiPanel);
+    }
+
+    template <typename ConfigVariable, TemplateParameterCstring kPanelId>
+    void registerHueSliderUpdateHandler(auto&& guiPanel) const
+    {
+        hookContext.template make<HueSlider>(guiPanel.findChildInLayoutFile(kPanelId)).registerSliderValueChangedHandler(
+            &GuiEntryPoints<HookContext, ConfigVariable, kPanelId>::hueSliderValueChanged
+        );
+    }
+
     void updatePlayerInfoInWorldTab(auto&& mainMenu) const noexcept
     {
         setDropDownSelectedIndex(mainMenu, "player_information_through_walls", playerInfoDropDownIndex());

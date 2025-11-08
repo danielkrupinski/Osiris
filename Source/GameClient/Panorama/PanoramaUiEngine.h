@@ -42,6 +42,12 @@ public:
         return -1;
     }
 
+    void registerEventHandler(cs2::CPanoramaSymbol symbol, cs2::CUIPanel* panel, cs2::CUtlAbstractDelegate handler) noexcept
+    {
+        if (hookContext.patternSearchResults().template get<RegisterEventHandlerFunctionPointer>() && thisptr())
+            hookContext.patternSearchResults().template get<RegisterEventHandlerFunctionPointer>()(*thisptr(), symbol, panel, &handler);
+    }
+
 private:
     [[nodiscard]] auto thisptr() const noexcept
     {

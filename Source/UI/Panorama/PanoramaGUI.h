@@ -147,9 +147,18 @@ public:
             state().modelGlowPreviewPlayerLabelHandleTT = guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerTTLabel").getHandle();
             state().modelGlowPreviewPlayerLabelHandleCT = guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCTLabel").getHandle();
             state().viewmodelPreviewPanelHandle = guiPanel.findChildInLayoutFile("ViewmodelPreview").getHandle();
+
+            hookContext.template make<VisualsTab>().init(guiPanel);
         }
 
         updateFromConfig();
+    }
+
+    template <typename ConfigVariable>
+    void onHueSliderValueChanged(const char* panelId, float value) const
+    {
+        const auto newVariableValue = handleHueSlider(panelId, value, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
+        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
     }
 
     [[nodiscard]] decltype(auto) modelGlowPreviewPanel(const char* panelId) const noexcept
@@ -208,6 +217,25 @@ public:
     }
 
 private:
+    [[nodiscard]] decltype(auto) getHueSlider(const char* sliderId) const noexcept
+    {
+        auto&& guiPanel = uiEngine().getPanelFromHandle(state().guiPanelHandle);
+        return hookContext.template make<HueSlider>(guiPanel.findChildInLayoutFile(sliderId));
+    }
+
+    [[nodiscard]] color::HueInteger handleHueSlider(const char* sliderId, float value, color::HueInteger min, color::HueInteger max, color::HueInteger current) const noexcept
+    {
+        const auto hueIntegral = static_cast<color::HueInteger::UnderlyingType>(value);
+        if (hueIntegral < min || hueIntegral > max || hueIntegral == current)
+            return current;
+
+        const auto hue = color::HueInteger{hueIntegral};
+        auto&& hueSlider = getHueSlider(sliderId);
+        hueSlider.updateTextEntry(hue);
+        hueSlider.updateColorPreview(hue);
+        return hue;
+    }
+
     [[nodiscard]] decltype(auto) uiEngine() const noexcept
     {
         return hookContext.template make<PanoramaUiEngine>();

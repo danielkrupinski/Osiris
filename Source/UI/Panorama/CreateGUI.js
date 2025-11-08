@@ -446,7 +446,6 @@ u8R"(
       direction: "horizontal"
     });
 
-    slider.SetPanelEvent('onvaluechanged', function () { $.Osiris.sliderUpdated('visuals', id, slider); });
     slider.min = min;
     slider.max = max;
     slider.increment = 1.0;

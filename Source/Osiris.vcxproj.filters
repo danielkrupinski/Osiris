@@ -250,6 +250,9 @@
     <Filter Include="Features\Hud\BombPlantAlert">
       <UniqueIdentifier>{93348815-91fe-4209-910f-aba93d67345a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EntryPoints">
+      <UniqueIdentifier>{95ddae8d-0dcc-4c4c-a44b-04135f59fdc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1748,9 +1751,6 @@
     <ClInclude Include="GameClient\Panorama\Ui3dPanel.h">
       <Filter>GameClient\Panorama</Filter>
     </ClInclude>
-    <ClInclude Include="MemoryPatterns\PatternTypes\MapPreviewPanelPatternTypes.h">
-      <Filter>MemoryPatterns\PatternTypes</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\EnemyTeam.h">
       <Filter>Features\Visuals\ModelGlow\Preview</Filter>
     </ClInclude>
@@ -1942,6 +1942,15 @@
     </ClInclude>
     <ClInclude Include="GameClient\Panorama\ImagePanel.h">
       <Filter>GameClient\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="CS2\Classes\CUtlAbstractDelegate.h">
+      <Filter>CS2\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="EntryPoints\GuiEntryPoints.h">
+      <Filter>EntryPoints</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\TemplateParameterCstring.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

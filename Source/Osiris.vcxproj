@@ -43,6 +43,7 @@
     <ClInclude Include="CS2\Classes\CRenderComponent.h" />
     <ClInclude Include="CS2\Classes\CSceneObject.h" />
     <ClInclude Include="CS2\Classes\CSceneSystem.h" />
+    <ClInclude Include="CS2\Classes\CUtlAbstractDelegate.h" />
     <ClInclude Include="CS2\Classes\CUtlFilenameSymbolTable.h" />
     <ClInclude Include="CS2\Classes\CUtlLinkedList.h" />
     <ClInclude Include="CS2\Classes\CUtlMap.h" />
@@ -116,6 +117,7 @@
     <ClInclude Include="CS2\Panorama\StyleProperties.h" />
     <ClInclude Include="CS2\Panorama\Transform3D.h" />
     <ClInclude Include="Endpoints.h" />
+    <ClInclude Include="EntryPoints\GuiEntryPoints.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVis.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisConfigVariables.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisParams.h" />
@@ -384,7 +386,6 @@
     <ClInclude Include="MemoryPatterns\PatternTypes\GlowPropertyPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\GlowSceneObjectPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\HostageServicesPatternTypes.h" />
-    <ClInclude Include="MemoryPatterns\PatternTypes\MapPreviewPanelPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\MemAllocPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PanelPatternTypes.h" />
     <ClInclude Include="MemoryPatterns\PatternTypes\PanelStylePatternTypes.h" />
@@ -564,6 +565,7 @@
     <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\StringParser.h" />
     <ClInclude Include="Utils\StrongTypeAlias.h" />
+    <ClInclude Include="Utils\TemplateParameterCstring.h" />
     <ClInclude Include="Utils\ToUnderlying.h" />
     <ClInclude Include="Utils\TypeBitFlags.h" />
     <ClInclude Include="Utils\TypedStaticStringPool.h" />

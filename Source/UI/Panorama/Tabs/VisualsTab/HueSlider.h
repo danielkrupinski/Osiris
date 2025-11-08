@@ -30,6 +30,16 @@ public:
         panel().children()[2].setBackgroundColor(color::HSBtoRGB(hue, color::Saturation{0.7f}, color::Brightness{0.9f}));
     }
 
+    void registerSliderValueChangedHandler(cs2::CSlider::SliderValueChangedEventHandler* func)
+    {
+        auto&& uiEngine = hookContext.template make<PanoramaUiEngine>();
+        uiEngine.registerEventHandler(
+            uiEngine.makeSymbol(0, "SliderValueChanged"),
+            panel().children()[0],
+            cs2::CUtlAbstractDelegate{func}
+        );
+    }
+
 private:
     [[nodiscard]] decltype(auto) panel() const noexcept
     {
