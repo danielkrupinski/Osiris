@@ -36,7 +36,6 @@
 #include <Vmt/VmtLengthCalculator.h>
 
 #include "OsirisDirectoryPath.h"
-#include "PeepEventsHookResult.h"
 
 #include <CS2/Classes/ConVarTypes.h>
 

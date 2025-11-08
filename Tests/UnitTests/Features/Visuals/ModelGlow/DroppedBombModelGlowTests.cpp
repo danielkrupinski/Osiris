@@ -6,7 +6,7 @@
 #include <Mocks/MockConfig.h>
 #include <Mocks/MockHookContext.h>
 
-extern "C" std::uint64_t Weapon_sceneObjectUpdater_asm(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept
+std::uint64_t Weapon_sceneObjectUpdater(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept
 {
     return {};
 }
@@ -41,7 +41,7 @@ TEST_F(DroppedBombModelGlowTest, CorrectOriginalSceneObjectUpdaterIsReturned) {
 }
 
 TEST_F(DroppedBombModelGlowTest, CorrectReplacementSceneObjectUpdaterIsReturned) {
-    EXPECT_EQ(droppedBombModelGlow.replacementSceneObjectUpdater(), &Weapon_sceneObjectUpdater_asm);
+    EXPECT_EQ(droppedBombModelGlow.replacementSceneObjectUpdater(), &Weapon_sceneObjectUpdater);
 }
 
 class DroppedBombModelGlowHueTest

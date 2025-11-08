@@ -207,7 +207,7 @@ TEST_F(ModelGlowActiveTest, DroppedBombUpdateInMainThread) {
     EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(false));
     const auto dummySceneObjectUpdater = reinterpret_cast<std::uint64_t(*)(cs2::C_CSWeaponBase*, void*, bool)>(0x123123);
     EXPECT_CALL(mockBaseWeapon, getSceneObjectUpdater()).WillRepeatedly(testing::Return(dummySceneObjectUpdater));
-    EXPECT_CALL(mockBaseWeapon, setSceneObjectUpdater(&Weapon_sceneObjectUpdater_asm));
+    EXPECT_CALL(mockBaseWeapon, setSceneObjectUpdater(&Weapon_sceneObjectUpdater));
 
     modelGlow.updateInMainThread()(
         DroppedBombModelGlow{mockHookContext},
@@ -238,7 +238,7 @@ TEST_F(ModelGlowActiveTest, PlayerUpdateInMainThread) {
     EXPECT_CALL(mockPlayerPawn, isTTorCT()).WillOnce(testing::Return(true));
     EXPECT_CALL(mockPlayerPawn, isControlledByLocalPlayer()).WillOnce(testing::Return(false));
     EXPECT_CALL(mockPlayerPawn, getSceneObjectUpdater()).WillRepeatedly(testing::Return(dummySceneObjectUpdater));
-    EXPECT_CALL(mockPlayerPawn, setSceneObjectUpdater(&PlayerPawn_sceneObjectUpdater_asm));
+    EXPECT_CALL(mockPlayerPawn, setSceneObjectUpdater(&PlayerPawn_sceneObjectUpdater));
 
     modelGlow.updateInMainThread()(
         PlayerModelGlow{mockHookContext},
@@ -267,7 +267,7 @@ TEST_F(ModelGlowActiveTest, WeaponUpdateInMainThread) {
     const auto dummySceneObjectUpdater = reinterpret_cast<std::uint64_t(*)(cs2::C_CSWeaponBase*, void*, bool)>(0x567890abcdef);
     EXPECT_CALL(mockBaseWeapon, baseEntity()).WillOnce(testing::ReturnRef(mockBaseEntity));
     EXPECT_CALL(mockBaseWeapon, getSceneObjectUpdater()).WillRepeatedly(testing::Return(dummySceneObjectUpdater));
-    EXPECT_CALL(mockBaseWeapon, setSceneObjectUpdater(&Weapon_sceneObjectUpdater_asm));
+    EXPECT_CALL(mockBaseWeapon, setSceneObjectUpdater(&Weapon_sceneObjectUpdater));
 
     modelGlow.updateInMainThread()(
         WeaponModelGlow{mockHookContext},
@@ -356,7 +356,7 @@ TEST_F(ModelGlowActiveTest, HookedDroppedBombOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowDroppedBomb>(true);
     const auto dummySceneObjectUpdater = reinterpret_cast<std::uint64_t(*)(cs2::C_CSWeaponBase*, void*, bool)>(0x123123);
     featuresStates.visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater = dummySceneObjectUpdater;
-    EXPECT_CALL(mockBaseWeapon, getSceneObjectUpdater()).WillOnce(testing::Return(&Weapon_sceneObjectUpdater_asm));
+    EXPECT_CALL(mockBaseWeapon, getSceneObjectUpdater()).WillOnce(testing::Return(&Weapon_sceneObjectUpdater));
     EXPECT_CALL(mockBaseWeapon, setSceneObjectUpdater(dummySceneObjectUpdater));
 
     modelGlow.onUnload()(DroppedBombModelGlow{mockHookContext}, mockBaseWeapon);
@@ -381,7 +381,7 @@ TEST_F(ModelGlowActiveTest, HookedPlayerOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowPlayers>(true);
     const auto dummySceneObjectUpdater = reinterpret_cast<std::uint64_t(*)(cs2::C_CSPlayerPawn*, void*, bool)>(0xbadc0de);
     featuresStates.visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater = dummySceneObjectUpdater;
-    EXPECT_CALL(mockPlayerPawn, getSceneObjectUpdater()).WillOnce(testing::Return(&PlayerPawn_sceneObjectUpdater_asm));
+    EXPECT_CALL(mockPlayerPawn, getSceneObjectUpdater()).WillOnce(testing::Return(&PlayerPawn_sceneObjectUpdater));
     EXPECT_CALL(mockPlayerPawn, setSceneObjectUpdater(dummySceneObjectUpdater));
 
     modelGlow.onUnload()(PlayerModelGlow{mockHookContext}, mockPlayerPawn);
@@ -407,7 +407,7 @@ TEST_F(ModelGlowActiveTest, HookedWeaponOnUnload) {
     mockConfig.expectGetVariable<model_glow_vars::GlowWeapons>(true);
     const auto dummySceneObjectUpdater = reinterpret_cast<std::uint64_t(*)(cs2::C_CSWeaponBase*, void*, bool)>(0x567890abcdef);
     featuresStates.visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater = dummySceneObjectUpdater;
-    EXPECT_CALL(mockBaseWeapon, getSceneObjectUpdater()).WillOnce(testing::Return(&Weapon_sceneObjectUpdater_asm));
+    EXPECT_CALL(mockBaseWeapon, getSceneObjectUpdater()).WillOnce(testing::Return(&Weapon_sceneObjectUpdater));
     EXPECT_CALL(mockBaseWeapon, setSceneObjectUpdater(dummySceneObjectUpdater));
 
     modelGlow.onUnload()(WeaponModelGlow{mockHookContext}, mockBaseWeapon);

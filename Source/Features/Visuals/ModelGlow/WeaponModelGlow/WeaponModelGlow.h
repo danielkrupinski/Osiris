@@ -12,7 +12,7 @@
 #include <HookContext/HookContextMacros.h>
 #include <Platform/Macros/FunctionAttributes.h>
 
-extern "C" std::uint64_t Weapon_sceneObjectUpdater_asm(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
+std::uint64_t Weapon_sceneObjectUpdater(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
 
 template <typename HookContext>
 class WeaponModelGlow {
@@ -44,7 +44,7 @@ public:
 
     [[nodiscard]] auto replacementSceneObjectUpdater() const
     {
-        return &Weapon_sceneObjectUpdater_asm;
+        return &Weapon_sceneObjectUpdater;
     }
 
     [[nodiscard]] Optional<color::HueInteger> hue(EntityTypeInfo entityTypeInfo) const

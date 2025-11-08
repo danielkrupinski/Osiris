@@ -72,7 +72,7 @@ public:
         return deferredCompleteContext.complete();
     }
 
-    [[nodiscard]] PeepEventsHookResult peepEventsHook() noexcept
+    [[nodiscard]] int peepEventsHook(void* events, int numevents, int action, unsigned minType, unsigned maxType) noexcept
     {
         const auto initInProgress = !deferredCompleteContext.isComplete();
         if (initInProgress)
@@ -83,7 +83,7 @@ public:
         if (initInProgress)
             finishInit(hookContext);
 
-        return PeepEventsHookResult{hookContext.hooks().peepEventsHook.original};
+        return hookContext.hooks().peepEventsHook.original(events, numevents, action, minType, maxType);
     }
 
     [[nodiscard]] std::uint64_t playerPawnSceneObjectUpdater(cs2::C_CSPlayerPawn* entity, void* unknown, bool unknownBool) noexcept

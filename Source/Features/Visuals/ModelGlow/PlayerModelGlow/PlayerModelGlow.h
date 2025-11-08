@@ -17,7 +17,7 @@
 #include <Utils/ColorUtils.h>
 #include <Utils/Optional.h>
 
-extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_asm(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept;
+std::uint64_t PlayerPawn_sceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept;
 
 template <typename HookContext>
 class PlayerModelGlow {
@@ -53,7 +53,7 @@ public:
 
     [[nodiscard]] auto replacementSceneObjectUpdater() const
     {
-        return &PlayerPawn_sceneObjectUpdater_asm;
+        return &PlayerPawn_sceneObjectUpdater;
     }
 
     [[nodiscard]] Optional<color::Hue> hue(auto&& playerPawn) const

@@ -4,34 +4,29 @@
 #include "Hooks/PeepEventsHook.h"
 #include "Utils/ReturnAddress.h"
 
-extern "C"
+int SDLHook_PeepEvents(void* events, int numevents, int action, unsigned minType, unsigned maxType) noexcept
 {
-
-sdl3::SDL_PeepEvents* SDLHook_PeepEvents_cpp() noexcept
-{
-    return GlobalContext::instance().peepEventsHook().original;
+    return GlobalContext::instance().peepEventsHook(events, numevents, action, minType, maxType);
 }
 
-void ViewRenderHook_onRenderStart_cpp(cs2::CViewRender* thisptr) noexcept
+void ViewRenderHook_onRenderStart(cs2::CViewRender* thisptr) noexcept
 {
     const auto unloadFlag = GlobalContext::instance().onRenderStartHook(thisptr);
     if (unloadFlag)
         GlobalContext::destroyInstance();
 }
 
-std::uint64_t PlayerPawn_sceneObjectUpdater_cpp(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
+LINUX_ONLY([[gnu::aligned(8)]]) std::uint64_t PlayerPawn_sceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
 {
     return GlobalContext::instance().playerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
 }
 
-std::uint64_t Weapon_sceneObjectUpdater_cpp(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept
+LINUX_ONLY([[gnu::aligned(8)]]) std::uint64_t Weapon_sceneObjectUpdater(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept
 {
     return GlobalContext::instance().weaponSceneObjectUpdater(weapon, unknown, unknownBool);
 }
 
-float ClientModeHook_getViewmodelFov_cpp(cs2::ClientModeCSNormal* clientMode) noexcept
+float ClientModeHook_getViewmodelFov(cs2::ClientModeCSNormal* clientMode) noexcept
 {
     return GlobalContext::instance().getViewmodelFovHook(clientMode);
-}
-
 }

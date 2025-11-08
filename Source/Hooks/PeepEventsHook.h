@@ -4,7 +4,7 @@
 
 #include <SDL/SdlFunctions.h>
 
-extern "C" int SDLHook_PeepEvents_asm(void* events, int numevents, int action, unsigned minType, unsigned maxType) noexcept;
+int SDLHook_PeepEvents(void* events, int numevents, int action, unsigned minType, unsigned maxType) noexcept;
 
 class PeepEventsHook {
 public:
@@ -22,7 +22,7 @@ public:
     {
         assert(isValid());
         original = *peepEventsPointer;
-        *peepEventsPointer = &SDLHook_PeepEvents_asm;
+        *peepEventsPointer = &SDLHook_PeepEvents;
     }
 
     void disable() const noexcept

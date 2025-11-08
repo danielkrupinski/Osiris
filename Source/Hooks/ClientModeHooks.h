@@ -7,7 +7,7 @@
 #include <Vmt/VmtLengthCalculator.h>
 #include <Vmt/VmtSwapper.h>
 
-extern "C" float ClientModeHook_getViewmodelFov_asm(cs2::ClientModeCSNormal* thisptr) noexcept;
+float ClientModeHook_getViewmodelFov(cs2::ClientModeCSNormal* thisptr) noexcept;
 
 template <typename HookContext>
 class ClientModeHooks {
@@ -26,7 +26,7 @@ public:
     {
         const auto vmt = clientModeInstanceVmtPointer();
         if (vmt && hook().install(hookContext.hooks().clientVmtLengthCalculator, *vmt)) {
-            hookContext.hooks().originalGetViewmodelFov = hook().hook(WIN64_LINUX(27, 28), &ClientModeHook_getViewmodelFov_asm);
+            hookContext.hooks().originalGetViewmodelFov = hook().hook(WIN64_LINUX(27, 28), &ClientModeHook_getViewmodelFov);
         }
     }
 

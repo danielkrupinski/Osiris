@@ -36,7 +36,7 @@ TEST_F(WeaponModelGlowTest, CorrectOriginalSceneObjectUpdaterIsReturned) {
 }
 
 TEST_F(WeaponModelGlowTest, CorrectReplacementSceneObjectUpdaterIsReturned) {
-    EXPECT_EQ(weaponModelGlow.replacementSceneObjectUpdater(), &Weapon_sceneObjectUpdater_asm);
+    EXPECT_EQ(weaponModelGlow.replacementSceneObjectUpdater(), &Weapon_sceneObjectUpdater);
 }
 
 TEST_F(WeaponModelGlowTest, NoHueIsReturnedWhenDefaultShouldBeUsed) {

@@ -6,7 +6,7 @@
 #include <Vmt/VmtLengthCalculator.h>
 #include <Vmt/VmtSwapper.h>
 
-extern "C" void ViewRenderHook_onRenderStart_asm(cs2::CViewRender* thisptr) noexcept;
+void ViewRenderHook_onRenderStart(cs2::CViewRender* thisptr) noexcept;
 
 class ViewRenderHook {
 public:
@@ -35,7 +35,7 @@ public:
     void install() noexcept
     {
         if (viewRender && *viewRender && hook.install(vmtLengthCalculator, *reinterpret_cast<std::uintptr_t**>(*viewRender))) {
-            originalOnRenderStart = hook.hook(4, &ViewRenderHook_onRenderStart_asm);
+            originalOnRenderStart = hook.hook(4, &ViewRenderHook_onRenderStart);
         }
     }
 

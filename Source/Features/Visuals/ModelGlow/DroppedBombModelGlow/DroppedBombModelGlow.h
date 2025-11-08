@@ -8,7 +8,7 @@
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
 #include <HookContext/HookContextMacros.h>
 
-extern "C" std::uint64_t Weapon_sceneObjectUpdater_asm(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
+std::uint64_t Weapon_sceneObjectUpdater(cs2::C_CSWeaponBase* weapon, void* unknown, bool unknownBool) noexcept;
 
 template <typename HookContext>
 class DroppedBombModelGlow {
@@ -40,7 +40,7 @@ public:
 
     [[nodiscard]] auto replacementSceneObjectUpdater() const
     {
-        return &Weapon_sceneObjectUpdater_asm;
+        return &Weapon_sceneObjectUpdater;
     }
 
     [[nodiscard]] color::HueInteger hue() const

@@ -7,7 +7,7 @@
 #include <Mocks/MockPlayerController.h>
 #include <Mocks/MockPlayerPawn.h>
 
-extern "C" std::uint64_t PlayerPawn_sceneObjectUpdater_asm(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
+std::uint64_t PlayerPawn_sceneObjectUpdater(cs2::C_CSPlayerPawn* playerPawn, void* unknown, bool unknownBool) noexcept
 {
     return 0;
 }
@@ -47,7 +47,7 @@ TEST_F(PlayerModelGlowTest, CorrectOriginalSceneObjectUpdaterIsReturned) {
 }
 
 TEST_F(PlayerModelGlowTest, CorrectReplacementSceneObjectUpdaterIsReturned) {
-    EXPECT_EQ(playerModelGlow.replacementSceneObjectUpdater(), &PlayerPawn_sceneObjectUpdater_asm);
+    EXPECT_EQ(playerModelGlow.replacementSceneObjectUpdater(), &PlayerPawn_sceneObjectUpdater);
 }
 
 struct PlayerModelGlowSaturationTestParam {
