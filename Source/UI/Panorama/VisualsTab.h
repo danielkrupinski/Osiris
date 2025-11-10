@@ -79,9 +79,9 @@ private:
     template <typename ConfigVariable, TemplateParameterCstring kPanelId>
     void registerHueSliderUpdateHandler(auto&& guiPanel) const
     {
-        hookContext.template make<HueSlider>(guiPanel.findChildInLayoutFile(kPanelId)).registerSliderValueChangedHandler(
-            &GuiEntryPoints<HookContext, ConfigVariable, kPanelId>::hueSliderValueChanged
-        );
+        auto&& hueSlider = hookContext.template make<HueSlider>(guiPanel.findChildInLayoutFile(kPanelId));
+        hueSlider.registerSliderValueChangedHandler(&GuiEntryPoints<HookContext, ConfigVariable, kPanelId>::hueSliderValueChanged);
+        hueSlider.registerTextEntrySubmitHandler(&GuiEntryPoints<HookContext, ConfigVariable, kPanelId>::hueSliderTextEntrySubmit);
     }
 
     void updatePlayerInfoInWorldTab(auto&& mainMenu) const noexcept

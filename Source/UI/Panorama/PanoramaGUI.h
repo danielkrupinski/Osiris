@@ -161,6 +161,13 @@ public:
         hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
     }
 
+    template <typename ConfigVariable>
+    void onHueSliderTextEntrySubmit(const char* panelId, const char* value) const noexcept
+    {
+        const auto newVariableValue = handleHueTextEntry(panelId, value, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
+        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
+    }
+
     [[nodiscard]] decltype(auto) modelGlowPreviewPanel(const char* panelId) const noexcept
     {
         auto&& guiPanel = uiEngine().getPanelFromHandle(state().guiPanelHandle);
@@ -221,6 +228,24 @@ private:
     {
         auto&& guiPanel = uiEngine().getPanelFromHandle(state().guiPanelHandle);
         return hookContext.template make<HueSlider>(guiPanel.findChildInLayoutFile(sliderId));
+    }
+
+    [[nodiscard]] color::HueInteger handleHueTextEntry(const char* sliderId, const char* value, color::HueInteger min, color::HueInteger max, color::HueInteger current) const noexcept
+    {
+        auto&& hueSlider = getHueSlider(sliderId);
+        color::HueInteger::UnderlyingType hueIntegral;
+        if (!StringParser{value}.parseInt(hueIntegral) || hueIntegral < min || hueIntegral > max) {
+            hueSlider.updateTextEntry(current);
+            return current;
+        }
+
+        if (hueIntegral == current)
+            return current;
+
+        const color::HueInteger hue{hueIntegral};
+        hueSlider.updateSlider(hue);
+        hueSlider.updateColorPreview(hue);
+        return hue;
     }
 
     [[nodiscard]] color::HueInteger handleHueSlider(const char* sliderId, float value, color::HueInteger min, color::HueInteger max, color::HueInteger current) const noexcept

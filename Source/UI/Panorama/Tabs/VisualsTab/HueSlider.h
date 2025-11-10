@@ -40,6 +40,16 @@ public:
         );
     }
 
+    void registerTextEntrySubmitHandler(cs2::CTextEntry::TextEntrySubmitEventHandler* func)
+    {
+        auto&& uiEngine = hookContext.template make<PanoramaUiEngine>();
+        uiEngine.registerEventHandler(
+            uiEngine.makeSymbol(0, "TextEntrySubmit"),
+            panel().children()[1],
+            cs2::CUtlAbstractDelegate{func}
+        );
+    }
+
 private:
     [[nodiscard]] decltype(auto) panel() const noexcept
     {

@@ -134,80 +134,6 @@ private:
             modelGlowToggle().updateDefuseKitModelGlowToggle(parser.getChar());
         } else if (feature == "grenade_proj_model_glow") {
             modelGlowToggle().updateGrenadeProjectileModelGlowToggle(parser.getChar());
-        } else if (feature == "player_model_glow_blue_hue_text") {
-            handleHueTextEntry<model_glow_vars::PlayerBlueHue>("player_model_glow_blue_hue");
-        } else if (feature == "player_model_glow_green_hue_text") {
-            handleHueTextEntry<model_glow_vars::PlayerGreenHue>("player_model_glow_green_hue");
-        } else if (feature == "player_model_glow_yellow_hue_text") {
-            handleHueTextEntry<model_glow_vars::PlayerYellowHue>("player_model_glow_yellow_hue");
-        } else if (feature == "player_model_glow_orange_hue_text") {
-            handleHueTextEntry<model_glow_vars::PlayerOrangeHue>("player_model_glow_orange_hue");
-        } else if (feature == "player_model_glow_purple_hue_text") {
-            handleHueTextEntry<model_glow_vars::PlayerPurpleHue>("player_model_glow_purple_hue");
-        } else if (feature == "player_model_glow_t_hue_text") {
-            handleHueTextEntry<model_glow_vars::TeamTHue>("player_model_glow_t_hue");
-        } else if (feature == "player_model_glow_ct_hue_text") {
-            handleHueTextEntry<model_glow_vars::TeamCTHue>("player_model_glow_ct_hue");
-        } else if (feature == "player_model_glow_low_hp_hue_text") {
-            handleHueTextEntry<model_glow_vars::LowHealthHue>("player_model_glow_low_hp_hue");
-        } else if (feature == "player_model_glow_high_hp_hue_text") {
-            handleHueTextEntry<model_glow_vars::HighHealthHue>("player_model_glow_high_hp_hue");
-        } else if (feature == "player_model_glow_enemy_hue_text") {
-            handleHueTextEntry<model_glow_vars::EnemyHue>("player_model_glow_enemy_hue");
-        } else if (feature == "player_model_glow_ally_hue_text") {
-            handleHueTextEntry<model_glow_vars::AllyHue>("player_model_glow_ally_hue");
-        } else if (feature == "model_glow_molotov_hue_text") {
-            handleHueTextEntry<model_glow_vars::MolotovHue>("model_glow_molotov_hue");
-        } else if (feature == "model_glow_flashbang_hue_text") {
-            handleHueTextEntry<model_glow_vars::FlashbangHue>("model_glow_flashbang_hue");
-        } else if (feature == "model_glow_hegrenade_hue_text") {
-            handleHueTextEntry<model_glow_vars::HEGrenadeHue>("model_glow_hegrenade_hue");
-        } else if (feature == "model_glow_smoke_hue_text") {
-            handleHueTextEntry<model_glow_vars::SmokeGrenadeHue>("model_glow_smoke_hue");
-        } else if (feature == "model_glow_dropped_bomb_hue_text") {
-            handleHueTextEntry<model_glow_vars::DroppedBombHue>("model_glow_dropped_bomb_hue");
-        } else if (feature == "model_glow_ticking_bomb_hue_text") {
-            handleHueTextEntry<model_glow_vars::TickingBombHue>("model_glow_ticking_bomb_hue");
-        } else if (feature == "model_glow_defuse_kit_hue_text") {
-            handleHueTextEntry<model_glow_vars::DefuseKitHue>("model_glow_defuse_kit_hue");
-        } else if (feature == "player_outline_glow_blue_hue_text") {
-            handleHueTextEntry<outline_glow_vars::PlayerBlueHue>("player_outline_glow_blue_hue");
-        } else if (feature == "player_outline_glow_green_hue_text") {
-            handleHueTextEntry<outline_glow_vars::PlayerGreenHue>("player_outline_glow_green_hue");
-        } else if (feature == "player_outline_glow_yellow_hue_text") {
-            handleHueTextEntry<outline_glow_vars::PlayerYellowHue>("player_outline_glow_yellow_hue");
-        } else if (feature == "player_outline_glow_orange_hue_text") {
-            handleHueTextEntry<outline_glow_vars::PlayerOrangeHue>("player_outline_glow_orange_hue");
-        } else if (feature == "player_outline_glow_purple_hue_text") {
-            handleHueTextEntry<outline_glow_vars::PlayerPurpleHue>("player_outline_glow_purple_hue");
-        } else if (feature == "player_outline_glow_t_hue_text") {
-            handleHueTextEntry<outline_glow_vars::TeamTHue>("player_model_glow_t_hue");
-        } else if (feature == "player_outline_glow_ct_hue_text") {
-            handleHueTextEntry<outline_glow_vars::TeamCTHue>("player_outline_glow_ct_hue");
-        } else if (feature == "player_outline_glow_low_hp_hue_text") {
-            handleHueTextEntry<outline_glow_vars::LowHealthHue>("player_outline_glow_low_hp_hue");
-        } else if (feature == "player_outline_glow_high_hp_hue_text") {
-            handleHueTextEntry<outline_glow_vars::HighHealthHue>("player_outline_glow_high_hp_hue");
-        } else if (feature == "player_outline_glow_enemy_hue_text") {
-            handleHueTextEntry<outline_glow_vars::EnemyHue>("player_outline_glow_enemy_hue");
-        } else if (feature == "player_outline_glow_ally_hue_text") {
-            handleHueTextEntry<outline_glow_vars::AllyHue>("player_outline_glow_ally_hue");
-        } else if (feature == "outline_glow_molotov_hue_text") {
-            handleHueTextEntry<outline_glow_vars::MolotovHue>("outline_glow_molotov_hue");
-        } else if (feature == "outline_glow_flashbang_hue_text") {
-            handleHueTextEntry<outline_glow_vars::FlashbangHue>("outline_glow_flashbang_hue");
-        } else if (feature == "outline_glow_hegrenade_hue_text") {
-            handleHueTextEntry<outline_glow_vars::HEGrenadeHue>("outline_glow_hegrenade_hue");
-        } else if (feature == "outline_glow_smoke_hue_text") {
-            handleHueTextEntry<outline_glow_vars::SmokeGrenadeHue>("outline_glow_smoke_hue");
-        } else if (feature == "outline_glow_dropped_bomb_hue_text") {
-            handleHueTextEntry<outline_glow_vars::DroppedBombHue>("outline_glow_dropped_bomb_hue");
-        } else if (feature == "outline_glow_ticking_bomb_hue_text") {
-            handleHueTextEntry<outline_glow_vars::TickingBombHue>("outline_glow_ticking_bomb_hue");
-        } else if (feature == "outline_glow_defuse_kit_hue_text") {
-            handleHueTextEntry<outline_glow_vars::DefuseKitHue>("outline_glow_defuse_kit_hue");
-        } else if (feature == "outline_glow_hostage_hue_text") {
-            handleHueTextEntry<outline_glow_vars::HostageHue>("outline_glow_hostage_hue");
         } else if (feature == "viewmodel_mod") {
             handleTogglableVariable<viewmodel_mod_vars::Enabled>();
         } else if (feature == "viewmodel_fov_mod") {
@@ -273,60 +199,11 @@ private:
         return value;
     }
 
-    template <typename ConfigVariable>
-    void handleHueTextEntry(const char* sliderId) const noexcept
-    {
-        const auto newVariableValue = handleHueTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
-        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
-    }
-
-    [[nodiscard]] color::HueInteger handleHueTextEntry(const char* sliderId, color::HueInteger min, color::HueInteger max, color::HueInteger current) const noexcept
-    {
-        auto&& hueSlider = getHueSlider(sliderId);
-        const auto hue = parseHueVariable(min, max);
-        if (!hue.has_value()) {
-            hueSlider.updateTextEntry(current);
-            return current;
-        }
-
-        if (*hue == current)
-            return current;
-
-        hueSlider.updateSlider(*hue);
-        hueSlider.updateColorPreview(*hue);
-        return *hue;
-    }
-
-    [[nodiscard]] decltype(auto) getHueSlider(const char* sliderId) const noexcept
-    {
-        const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
-        auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
-        return hookContext.template make<HueSlider>(mainMenu.findChildInLayoutFile(sliderId));
-    }
-
     [[nodiscard]] decltype(auto) getIntSlider(const char* sliderId) const noexcept
     {
         const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
         auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
         return hookContext.template make<IntSlider>(mainMenu.findChildInLayoutFile(sliderId));
-    }
-
-    [[nodiscard]] [[NOINLINE]] std::optional<color::HueInteger> parseHueVariable(color::HueInteger min, color::HueInteger max) const noexcept
-    {
-        const auto hueInteger = parseHueInteger();
-        if (!hueInteger.has_value())
-            return {};
-
-        if (*hueInteger >= min && *hueInteger <= max)
-            return *hueInteger;
-        return {};
-    }
-
-    [[nodiscard]] std::optional<color::HueInteger> parseHueInteger() const noexcept
-    {
-        if (color::HueInteger::UnderlyingType underlying; parser.parseInt(underlying) && underlying >= color::HueInteger::kMin && underlying <= color::HueInteger::kMax)
-            return color::HueInteger{underlying};
-        return {};
     }
 
     [[nodiscard]] auto playerInfoInWorldToggle() const noexcept
