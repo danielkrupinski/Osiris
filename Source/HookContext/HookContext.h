@@ -34,6 +34,21 @@ struct HookContext {
     {
     }
 
+    [[nodiscard]] static bool isGlobalContextComplete() noexcept
+    {
+        return GlobalContext::instance().isComplete();
+    }
+
+    static void initCompleteGlobalContextFromGameThread() noexcept
+    {
+        GlobalContext::instance().initCompleteContextFromGameThread();
+    }
+
+    static void destroyGlobalContext() noexcept
+    {
+        GlobalContext::destroyInstance();
+    }
+
     [[nodiscard]] SoundWatcherState& soundWatcherState() const noexcept
     {
         return fullGlobalContext.soundWatcherState;
