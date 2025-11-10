@@ -453,7 +453,6 @@
     <ClInclude Include="Vmt\VmtSwapper.h">
       <Filter>Vmt</Filter>
     </ClInclude>
-    <ClInclude Include="Endpoints.h" />
     <ClInclude Include="Platform\Macros\IsCompiler.h">
       <Filter>Platform\Macros</Filter>
     </ClInclude>
@@ -606,9 +605,6 @@
       <Filter>GlobalContext</Filter>
     </ClInclude>
     <ClInclude Include="GlobalContext\PartialGlobalContext.h">
-      <Filter>GlobalContext</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalContext\PeepEventsHookResult.h">
       <Filter>GlobalContext</Filter>
     </ClInclude>
     <ClInclude Include="Features\FeaturesStates.h">
@@ -1952,6 +1948,9 @@
     <ClInclude Include="Utils\TemplateParameterCstring.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="EntryPoints\EntryPoints.h">
+      <Filter>EntryPoints</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UI\Panorama\CreateGUI.js">
@@ -1968,6 +1967,5 @@
     <MASM Include="Platform\Windows\Syscalls\WindowsSyscall.asm">
       <Filter>Platform\Windows\Syscalls</Filter>
     </MASM>
-    <MASM Include="WindowsEndpoints.asm" />
   </ItemGroup>
 </Project>

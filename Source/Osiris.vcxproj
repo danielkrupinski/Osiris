@@ -116,7 +116,7 @@
     <ClInclude Include="CS2\Panorama\StyleEnums.h" />
     <ClInclude Include="CS2\Panorama\StyleProperties.h" />
     <ClInclude Include="CS2\Panorama\Transform3D.h" />
-    <ClInclude Include="Endpoints.h" />
+    <ClInclude Include="EntryPoints\EntryPoints.h" />
     <ClInclude Include="EntryPoints\GuiEntryPoints.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVis.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisConfigVariables.h" />
