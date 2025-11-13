@@ -670,7 +670,9 @@ u8R"(
   createHueSlider(playerModelGlow, "Enemy Hue", 'player_model_glow_enemy_hue', 0, 359);
   separator(playerModelGlow);
   createHueSlider(playerModelGlow, "Ally Hue", 'player_model_glow_ally_hue', 0, 359);
-
+)"
+// split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
+u8R"(
   var weaponModelGlow = createSection(modelGlowTab, 'Weapons');
   createYesNoDropDown(weaponModelGlow, "Glow Weapon Models on Ground", 'visuals', 'weapon_model_glow');
   separator(weaponModelGlow);
@@ -718,6 +720,7 @@ u8R"(
     "pin-fov": "vertical",
     style: "width: 700px; height: 400px;"
   });
+  viewmodelPreview.SetHideStaticGeometry(true);
 
   var viewmodelTab = $.CreatePanel('Panel', _viewmodelTab, '', { style: 'flow-children: down; margin-right: 40px; overflow: squish scroll;' });
 
