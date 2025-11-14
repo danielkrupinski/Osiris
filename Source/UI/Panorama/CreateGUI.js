@@ -69,9 +69,6 @@ $.Osiris = (function () {
       activePanel.visible = true;
       activePanel.SetReadyForDisplay(true);
     },
-    dropDownUpdated: function (tabID, dropDownID) {
-      this.addCommand('set', tabID + '/' + dropDownID + '/' + this.rootPanel.FindChildInLayoutFile(dropDownID).GetSelected().GetAttributeString('value', ''));
-    },
     sliderUpdated: function (tabID, sliderID, slider) {
       this.addCommand('set', tabID + '/' + sliderID + '/' + Math.floor(slider.value));
     },
@@ -319,10 +316,7 @@ $.Osiris = (function () {
       text: labelText
     });
 
-    var dropdown = $.CreatePanel('CSGOSettingsEnumDropDown', container, feature, {
-      class: "PopupButton White",
-      oninputsubmit: `$.Osiris.dropDownUpdated('${section}', '${feature}');`
-    });
+    var dropdown = $.CreatePanel('CSGOSettingsEnumDropDown', container, feature, { class: "PopupButton White" });
 
     for (let i = 0; i < options.length; ++i) {
       dropdown.AddOption($.CreatePanel('Label', dropdown, i, {

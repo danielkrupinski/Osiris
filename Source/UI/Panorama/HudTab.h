@@ -11,6 +11,15 @@ public:
     {
     }
 
+    void init(auto&& guiPanel) const
+    {
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, BombTimerEnabled>>(guiPanel, "bomb_timer");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, DefusingAlertEnabled>>(guiPanel, "defusing_alert");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, KillfeedPreserverEnabled>>(guiPanel, "preserve_killfeed");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, PostRoundTimerEnabled>>(guiPanel, "postround_timer");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, BombPlantAlertEnabled>>(guiPanel, "bomb_plant_alert");
+    }
+
     void updateFromConfig(auto&& mainMenu) const noexcept
     {
         setDropDownSelectedIndex(mainMenu, "bomb_timer", !GET_CONFIG_VAR(BombTimerEnabled));
@@ -24,6 +33,13 @@ private:
     [[NOINLINE]] void setDropDownSelectedIndex(auto&& mainMenu, const char* dropDownId, int selectedIndex) const noexcept
     {
         mainMenu.findChildInLayoutFile(dropDownId).clientPanel().template as<PanoramaDropDown>().setSelectedIndex(selectedIndex);
+    }
+
+    template <typename Handler>
+    void initDropDown(auto&& guiPanel, const char* panelId) const
+    {
+        auto&& dropDown = guiPanel.findChildInLayoutFile(panelId).clientPanel().template as<PanoramaDropDown>();
+        dropDown.registerSelectionChangedHandler(&GuiEntryPoints<HookContext>::template dropDownSelectionChanged<Handler>);
     }
 
     HookContext& hookContext;

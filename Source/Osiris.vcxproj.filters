@@ -997,9 +997,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowColorType.h">
       <Filter>Features\Visuals\OutlineGlow\PlayerOutlineGlow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowToggle.h">
-      <Filter>Features\Visuals\OutlineGlow\PlayerOutlineGlow</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Classes\Entities\WeaponEntities.h">
       <Filter>CS2\Classes\Entities</Filter>
     </ClInclude>
@@ -1289,9 +1286,6 @@
       <Filter>Features\Visuals\ModelGlow</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h">
-      <Filter>Features\Visuals\ModelGlow</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h">
       <Filter>Features\Visuals\ModelGlow</Filter>
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\SceneObjectPatternsWindows.h">
@@ -1950,6 +1944,30 @@
     </ClInclude>
     <ClInclude Include="EntryPoints\EntryPoints.h">
       <Filter>EntryPoints</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\OnOffDropdownSelectionChangeHandler.h">
+      <Filter>UI\Panorama</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerInfoInWorldDropdownSelectionChangeHandler.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerInfoInWorldPlayerHealthColorModeDropdownSelectionChangeHandler.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerInfoInWorldPlayerPositionArrowColorModeDropdownSelectionChangeHandler.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerModelGlowColorModeDropdownSelectionChangeHandler.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerModelGlowDropdownSelectionChangeHandler.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerOutlineGlowColorModeDropdownSelectionChangeHandler.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerOutlineGlowDropdownSelectionChangeHandler.h">
+      <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

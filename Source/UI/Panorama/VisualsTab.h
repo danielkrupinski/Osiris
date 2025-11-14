@@ -8,6 +8,14 @@
 #include <Platform/Macros/FunctionAttributes.h>
 #include <EntryPoints/GuiEntryPoints.h>
 
+#include "Tabs/VisualsTab/PlayerInfoInWorldDropdownSelectionChangeHandler.h"
+#include "Tabs/VisualsTab/PlayerInfoInWorldPlayerHealthColorModeDropdownSelectionChangeHandler.h"
+#include "Tabs/VisualsTab/PlayerInfoInWorldPlayerPositionArrowColorModeDropdownSelectionChangeHandler.h"
+#include "Tabs/VisualsTab/PlayerModelGlowColorModeDropdownSelectionChangeHandler.h"
+#include "Tabs/VisualsTab/PlayerModelGlowDropdownSelectionChangeHandler.h"
+#include "Tabs/VisualsTab/PlayerOutlineGlowColorModeDropdownSelectionChangeHandler.h"
+#include "Tabs/VisualsTab/PlayerOutlineGlowDropdownSelectionChangeHandler.h"
+
 template <typename HookContext>
 class VisualsTab {
 public:
@@ -18,8 +26,10 @@ public:
 
     void init(auto&& guiPanel) const noexcept
     {
+        initPlayerInfoInWorldTab(guiPanel);
         initModelGlowTab(guiPanel);
         initOutlineGlowTab(guiPanel);
+        initViewmodelTab(guiPanel);
     }
 
     void updateFromConfig(auto&& mainMenu) const noexcept
@@ -31,8 +41,34 @@ public:
     }
 
 private:
+    void initPlayerInfoInWorldTab(auto&& guiPanel) const
+    {
+        initDropDown<PlayerInfoInWorldDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_information_through_walls");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::PlayerPositionArrowEnabled>>(guiPanel, "player_info_position");
+        initDropDown<PlayerInfoInWorldPlayerPositionArrowColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_info_position_color");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::PlayerHealthEnabled>>(guiPanel, "player_info_health");
+        initDropDown<PlayerInfoInWorldPlayerHealthColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_info_health_color");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::ActiveWeaponIconEnabled>>(guiPanel, "player_info_weapon");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::ActiveWeaponAmmoEnabled>>(guiPanel, "player_info_weapon_clip");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::BombDefuseIconEnabled>>(guiPanel, "player_info_defuse");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::HostagePickupIconEnabled>>(guiPanel, "player_info_hostage_pickup");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::HostageRescueIconEnabled>>(guiPanel, "player_info_hostage_rescue");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::BlindedIconEnabled>>(guiPanel, "player_info_blinded");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::BombCarrierIconEnabled>>(guiPanel, "player_info_bomb_carrier");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::BombPlantIconEnabled>>(guiPanel, "player_info_bomb_planting");
+    }
+
     void initModelGlowTab(auto&& guiPanel) const
     {
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, model_glow_vars::Enabled>>(guiPanel, "model_glow_enable");
+        initDropDown<PlayerModelGlowDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_model_glow");
+        initDropDown<PlayerModelGlowColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_model_glow_color");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, model_glow_vars::GlowWeapons>>(guiPanel, "weapon_model_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, model_glow_vars::GlowDroppedBomb>>(guiPanel, "dropped_bomb_model_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, model_glow_vars::GlowTickingBomb>>(guiPanel, "ticking_bomb_model_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, model_glow_vars::GlowDefuseKits>>(guiPanel, "defuse_kit_model_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, model_glow_vars::GlowGrenadeProjectiles>>(guiPanel, "grenade_proj_model_glow");
+
         registerHueSliderUpdateHandler<model_glow_vars::PlayerBlueHue, "player_model_glow_blue_hue">(guiPanel);
         registerHueSliderUpdateHandler<model_glow_vars::PlayerGreenHue, "player_model_glow_green_hue">(guiPanel);
         registerHueSliderUpdateHandler<model_glow_vars::PlayerYellowHue, "player_model_glow_yellow_hue">(guiPanel);
@@ -55,6 +91,16 @@ private:
 
     void initOutlineGlowTab(auto&& guiPanel) const
     {
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, outline_glow_vars::Enabled>>(guiPanel, "outline_glow_enable");
+        initDropDown<PlayerOutlineGlowDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_outline_glow");
+        initDropDown<PlayerOutlineGlowColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_outline_glow_color");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, outline_glow_vars::GlowWeapons>>(guiPanel, "weapon_outline_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, outline_glow_vars::GlowDefuseKits>>(guiPanel, "defuse_kit_outline_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, outline_glow_vars::GlowGrenadeProjectiles>>(guiPanel, "grenade_proj_outline_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, outline_glow_vars::GlowDroppedBomb>>(guiPanel, "dropped_bomb_outline_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, outline_glow_vars::GlowTickingBomb>>(guiPanel, "ticking_bomb_outline_glow");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, outline_glow_vars::GlowHostages>>(guiPanel, "hostage_outline_glow");
+
         registerHueSliderUpdateHandler<outline_glow_vars::PlayerBlueHue, "player_outline_glow_blue_hue">(guiPanel);
         registerHueSliderUpdateHandler<outline_glow_vars::PlayerGreenHue, "player_outline_glow_green_hue">(guiPanel);
         registerHueSliderUpdateHandler<outline_glow_vars::PlayerYellowHue, "player_outline_glow_yellow_hue">(guiPanel);
@@ -76,12 +122,25 @@ private:
         registerHueSliderUpdateHandler<outline_glow_vars::HostageHue, "outline_glow_hostage_hue">(guiPanel);
     }
 
+    void initViewmodelTab(auto&& guiPanel) const
+    {
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, viewmodel_mod_vars::Enabled>>(guiPanel, "viewmodel_mod");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, viewmodel_mod_vars::ModifyFov>>(guiPanel, "viewmodel_fov_mod");
+    }
+
+    template <typename Handler>
+    void initDropDown(auto&& guiPanel, const char* panelId) const
+    {
+        auto&& dropDown = guiPanel.findChildInLayoutFile(panelId).clientPanel().template as<PanoramaDropDown>();
+        dropDown.registerSelectionChangedHandler(&GuiEntryPoints<HookContext>::template dropDownSelectionChanged<Handler>);
+    }
+
     template <typename ConfigVariable, TemplateParameterCstring kPanelId>
     void registerHueSliderUpdateHandler(auto&& guiPanel) const
     {
         auto&& hueSlider = hookContext.template make<HueSlider>(guiPanel.findChildInLayoutFile(kPanelId));
-        hueSlider.registerSliderValueChangedHandler(&GuiEntryPoints<HookContext, ConfigVariable, kPanelId>::hueSliderValueChanged);
-        hueSlider.registerTextEntrySubmitHandler(&GuiEntryPoints<HookContext, ConfigVariable, kPanelId>::hueSliderTextEntrySubmit);
+        hueSlider.registerSliderValueChangedHandler(&GuiEntryPoints<HookContext>::template hueSliderValueChanged<ConfigVariable, kPanelId>);
+        hueSlider.registerTextEntrySubmitHandler(&GuiEntryPoints<HookContext>::template hueSliderTextEntrySubmit<ConfigVariable, kPanelId>);
     }
 
     void updatePlayerInfoInWorldTab(auto&& mainMenu) const noexcept

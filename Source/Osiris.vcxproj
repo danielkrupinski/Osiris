@@ -200,7 +200,6 @@
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowDeactivationFlags.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowParams.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowState.h" />
-    <ClInclude Include="Features\Visuals\ModelGlow\ModelGlowToggle.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\PlayerModelGlow\PlayerModelGlow.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\BaseEntityForModelGlowPreview.h" />
     <ClInclude Include="Features\Visuals\ModelGlow\Preview\EnemyTeam.h" />
@@ -223,7 +222,6 @@
     <ClInclude Include="Features\Visuals\OutlineGlow\OutlineGlowParams.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowColorType.h" />
-    <ClInclude Include="Features\Visuals\OutlineGlow\PlayerOutlineGlow\PlayerOutlineGlowToggle.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\TickingBombOutlineGlow\TickingBombOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\OutlineGlow\WeaponOutlineGlow\WeaponOutlineGlow.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\ActiveWeaponAmmoPanelParams.h" />
@@ -522,6 +520,7 @@
     <ClInclude Include="SDL\SdlFunctions.h" />
     <ClInclude Include="UI\Panorama\CombatTab.h" />
     <ClInclude Include="UI\Panorama\HudTab.h" />
+    <ClInclude Include="UI\Panorama\OnOffDropdownSelectionChangeHandler.h" />
     <ClInclude Include="UI\Panorama\PanoramaCommandDispatcher.h" />
     <ClInclude Include="UI\Panorama\PanoramaGUI.h" />
     <ClInclude Include="UI\Panorama\PanoramaGuiState.h" />
@@ -529,6 +528,13 @@
     <ClInclude Include="UI\Panorama\SoundTab.h" />
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\HueSlider.h" />
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\IntSlider.h" />
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerInfoInWorldDropdownSelectionChangeHandler.h" />
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerInfoInWorldPlayerHealthColorModeDropdownSelectionChangeHandler.h" />
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerInfoInWorldPlayerPositionArrowColorModeDropdownSelectionChangeHandler.h" />
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerModelGlowColorModeDropdownSelectionChangeHandler.h" />
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerModelGlowDropdownSelectionChangeHandler.h" />
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerOutlineGlowColorModeDropdownSelectionChangeHandler.h" />
+    <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerOutlineGlowDropdownSelectionChangeHandler.h" />
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\ViewmodelModPreviewPanel.h" />
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\ViewmodelModPreviewPanelState.h" />
     <ClInclude Include="UI\Panorama\VisualsTab.h" />

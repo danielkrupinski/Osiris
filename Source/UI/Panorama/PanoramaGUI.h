@@ -148,7 +148,10 @@ public:
             state().modelGlowPreviewPlayerLabelHandleCT = guiPanel.findChildInLayoutFile("ModelGlowPreviewPlayerCTLabel").getHandle();
             state().viewmodelPreviewPanelHandle = guiPanel.findChildInLayoutFile("ViewmodelPreview").getHandle();
 
+            hookContext.template make<CombatTab>().init(guiPanel);
+            hookContext.template make<HudTab>().init(guiPanel);
             hookContext.template make<VisualsTab>().init(guiPanel);
+            hookContext.template make<SoundTab>().init(guiPanel);
         }
 
         updateFromConfig();
