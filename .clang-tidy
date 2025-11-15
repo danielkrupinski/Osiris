@@ -1,0 +1,9 @@
+HeaderFilterRegex: '.*'
+Checks: >
+  -*,
+  readability-function-cognitive-complexity
+WarningsAsErrors: >
+  readability-function-cognitive-complexity
+CheckOptions:
+  - key: readability-function-cognitive-complexity.Threshold
+    value: 21
