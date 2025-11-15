@@ -62,8 +62,9 @@ public:
     void restoreDefaults() noexcept
     {
         ConfigVariableTypes::forEach([this] <typename ConfigVariable> (std::type_identity<ConfigVariable>) {
-            this->setVariable<ConfigVariable>(ConfigVariable::kDefaultValue);
+            this->setVariableWithoutAutoSave<ConfigVariable>(ConfigVariable::kDefaultValue);
         });
+        scheduleAutoSave();
         hookContext.gui().updateFromConfig();
     }
 
