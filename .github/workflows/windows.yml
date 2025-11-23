@@ -20,6 +20,11 @@ jobs:
     - name: Build
       shell: cmd
       run: msbuild Osiris.sln /p:Platform=x64 /p:Configuration=${{ matrix.configuration }} ${{ env.toolset }}
+    - name: upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Osiris_${{ matrix.os }}_msbuild_${{ matrix.toolset }}_${{ matrix.configuration }}
+        path: x64\${{ matrix.configuration }}\Osiris.dll
 
   cmake:
     runs-on: ${{ matrix.os }}
@@ -37,6 +42,11 @@ jobs:
       run: cmake -Werror=dev -D ENABLE_TESTS="unit;functional" -D CMAKE_COMPILE_WARNING_AS_ERROR=1 -A x64 ${{ env.toolset }} -B build
     - name: build source
       run: cmake --build build --target Osiris --config ${{ matrix.configuration }}
+    - name: upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Osiris_${{ matrix.os }}_cmake_${{ matrix.toolset }}_${{ matrix.configuration }}
+        path: build\Source\${{ matrix.configuration }}\Osiris.dll
     - name: build unit tests
       run: cmake --build build --target UnitTests --config ${{ matrix.configuration }}
     - name: build functional tests
