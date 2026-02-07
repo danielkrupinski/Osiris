@@ -11,7 +11,7 @@ enum SceneObjectFlags {
 
 enum ESceneObjectFlags : std::uint64_t {
     SCENEOBJECTFLAG_VIEWMODEL_LAYER = (std::uint64_t{1} << 8),
-    SCENEOBJECTFLAG_PIPELINE_SPECIFIC_2 = (std::uint64_t{1} << 54)
+    SCENEOBJECTFLAG_PIPELINE_SPECIFIC_2 = (std::uint64_t{1} << 50)
 };
 
 struct SceneObjectAttributes {
