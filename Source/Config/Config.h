@@ -180,6 +180,10 @@ private:
         ConfigToString configToString{std::span{state().fileOperationBuffer, build::kConfigFileBufferSize}, conversionState};
         state().bufferUsedBytes = ConfigSchema{hookContext}.performConversion(configToString);
         assert(conversionState.nestingLevel == 0 && conversionState.indexInNestingLevel[0] == 1);
+
+        if (state().bufferUsedBytes >= build::kConfigFileBufferSize) {
+            state().currentFileOperation = ConfigFileOperation::None;
+        }
     }
 
     void saveToFile() noexcept
