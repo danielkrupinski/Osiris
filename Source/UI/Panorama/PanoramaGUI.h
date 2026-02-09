@@ -107,9 +107,7 @@ public:
     {
         if (!mainMenu)
             return;
-
-        // ensure settings tab is loaded because we use CSS classes from settings
-        // TODO: replace use of settings CSS classes with raw style properties
+        
         uiEngine().runScript(mainMenu, "if (!$('#JsSettings')) MainMenu.NavigateToTab('JsSettings', 'settings/settings');");
 
         const auto settings = mainMenu.findChildInLayoutFile("JsSettings");
@@ -125,13 +123,13 @@ public:
   $('#JsSettings').FindChildInLayoutFile('OsirisMenuTab').SetParent($('#JsMainMenuContent'));
 
   var openMenuButton = $.CreatePanel('RadioButton', $.GetContextPanel().FindChildTraverse('MainMenuNavBarSettings').GetParent(), 'OsirisOpenMenuButton', {
-    class: "mainmenu-top-navbar__radio-iconbtn",
+    style: "width: 48px; height: 100%; padding: 0; vertical-align: center;",
     group: "NavBar",
     onactivate: "MainMenu.NavigateToTab('OsirisMenuTab', '');"
   });
 
   $.CreatePanel('Image', openMenuButton, '', {
-    class: "mainmenu-top-navbar__radio-btn__icon",
+    style: "width: 24px; height: 24px; vertical-align: center; horizontal-align: center; wash-color: #ffffff;",
     src: "s2r://panorama/images/icons/ui/bug.vsvg"
   });
 
