@@ -65,6 +65,11 @@ jobs:
       run: CXX=${{ matrix.compiler }} cmake -Werror=dev -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DENABLE_TESTS="unit;functional" -DCMAKE_COMPILE_WARNING_AS_ERROR=1 -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=4 -B build
     - name: build source
       run: cmake --build build --target Osiris -j $(nproc --all)
+    - name: upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Osiris_${{ matrix.os }}_cmake_${{ matrix.compiler }}_${{ matrix.configuration }}
+        path: build/Source/libOsiris.so
     - name: build unit tests
       run: cmake --build build --target UnitTests -j $(nproc --all)
     - name: build functional tests
