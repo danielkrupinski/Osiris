@@ -84,9 +84,52 @@ Counter-Strike 2 blocks LoadLibrary injection method, so you have to use a manua
 
 You can simply run the following script in the directory containing **libOsiris.so**:
 
-    sudo gdb -batch-silent -p $(pidof cs2) -ex "call (void*)dlopen(\"$PWD/libOsiris.so\", 2)"
+```
+
+And the `.so` file is located in:
+```
+build/Source/libOsiris.so
+
+
+---
+
+###  **Live Injection Methods**
+
+#### 1. **Using GDB with explicit PID**
+```
+sudo gdb -batch -n -q -p <PID> -ex "call (void*)dlopen(\"$PWD/build/Source/libOsiris.so\", 2)"
+```
+
+#### 2. **Using ptrace injector (if available)**
+```
+sudo injectso <PID> "$PWD/build/Source/libOsiris.so"
+```
+
+#### 3. **Using GDB with absolute path**
+```
+sudo gdb -batch -n -q -p $(pidof cs2) -ex "call (void*)dlopen(\"$(realpath build/Source/libOsiris.so)\", 2)"
+```
+
+#### 4. **Using GDB with silent mode**
+```
+sudo gdb -batch-silent -p $(pidof cs2) -ex "call (void*)dlopen(\"$PWD/build/Source/libOsiris.so\", 2)"
+```
+
+###  **Launch-Time Injection Methods**
+
+#### 5. **Using LD_PRELOAD on fresh launch**
+```
+LD_PRELOAD="$PWD/build/Source/libOsiris.so" ./cs2
+```
+
+#### 6. **Using GDB with run + preload**
+```
+sudo gdb -batch -n -q --args ./cs2 -ex "set environment LD_PRELOAD=$PWD/build/Source/libOsiris.so" -ex run
+```
 
 However, this injection method might be detected by VAC as gdb is visible under **TracerPid** in `/proc/$(pidof cs2)/status` for the duration of the injection.
+
+sudo gdb -batch-silent -p $(pidof cs2) -ex "call (void*)dlopen(\"$PWD/build/Source/libOsiris.so\", 2)"
 
 ## FAQ
 
