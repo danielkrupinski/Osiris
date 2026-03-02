@@ -66,7 +66,7 @@ Configure with CMake:
 
 Build:
 
-    cmake --build build -j $(nproc)
+    cmake --build build -j $(nproc --all)
 
 After following these steps you should receive **libOsiris.so** file in **build/Source/** directory.
 
