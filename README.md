@@ -62,11 +62,11 @@ Open **Osiris.sln** in Visual Studio 2022, set build configuration to **Release 
 
 Configure with CMake:
 
-    cmake -B build
+    cmake -B build -S .
 
 Build:
 
-    cmake --build build -j $(nproc --all)
+    cmake --build build -j $(nproc)
 
 After following these steps you should receive **libOsiris.so** file in **build/Source/** directory.
 
