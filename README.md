@@ -62,7 +62,7 @@ Open **Osiris.sln** in Visual Studio 2022, set build configuration to **Release 
 
 Configure with CMake:
 
-    cmake -DCMAKE_BUILD_TYPE=Release -B build
+    cmake -B build
 
 Build:
 
