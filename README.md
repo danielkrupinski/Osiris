@@ -39,6 +39,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 * Exceptions are not used
 * No external dependencies
 
+## Downloading pre-built binaries
+
+* [Latest MSVC build for Windows](https://nightly.link/danielkrupinski/Osiris/workflows/windows/master/Osiris_windows-2025_msbuild_MSVC_Release.zip)
+* [Latest g++ build for Linux](https://nightly.link/danielkrupinski/Osiris/workflows/linux/master/Osiris_ubuntu-24.04_cmake_g%2B%2B-15_Release.zip)
+
 ## Compiling
 
 ### Prerequisites
@@ -70,9 +75,9 @@ Build:
 
 After following these steps you should receive **libOsiris.so** file in **build/Source/** directory.
 
-### Loading / Injecting into game process
+## Loading / Injecting into game process
 
-#### Windows
+### Windows
 
 You need a **DLL injector** to inject (load) **Osiris.dll** into game process.
 
@@ -80,7 +85,7 @@ Counter-Strike 2 blocks LoadLibrary injection method, so you have to use a manua
 
 **Xenos** and **Extreme Injector** are known to be **detected** by VAC.
 
-#### Linux
+### Linux
 
 You can simply run the following script in the directory containing **libOsiris.so**:
 
