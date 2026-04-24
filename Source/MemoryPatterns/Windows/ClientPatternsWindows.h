@@ -7,7 +7,7 @@ struct ClientPatterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<MainMenuPanelPointer, CodePattern{"48 83 EC ? 48 8B 05 ? ? ? ? 48 8D 15"}.add(7).abs()>()
+            .template addPattern<MainMenuPanelPointer, CodePattern{"48 83 EC ? 48 8B 05 ? ? ? ? 48 8D 15 ? ? ? ? 48 8B 48"}.add(7).abs()>()
             .template addPattern<HudPanelPointer, CodePattern{"48 89 35 ? ? ? ? E8 ? ? ? ? 48 85"}.add(3).abs()>()
             .template addPattern<GlobalVarsPointer, CodePattern{"48 8B 05 ? ? ? ? 0F 57 C0 8B 48"}.add(3).abs()>()
             .template addPattern<TransformTranslate3dVMT, CodePattern{"00 00 80 00 48 8D 05 ? ? ? ? 48 C7 42 ? 00"}.add(7).abs()>()
