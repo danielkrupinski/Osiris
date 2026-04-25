@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Platform/Macros/IsPlatform.h>
+
 template <typename HookContext>
 class PlayerResource {
 public:
@@ -25,14 +27,32 @@ private:
         return bombsiteBCenter().transform(squareDistTo(position));
     }
 
-    [[nodiscard]] auto bombsiteACenter() const
+    [[nodiscard]] Optional<cs2::Vector> bombsiteACenter() const
     {
-        return hookContext.patternSearchResults().template get<OffsetToBombsiteACenter>().of(playerResource).toOptional();
+        if (playerResource && hookContext.patternSearchResults().template get<GetBombsiteACenter>()) {
+#if IS_WIN64()
+            cs2::Vector v;
+            hookContext.patternSearchResults().template get<GetBombsiteACenter>()(playerResource, &v);
+            return v;
+#else
+            return hookContext.patternSearchResults().template get<GetBombsiteACenter>()(playerResource);
+#endif
+        }
+        return {};
     }
 
-    [[nodiscard]] auto bombsiteBCenter() const
+    [[nodiscard]] Optional<cs2::Vector> bombsiteBCenter() const
     {
-        return hookContext.patternSearchResults().template get<OffsetToBombsiteBCenter>().of(playerResource).toOptional();
+        if (playerResource && hookContext.patternSearchResults().template get<GetBombsiteBCenter>()) {
+#if IS_WIN64()
+            cs2::Vector v;
+            hookContext.patternSearchResults().template get<GetBombsiteBCenter>()(playerResource, &v);
+            return v;
+#else
+            return hookContext.patternSearchResults().template get<GetBombsiteBCenter>()(playerResource);
+#endif
+        }
+        return {};
     }
 
     [[nodiscard]] static auto toBombsiteIndex() noexcept

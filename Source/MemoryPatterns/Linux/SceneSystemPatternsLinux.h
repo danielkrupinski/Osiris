@@ -8,7 +8,7 @@ struct SceneSystemPatterns {
     {
         return sceneSystemPatterns
             .template addPattern<SceneSystemPointer, CodePattern{"? ? ? ? F6 84 02 ? ? ? ? ? 75 ? 66"}.abs()>()
-            .template addPattern<DeleteSceneObjectFunctionPointer, CodePattern{"48 85 F6 0F 84 ? ? ? ? 55 48 89 E5 41 56 49"}>()
-            .template addPattern<AllocateAttributeListFunctionPointer, CodePattern{"C3 48 8B 3D ? ? ? ? 48 8D 15 ? ? ? ? 66"}.add(11).abs()>();
+            .template addPattern<DeleteSceneObjectFunctionPointer, CodePattern{"55 48 8D 05 ? ? ? ? 48 89 E5 41 56 41 55 41 54 53 48 83"}>()
+            .template addPattern<AllocateAttributeListFunctionPointer, CodePattern{"48 8B 3D ? ? ? ? 48 8D 15 ? ? ? ? 44"}.add(10).abs()>();
     }
 };

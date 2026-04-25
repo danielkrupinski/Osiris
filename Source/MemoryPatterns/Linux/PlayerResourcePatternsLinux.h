@@ -8,7 +8,7 @@ struct PlayerResourcePatterns {
     {
         return clientPatterns
             .template addPattern<PointerToPlayerResource, CodePattern{"C5 48 8D 05 ? ? ? ? 48 83 38 00 0F"}.add(4).abs()>()
-            .template addPattern<OffsetToBombsiteACenter, CodePattern{"FF 48 C7 80 ? ? ? ? 00 00 00 00 0F 11 80 ? ? ? ?"}.add(15).read()>()
-            .template addPattern<OffsetToBombsiteBCenter, CodePattern{"FF 48 C7 80 ? ? ? ? 00 00 00 00 0F 11 80"}.add(4).read()>();
+            .template addPattern<GetBombsiteACenter, CodePattern{"E8 ? ? ? ? 66 0F D6 45 ? F3 0F 11 4D ? 4C 8D 6D"}.add(1).abs()>()
+            .template addPattern<GetBombsiteBCenter, CodePattern{"01 4C 89 EF E8 ? ? ? ? 66"}.add(5).abs()>();
     }
 };

@@ -11,7 +11,7 @@ struct PanelStylePatterns2 {
     [[nodiscard]] static consteval auto addPanoramaPatterns(auto panoramaPatterns) noexcept
     {
         return panoramaPatterns
-            .template addPattern<SetPanelStylePropertyFunctionPointer, CodePattern{"E8 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 45 ? EB"}.add(1).abs()>();
+            .template addPattern<SetPanelStylePropertyFunctionPointer, CodePattern{"E8 ? ? ? ? 48 8D 05 ? ? ? ? 48 89 45 ? EB ? 0F"}.add(1).abs()>();
     }
 };
 
@@ -21,7 +21,7 @@ struct PanelStylePatterns {
 
     [[nodiscard]] cs2::CPanelStyle::StylePropertySymbols* stylePropertiesSymbols() const noexcept
     {
-        if (const auto pointerToStylePropertySymbolsMemory{patternFinders.panoramaPatternFinder("48 8D 0D ? ? ? ? 48 8D 45"_pat).add(3).abs().template as<std::byte*>()})
+        if (const auto pointerToStylePropertySymbolsMemory{patternFinders.panoramaPatternFinder("75 ? 4C 89 2D ? ? ? ?"_pat).add(5).abs().template as<std::byte*>()})
             return reinterpret_cast<cs2::CPanelStyle::StylePropertySymbols*>(pointerToStylePropertySymbolsMemory);
         return nullptr;
     }
