@@ -57,7 +57,7 @@ public:
         constexpr auto kOffsetFromPlayerColorToSanitizedName{0x18};
         if (const auto playerColor = hookContext.patternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).get())
             return reinterpret_cast<cs2::CUtlString*>(reinterpret_cast<std::byte*>(playerColor) + kOffsetFromPlayerColorToSanitizedName)->m_pString;
-        return static_cast<const char*>(nullptr);
+        return nullptr;
     }
 
 private:
