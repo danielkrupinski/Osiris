@@ -499,6 +499,9 @@ u8R"(
   separator(playerPosition);
   createDropDown(playerPosition, "Player Position Arrow Color", 'visuals', 'player_info_position_color', ['Player / Team Color', 'Team Color']);
 
+  var playerName = createSection(playerInfoTab, 'Player Name');
+  createYesNoDropDown(playerName, "Show Player Name", 'visuals', 'player_info_name');
+
   var playerHealth = createSection(playerInfoTab, 'Player Health');
   createYesNoDropDown(playerHealth, "Show Player Health", 'visuals', 'player_info_health');
   separator(playerHealth);

@@ -171,9 +171,15 @@ protected:
         get<BombPlantAlertEnabled>() = true;
     }
 
-    void setVariableExpectationsCurrent()
+    void setVariableExpectationsV11()
     {
         setVariableExpectationsV10();
+        get<player_info_vars::PlayerNameEnabled>() = true;
+    }
+
+    void setVariableExpectationsCurrent()
+    {
+        setVariableExpectationsV11();
     }
 
     struct VariableChecker {
