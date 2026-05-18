@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <optional>
 #include <span>
 #include <utility>
@@ -53,8 +54,9 @@ public:
 
     [[nodiscard]] const char* getName() const noexcept
     {
-        if (const auto playerName = hookContext.patternSearchResults().template get<OffsetToSanitizedPlayerName>().of(playerControllerPointer).get())
-            return playerName->m_pString;
+        constexpr auto kOffsetFromPlayerColorToSanitizedName{0x18};
+        if (const auto playerColor = hookContext.patternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).get())
+            return reinterpret_cast<cs2::CUtlString*>(reinterpret_cast<std::byte*>(playerColor) + kOffsetFromPlayerColorToSanitizedName)->m_pString;
         return nullptr;
     }
 
