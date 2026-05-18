@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <optional>
 #include <span>
 #include <utility>
@@ -49,6 +50,14 @@ public:
     [[nodiscard]] decltype(auto) playerColorIndex() const noexcept
     {
         return hookContext.patternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).toOptional();
+    }
+
+    [[nodiscard]] const char* getName() const noexcept
+    {
+        constexpr auto kOffsetFromPlayerColorToSanitizedName{0x18};
+        if (const auto playerColor = hookContext.patternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).get())
+            return reinterpret_cast<cs2::CUtlString*>(reinterpret_cast<std::byte*>(playerColor) + kOffsetFromPlayerColorToSanitizedName)->m_pString;
+        return nullptr;
     }
 
 private:

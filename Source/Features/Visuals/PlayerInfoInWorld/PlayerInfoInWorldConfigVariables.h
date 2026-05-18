@@ -15,6 +15,7 @@ CONFIG_VARIABLE(Enabled, bool, false);
 CONFIG_VARIABLE(OnlyEnemies, bool, false);
 CONFIG_VARIABLE(PlayerPositionArrowEnabled, bool, true);
 CONFIG_VARIABLE(PlayerPositionArrowColorMode, PlayerPositionArrowColorType, PlayerPositionArrowColorType::PlayerOrTeamColor);
+CONFIG_VARIABLE(PlayerNameEnabled, bool, true);
 CONFIG_VARIABLE(PlayerHealthEnabled, bool, true);
 CONFIG_VARIABLE(PlayerHealthColorMode, PlayerHealthTextColor, PlayerHealthTextColor::HealthBased);
 CONFIG_VARIABLE(ActiveWeaponIconEnabled, bool, true);

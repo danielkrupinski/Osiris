@@ -4,6 +4,7 @@
 
 #include "ActiveWeaponAmmo/PlayerActiveWeaponAmmoPanel.h"
 #include "PlayerHealth/PlayerHealthPanel.h"
+#include "PlayerNamePanel.h"
 #include "PlayerPositionArrow/PlayerPositionArrowPanel.h"
 #include "PlayerStateIcons/PlayerStateIconsPanel.h"
 #include "PlayerWeaponIcon/PlayerWeaponIconPanel.h"
@@ -11,6 +12,7 @@
 template <typename HookContext>
 using PlayerInfoPanelTypes = std::tuple<
     PlayerPositionArrowPanel<HookContext>,
+    PlayerNamePanel<HookContext>,
     PlayerHealthPanel<HookContext>,
     PlayerWeaponIconPanel<HookContext>,
     PlayerActiveWeaponAmmoPanel<HookContext>,
