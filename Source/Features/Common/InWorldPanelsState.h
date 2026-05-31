@@ -13,6 +13,7 @@ struct InWorldPanelsState {
     cs2::PanelHandle containerPanelHandle;
     DynamicArray<InWorldPanelListEntry> panelList;
     InWorldPanelIndex playerInfoPanelListHead{};
+    InWorldPanelIndex playerNamePanelListHead{};
     std::array<InWorldPanelIndex, SoundVisualizationPanelTypes::size()> soundVisualizationPanelListHeads{};
 
     void reset() noexcept
@@ -20,6 +21,7 @@ struct InWorldPanelsState {
         containerPanelHandle = {};
         panelList.clear();
         playerInfoPanelListHead = {};
+        playerNamePanelListHead = {};
         soundVisualizationPanelListHeads = {};
     }
 };

@@ -8,7 +8,17 @@
 #include <GameClient/Panorama/PanelMarginParams.h>
 #include <GameClient/Panorama/PanelShadowParams.h>
 
-namespace player_name_panel_params
+namespace player_name_panel_params::container_panel_params
+{
+    static constexpr auto kWidth = cs2::CUILength::pixels(256);
+    static constexpr auto kHeight = cs2::CUILength::pixels(32);
+    static constexpr auto kPositionX = cs2::CUILength::pixels(-kWidth.m_flValue * 0.5f);
+    static constexpr auto kPositionY = cs2::CUILength::pixels(-kHeight.m_flValue);
+    static constexpr auto kTransformOriginX = cs2::CUILength::percent(50);
+    static constexpr auto kTransformOriginY = cs2::CUILength::percent(100);
+}
+
+namespace player_name_panel_params::label_params
 {
     static constexpr auto kFont = PanelFontParams{
         .fontFamily = "Stratum2, 'Arial Unicode MS'",
@@ -17,9 +27,8 @@ namespace player_name_panel_params
     };
     static constexpr auto kAlignment = PanelAlignmentParams{
         .horizontalAlignment = cs2::k_EHorizontalAlignmentCenter,
-        .verticalAlignment = cs2::k_EVerticalAlignmentTop
+        .verticalAlignment = cs2::k_EVerticalAlignmentCenter
     };
-    static constexpr auto kMargin = PanelMarginParams{.marginBottom = cs2::CUILength::pixels(1)};
     static constexpr auto kColor = cs2::kColorWhite;
     static constexpr auto kShadowParams = PanelShadowParams{
         .horizontalOffset{cs2::CUILength::pixels(0)},

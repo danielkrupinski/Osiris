@@ -60,14 +60,29 @@ public:
 
     void createPanel(std::type_identity<PlayerNamePanel<HookContext>>, auto&& containerPanel) const noexcept
     {
-        using namespace player_name_panel_params;
+        createPlayerNamePanel(containerPanel);
+    }
 
-        auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
-        label.setFont(kFont);
-        label.setAlign(kAlignment);
-        label.setMargin(kMargin);
-        label.setTextShadow(kShadowParams);
-        label.setColor(kColor);
+    [[nodiscard]] decltype(auto) createPlayerNamePanel(auto&& parentPanel) const noexcept
+    {
+        using namespace player_name_panel_params::container_panel_params;
+
+        auto&& container = hookContext.panelFactory().createPanel(parentPanel).uiPanel();
+        container.setWidth(kWidth);
+        container.setHeight(kHeight);
+        container.setPosition(kPositionX, kPositionY);
+        container.setTransformOrigin(kTransformOriginX, kTransformOriginY);
+
+        {
+            using namespace player_name_panel_params::label_params;
+            auto&& label = hookContext.panelFactory().createLabelPanel(container).uiPanel();
+            label.setFont(kFont);
+            label.setAlign(kAlignment);
+            label.setTextShadow(kShadowParams);
+            label.setColor(kColor);
+        }
+
+        return utils::lvalue<decltype(container)>(container);
     }
 
     void createPanel(std::type_identity<PlayerActiveWeaponAmmoPanel<HookContext>>, auto&& containerPanel) const noexcept

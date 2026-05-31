@@ -11,6 +11,7 @@
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCache.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelTypes.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerNamePanel.h>
 #include <GameClient/Panorama/PanelHandle.h>
 #include <GameClient/Panorama/PanoramaUiPanel.h>
 #include <Utils/Lvalue.h>
@@ -44,6 +45,15 @@ public:
         return newPanel.template as<PlayerInfoPanel>(hookContext.template make<PlayerInfoPanelCache>().nextEntry());
     }
 
+    [[nodiscard]] decltype(auto) getNextPlayerNamePanel() const noexcept
+    {
+        if (auto&& existingPanel = getNextExistingPanel(state().playerNamePanelListHead, perHookState().lastUsedPlayerNamePanelIndex))
+            return existingPanel.template as<PlayerNamePanel>(state());
+        auto&& newPanel = hookContext.template make<PlayerInfoInWorldPanelFactory>().createPlayerNamePanel(getOrCreateContainerPanel());
+        registerNewPanel(state().playerNamePanelListHead, perHookState().lastUsedPlayerNamePanelIndex);
+        return newPanel.template as<PlayerNamePanel>(state());
+    }
+
     template <typename Type>
     [[nodiscard]] decltype(auto) getNextSoundVisualizationPanel() const noexcept
     {
@@ -57,6 +67,7 @@ public:
     void hideUnusedPanels() const noexcept
     {
         hideUnusedPanels(state().playerInfoPanelListHead, perHookState().lastUsedPlayerInfoPanelIndex);
+        hideUnusedPanels(state().playerNamePanelListHead, perHookState().lastUsedPlayerNamePanelIndex);
         for (std::size_t i = 0; i < SoundVisualizationPanelTypes::size(); ++i)
             hideUnusedPanels(state().soundVisualizationPanelListHeads[i], perHookState().lastUsedSoundVisualizationPanelIndexes[i]);
     }

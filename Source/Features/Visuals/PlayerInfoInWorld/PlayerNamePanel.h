@@ -1,11 +1,16 @@
 #pragma once
 
+#include <algorithm>
 #include <utility>
 
+#include <CS2/Classes/Vector.h>
 #include <CS2/Panorama/CUIPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
+#include <GameClient/Panorama/PanoramaTransformations.h>
 #include <GameClient/Panorama/PanoramaUiPanel.h>
+#include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
+#include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
 
 #include "PlayerNamePanelParams.h"
 
@@ -26,6 +31,21 @@ public:
     [[nodiscard]] decltype(auto) panel() const noexcept
     {
         return _hookContext.template make<PanoramaUiPanel>(_panel);
+    }
+
+    [[nodiscard]] decltype(auto) toClipSpace(const cs2::Vector& worldPosition) const noexcept
+    {
+        return _hookContext.template make<WorldToClipSpaceConverter>().toClipSpace(worldPosition);
+    }
+
+    [[nodiscard]] float getFovScale() const noexcept
+    {
+        return ViewToProjectionMatrix{_hookContext}.getFovScale();
+    }
+
+    [[nodiscard]] decltype(auto) panoramaTransformFactory() const noexcept
+    {
+        return _hookContext.panoramaTransformFactory();
     }
 
 private:
@@ -56,7 +76,27 @@ public:
         }
 
         context.panel().setVisible(true);
-        context.panel().clientPanel().template as<PanoramaLabel>().setText(playerName);
+        context.panel().children()[0].clientPanel().template as<PanoramaLabel>().setText(playerName);
+    }
+
+    void updatePosition(const cs2::Vector& origin) const noexcept
+    {
+        const auto positionInClipSpace = context.toClipSpace(origin);
+        if (!positionInClipSpace.onScreen()) {
+            context.panel().setVisible(false);
+            return;
+        }
+
+        context.panel().setZIndex(-positionInClipSpace.z);
+
+        constexpr auto kMaxScale{1.0f};
+        const auto scale = std::clamp(500.0f / (positionInClipSpace.z / context.getFovScale() + 400.0f), 0.4f, kMaxScale);
+        const auto deviceCoordinates = positionInClipSpace.toNormalizedDeviceCoordinates();
+
+        PanoramaTransformations{
+            context.panoramaTransformFactory().scale(scale),
+            context.panoramaTransformFactory().translate(deviceCoordinates.getX(), deviceCoordinates.getY())
+        }.applyTo(context.panel());
     }
 
 private:

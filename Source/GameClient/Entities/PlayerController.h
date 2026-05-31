@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <optional>
 #include <span>
 #include <utility>
@@ -49,18 +50,56 @@ public:
 
     [[nodiscard]] decltype(auto) playerColorIndex() const noexcept
     {
-        return hookContext.patternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).toOptional();
+        return offsetToPlayerColor().of(playerControllerPointer).toOptional();
     }
 
     [[nodiscard]] const char* getName() const noexcept
     {
-        constexpr auto kOffsetFromPlayerColorToSanitizedName{0x18};
-        if (const auto playerColor = hookContext.patternSearchResults().template get<OffsetToPlayerColor>().of(playerControllerPointer).get())
-            return reinterpret_cast<cs2::CUtlString*>(reinterpret_cast<std::byte*>(playerColor) + kOffsetFromPlayerColorToSanitizedName)->m_pString;
+        if (const auto name = playerName(); name && *name)
+            return name;
+        if (const auto name = sanitizedPlayerName(); name && *name)
+            return name;
         return nullptr;
     }
 
 private:
+    [[nodiscard]] const char* sanitizedPlayerName() const noexcept
+    {
+        constexpr auto kOffsetFromPlayerColorToSanitizedName{0x18};
+        if (const auto playerColor = offsetToPlayerColor().of(playerControllerPointer).get()) {
+            if (const auto name = reinterpret_cast<cs2::CUtlString*>(reinterpret_cast<std::byte*>(playerColor) + kOffsetFromPlayerColorToSanitizedName)->m_pString)
+                return name;
+        }
+
+        // Fallback from current public schema (CCSPlayerController::m_sSanitizedPlayerName).
+        constexpr auto kFallbackOffsetToSanitizedPlayerName{std::int32_t{0x860}};
+        if (playerControllerPointer != nullptr) {
+            if (const auto name = reinterpret_cast<cs2::CUtlString*>(reinterpret_cast<std::byte*>(playerControllerPointer) + kFallbackOffsetToSanitizedPlayerName)->m_pString)
+                return name;
+        }
+        return nullptr;
+    }
+
+    [[nodiscard]] const char* playerName() const noexcept
+    {
+        // Fallback from current public schema (CBasePlayerController::m_iszPlayerName).
+        constexpr auto kFallbackOffsetToPlayerName{std::int32_t{0x6F4}};
+        if (playerControllerPointer != nullptr)
+            return reinterpret_cast<const char*>(reinterpret_cast<const std::byte*>(playerControllerPointer) + kFallbackOffsetToPlayerName);
+        return nullptr;
+    }
+
+    [[nodiscard]] auto offsetToPlayerColor() const noexcept
+    {
+        const auto offset = hookContext.patternSearchResults().template get<OffsetToPlayerColor>();
+        if (offset)
+            return offset;
+
+        // Fallback for game builds where the color signature is out-of-date.
+        constexpr auto kFallbackOffsetToPlayerColor{std::int32_t{0x848}};
+        return decltype(offset){kFallbackOffsetToPlayerColor};
+    }
+
     HookContext& hookContext;
     cs2::CCSPlayerController* playerControllerPointer;
 };
