@@ -59,10 +59,25 @@ struct PatternNotFoundLogger {
         logDirectoryPath = path;
     }
 
+    static void addSummary() noexcept
+    {
+        const auto remaining = std::span{logBuffer}.subspan(logWritePos);
+        if (remaining.size() < 64) return;
+
+        StringBuilder builder{remaining};
+        if (totalNotFound == 0)
+            builder.put("[OK] All patterns matched. No failures detected.\n");
+        else
+            builder.put("[SUMMARY] ", totalNotFound, " pattern(s) NOT found.\n");
+        logWritePos += builder.string().size();
+    }
+
     static void flushLogToFile() noexcept
     {
-        if (!logDirectoryPath || logWritePos == 0)
+        if (!logDirectoryPath)
             return;
+
+        addSummary();
 
 #if IS_WIN64()
         // build full log file path: <directory>\pattern_scan.log
