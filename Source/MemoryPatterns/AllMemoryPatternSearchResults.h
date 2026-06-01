@@ -1,6 +1,7 @@
 #pragma once
 
 #include <MemoryPatterns/MemoryPatterns.h>
+#include <MemorySearch/PatternNotFoundLogger.h>
 #include <MemorySearch/PatternSearchResults.h>
 
 struct AllMemoryPatternSearchResults {
@@ -12,6 +13,9 @@ struct AllMemoryPatternSearchResults {
         , soundSystemPatternSearchResults{memoryPatterns.patternFinders.soundSystemPatternFinder.findPatterns(kSoundSystemPatterns)}
         , panoramaPatternSearchResults{memoryPatterns.patternFinders.panoramaPatternFinder.findPatterns(kPanoramaPatterns)}
     {
+        // flush pattern scan log to file immediately after all scans complete,
+        // before any downstream code uses the results (which might crash on null pointers)
+        PatternNotFoundLogger::flushLogToFile();
     }
 
     template <typename PatternType>

@@ -16,6 +16,7 @@ public:
     [[nodiscard]] decltype(auto) performConversion(auto&& configConversion)
     {
         configConversion.beginRoot();
+        configConversion.uint(u8"Language", loadVariable<Language>(), saveVariable<Language>());
         combatObject(configConversion);
         hudObject(configConversion);
         visualsObject(configConversion);

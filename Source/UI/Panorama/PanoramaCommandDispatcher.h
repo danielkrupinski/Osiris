@@ -2,6 +2,7 @@
 
 #include <string_view>
 
+#include <Config/LanguageConfigVariables.h>
 #include <GlobalContext/UnloadFlag.h>
 #include <Utils/StringParser.h>
 
@@ -39,6 +40,12 @@ private:
             SetCommandHandler{parser, hookContext}();
         } else if (command == "restore_defaults") {
             hookContext.config().restoreDefaults();
+        } else if (command == "language") {
+            unsigned int langValue = 0;
+            const auto langStr = parseNextCommand();
+            StringParser{langStr.data()}.parseInt(langValue);
+            if (langValue <= 1)
+                hookContext.config().template setVariable<Language>(static_cast<lang_vars::Language>(langValue));
         }
     }
 

@@ -22,6 +22,11 @@ public:
 
     PatternSearchResult() = default;
 
+    [[nodiscard]] explicit operator bool() const noexcept
+    {
+        return static_cast<bool>(base);
+    }
+
     PatternSearchResult& add(std::size_t offset) noexcept
     {
         if (base) {

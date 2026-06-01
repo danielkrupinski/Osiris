@@ -11,10 +11,13 @@
 #if IS_WIN64()
 #include <Platform/Windows/DLLs/Shell32Dll.h>
 #include <Platform/Windows/CoTaskMemDeleter.h>
+#include <Platform/Windows/FileSystem/WindowsFileSystem.h>
 #include <Utils/Wcslen.h>
 #elif IS_LINUX()
 #include <Platform/Linux/LinuxPlatformApi.h>
 #endif
+
+#include <MemorySearch/PatternNotFoundLogger.h>
 
 class OsirisDirectoryPath {
 public:
@@ -48,6 +51,12 @@ public:
         std::ranges::copy(build::kOsirisDirectoryName, pathString.get() + writeIndex);
         writeIndex += build::kOsirisDirectoryName.length();
         pathString.get()[writeIndex++] = L'\0';
+
+        // ensure the Osiris directory exists and set up pattern scan log path
+        if (pathString) {
+            WindowsFileSystem::createDirectory(pathString.get());
+            PatternNotFoundLogger::setLogDirectoryPath(pathString.get());
+        }
 #elif IS_LINUX()
         const auto home = LinuxPlatformApi::getenv("HOME");
         if (!home)
@@ -67,6 +76,10 @@ public:
         std::ranges::copy(build::kOsirisDirectoryName, pathString.get() + writeIndex);
         writeIndex += build::kOsirisDirectoryName.length();
         pathString.get()[writeIndex++] = '\0';
+
+        // set up pattern scan log path for Linux
+        if (pathString)
+            PatternNotFoundLogger::setLogDirectoryPath(pathString.get());
 #endif
     }
 

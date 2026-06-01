@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Config/LanguageConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlertConfigVariables.h>
 #include <Features/Hud/BombTimer/BombTimerConfigVariables.h>
@@ -14,6 +15,7 @@
 #include <Utils/TypeList.h>
 
 using ConfigVariableTypes = TypeList<
+    Language,
     BombTimerEnabled,
     DefusingAlertEnabled,
     KillfeedPreserverEnabled,
