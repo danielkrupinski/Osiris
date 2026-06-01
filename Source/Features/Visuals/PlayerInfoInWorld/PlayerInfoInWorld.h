@@ -36,13 +36,6 @@ public:
         auto&& playerInformationPanel = inWorldPanels.getNextPlayerInfoPanel();
         playerInformationPanel.drawPlayerInfo(playerPawn);
         playerInformationPanel.updatePosition(absOrigin.value());
-
-        constexpr auto kPlayerNameHeightOffset{74.0f};
-        auto playerNameOrigin = absOrigin.value();
-        playerNameOrigin.z += kPlayerNameHeightOffset;
-        auto&& playerNamePanel = inWorldPanels.getNextPlayerNamePanel();
-        playerNamePanel.update(playerPawn);
-        playerNamePanel.updatePosition(playerNameOrigin);
     }
 
 private:

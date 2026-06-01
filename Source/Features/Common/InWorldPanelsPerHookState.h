@@ -6,6 +6,5 @@
 
 struct InWorldPanelsPerHookState {
     InWorldPanelIndex lastUsedPlayerInfoPanelIndex{};
-    InWorldPanelIndex lastUsedPlayerNamePanelIndex{};
     std::array<InWorldPanelIndex, SoundVisualizationPanelTypes::size()> lastUsedSoundVisualizationPanelIndexes{};
 };

@@ -85,6 +85,7 @@ using ConfigVariableTypes = TypeList<
     player_info_vars::PlayerPositionArrowEnabled,
     player_info_vars::PlayerPositionArrowColorMode,
     player_info_vars::PlayerNameEnabled,
+    player_info_vars::PlayerNameColorMode,
     player_info_vars::PlayerHealthEnabled,
     player_info_vars::PlayerHealthColorMode,
     player_info_vars::ActiveWeaponIconEnabled,

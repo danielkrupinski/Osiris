@@ -1,25 +1,27 @@
 #pragma once
 
 #include <algorithm>
+#include <optional>
 #include <utility>
 
-#include <CS2/Classes/Vector.h>
+#include <CS2/Classes/Color.h>
+#include <CS2/Constants/ColorConstants.h>
 #include <CS2/Panorama/CUIPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
+#include <GameClient/Entities/TeamNumber.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
-#include <GameClient/Panorama/PanoramaTransformations.h>
 #include <GameClient/Panorama/PanoramaUiPanel.h>
-#include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
-#include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
+#include <Utils/ColorUtils.h>
 
-#include "PlayerNamePanelParams.h"
+#include "PlayerInfoPanelCacheEntry.h"
 
 template <typename HookContext>
 class PlayerNamePanelContext {
 public:
-    PlayerNamePanelContext(HookContext& hookContext, cs2::CUIPanel* panel, auto&) noexcept
+    PlayerNamePanelContext(HookContext& hookContext, cs2::CUIPanel* panel, PlayerInfoPanelCacheEntry& cache) noexcept
         : _hookContext{hookContext}
         , _panel{panel}
+        , _cache{cache}
     {
     }
 
@@ -33,24 +35,15 @@ public:
         return _hookContext.template make<PanoramaUiPanel>(_panel);
     }
 
-    [[nodiscard]] decltype(auto) toClipSpace(const cs2::Vector& worldPosition) const noexcept
+    [[nodiscard]] auto& cache() const noexcept
     {
-        return _hookContext.template make<WorldToClipSpaceConverter>().toClipSpace(worldPosition);
-    }
-
-    [[nodiscard]] float getFovScale() const noexcept
-    {
-        return ViewToProjectionMatrix{_hookContext}.getFovScale();
-    }
-
-    [[nodiscard]] decltype(auto) panoramaTransformFactory() const noexcept
-    {
-        return _hookContext.panoramaTransformFactory();
+        return _cache;
     }
 
 private:
     HookContext& _hookContext;
     cs2::CUIPanel* _panel;
+    PlayerInfoPanelCacheEntry& _cache;
 };
 
 template <typename HookContext, typename Context = PlayerNamePanelContext<HookContext>>
@@ -76,29 +69,39 @@ public:
         }
 
         context.panel().setVisible(true);
-        context.panel().children()[0].clientPanel().template as<PanoramaLabel>().setText(playerName);
-    }
 
-    void updatePosition(const cs2::Vector& origin) const noexcept
-    {
-        const auto positionInClipSpace = context.toClipSpace(origin);
-        if (!positionInClipSpace.onScreen()) {
-            context.panel().setVisible(false);
-            return;
-        }
+        if (const auto nameColor = getColor(playerPawn); context.cache().playerNameColor(nameColor))
+            context.panel().setColor(nameColor);
 
-        context.panel().setZIndex(-positionInClipSpace.z);
-
-        constexpr auto kMaxScale{1.0f};
-        const auto scale = std::clamp(500.0f / (positionInClipSpace.z / context.getFovScale() + 400.0f), 0.4f, kMaxScale);
-        const auto deviceCoordinates = positionInClipSpace.toNormalizedDeviceCoordinates();
-
-        PanoramaTransformations{
-            context.panoramaTransformFactory().scale(scale),
-            context.panoramaTransformFactory().translate(deviceCoordinates.getX(), deviceCoordinates.getY())
-        }.applyTo(context.panel());
+        context.panel().clientPanel().template as<PanoramaLabel>().setText(playerName);
     }
 
 private:
+    [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
+    {
+        switch (context.config().template getVariable<player_info_vars::PlayerNameColorMode>()) {
+        case PlayerNameColorType::TeamColor: return teamColor(playerPawn);
+        case PlayerNameColorType::HealthBased: return healthColor(playerPawn).value_or(cs2::kColorWhite);
+        default: return cs2::kColorWhite;
+        }
+    }
+
+    [[nodiscard]] static cs2::Color teamColor(auto&& playerPawn) noexcept
+    {
+        switch (playerPawn.teamNumber()) {
+            using enum TeamNumber;
+        case TT: return cs2::kColorTeamTT;
+        case CT: return cs2::kColorTeamCT;
+        default: return cs2::kColorWhite;
+        }
+    }
+
+    [[nodiscard]] static std::optional<cs2::Color> healthColor(auto&& playerPawn) noexcept
+    {
+        if (const auto healthValue = playerPawn.health(); healthValue.hasValue())
+            return color::HSBtoRGB(color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * (std::clamp(healthValue.value(), 0, 100) / 100.0f)}, color::Saturation{0.7f}, color::Brightness{1.0f});
+        return {};
+    }
+
     Context context;
 };

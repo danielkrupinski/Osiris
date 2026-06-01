@@ -175,6 +175,7 @@ protected:
     {
         setVariableExpectationsV10();
         get<player_info_vars::PlayerNameEnabled>() = true;
+        get<player_info_vars::PlayerNameColorMode>() = PlayerNameColorType::White;
     }
 
     void setVariableExpectationsCurrent()

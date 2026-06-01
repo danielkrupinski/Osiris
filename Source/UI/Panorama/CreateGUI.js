@@ -501,6 +501,8 @@ u8R"(
 
   var playerName = createSection(playerInfoTab, 'Player Name');
   createYesNoDropDown(playerName, "Show Player Name", 'visuals', 'player_info_name');
+  separator(playerName);
+  createDropDown(playerName, "Player Name Color", 'visuals', 'player_info_name_color', ['White', 'Team Color', 'Health-based']);
 
   var playerHealth = createSection(playerInfoTab, 'Player Health');
   createYesNoDropDown(playerHealth, "Show Player Health", 'visuals', 'player_info_health');

@@ -55,9 +55,10 @@ public:
 
     [[nodiscard]] const char* getName() const noexcept
     {
-        if (const auto name = playerName(); name && *name)
-            return name;
+        // Prefer the sanitized name so it matches the scoreboard and killfeed (e.g. bot names).
         if (const auto name = sanitizedPlayerName(); name && *name)
+            return name;
+        if (const auto name = playerName(); name && *name)
             return name;
         return nullptr;
     }
