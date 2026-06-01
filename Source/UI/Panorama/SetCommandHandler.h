@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Features/Combat/AimBot/AimBotConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 #include <GameClient/Panorama/Slider.h>
@@ -31,8 +32,29 @@ struct SetCommandHandler {
     }
 
 private:
-    void handleCombatSection() noexcept
+    void handleCombatSection() const noexcept
     {
+        if (const auto feature = parser.getLine('/'); feature == "aim_bot_fov") {
+            handleIntSlider<aim_bot_vars::FovPixels>("aim_bot_fov");
+        } else if (feature == "aim_bot_fov_text") {
+            handleIntSliderTextEntry<aim_bot_vars::FovPixels>("aim_bot_fov");
+        } else if (feature == "aim_bot_max_distance") {
+            handleIntSlider<aim_bot_vars::MaxDistance>("aim_bot_max_distance");
+        } else if (feature == "aim_bot_max_distance_text") {
+            handleIntSliderTextEntry<aim_bot_vars::MaxDistance>("aim_bot_max_distance");
+        } else if (feature == "aim_bot_smooth") {
+            handleIntSlider<aim_bot_vars::Smooth>("aim_bot_smooth");
+        } else if (feature == "aim_bot_smooth_text") {
+            handleIntSliderTextEntry<aim_bot_vars::Smooth>("aim_bot_smooth");
+        } else if (feature == "aim_bot_vertical_adj") {
+            handleIntSlider<aim_bot_vars::VerticalAdjustment>("aim_bot_vertical_adj");
+        } else if (feature == "aim_bot_vertical_adj_text") {
+            handleIntSliderTextEntry<aim_bot_vars::VerticalAdjustment>("aim_bot_vertical_adj");
+        } else if (feature == "aim_bot_deadzone") {
+            handleIntSlider<aim_bot_vars::DeadzonePixels>("aim_bot_deadzone");
+        } else if (feature == "aim_bot_deadzone_text") {
+            handleIntSliderTextEntry<aim_bot_vars::DeadzonePixels>("aim_bot_deadzone");
+        }
     }
 
     void handleHudSection() const noexcept
@@ -55,13 +77,15 @@ private:
     template <typename ConfigVariable>
     void handleIntSlider(const char* sliderId) const noexcept
     {
-        const auto newVariableValue = handleIntSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
+        using ValueType = typename ConfigVariable::ValueType::ValueType;
+        const auto newVariableValue = handleIntSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, static_cast<ValueType>(GET_CONFIG_VAR(ConfigVariable)));
         hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
     }
 
-    [[nodiscard]] std::uint8_t handleIntSlider(const char* sliderId, std::uint8_t min, std::uint8_t max, std::uint8_t current) const noexcept
+    template <std::unsigned_integral ValueType>
+    [[nodiscard]] ValueType handleIntSlider(const char* sliderId, ValueType min, ValueType max, ValueType current) const noexcept
     {
-        std::uint8_t value{};
+        ValueType value{};
         if (!parser.parseInt(value) || value == current || value < min || value > max)
             return current;
 
@@ -73,14 +97,16 @@ private:
     template <typename ConfigVariable>
     void handleIntSliderTextEntry(const char* sliderId) const noexcept
     {
-        const auto newVariableValue = handleIntSliderTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable));
+        using ValueType = typename ConfigVariable::ValueType::ValueType;
+        const auto newVariableValue = handleIntSliderTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, static_cast<ValueType>(GET_CONFIG_VAR(ConfigVariable)));
         hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
     }
 
-    [[nodiscard]] std::uint8_t handleIntSliderTextEntry(const char* sliderId, std::uint8_t min, std::uint8_t max, std::uint8_t current) const noexcept
+    template <std::unsigned_integral ValueType>
+    [[nodiscard]] ValueType handleIntSliderTextEntry(const char* sliderId, ValueType min, ValueType max, ValueType current) const noexcept
     {
         auto&& slider = getIntSlider(sliderId);
-        std::uint8_t value{};
+        ValueType value{};
         if (!parser.parseInt(value) || value < min || value > max) {
             slider.updateTextEntry(current);
             return current;

@@ -235,6 +235,9 @@
     <Filter Include="Features\Combat">
       <UniqueIdentifier>{a7e69fbf-3ca6-470a-abde-6380959510c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Combat\AimBot">
+      <UniqueIdentifier>{5d396765-f2d4-4864-a791-887b415e5825}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Features\Combat\SniperRifles">
       <UniqueIdentifier>{4abe2bc9-1abb-4667-8119-82968a9df3d8}</UniqueIdentifier>
     </Filter>
@@ -1854,6 +1857,12 @@
     </ClInclude>
     <ClInclude Include="CS2\Constants\CrosshairColorIndex.h">
       <Filter>CS2\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\AimBot\AimBot.h">
+      <Filter>Features\Combat\AimBot</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\AimBot\AimBotConfigVariables.h">
+      <Filter>Features\Combat\AimBot</Filter>
     </ClInclude>
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVis.h">
       <Filter>Features\Combat\SniperRifles\NoScopeInaccuracyVis</Filter>

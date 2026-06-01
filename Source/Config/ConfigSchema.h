@@ -32,6 +32,17 @@ private:
         configConversion.boolean(u8"Enabled", loadVariable<no_scope_inaccuracy_vis_vars::Enabled>(), saveVariable<no_scope_inaccuracy_vis_vars::Enabled>());
         configConversion.endObject();
 
+        configConversion.beginObject(u8"AimBot");
+        configConversion.boolean(u8"Enabled", loadVariable<aim_bot_vars::Enabled>(), saveVariable<aim_bot_vars::Enabled>());
+        configConversion.uint(u8"ActivationKey", loadVariable<aim_bot_vars::ActivationKey>(), saveVariable<aim_bot_vars::ActivationKey>());
+        configConversion.boolean(u8"TeamCheck", loadVariable<aim_bot_vars::TeamCheck>(), saveVariable<aim_bot_vars::TeamCheck>());
+        configConversion.uint(u8"FovPixels", loadVariable<aim_bot_vars::FovPixels>(), saveVariable<aim_bot_vars::FovPixels>());
+        configConversion.uint(u8"MaxDistance", loadVariable<aim_bot_vars::MaxDistance>(), saveVariable<aim_bot_vars::MaxDistance>());
+        configConversion.uint(u8"Smooth", loadVariable<aim_bot_vars::Smooth>(), saveVariable<aim_bot_vars::Smooth>());
+        configConversion.uint(u8"VerticalAdjustment", loadVariable<aim_bot_vars::VerticalAdjustment>(), saveVariable<aim_bot_vars::VerticalAdjustment>());
+        configConversion.uint(u8"DeadzonePixels", loadVariable<aim_bot_vars::DeadzonePixels>(), saveVariable<aim_bot_vars::DeadzonePixels>());
+        configConversion.endObject();
+
         configConversion.endObject();
     }
 

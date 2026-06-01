@@ -382,7 +382,7 @@ $.Osiris = (function () {
 )"
 // split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
 u8R"(
-  var createSlider = function (parent, name, id, min, max) {
+  var createSlider = function (parent, name, section, id, min, max) {
     var container = $.CreatePanel('Panel', parent, '', {
       class: "SettingsMenuDropdownContainer"
     });
@@ -402,18 +402,18 @@ u8R"(
       direction: "horizontal"
     });
 
-    slider.SetPanelEvent('onvaluechanged', function () { $.Osiris.sliderUpdated('visuals', id, slider); });
+    slider.SetPanelEvent('onvaluechanged', function () { $.Osiris.sliderUpdated(section, id, slider); });
     slider.min = min;
     slider.max = max;
     slider.increment = 1.0;
 
     var textEntry = $.CreatePanel('TextEntry', sliderContainer, id + '_text', {
-      maxchars: "3",
+      maxchars: "5",
       textmode: "numeric",
       style: "width: 75px; margin-left: 10px; padding-left: 10px; text-align: center; font-size: 20px; color: #ccccccff; font-weight: bold; font-family: Stratum2, notosans, 'Arial Unicode MS'; border: 2px solid #cccccc15;"
     });
 
-    textEntry.SetPanelEvent('ontextentrysubmit', function () { $.Osiris.sliderTextEntryUpdated('visuals', `${id}_text`, textEntry); });
+    textEntry.SetPanelEvent('ontextentrysubmit', function () { $.Osiris.sliderTextEntryUpdated(section, `${id}_text`, textEntry); });
     textEntry.SetPanelEvent('onfocus', function () { textEntry.style.backgroundColor = 'gradient(linear, 100% 0%, 0% 0%, from(#00000080), color-stop(0, #00000060), to(#00000080))'; });
     textEntry.SetPanelEvent('onblur', function () { textEntry.style.backgroundColor = 'none'; });
     textEntry.SetPanelEvent('onmouseover', function () { if (!textEntry.BHasKeyFocus()) textEntry.style.backgroundColor = 'gradient(linear, 100% 0%, 0% 0%, from(#000000ff), color-stop(0, #00000000), to(#00000050));'; });
@@ -467,6 +467,23 @@ u8R"(
   var noScope = createSection(sniperRiflesTab, 'No scope');
   separator(noScope);
   createYesNoDropDown(noScope, "Visualize Inaccuracy When Not Using a Scope", 'combat', 'no_scope_inacc_vis');
+
+  var aimBot = createSection(sniperRiflesTab, 'Aim Bot');
+  createYesNoDropDown(aimBot, "Enable Aim Bot", 'combat', 'aim_bot');
+  separator(aimBot);
+  createDropDown(aimBot, "Aim Key", 'combat', 'aim_bot_activation_key', ['Alt', 'Mouse 4', 'Shift']);
+  separator(aimBot);
+  createYesNoDropDown(aimBot, "Aim At Enemies Only", 'combat', 'aim_bot_team_check');
+  separator(aimBot);
+  createSlider(aimBot, "FOV", 'combat', 'aim_bot_fov', 10, 500);
+  separator(aimBot);
+  createSlider(aimBot, "Max Distance", 'combat', 'aim_bot_max_distance', 100, 5000);
+  separator(aimBot);
+  createSlider(aimBot, "Smooth", 'combat', 'aim_bot_smooth', 1, 30);
+  separator(aimBot);
+  createSlider(aimBot, "Vertical Adj", 'combat', 'aim_bot_vertical_adj', 0, 120);
+  separator(aimBot);
+  createSlider(aimBot, "Deadzone", 'combat', 'aim_bot_deadzone', 0, 30);
 
   $.Osiris.navigateToSubTab('combat', 'sniper_rifles');
 
@@ -724,7 +741,7 @@ u8R"(
   var viewmodelFov = createSection(viewmodelTab, 'Viewmodel Fov');
   createYesNoDropDown(viewmodelFov, "Modify Viewmodel Fov", 'visuals', 'viewmodel_fov_mod');
   separator(viewmodelFov);
-  createSlider(viewmodelFov, "Fov", 'viewmodel_fov', 40, 90);
+  createSlider(viewmodelFov, "Fov", 'visuals', 'viewmodel_fov', 40, 90);
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 

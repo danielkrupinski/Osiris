@@ -118,6 +118,8 @@
     <ClInclude Include="CS2\Panorama\Transform3D.h" />
     <ClInclude Include="EntryPoints\EntryPoints.h" />
     <ClInclude Include="EntryPoints\GuiEntryPoints.h" />
+    <ClInclude Include="Features\Combat\AimBot\AimBot.h" />
+    <ClInclude Include="Features\Combat\AimBot\AimBotConfigVariables.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVis.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisConfigVariables.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisParams.h" />
