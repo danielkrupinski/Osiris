@@ -36,6 +36,26 @@ public:
     {
         return hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(getEntityFromHandle(handle)));
     }
+
+    [[nodiscard]] cs2::CEntityInstance* getEntityFromIndex(cs2::CEntityIndex entityIndex) const noexcept
+    {
+        if (!entityIndex.isValid())
+            return nullptr;
+
+        const auto entityList = getEntityList();
+        if (!entityList)
+            return nullptr;
+
+        const auto chunkIndex = entityIndex.value / cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk;
+        if (auto* const chunk = entityList->chunks[chunkIndex])
+            return (*chunk)[entityIndex.value % cs2::CConcreteEntityList::kNumberOfIdentitiesPerChunk].entity;
+        return nullptr;
+    }
+
+    [[nodiscard]] decltype(auto) getEntityFromIndex2(cs2::CEntityIndex entityIndex) const noexcept
+    {
+        return hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(getEntityFromIndex(entityIndex)));
+    }
     
     template <typename F>
     void forEachNetworkableEntityIdentity(F&& f) const noexcept

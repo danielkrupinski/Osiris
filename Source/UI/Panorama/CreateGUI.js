@@ -468,6 +468,11 @@ u8R"(
   separator(noScope);
   createYesNoDropDown(noScope, "Visualize Inaccuracy When Not Using a Scope", 'combat', 'no_scope_inacc_vis');
 
+  var triggerBot = createSection(sniperRiflesTab, 'Trigger Bot');
+  createYesNoDropDown(triggerBot, "Enable Trigger Bot", 'combat', 'trigger_bot');
+  separator(triggerBot);
+  createYesNoDropDown(triggerBot, "Shoot Enemies Only", 'combat', 'trigger_bot_team_check');
+
   $.Osiris.navigateToSubTab('combat', 'sniper_rifles');
 
   var hud = createTab('hud');

@@ -241,6 +241,9 @@
     <Filter Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis">
       <UniqueIdentifier>{41ddf56e-4385-4ce4-9df4-99654e07fac9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Combat\TriggerBot">
+      <UniqueIdentifier>{81b753bb-d0ee-4fea-9984-1dc31d43133f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="CS2\Econ">
       <UniqueIdentifier>{d789bb17-c27a-4136-aee2-4543b073ba4e}</UniqueIdentifier>
     </Filter>
@@ -1866,6 +1869,15 @@
     </ClInclude>
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisState.h">
       <Filter>Features\Combat\SniperRifles\NoScopeInaccuracyVis</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\TriggerBot\TriggerBot.h">
+      <Filter>Features\Combat\TriggerBot</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\TriggerBot\TriggerBotConfigVariables.h">
+      <Filter>Features\Combat\TriggerBot</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\TriggerBot\TriggerBotState.h">
+      <Filter>Features\Combat\TriggerBot</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Crosshair.h">
       <Filter>GameClient</Filter>

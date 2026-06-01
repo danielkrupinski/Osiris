@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Features/Combat/TriggerBot/TriggerBotConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlertConfigVariables.h>
 #include <Features/Hud/BombTimer/BombTimerConfigVariables.h>
@@ -98,5 +99,10 @@ using ConfigVariableTypes = TypeList<
     viewmodel_mod_vars::ModifyFov,
     viewmodel_mod_vars::Fov,
     no_scope_inaccuracy_vis_vars::Enabled,
-    BombPlantAlertEnabled
+    BombPlantAlertEnabled,
+    trigger_bot_vars::Enabled,
+    trigger_bot_vars::TeamCheck,
+    trigger_bot_vars::DelayMin,
+    trigger_bot_vars::DelayMax,
+    trigger_bot_vars::ShotDuration
 >;

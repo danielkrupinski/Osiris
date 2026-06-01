@@ -32,6 +32,14 @@ private:
         configConversion.boolean(u8"Enabled", loadVariable<no_scope_inaccuracy_vis_vars::Enabled>(), saveVariable<no_scope_inaccuracy_vis_vars::Enabled>());
         configConversion.endObject();
 
+        configConversion.beginObject(u8"TriggerBot");
+        configConversion.boolean(u8"Enabled", loadVariable<trigger_bot_vars::Enabled>(), saveVariable<trigger_bot_vars::Enabled>());
+        configConversion.boolean(u8"TeamCheck", loadVariable<trigger_bot_vars::TeamCheck>(), saveVariable<trigger_bot_vars::TeamCheck>());
+        configConversion.uint(u8"DelayMin", loadVariable<trigger_bot_vars::DelayMin>(), saveVariable<trigger_bot_vars::DelayMin>());
+        configConversion.uint(u8"DelayMax", loadVariable<trigger_bot_vars::DelayMax>(), saveVariable<trigger_bot_vars::DelayMax>());
+        configConversion.uint(u8"ShotDuration", loadVariable<trigger_bot_vars::ShotDuration>(), saveVariable<trigger_bot_vars::ShotDuration>());
+        configConversion.endObject();
+
         configConversion.endObject();
     }
 

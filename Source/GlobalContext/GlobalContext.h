@@ -14,6 +14,7 @@
 #include <GameClient/Entities/BaseWeapon.h>
 #include <GameClient/Entities/PlayerPawn.h>
 #include <GameClient/Entities/PreviewPlayer.h>
+#include <Features/Combat/TriggerBot/TriggerBot.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVis.h>
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserver.h>

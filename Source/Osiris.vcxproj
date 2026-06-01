@@ -122,6 +122,9 @@
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisConfigVariables.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisParams.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisState.h" />
+    <ClInclude Include="Features\Combat\TriggerBot\TriggerBot.h" />
+    <ClInclude Include="Features\Combat\TriggerBot\TriggerBotConfigVariables.h" />
+    <ClInclude Include="Features\Combat\TriggerBot\TriggerBotState.h" />
     <ClInclude Include="Features\Common\FeatureToggle.h" />
     <ClInclude Include="Features\Common\InWorldPanelIndex.h" />
     <ClInclude Include="Features\Common\InWorldPanelListEntry.h" />

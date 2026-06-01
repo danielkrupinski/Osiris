@@ -175,6 +175,11 @@ public:
         return getActiveWeapon().isSniperRifle();
     }
 
+    [[nodiscard]] auto crosshairEntityIndex() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToCrosshairEntityIndex>().of(playerPawn).toOptional();
+    }
+
 private:
     [[nodiscard]] auto sceneObjectUpdaterHandle() const noexcept
     {

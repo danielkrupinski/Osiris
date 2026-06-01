@@ -15,6 +15,7 @@ struct PlayerPawnPatterns {
             .template addPattern<OffsetToHostageServices, CodePattern{"74 0E 48 8B BB ? ? ? ? 31"}.add(5).read()>()
             .template addPattern<OffsetToFlashBangEndTime, CodePattern{"41 0F 10 ? ? ? ? ? F3 0F 5C 05"}.add(4).read()>()
             .template addPattern<OffsetToPlayerPawnSceneObjectUpdaterHandle, CodePattern{"89 83 ? ? ? ? 48 8B BB ? ? ? ? 48 8B"}.add(2).read()>()
-            .template addPattern<OffsetToIsScoped, CodePattern{"BB ? ? ? ? 00 F3 0F 11 45 ? 0F"}.add(1).read()>();
+            .template addPattern<OffsetToIsScoped, CodePattern{"BB ? ? ? ? 00 F3 0F 11 45 ? 0F"}.add(1).read()>()
+            .template addPattern<OffsetToCrosshairEntityIndex, CodePattern{"8B 83 ? ? ? ? 89 45 ? 48 8B 45"}.add(2).read()>();
     }
 };
