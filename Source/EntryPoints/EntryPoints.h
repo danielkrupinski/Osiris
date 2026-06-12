@@ -3,6 +3,7 @@
 #include "GlobalContext/GlobalContext.h"
 #include "Hooks/PeepEventsHook.h"
 #include "Utils/ReturnAddress.h"
+#include "Features/Visuals/SkyChanger/SkyChanger.h"
 
 [[NOINLINE]] void finishInit(auto& hookContext)
 {
@@ -80,6 +81,11 @@ void ViewRenderHook_onRenderStart(cs2::CViewRender* thisptr) noexcept
     hookContext.make<BombStatusPanelManager>().run();
     hookContext.make<InWorldPanels>().hideUnusedPanels();
 
+    // Sky Changer integration - apply sky texture every frame
+    if (hookContext.featuresStates().visualFeaturesStates.skyChangerState.enabled) {
+        hookContext.template make<SkyChanger<decltype(hookContext)>>().applySkyTexture();
+    }
+
     UnloadFlag unloadFlag;
     hookContext.make<PanoramaGUI>().run(unloadFlag);
     hookContext.config().update();
@@ -112,7 +118,7 @@ LINUX_ONLY([[gnu::aligned(8)]]) std::uint64_t Weapon_sceneObjectUpdater(cs2::C_C
     if (auto&& c4 = hookContext.make<BaseWeapon>(weapon).template cast<C4>())
         hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(DroppedBombModelGlow{hookContext}, c4.baseWeapon(), EntityTypeInfo{});
     else
-        hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(WeaponModelGlow{hookContext}, hookContext.make<BaseWeapon>(weapon), hookContext.make<BaseWeapon>(weapon).baseEntity().classify());
+        hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(WeaponModelGlow{hookContext}, hookContext.make<BaseWeapon>(weapon), hookContext.make<BaseWeapon>(weapon).baseEntity().classify()[...]
     return originalReturnValue;
 }
 
