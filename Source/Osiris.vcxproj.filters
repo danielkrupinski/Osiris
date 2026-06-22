@@ -1708,6 +1708,9 @@
     <ClInclude Include="Config\ConfigVariableTypes.h">
       <Filter>Config</Filter>
     </ClInclude>
+    <ClInclude Include="Config\LanguageConfigVariables.h">
+      <Filter>Config</Filter>
+    </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimerConfigVariables.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>

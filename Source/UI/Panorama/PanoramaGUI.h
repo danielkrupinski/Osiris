@@ -116,6 +116,14 @@ public:
         if (settings)
             state().settingsPanelHandle = settings.getHandle();
 
+        // inject language setting from config before UI creation
+        {
+            StringBuilderStorage<64> langStorage;
+            auto langBuilder = langStorage.builder();
+            langBuilder.put("$.Osiris = $.Osiris || {}; $.Osiris.language = ", static_cast<std::uint8_t>(GET_CONFIG_VAR(Language)), ";");
+            uiEngine().runScript(settings, langBuilder.cstring());
+        }
+
         uiEngine().runScript(settings, reinterpret_cast<const char*>(
 #include "CreateGUI.js"
 ));

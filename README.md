@@ -7,6 +7,11 @@ Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and 
 
 ## What's new
 
+* 31 May 2026
+    * Player name now displayed above the player's head in world space (independent projection at head height)
+    * Fixed pattern scan failures after CS2 update (`OffsetToPlayerColor`, `UiItem3dPanel`)
+    * Added multi-level fallback for player name lookup to improve robustness across game updates
+
 * 04 November 2025
     * Improved smoothness of "Player Info in World" on moving players
 

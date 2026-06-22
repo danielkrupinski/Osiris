@@ -7,6 +7,7 @@
 #include <Features/Hud/BombTimer/BombTimer.h>
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
 #include <Features/Hud/PostRoundTimer/PostRoundTimer.h>
+#include <Features/Hud/SpectatorList/SpectatorList.h>
 #include <Features/Sound/Details/BombBeepSound.h>
 #include <Features/Sound/Details/BombDefuseSound.h>
 #include <Features/Sound/Details/BombPlantSound.h>
@@ -213,6 +214,12 @@ private:
     {
         if (newValue == false)
             hookContext.template make<BombPlantAlert>().onDisable();
+    }
+
+    ON_CHANGE(SpectatorListEnabled)
+    {
+        if (newValue == false)
+            hookContext.template make<SpectatorList>().onDisable();
     }
 
     #undef ON_CHANGE

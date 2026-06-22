@@ -1,11 +1,13 @@
 #pragma once
 
+#include <Config/LanguageConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlertConfigVariables.h>
 #include <Features/Hud/BombTimer/BombTimerConfigVariables.h>
 #include <Features/Hud/DefusingAlert/DefusingAlertConfigVariables.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserverConfigVariables.h>
 #include <Features/Hud/PostRoundTimer/PostRoundTimerConfigVariables.h>
+#include <Features/Hud/SpectatorList/SpectatorListConfigVariables.h>
 #include <Features/Sound/SoundVisualizationConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
@@ -14,10 +16,12 @@
 #include <Utils/TypeList.h>
 
 using ConfigVariableTypes = TypeList<
+    Language,
     BombTimerEnabled,
     DefusingAlertEnabled,
     KillfeedPreserverEnabled,
     PostRoundTimerEnabled,
+    SpectatorListEnabled,
     BombBeepSoundVisualizationEnabled,
     BombDefuseSoundVisualizationEnabled,
     BombPlantSoundVisualizationEnabled,
@@ -84,6 +88,8 @@ using ConfigVariableTypes = TypeList<
     player_info_vars::OnlyEnemies,
     player_info_vars::PlayerPositionArrowEnabled,
     player_info_vars::PlayerPositionArrowColorMode,
+    player_info_vars::PlayerNameEnabled,
+    player_info_vars::PlayerNameColorMode,
     player_info_vars::PlayerHealthEnabled,
     player_info_vars::PlayerHealthColorMode,
     player_info_vars::ActiveWeaponIconEnabled,

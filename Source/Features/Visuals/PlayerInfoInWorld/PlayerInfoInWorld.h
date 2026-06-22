@@ -32,7 +32,8 @@ public:
         if (!positionInClipSpace.onScreen())
             return;
 
-        auto&& playerInformationPanel = hookContext.template make<InWorldPanels>().getNextPlayerInfoPanel();
+        auto&& inWorldPanels = hookContext.template make<InWorldPanels>();
+        auto&& playerInformationPanel = inWorldPanels.getNextPlayerInfoPanel();
         playerInformationPanel.drawPlayerInfo(playerPawn);
         playerInformationPanel.updatePosition(absOrigin.value());
     }

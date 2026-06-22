@@ -25,8 +25,9 @@
 template <typename NotFoundHandler>
 struct PatternFinder {
 public:
-    explicit PatternFinder(std::span<const std::byte> bytes) noexcept
+    explicit PatternFinder(std::span<const std::byte> bytes, const char* moduleName = "") noexcept
         : bytes{bytes}
+        , moduleName{moduleName}
     {
     }
 
@@ -47,6 +48,8 @@ public:
     {
         patterns.forEach([patternIndex = std::size_t{0}, results, this](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation) mutable {
             auto result = operator()(pattern);
+            if (!result)
+                NotFoundHandler::onPatternNotFound(moduleName, patternIndex, pattern);
             result.add(offset);
 
             std::array<std::byte, 8> resultToStore{};
@@ -67,8 +70,8 @@ public:
         auto patternFinder = HybridPatternFinder{bytes, pattern};
         const auto found = patternFinder.findNextOccurrence();
         assert(patternFinder.findNextOccurrence() == nullptr && "Pattern should be unique!");
-        if (!found)
-            NotFoundHandler::onPatternNotFound(pattern);
+        // onPatternNotFound is called from findPatterns() with module name and pattern index
+        // for richer diagnostics. Direct callers should check the result themselves.
         return makeResult(found, pattern.length());
     }
 
@@ -106,4 +109,5 @@ private:
     }
 
     std::span<const std::byte> bytes;
+    const char* moduleName;
 };

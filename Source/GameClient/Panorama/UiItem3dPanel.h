@@ -16,9 +16,7 @@ public:
 
     void createItem(cs2::ItemId itemId) const noexcept
     {
-        forceItemEntityToBeCreated();
         setItemId(itemId);
-        assert(unknownFieldHasDefaultValue());
     }
 
     void startWeaponLookAt() const noexcept
@@ -27,32 +25,10 @@ public:
     }
 
 private:
-    void forceItemEntityToBeCreated() const noexcept
-    {
-        assert(unknownFieldHasDefaultValue());
-        unknownField() = 0;
-    }
-
     void setItemId(cs2::ItemId itemId) const noexcept
     {
         if (const auto setItemItemIdFunction = hookContext.patternSearchResults().template get<SetItemItemIdFunction>(); setItemItemIdFunction && uiItem3dPanel)
             setItemItemIdFunction(uiItem3dPanel, itemId, "");
-    }
-
-    [[nodiscard]] [[maybe_unused]] bool unknownFieldHasDefaultValue() const noexcept
-    {
-        constexpr auto kDefaultValue = -1;
-        return unknownField().valueOr(kDefaultValue) == kDefaultValue;
-    }
-
-    [[nodiscard]] decltype(auto) unknownField() const noexcept
-    {
-        return hookContext.patternSearchResults().template get<OffsetToItem3dPanelUnknownField>().of(properties());
-    }
-
-    [[nodiscard]] decltype(auto) properties() const noexcept
-    {
-        return hookContext.patternSearchResults().template get<OffsetToItem3dPanelProperties>().of(uiItem3dPanel).get();
     }
 
     HookContext& hookContext;

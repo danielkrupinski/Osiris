@@ -16,6 +16,7 @@ public:
     [[nodiscard]] decltype(auto) performConversion(auto&& configConversion)
     {
         configConversion.beginRoot();
+        configConversion.uint(u8"Language", loadVariable<Language>(), saveVariable<Language>());
         combatObject(configConversion);
         hudObject(configConversion);
         visualsObject(configConversion);
@@ -143,6 +144,11 @@ private:
         configConversion.beginObject(u8"PlayerPositionArrow");
         configConversion.boolean(u8"Enabled", loadVariable<player_info_vars::PlayerPositionArrowEnabled>(), saveVariable<player_info_vars::PlayerPositionArrowEnabled>());
         configConversion.uint(u8"ColorMode", loadVariable<player_info_vars::PlayerPositionArrowColorMode>(), saveVariable<player_info_vars::PlayerPositionArrowColorMode>());
+        configConversion.endObject();
+
+        configConversion.beginObject(u8"PlayerName");
+        configConversion.boolean(u8"Enabled", loadVariable<player_info_vars::PlayerNameEnabled>(), saveVariable<player_info_vars::PlayerNameEnabled>());
+        configConversion.uint(u8"ColorMode", loadVariable<player_info_vars::PlayerNameColorMode>(), saveVariable<player_info_vars::PlayerNameColorMode>());
         configConversion.endObject();
 
         configConversion.beginObject(u8"Health");

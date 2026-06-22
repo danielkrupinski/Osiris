@@ -11,6 +11,8 @@
 #include "PlayerHealth/PlayerHealthPanel.h"
 #include "PlayerHealth/PlayerHealthPanelParams.h"
 #include "PlayerInfoContainerPanelParams.h"
+#include "PlayerNamePanel.h"
+#include "PlayerNamePanelParams.h"
 #include "PlayerPositionArrow/PlayerPositionArrowPanel.h"
 #include "PlayerPositionArrow/PlayerPositionArrowPanelParams.h"
 #include "PlayerStateIcons/PlayerStateIconsPanel.h"
@@ -54,6 +56,18 @@ public:
         PanoramaTransformations{
             hookContext.panoramaTransformFactory().scale(1.0f, -1.0f),
         }.applyTo(uiPanel);
+    }
+
+    void createPanel(std::type_identity<PlayerNamePanel<HookContext>>, auto&& containerPanel) const noexcept
+    {
+        using namespace player_name_panel_params;
+
+        auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
+        label.setFont(kFont);
+        label.setAlign(kAlignment);
+        label.setMargin(kMargin);
+        label.setTextShadow(kShadowParams);
+        label.setColor(kColor);
     }
 
     void createPanel(std::type_identity<PlayerActiveWeaponAmmoPanel<HookContext>>, auto&& containerPanel) const noexcept

@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include <CS2/Classes/CUtlString.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
@@ -20,11 +21,26 @@ enum class PlayerColorIndex : std::int32_t {
 
 constexpr auto kPlayerColorIndexCount{5};
 
+enum class PlayerConnectedState : std::int32_t {
+    Connected = 0,
+    Connecting = 1,
+    Reconnecting = 2,
+    Disconnecting = 3,
+    Disconnected = 4,
+    Reserved = 5,
+    NotYetConnected = 6
+};
+
 struct CCSPlayerController : C_BaseEntity {
     static constexpr auto kMangledTypeName{WIN64_LINUX(".?AVCCSPlayerController@@", "19CCSPlayerController")};
 
     using m_hPawn = CEntityHandle;
+    using m_hPlayerPawn = CEntityHandle;
+    using m_hObserverPawn = CEntityHandle;
+    using m_bPawnIsAlive = bool;
+    using m_iConnected = PlayerConnectedState;
     using m_iCompTeammateColor = PlayerColorIndex;
+    using m_sSanitizedPlayerName = CUtlString;
 };
 
 }
