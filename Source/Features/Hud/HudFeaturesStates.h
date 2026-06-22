@@ -4,10 +4,12 @@
 #include "BombPlantAlert/BombPlantAlertState.h"
 #include "DefusingAlert/DefusingAlertState.h"
 #include "PostRoundTimer/PostRoundTimerState.h"
+#include "SpectatorList/SpectatorListState.h"
 
 struct HudFeaturesStates {
     BombTimerState bombTimerState;
     DefusingAlertState defusingAlertState;
     PostRoundTimerState postRoundTimerState;
     BombPlantAlertState bombPlantAlertState;
+    SpectatorListState spectatorListState;
 };

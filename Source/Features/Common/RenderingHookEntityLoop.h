@@ -10,6 +10,9 @@
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlert.h>
+#include <Features/Hud/SpectatorList/SpectatorList.h>
+#include <CS2/Classes/Entities/CCSPlayerController.h>
+#include <GameClient/Entities/PlayerController.h>
 
 template <typename HookContext>
 class RenderingHookEntityLoop {
@@ -22,19 +25,25 @@ public:
     void run() const noexcept
     {
         auto bombPlantAlertVisibility = Visibility::Hidden;
-        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this, &bombPlantAlertVisibility](const auto& entityIdentity) { handleEntityIdentity(entityIdentity, bombPlantAlertVisibility); });
+        auto spectatorList = hookContext.template make<SpectatorList>();
+        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this, &bombPlantAlertVisibility, &spectatorList](const auto& entityIdentity) {
+            handleEntityIdentity(entityIdentity, bombPlantAlertVisibility, spectatorList);
+        });
         hookContext.template make<ModelGlow>().postUpdateInMainThread();
         if (bombPlantAlertVisibility == Visibility::Hidden)
             hookContext.template make<BombPlantAlert>().hide();
+        spectatorList.render();
     }
 
 private:
-    void handleEntityIdentity(const cs2::CEntityIdentity& entityIdentity, Visibility& bombPlantAlertVisibility) const noexcept
+    void handleEntityIdentity(const cs2::CEntityIdentity& entityIdentity, Visibility& bombPlantAlertVisibility, SpectatorList<HookContext>& spectatorList) const noexcept
     {
         const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(entityIdentity.entityClass);
         auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
 
-        if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
+        if (entityTypeInfo.template is<cs2::CCSPlayerController>()) {
+            spectatorList.addPotentialSpectator(hookContext.template make<PlayerController>(static_cast<cs2::CCSPlayerController*>(entityIdentity.entity)));
+        } else if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
             auto&& playerPawn = baseEntity.template as<PlayerPawn>();
             hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(playerPawn);
             updateModelGlow<PlayerModelGlow>(playerPawn, entityTypeInfo);
