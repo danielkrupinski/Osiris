@@ -8,6 +8,8 @@
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Classes/ConVarTypes.h>
+#include <CS2/Classes/Vector.h>
+#include <CS2/Constants/BoneIndex.h>
 #include <GameClient/Entities/TeamNumber.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
 #include <MemoryPatterns/PatternTypes/PlayerPawnPatternTypes.h>
@@ -93,6 +95,40 @@ public:
     [[nodiscard]] decltype(auto) absOrigin() const noexcept
     {
         return baseEntity().absOrigin();
+    }
+
+    [[nodiscard]] Optional<cs2::Vector> bonePosition(cs2::BoneIndex boneIndex) const noexcept
+    {
+        if (!playerPawn)
+            return {};
+
+        const auto gameSceneNode = *reinterpret_cast<std::byte**>(
+            reinterpret_cast<std::byte*>(playerPawn) + kOffsetToGameSceneNode);
+        if (!gameSceneNode)
+            return {};
+
+        const auto boneArray = *reinterpret_cast<std::byte**>(
+            gameSceneNode + kOffsetToModelState + kOffsetToBoneArray);
+        if (!boneArray)
+            return {};
+
+        const auto boneData = boneArray + static_cast<std::int32_t>(boneIndex) * kBoneDataStride;
+        return *reinterpret_cast<const cs2::Vector*>(boneData);
+    }
+
+    [[nodiscard]] Optional<cs2::Vector> headPosition() const noexcept
+    {
+        return bonePosition(cs2::BoneIndex::Head);
+    }
+
+    [[nodiscard]] Optional<cs2::Vector> chestPosition() const noexcept
+    {
+        return bonePosition(cs2::BoneIndex::Chest);
+    }
+
+    [[nodiscard]] Optional<cs2::Vector> stomachPosition() const noexcept
+    {
+        return bonePosition(cs2::BoneIndex::Stomach);
     }
 
     [[nodiscard]] bool isControlledByLocalPlayer() const noexcept
@@ -190,6 +226,12 @@ private:
     {
         return hookContext.cvarSystem().template getConVarValue<cs2::mp_teammates_are_enemies>().value_or(true);
     }
+
+    // Hardcoded offsets for bone position reading (from cs2-dumper schema).
+    static constexpr std::ptrdiff_t kOffsetToGameSceneNode{0x330};
+    static constexpr std::ptrdiff_t kOffsetToModelState{0x150};
+    static constexpr std::ptrdiff_t kOffsetToBoneArray{0x80};
+    static constexpr std::ptrdiff_t kBoneDataStride{32};
 
     HookContext& hookContext;
     cs2::C_CSPlayerPawn* playerPawn;

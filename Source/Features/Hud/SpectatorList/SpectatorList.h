@@ -85,18 +85,17 @@ private:
 
     [[nodiscard]] decltype(auto) getOrCreateContainerPanel() const noexcept
     {
-        return hookContext.template make<PanelHandle>(state().containerPanelHandle).getOrInit([this]() -> decltype(auto) {
+        return hookContext.template make<PanelHandle>(state().containerPanelHandle).getOrInit([this]() {
             auto&& factory = hookContext.template make<SpectatorListPanelFactory>();
             auto&& container = factory.createContainerPanel(hookContext.hud().rootPanel());
-            state().containerPanelHandle = container.getHandle();
             state().headerPanelHandle = factory.createHeaderPanel(container).getHandle();
-            return utils::lvalue<decltype(container)>(container);
+            return container;
         });
     }
 
     void updateHeaderPanel(auto&& container) const noexcept
     {
-        auto&& header = hookContext.template make<PanelHandle>(state().headerPanelHandle).getOrInit([this, &container]() -> decltype(auto) {
+        auto&& header = hookContext.template make<PanelHandle>(state().headerPanelHandle).getOrInit([this, &container]() {
             return hookContext.template make<SpectatorListPanelFactory>().createHeaderPanel(container);
         });
         StringBuilderStorage<32> storage;
@@ -109,7 +108,7 @@ private:
         auto&& factory = hookContext.template make<SpectatorListPanelFactory>();
         std::size_t index = 0;
         for (; index < spectatorCount; ++index) {
-            auto&& namePanel = hookContext.template make<PanelHandle>(state().namePanelHandles[index]).getOrInit([&factory, &container]() -> decltype(auto) {
+            auto&& namePanel = hookContext.template make<PanelHandle>(state().namePanelHandles[index]).getOrInit([&factory, &container]() {
                 return factory.createNamePanel(container);
             });
             namePanel.setVisible(true);

@@ -11,6 +11,11 @@ struct Hud {
     {
     }
 
+    [[nodiscard]] decltype(auto) rootPanel() noexcept
+    {
+        return context.panel();
+    }
+
     [[nodiscard]] decltype(auto) deathNotices() noexcept
     {
         return context.deathNoticesPanelHandle().getOrInit(findVisibleDeathNoticesPanel()).template as<DeathNotices>();
