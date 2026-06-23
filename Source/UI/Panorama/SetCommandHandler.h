@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Features/Combat/Aimbot/AimbotConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 #include <GameClient/Panorama/Slider.h>
@@ -33,6 +34,11 @@ struct SetCommandHandler {
 private:
     void handleCombatSection() noexcept
     {
+        if (const auto feature = parser.getLine('/'); feature == "aimbot_radius") {
+            handleIntSlider<aimbot_vars::FovRadius>("aimbot_radius");
+        } else if (feature == "aimbot_radius_text") {
+            handleIntSliderTextEntry<aimbot_vars::FovRadius>("aimbot_radius");
+        }
     }
 
     void handleHudSection() const noexcept

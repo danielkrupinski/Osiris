@@ -18,6 +18,7 @@ public:
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, KillfeedPreserverEnabled>>(guiPanel, "preserve_killfeed");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, PostRoundTimerEnabled>>(guiPanel, "postround_timer");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, BombPlantAlertEnabled>>(guiPanel, "bomb_plant_alert");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, SpectatorListEnabled>>(guiPanel, "spectator_list");
     }
 
     void updateFromConfig(auto&& mainMenu) const noexcept
@@ -27,6 +28,7 @@ public:
         setDropDownSelectedIndex(mainMenu, "preserve_killfeed", !GET_CONFIG_VAR(KillfeedPreserverEnabled));
         setDropDownSelectedIndex(mainMenu, "postround_timer", !GET_CONFIG_VAR(PostRoundTimerEnabled));
         setDropDownSelectedIndex(mainMenu, "bomb_plant_alert", !GET_CONFIG_VAR(BombPlantAlertEnabled));
+        setDropDownSelectedIndex(mainMenu, "spectator_list", !GET_CONFIG_VAR(SpectatorListEnabled));
     }
 
 private:

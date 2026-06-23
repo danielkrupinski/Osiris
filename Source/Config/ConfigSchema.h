@@ -33,6 +33,18 @@ private:
         configConversion.boolean(u8"Enabled", loadVariable<no_scope_inaccuracy_vis_vars::Enabled>(), saveVariable<no_scope_inaccuracy_vis_vars::Enabled>());
         configConversion.endObject();
 
+        configConversion.beginObject(u8"Triggerbot");
+        configConversion.boolean(u8"Enabled", loadVariable<triggerbot_vars::Enabled>(), saveVariable<triggerbot_vars::Enabled>());
+        configConversion.boolean(u8"VisibilityCheck", loadVariable<triggerbot_vars::VisibilityCheck>(), saveVariable<triggerbot_vars::VisibilityCheck>());
+        configConversion.boolean(u8"FlashImmunity", loadVariable<triggerbot_vars::FlashImmunity>(), saveVariable<triggerbot_vars::FlashImmunity>());
+        configConversion.endObject();
+
+        configConversion.beginObject(u8"Aimbot");
+        configConversion.boolean(u8"Enabled", loadVariable<aimbot_vars::Enabled>(), saveVariable<aimbot_vars::Enabled>());
+        configConversion.boolean(u8"Smooth", loadVariable<aimbot_vars::Smooth>(), saveVariable<aimbot_vars::Smooth>());
+        configConversion.uint(u8"FovRadius", loadVariable<aimbot_vars::FovRadius>(), saveVariable<aimbot_vars::FovRadius>());
+        configConversion.endObject();
+
         configConversion.endObject();
     }
 
@@ -58,6 +70,10 @@ private:
 
         configConversion.beginObject(u8"BombPlantAlert");
         configConversion.boolean(u8"Enabled", loadVariable<BombPlantAlertEnabled>(), saveVariable<BombPlantAlertEnabled>());
+        configConversion.endObject();
+
+        configConversion.beginObject(u8"SpectatorList");
+        configConversion.boolean(u8"Enabled", loadVariable<SpectatorListEnabled>(), saveVariable<SpectatorListEnabled>());
         configConversion.endObject();
 
         configConversion.endObject();

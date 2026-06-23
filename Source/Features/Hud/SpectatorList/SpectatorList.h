@@ -32,8 +32,6 @@ public:
             return;
         if (playerController == hookContext.localPlayerController())
             return;
-        if (!playerController.isConnected())
-            return;
         if (playerController.isPawnAlive().value_or(true))
             return;
         if (playerController.observerTargetHandle() != watchedPawnHandle)
@@ -45,7 +43,14 @@ public:
 
     void render() const noexcept
     {
-        if (!enabled || spectatorCount == 0) {
+        if (!enabled) {
+            if (!state().containerPanelHandle.isValid())
+                return;
+            hide();
+            return;
+        }
+
+        if (spectatorCount == 0) {
             hide();
             return;
         }
@@ -78,8 +83,6 @@ private:
         if (!localPlayerController)
             return std::nullopt;
 
-        if (const auto isAlive = localPlayerController.isPawnAlive(); isAlive && !*isAlive)
-            return localPlayerController.observerTargetHandle();
         return localPlayerController.playerPawnHandle();
     }
 
@@ -121,7 +124,8 @@ private:
 
     void hide() const noexcept
     {
-        hookContext.template make<PanelHandle>(state().containerPanelHandle).get().setVisible(false);
+        if (state().containerPanelHandle.isValid())
+            hookContext.template make<PanelHandle>(state().containerPanelHandle).get().setVisible(false);
     }
 
     [[nodiscard]] SpectatorListState& state() const noexcept

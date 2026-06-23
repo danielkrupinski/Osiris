@@ -22,11 +22,12 @@ struct PanelHandle {
     template <typename F>
     [[nodiscard]] decltype(auto) getOrInit(F&& f) noexcept
     {
-        if (!static_cast<bool>(get())) {
-            auto&& created = std::forward<F>(f)();
-            handle = created.getHandle();
-        }
-        return get();
+        if (auto&& panel = get())
+            return utils::lvalue<decltype(panel)>(panel);
+
+        auto&& panel = std::forward<F>(f)();
+        handle = panel.getHandle();
+        return utils::lvalue<decltype(panel)>(panel);
     }
 
     [[nodiscard]] bool panelExists() noexcept

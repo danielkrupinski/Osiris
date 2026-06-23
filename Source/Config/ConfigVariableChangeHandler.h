@@ -2,12 +2,14 @@
 
 #include <type_traits>
 
+#include <Features/Combat/Aimbot/AimbotConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVis.h>
+#include <Features/Combat/Triggerbot/TriggerbotConfigVariables.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlert.h>
+#include <Features/Hud/SpectatorList/SpectatorList.h>
 #include <Features/Hud/BombTimer/BombTimer.h>
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
 #include <Features/Hud/PostRoundTimer/PostRoundTimer.h>
-#include <Features/Hud/SpectatorList/SpectatorList.h>
 #include <Features/Sound/Details/BombBeepSound.h>
 #include <Features/Sound/Details/BombDefuseSound.h>
 #include <Features/Sound/Details/BombPlantSound.h>
@@ -202,6 +204,16 @@ private:
             hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
         else
             hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
+    }
+
+    ON_CHANGE(triggerbot_vars::Enabled)
+    {
+    }
+
+    ON_CHANGE(aimbot_vars::Enabled)
+    {
+        if (newValue == false)
+            hookContext.featuresStates().aimbotState.aiming = false;
     }
 
     ON_CHANGE(no_scope_inaccuracy_vis_vars::Enabled)

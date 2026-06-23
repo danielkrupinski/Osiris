@@ -15,12 +15,11 @@
 #include <GameClient/EntitySystem/EntitySystem.h>
 #include <MemoryPatterns/PatternTypes/PlayerControllerPatternTypes.h>
 #include "PlayerPawn.h"
+#include <CS2/Classes/EntitySystem/CEntityHandle.h>
 
 template <typename HookContext>
 class PlayerController {
 public:
-    using RawType = cs2::CCSPlayerController;
-
     PlayerController(HookContext& hookContext, cs2::CCSPlayerController* playerControllerPointer) noexcept
         : hookContext{hookContext}
         , playerControllerPointer{playerControllerPointer}
@@ -40,6 +39,11 @@ public:
     [[nodiscard]] explicit operator bool() const noexcept
     {
         return playerControllerPointer != nullptr;
+    }
+
+    [[nodiscard]] cs2::CCSPlayerController* rawPointer() const noexcept
+    {
+        return playerControllerPointer;
     }
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept
@@ -77,18 +81,14 @@ public:
         return std::nullopt;
     }
 
-    // A player whose controller is still in the entity system but who has left the
-    // server (disconnecting/disconnected) must not be treated as an active player.
-    [[nodiscard]] bool isConnected() const noexcept
-    {
-        if (const auto field = fieldAt<cs2::PlayerConnectedState>(playerControllerPointer, kOffsetToConnectedState))
-            return *field == cs2::PlayerConnectedState::Connected;
-        return false;
-    }
-
     [[nodiscard]] std::optional<cs2::CEntityHandle> playerPawnHandle() const noexcept
     {
         return entityHandleAt(playerControllerPointer, kOffsetToPlayerPawnHandle);
+    }
+
+    [[nodiscard]] std::optional<cs2::CEntityHandle> observerPawnHandle() const noexcept
+    {
+        return entityHandleAt(playerControllerPointer, kOffsetToObserverPawnHandle);
     }
 
     [[nodiscard]] std::optional<cs2::CEntityHandle> observerTargetHandle() const noexcept
@@ -109,21 +109,6 @@ public:
     }
 
 private:
-    template <typename FieldType>
-    [[nodiscard]] static const FieldType* fieldAt(const void* object, std::ptrdiff_t offset) noexcept
-    {
-        if (!object)
-            return nullptr;
-        return reinterpret_cast<const FieldType*>(static_cast<const std::byte*>(object) + offset);
-    }
-
-    [[nodiscard]] static std::optional<cs2::CEntityHandle> entityHandleAt(const void* object, std::ptrdiff_t offset) noexcept
-    {
-        if (const auto handle = fieldAt<cs2::CEntityHandle>(object, offset); handle && handle->index().isValid())
-            return *handle;
-        return std::nullopt;
-    }
-
     [[nodiscard]] const char* sanitizedPlayerName() const noexcept
     {
         constexpr auto kOffsetFromPlayerColorToSanitizedName{0x18};
@@ -161,8 +146,21 @@ private:
         return decltype(offset){kFallbackOffsetToPlayerColor};
     }
 
-    // Current public CS2 schema offsets. Keep these together so post-update validation is mechanical.
-    static constexpr std::ptrdiff_t kOffsetToConnectedState{0x6EC};
+    template <typename FieldType>
+    [[nodiscard]] static const FieldType* fieldAt(const void* object, std::ptrdiff_t offset) noexcept
+    {
+        if (!object)
+            return nullptr;
+        return reinterpret_cast<const FieldType*>(static_cast<const std::byte*>(object) + offset);
+    }
+
+    [[nodiscard]] static std::optional<cs2::CEntityHandle> entityHandleAt(const void* object, std::ptrdiff_t offset) noexcept
+    {
+        if (const auto handle = fieldAt<cs2::CEntityHandle>(object, offset); handle && handle->index().isValid())
+            return *handle;
+        return std::nullopt;
+    }
+
     static constexpr std::ptrdiff_t kOffsetToPlayerPawnHandle{0x90C};
     static constexpr std::ptrdiff_t kOffsetToObserverPawnHandle{0x910};
     static constexpr std::ptrdiff_t kOffsetToPawnIsAlive{0x914};

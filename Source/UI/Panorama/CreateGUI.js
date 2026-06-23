@@ -15,15 +15,20 @@ $.Osiris = (function () {
     sound:              { en: "Sound",              zh: "声音" },
     // Sub-tabs
     sniper_rifles:      { en: "Sniper rifles",      zh: "狙击步枪" },
+    triggerbot:         { en: "Triggerbot",         zh: "自动扳机" },
+    aimbot:             { en: "Aimbot",             zh: "自动瞄准" },
     player_info_in_world:{ en: "Player Info In World", zh: "世界玩家信息" },
     outline_glow:       { en: "Outline Glow",       zh: "轮廓发光" },
     model_glow:         { en: "Model Glow",         zh: "模型发光" },
     viewmodel:          { en: "Viewmodel",          zh: "视角模型" },
     // Section titles
     sec_no_scope:       { en: "No scope",           zh: "无准镜" },
+    sec_triggerbot:     { en: "Triggerbot",         zh: "自动扳机" },
+    sec_aimbot:         { en: "Aimbot",             zh: "自动瞄准" },
     sec_bomb:           { en: "Bomb",               zh: "炸弹" },
     sec_killfeed:       { en: "Killfeed",           zh: "击杀信息" },
     sec_time:           { en: "Time",               zh: "时间" },
+    sec_spectator_list: { en: "Spectator List",      zh: "观察者列表" },
     sec_player_info:    { en: "Player Info In World", zh: "世界玩家信息" },
     sec_player_position:{ en: "Player Position",    zh: "玩家位置" },
     sec_player_name:    { en: "Player Name",        zh: "玩家名称" },
@@ -48,6 +53,7 @@ $.Osiris = (function () {
     lbl_bomb_plant:     { en: "Show Bomb Plant Alert", zh: "显示安放炸弹警报" },
     lbl_preserve_kf:    { en: "Preserve My Killfeed During The Round", zh: "回合内保留我的击杀信息" },
     lbl_postround_timer:{ en: "Show Post-round Timer", zh: "显示回合结束计时器" },
+    lbl_spectator_list: { en: "Show Spectator List",  zh: "显示观察者列表" },
     lbl_pos_arrow:      { en: "Show Player Position Arrow", zh: "显示玩家位置箭头" },
     lbl_pos_arrow_color:{ en: "Player Position Arrow Color", zh: "玩家位置箭头颜色" },
     lbl_show_name:      { en: "Show Player Name",   zh: "显示玩家名称" },
@@ -86,6 +92,13 @@ $.Osiris = (function () {
     lbl_scope_vis:      { en: "Visualize Weapon Scope Sound", zh: "可视化武器开镜声音" },
     lbl_reload_vis:     { en: "Visualize Weapon Reload Sound", zh: "可视化武器换弹声音" },
     lbl_inacc_vis:      { en: "Visualize Inaccuracy When Not Using a Scope", zh: "未开镜时显示不准确度" },
+    lbl_triggerbot:     { en: "Triggerbot",         zh: "自动扳机" },
+    lbl_triggerbot_vis: { en: "Visibility check",    zh: "可见性检查" },
+    lbl_flash_immunity: { en: "Flash immunity",       zh: "闪光免疫" },
+    lbl_aimbot:         { en: "Aimbot",              zh: "自动瞄准" },
+    lbl_aimbot_smooth:  { en: "Smooth follow [off = instant snap]", zh: "平滑跟随，关闭则瞬移" },
+    lbl_aimbot_radius:  { en: "FOV radius [px]",     zh: "检测半径 [像素]" },
+    lbl_aimbot_preview: { en: "Preview [based on 1920x1080]", zh: "预览[基于1920x1080]" },
     // Hue labels
     hue_player_blue:    { en: "Player Blue Hue",    zh: "玩家蓝色色相" },
     hue_player_green:   { en: "Player Green Hue",   zh: "玩家绿色色相" },
@@ -419,6 +432,22 @@ u8R"(
     });
 
     $.CreatePanel('Label', sniperRiflesTabButton, '', { text: tr('sniper_rifles') });
+
+    var triggerbotTabButton = $.CreatePanel('RadioButton', centerContainer, 'triggerbot_button', {
+      group: "CombatNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToSubTab('combat', 'triggerbot');"
+    });
+
+    $.CreatePanel('Label', triggerbotTabButton, '', { text: tr('triggerbot') });
+
+    var aimbotTabButton = $.CreatePanel('RadioButton', centerContainer, 'aimbot_button', {
+      group: "CombatNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToSubTab('combat', 'aimbot');"
+    });
+
+    $.CreatePanel('Label', aimbotTabButton, '', { text: tr('aimbot') });
   };
 
   createNavbar();
@@ -581,7 +610,8 @@ u8R"(
 )"
 // split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
 u8R"(
-  var createSlider = function (parent, nameKey, id, min, max) {
+  var createSlider = function (parent, nameKey, id, min, max, tabID, onChange) {
+    if (tabID === undefined) tabID = 'visuals';
     var container = $.CreatePanel('Panel', parent, '', {
       class: "SettingsMenuDropdownContainer"
     });
@@ -602,7 +632,10 @@ u8R"(
       direction: "horizontal"
     });
 
-    slider.SetPanelEvent('onvaluechanged', function () { $.Osiris.sliderUpdated('visuals', id, slider); });
+    slider.SetPanelEvent('onvaluechanged', function () {
+      $.Osiris.sliderUpdated(tabID, id, slider);
+      if (onChange) onChange(slider.value);
+    });
     slider.min = min;
     slider.max = max;
     slider.increment = 1.0;
@@ -613,7 +646,13 @@ u8R"(
       style: "width: 75px; margin-left: 10px; padding-left: 10px; text-align: center; font-size: 20px; color: #ccccccff; font-weight: bold; font-family: Stratum2, notosans, 'Arial Unicode MS'; border: 2px solid #cccccc15;"
     });
 
-    textEntry.SetPanelEvent('ontextentrysubmit', function () { $.Osiris.sliderTextEntryUpdated('visuals', `${id}_text`, textEntry); });
+    textEntry.SetPanelEvent('ontextentrysubmit', function () {
+      $.Osiris.sliderTextEntryUpdated(tabID, `${id}_text`, textEntry);
+      if (onChange) {
+        var parsed = parseInt(textEntry.text, 10);
+        if (!isNaN(parsed)) onChange(parsed);
+      }
+    });
     textEntry.SetPanelEvent('onfocus', function () { textEntry.style.backgroundColor = 'gradient(linear, 100% 0%, 0% 0%, from(#00000080), color-stop(0, #00000060), to(#00000080))'; });
     textEntry.SetPanelEvent('onblur', function () { textEntry.style.backgroundColor = 'none'; });
     textEntry.SetPanelEvent('onmouseover', function () { if (!textEntry.BHasKeyFocus()) textEntry.style.backgroundColor = 'gradient(linear, 100% 0%, 0% 0%, from(#000000ff), color-stop(0, #00000000), to(#00000050));'; });
@@ -669,6 +708,52 @@ u8R"(
   separator(noScope);
   createYesNoDropDown(noScope, "lbl_inacc_vis", 'combat', 'no_scope_inacc_vis');
 
+  var triggerbotTab = createSubTab(combat, 'triggerbot');
+  var triggerbot = createSection(triggerbotTab, 'sec_triggerbot');
+  separator(triggerbot);
+  createYesNoDropDown(triggerbot, "lbl_triggerbot", 'combat', 'triggerbot_switch');
+  separator(triggerbot);
+  createYesNoDropDown(triggerbot, "lbl_triggerbot_vis", 'combat', 'triggerbot_visibility');
+  separator(triggerbot);
+  createYesNoDropDown(triggerbot, "lbl_flash_immunity", 'combat', 'triggerbot_flash');
+
+  var aimbotTab = createSubTab(combat, 'aimbot');
+  var aimbot = createSection(aimbotTab, 'sec_aimbot');
+  separator(aimbot);
+  createYesNoDropDown(aimbot, "lbl_aimbot", 'combat', 'aimbot_switch');
+  separator(aimbot);
+  createYesNoDropDown(aimbot, "lbl_aimbot_smooth", 'combat', 'aimbot_smooth');
+  separator(aimbot);
+
+  var aimbotRadiusCircle = null;
+  var updateAimbotPreview = function (radiusValue) {
+    if (!aimbotRadiusCircle) return;
+    var previewWidth = 400.0;
+    var screenWidth = 1920.0;
+    var diameterPx = Math.floor(2.0 * radiusValue * previewWidth / screenWidth);
+    if (diameterPx < 4) diameterPx = 4;
+    aimbotRadiusCircle.style.width = diameterPx + 'px';
+    aimbotRadiusCircle.style.height = diameterPx + 'px';
+  };
+  createSlider(aimbot, "lbl_aimbot_radius", 'aimbot_radius', 30, 250, 'combat', updateAimbotPreview);
+
+  separator(aimbot);
+  var previewLabel = $.CreatePanel('Label', aimbot, '', {
+    style: 'horizontal-align: center; color: #ccccccff; font-size: 14px; margin-top: 10px;',
+    text: tr('lbl_aimbot_preview')
+  });
+  register(previewLabel, 'lbl_aimbot_preview');
+  var previewContainer = $.CreatePanel('Panel', aimbot, '', {
+    style: 'width: 400px; height: 225px; horizontal-align: center; margin: 5px 0 10px 0; background-color: #00000080; border: 1px solid #ffffff30;'
+  });
+  aimbotRadiusCircle = $.CreatePanel('Panel', previewContainer, '', {
+    style: 'width: 60px; height: 60px; horizontal-align: center; vertical-align: center; border: 2px solid #ff8000; border-radius: 50%; background-color: #ff800010;'
+  });
+  $.CreatePanel('Label', previewContainer, '', {
+    text: '+',
+    style: 'horizontal-align: center; vertical-align: center; color: #ffffff; font-size: 28px; font-weight: bold;'
+  });
+
   $.Osiris.navigateToSubTab('combat', 'sniper_rifles');
 
   var hud = createTab('hud');
@@ -687,6 +772,10 @@ u8R"(
   var time = createSection(hud, 'sec_time');
   separator(time);
   createYesNoDropDown(time, "lbl_postround_timer", 'hud', 'postround_timer');
+
+  var spectatorList = createSection(hud, 'sec_spectator_list');
+  separator(spectatorList);
+  createYesNoDropDown(spectatorList, "lbl_spectator_list", 'hud', 'spectator_list');
 
   var visuals = createVisualsTab();
 

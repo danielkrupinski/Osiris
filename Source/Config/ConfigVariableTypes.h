@@ -1,12 +1,14 @@
 #pragma once
 
 #include <Config/LanguageConfigVariables.h>
+#include <Features/Combat/Aimbot/AimbotConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlertConfigVariables.h>
 #include <Features/Hud/BombTimer/BombTimerConfigVariables.h>
 #include <Features/Hud/DefusingAlert/DefusingAlertConfigVariables.h>
 #include <Features/Hud/KillfeedPreserver/KillfeedPreserverConfigVariables.h>
 #include <Features/Hud/PostRoundTimer/PostRoundTimerConfigVariables.h>
+#include <Features/Combat/Triggerbot/TriggerbotConfigVariables.h>
 #include <Features/Hud/SpectatorList/SpectatorListConfigVariables.h>
 #include <Features/Sound/SoundVisualizationConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
@@ -21,7 +23,6 @@ using ConfigVariableTypes = TypeList<
     DefusingAlertEnabled,
     KillfeedPreserverEnabled,
     PostRoundTimerEnabled,
-    SpectatorListEnabled,
     BombBeepSoundVisualizationEnabled,
     BombDefuseSoundVisualizationEnabled,
     BombPlantSoundVisualizationEnabled,
@@ -104,5 +105,12 @@ using ConfigVariableTypes = TypeList<
     viewmodel_mod_vars::ModifyFov,
     viewmodel_mod_vars::Fov,
     no_scope_inaccuracy_vis_vars::Enabled,
+    triggerbot_vars::Enabled,
+    triggerbot_vars::VisibilityCheck,
+    triggerbot_vars::FlashImmunity,
+    aimbot_vars::Enabled,
+    aimbot_vars::Smooth,
+    aimbot_vars::FovRadius,
+    SpectatorListEnabled,
     BombPlantAlertEnabled
 >;
