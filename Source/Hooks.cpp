@@ -1,4 +1,4 @@
-#include <charconv>
+﻿#include <charconv>
 #include <functional>
 #include <string>
 
@@ -89,10 +89,10 @@ void swapWindow(SDL_Window* window) noexcept;
 void Hooks::install() noexcept
 {
 #if IS_WIN32()
-    originalPresent = **reinterpret_cast<decltype(originalPresent)**>(memory.present);
-    **reinterpret_cast<decltype(present)***>(memory.present) = present;
-    originalReset = **reinterpret_cast<decltype(originalReset)**>(memory.reset);
-    **reinterpret_cast<decltype(reset)***>(memory.reset) = reset;
+    originalPresent = *reinterpret_cast<decltype(originalPresent)*>(memory.present);
+    *reinterpret_cast<decltype(present)**>(memory.present) = present;
+    originalReset = *reinterpret_cast<decltype(originalReset)*>(memory.reset);
+    *reinterpret_cast<decltype(reset)**>(memory.reset) = reset;
 
     if constexpr (std::is_same_v<HookType, MinHook>)
         MH_Initialize();
@@ -176,8 +176,8 @@ void Hooks::uninstall(Misc& misc, Glow& glow, Visuals& visuals, inventory_change
 #if IS_WIN32()
     keyValuesSystemHooks.forceUninstall();
 
-    **reinterpret_cast<void***>(memory.present) = originalPresent;
-    **reinterpret_cast<void***>(memory.reset) = originalReset;
+    *reinterpret_cast<decltype(originalPresent)*>(memory.present) = originalPresent;
+    *reinterpret_cast<decltype(originalReset)*>(memory.reset) = originalReset;
 
     if (HANDLE thread = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(unload), 0, 0, nullptr))
         CloseHandle(thread);
