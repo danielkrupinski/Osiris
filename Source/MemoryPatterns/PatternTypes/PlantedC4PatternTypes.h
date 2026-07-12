@@ -11,6 +11,7 @@ template <typename FieldType, typename OffsetType>
 using PlantedC4Offset = FieldOffset<cs2::CPlantedC4, FieldType, OffsetType>;
 
 STRONG_TYPE_ALIAS(PlantedC4sPointer, cs2::CUtlVector<cs2::CPlantedC4*>*);
+STRONG_TYPE_ALIAS(PlantedC4Pointer, cs2::CPlantedC4**);
 STRONG_TYPE_ALIAS(BombSiteOffset, PlantedC4Offset<cs2::CPlantedC4::m_nBombSite, std::int32_t>);
 STRONG_TYPE_ALIAS(BombTickingOffset, PlantedC4Offset<cs2::CPlantedC4::m_bBombTicking, std::int32_t>);
 STRONG_TYPE_ALIAS(BombBlowTimeOffset, PlantedC4Offset<cs2::CPlantedC4::m_flC4Blow, std::int32_t>);

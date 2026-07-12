@@ -13,9 +13,12 @@
 #include <CS2/Classes/Entities/C_BaseCSGrenadeProjectile.h>
 #include <CS2/Classes/Entities/C_BaseModelEntity.h>
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
+#include <CS2/Constants/DllNames.h>
 #include <CS2/Classes/EntitySystem/CEntityClass.h>
 #include <CS2/Constants/EntityClasses.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
+#include <Platform/DynamicLibrary.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <Utils/TypeIndex.h>
 
 struct EntityTypeInfo {
@@ -73,8 +76,13 @@ private:
 
 class EntityClassifier {
 public:
-    void init(auto& hookContext) noexcept
+    void init([[maybe_unused]] auto& hookContext) noexcept
     {
+#if IS_WIN64()
+        const DynamicLibrary clientDLL{cs2::CLIENT_DLL};
+        clientDataSection = clientDLL.getDataSection();
+        clientVmtSection = clientDLL.getVmtSection();
+#else
         cs2::kEntityClassNames.forEach([i = 0u, &hookContext, this](const auto typeName) mutable {
             const auto entityClass = hookContext.template make<EntitySystem>().findEntityClass(typeName);
             auto j = i;
@@ -90,16 +98,36 @@ public:
 
         for (std::size_t i = 0; i < std::tuple_size_v<cs2::EntityClasses>; ++i)
             entityTypeIndexToClassIndex[entityClassIndexToTypeIndex[i]] = static_cast<EntityTypeInfo::Index>(i);
+#endif
     }
 
     template <typename EntityType>
     [[nodiscard]] bool entityIs(const cs2::CEntityClass* entityClass) const noexcept
     {
+#if IS_WIN64()
+        return classifyEntity(entityClass).template is<EntityType>();
+#else
         return entityClass != nullptr && entityClass == entityClasses[entityTypeIndexToClassIndex[utils::typeIndex<EntityType, cs2::EntityClasses>()]];
+#endif
     }
 
     [[nodiscard]] EntityTypeInfo classifyEntity(const cs2::CEntityClass* entityClass) const noexcept
     {
+#if IS_WIN64()
+        if (!clientDataSection.contains(reinterpret_cast<std::uintptr_t>(entityClass), sizeof(cs2::CEntityClass))
+            || !clientDataSection.contains(reinterpret_cast<std::uintptr_t>(entityClass->info), sizeof(cs2::CEntityClassInfo))
+            || !clientVmtSection.contains(reinterpret_cast<std::uintptr_t>(entityClass->info->name)))
+            return {};
+
+        auto typeIndex = EntityTypeInfo::Index{0};
+        EntityTypeInfo result;
+        cs2::kEntityClassNames.forEach([&](const auto entityClassName) {
+            if (std::strcmp(entityClass->info->name, entityClassName) == 0)
+                result.typeIndex = typeIndex;
+            ++typeIndex;
+        });
+        return result;
+#else
         if (entityClass == nullptr)
             return {};
 
@@ -107,10 +135,16 @@ public:
         if (it != entityClasses.end() && *it == entityClass)
             return EntityTypeInfo{entityClassIndexToTypeIndex[std::distance(entityClasses.begin(), it)]};
         return {};
+#endif
     }
 
 private:
+#if IS_WIN64()
+    MemorySection clientDataSection;
+    MemorySection clientVmtSection;
+#else
     std::array<const cs2::CEntityClass*, std::tuple_size_v<cs2::EntityClasses>> entityClasses;
     std::array<EntityTypeInfo::Index, std::tuple_size_v<cs2::EntityClasses>> entityTypeIndexToClassIndex;
     std::array<EntityTypeInfo::Index, std::tuple_size_v<cs2::EntityClasses>> entityClassIndexToTypeIndex;
+#endif
 };

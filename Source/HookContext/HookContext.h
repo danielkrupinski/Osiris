@@ -16,6 +16,7 @@
 #include <MemoryPatterns/PatternTypes/CvarPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/GameRulesPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/PlantedC4PatternTypes.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <GameClient/Panorama/PanelFactory.h>
 #include <GameClient/GlobalVars.h>
 #include <GameClient/Panorama/PanoramaTransformFactory.h>
@@ -142,7 +143,9 @@ struct HookContext {
 
     [[nodiscard]] auto plantedC4() noexcept
     {
-        return std::optional{make<PlantedC4<HookContext>>(getPlantedC4())};
+        if (const auto plantedC4 = getPlantedC4())
+            return std::optional{make<PlantedC4<HookContext>>(plantedC4)};
+        return std::optional<PlantedC4<HookContext>>{};
     }
 
     [[nodiscard]] auto cvarSystem() noexcept
@@ -267,10 +270,15 @@ struct HookContext {
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {
+#if IS_WIN64()
+        const auto plantedC4 = fullGlobalContext.patternSearchResults.template get<PlantedC4Pointer>();
+        return plantedC4 ? *plantedC4 : nullptr;
+#elif IS_LINUX()
         const auto* const plantedC4s = fullGlobalContext.patternSearchResults.template get<PlantedC4sPointer>();
         if (plantedC4s && plantedC4s->size > 0)
             return plantedC4s->memory[0];
         return nullptr;
+#endif
     }
 
     GlobalContext::Complete& fullGlobalContext;
