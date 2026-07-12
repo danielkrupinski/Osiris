@@ -85,7 +85,7 @@ private:
         auto&& timerPanel = getPanel(state().timerPanelHandle);
         const auto timeToArmingEnd = bomb.timeToArmingEnd();
         if (timeToArmingEnd.hasValue()) {
-            timerPanel.clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(
+            timerPanel.clientPanel().template as<PanoramaLabel>().setText(StringBuilder{state().timerText}.put(
                 static_cast<int>(timeToArmingEnd.value()), '.', static_cast<int>(timeToArmingEnd.value() * 10) % 10).cstring());
         }
         timerPanel.setColor(timerColor(canBePlantedBeforeRoundEnd));

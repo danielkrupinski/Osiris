@@ -16,8 +16,9 @@ struct CSfxTable {
 
 struct ChannelInfo1 {
     CSfxTable* sfx;
+    PAD(48);
     int guid;
-    PAD(52); // TODO: get sizeof dynamically, was broken: 2024.02.07, broken again (reverted to previous) 2024.05.23, broken again 2025.07.29
+    PAD(4);
 };
 
 static_assert(sizeof(ChannelInfo1) == 64);

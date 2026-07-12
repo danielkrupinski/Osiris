@@ -34,7 +34,7 @@ public:
             healthValuePanel.setColor(healthTextColor);
 
         if (const auto playerHealth = playerPawn.health().valueOr(0); context.cache().playerHealth(playerHealth))
-            healthValuePanel.clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(playerHealth).cstring());
+            healthValuePanel.clientPanel().template as<PanoramaLabel>().setText(StringBuilder{std::span{context.cache().playerHealthText, 10}}.put(playerHealth).cstring());
     }
 
 private:

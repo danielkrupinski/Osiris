@@ -39,7 +39,7 @@ private:
     void updateCountdownTime(auto&& countdownTextPanel) const noexcept
     {
         const auto timeToRoundRestart = getTimeToRoundRestart();
-        countdownTextPanel.setText(StringBuilderStorage<10>{}.builder().put(static_cast<int>(timeToRoundRestart), '.', static_cast<int>(timeToRoundRestart * 10) % 10).cstring());
+        countdownTextPanel.setText(StringBuilder{context.state().timerText}.put(static_cast<int>(timeToRoundRestart), '.', static_cast<int>(timeToRoundRestart * 10) % 10).cstring());
     }
 
     [[nodiscard]] float getTimeToRoundRestart() const noexcept

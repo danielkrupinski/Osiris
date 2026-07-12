@@ -29,4 +29,6 @@ struct PlayerInfoPanelCacheEntry {
     Cached<int> playerHealth{-1};
     Cached<int> activeWeaponAmmo{-1};
     Cached<float> opacity{-1.0f};
+    char* playerHealthText{};
+    char* activeWeaponAmmoText{};
 };

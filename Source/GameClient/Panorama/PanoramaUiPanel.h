@@ -78,7 +78,7 @@ public:
 
     void setVisible(bool visible) const noexcept
     {
-        if (isVisible() != visible) {
+        if (const auto currentVisibility = isVisible(); !currentVisibility.hasValue() || currentVisibility.value() != visible) {
             if (auto&& setVisibleFn = setVisible())
                 setVisibleFn(visible);
         }
@@ -284,7 +284,9 @@ private:
 
     [[nodiscard]] Optional<bool> hasFlag(cs2::EPanelFlag flag) const noexcept
     {
-        return (hookContext.patternSearchResults().template get<OffsetToPanelFlags>().of(panel).toOptional() & flag) != 0;
+        if (const auto panelFlags = hookContext.patternSearchResults().template get<OffsetToPanelFlags>().of(panel).toOptional(); panelFlags.hasValue())
+            return (panelFlags.value() & flag) != 0;
+        return {};
     }
 
     [[nodiscard]] auto setParent() const noexcept

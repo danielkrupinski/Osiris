@@ -7,4 +7,5 @@
 
 STRONG_TYPE_ALIAS(LabelPanelConstructorPointer, cs2::CLabel::Constructor*);
 STRONG_TYPE_ALIAS(SetLabelTextFunctionPointer, cs2::CLabel::setTextInternal);
+STRONG_TYPE_ALIAS(GetLabelTextFormatterFunctionPointer, cs2::CLabel::GetTextFormatter);
 STRONG_TYPE_ALIAS(LabelPanelObjectSize, std::uint32_t);

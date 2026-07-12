@@ -1,5 +1,7 @@
 #pragma once
 
+#include <span>
+
 #include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <Utils/Optional.h>
@@ -7,15 +9,16 @@
 
 template <typename LabelPanel>
 struct DefusingCountdownTextPanel {
-    explicit DefusingCountdownTextPanel(LabelPanel panel) noexcept
+    DefusingCountdownTextPanel(LabelPanel panel, std::span<char> textBuffer) noexcept
         : panel{panel}
+        , textBuffer{textBuffer}
     {
     }
 
     auto& setTimeToDefuseEnd(Optional<float> timeToDefuseEnd) const noexcept
     {
         if (timeToDefuseEnd.hasValue()) {
-            panel.setText(StringBuilderStorage<10>{}.builder().put(
+            panel.setText(StringBuilder{textBuffer}.put(
                 static_cast<int>(timeToDefuseEnd.value()), '.', static_cast<int>(timeToDefuseEnd.value() * 10) % 10).cstring());
         }
         return *this;
@@ -36,4 +39,5 @@ private:
     }
 
     LabelPanel panel;
+    std::span<char> textBuffer;
 };

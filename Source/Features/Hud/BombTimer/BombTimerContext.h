@@ -60,7 +60,7 @@ struct BombTimerContext {
 
     [[nodiscard]] auto bombTimerTextPanel() const noexcept
     {
-        return BombTimerTextPanel{uiEngine().getPanelFromHandle(state().bombTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
+        return BombTimerTextPanel{uiEngine().getPanelFromHandle(state().bombTimerPanelHandle).clientPanel().template as<PanoramaLabel>(), state().timerText};
     }
 
     void updatePanelHandles() const noexcept

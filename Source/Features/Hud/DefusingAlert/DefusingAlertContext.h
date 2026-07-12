@@ -59,7 +59,7 @@ public:
 
     [[nodiscard]] auto defusingCountdownTextPanel() const noexcept
     {
-        return DefusingCountdownTextPanel{uiEngine().getPanelFromHandle(state().defusingTimerPanelHandle).clientPanel().template as<PanoramaLabel>()};
+        return DefusingCountdownTextPanel{uiEngine().getPanelFromHandle(state().defusingTimerPanelHandle).clientPanel().template as<PanoramaLabel>(), state().timerText};
     }
 
     [[nodiscard]] decltype(auto) config() const noexcept

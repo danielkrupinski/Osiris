@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PlayerInfoPanelCacheState.h"
+
 template <typename HookContext>
 class PlayerInfoPanelCache {
 public:
@@ -10,7 +12,11 @@ public:
 
     void allocateNewEntry() const noexcept
     {
-        state().cache.pushBack({});
+        const auto newEntryIndex = state().cache.getSize();
+        if (newEntryIndex >= PlayerInfoPanelCacheState::kMaxEntries || !state().cache.pushBack({}))
+            return;
+        state().cache.back().playerHealthText = state().playerHealthText[newEntryIndex].data();
+        state().cache.back().activeWeaponAmmoText = state().activeWeaponAmmoText[newEntryIndex].data();
     }
 
     [[nodiscard]] auto& nextEntry() const noexcept

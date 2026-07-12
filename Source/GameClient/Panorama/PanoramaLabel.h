@@ -28,8 +28,32 @@ struct PanoramaLabel {
 
     void setTextInternal(const char* value, int textType, bool trustedSource) const noexcept
     {
-        if (panel && setTextInternalFunction())
+#if IS_WIN64()
+        (void)trustedSource;
+        if (!panel)
+            return;
+
+        auto* const panelBytes = reinterpret_cast<std::byte*>(panel);
+        auto* const panelVmt = *reinterpret_cast<void***>(panel);
+        if (!*reinterpret_cast<void**>(panelBytes + 0x80)) {
+            reinterpret_cast<void (*)(cs2::CLabel*)>(panelVmt[0x2A0 / sizeof(void*)])(panel);
+        } else if (const auto getTextFormatter = hookContext.patternSearchResults().template get<GetLabelTextFormatterFunctionPointer>()) {
+            auto* const textStorage = panelBytes + (textType == 3 ? 0x88 : 0x78);
+            if (auto* const formatter = getTextFormatter(textStorage)) {
+                auto* const formatterVmt = *reinterpret_cast<void***>(formatter);
+                reinterpret_cast<void (*)(void*, const char*)>(formatterVmt[0x48 / sizeof(void*)])(formatter, value);
+            }
+        }
+
+        panelBytes[0x28] = std::byte{1};
+        if (panel->uiPanel) {
+            auto* const uiPanelVmt = *reinterpret_cast<void***>(panel->uiPanel);
+            reinterpret_cast<void (*)(cs2::CUIPanel*)>(uiPanelVmt[0x298 / sizeof(void*)])(panel->uiPanel);
+        }
+#else
+        if (setTextInternalFunction())
             setTextInternalFunction()(panel, value, textType, trustedSource);
+#endif
     }
 
 private:

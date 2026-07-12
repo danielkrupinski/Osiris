@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <CS2/Panorama/PanelHandle.h>
 
 struct BombPlantAlertState {
@@ -7,4 +9,5 @@ struct BombPlantAlertState {
     cs2::PanelHandle bombsiteAIconPanelHandle{};
     cs2::PanelHandle bombsiteBIconPanelHandle{};
     cs2::PanelHandle timerPanelHandle{};
+    std::array<char, 10> timerText;
 };
