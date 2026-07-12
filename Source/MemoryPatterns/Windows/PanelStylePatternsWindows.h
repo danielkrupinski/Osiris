@@ -21,7 +21,7 @@ struct PanelStylePatterns {
 
     [[nodiscard]] cs2::CPanelStyle::StylePropertySymbols* stylePropertiesSymbols() const noexcept
     {
-        if (const auto pointerToStylePropertySymbolsMemory{patternFinders.panoramaPatternFinder("75 ? 4C 89 2D ? ? ? ?"_pat).add(5).abs().template as<std::byte*>()})
+        if (const auto pointerToStylePropertySymbolsMemory{patternFinders.panoramaPatternFinder("48 8D 0D ? ? ? ? E8 ? ? ? ? 48 8D 0D ? ? ? ? C7 05 ? ? ? ? FF FF FF FF C7 05 ? ? ? ? 00 00 00 00 C7 05 ? ? ? ? FF FF FF FF"_pat).add(3).abs().template as<std::byte*>()})
             return reinterpret_cast<cs2::CPanelStyle::StylePropertySymbols*>(pointerToStylePropertySymbolsMemory);
         return nullptr;
     }
