@@ -266,6 +266,7 @@ TEST_F(ModelGlowActiveTest, WeaponUpdateInMainThread) {
     EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(false));
     const auto dummySceneObjectUpdater = reinterpret_cast<std::uint64_t(*)(cs2::C_CSWeaponBase*, void*, bool)>(0x567890abcdef);
     EXPECT_CALL(mockBaseWeapon, baseEntity()).WillOnce(testing::ReturnRef(mockBaseEntity));
+    EXPECT_CALL(mockBaseWeapon, grenadeKind()).WillRepeatedly(testing::Return(Optional<cs2::GrenadeKind>{}));
     EXPECT_CALL(mockBaseWeapon, getSceneObjectUpdater()).WillRepeatedly(testing::Return(dummySceneObjectUpdater));
     EXPECT_CALL(mockBaseWeapon, setSceneObjectUpdater(&Weapon_sceneObjectUpdater));
 
@@ -336,6 +337,7 @@ TEST_F(ModelGlowActiveTest, WeaponUpdateInSceneObjectUpdater) {
     mockConfig.expectGetVariable<model_glow_vars::GlowWeapons>(true);
     mockConfig.expectGetVariable<model_glow_vars::MolotovHue>(model_glow_vars::MolotovHue::ValueType{color::HueInteger{43}});
 
+    EXPECT_CALL(mockBaseWeapon, grenadeKind()).WillRepeatedly(testing::Return(Optional<cs2::GrenadeKind>{cs2::GrenadeKind::Molotov}));
     EXPECT_CALL(mockBaseWeapon, baseEntity()).WillRepeatedly(testing::ReturnRef(mockBaseEntity));
     EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(false));
     EXPECT_CALL(mockBaseEntity, applySpawnProtectionEffectRecursively(cs2::Color{255, 182, 0}));

@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include <Features/Visuals/OutlineGlow/OutlineGlow.h>
+#include <Mocks/MockBaseWeapon.h>
 #include <Mocks/MockConfig.h>
 #include <Mocks/MockGlowProperty.h>
 #include <Mocks/MockHookContext.h>
@@ -14,6 +15,7 @@ protected:
     testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockConfig> mockConfig;
     testing::StrictMock<MockBaseEntity> mockBaseEntity;
+    testing::StrictMock<MockBaseWeapon> mockBaseWeapon;
     testing::StrictMock<MockModelEntity> mockModelEntity;
     testing::StrictMock<MockGlowProperty> mockGlowProperty;
     testing::StrictMock<MockPlayerPawn> mockPlayerPawn;
@@ -79,7 +81,9 @@ TEST_P(OutlineGlowInactiveTest, TickingBomb) {
 
 TEST_P(OutlineGlowInactiveTest, Weapon) {
     mockConfig.expectGetVariable<outline_glow_vars::GlowWeapons>().WillRepeatedly(testing::Return(GetParam().glowEnabled));
-    outlineGlow.applyGlow()(WeaponOutlineGlow{mockHookContext}, mockBaseEntity, EntityTypeInfo{EntityTypeInfo::indexOf<cs2::C_DEagle>()});
+    if (GetParam().outlineGlowEnabled && GetParam().glowEnabled && GetParam().isGlowAppliedByTheGame)
+        EXPECT_CALL(mockBaseWeapon, baseEntity()).WillRepeatedly(testing::ReturnRef(mockBaseEntity));
+    outlineGlow.applyGlow()(WeaponOutlineGlow{mockHookContext}, mockBaseWeapon, EntityTypeInfo{EntityTypeInfo::indexOf<cs2::C_DEagle>()});
 }
 
 INSTANTIATE_TEST_SUITE_P(, OutlineGlowInactiveTest, testing::ValuesIn(
@@ -161,9 +165,11 @@ TEST_F(OutlineGlowActiveTest, TickingBomb) {
 
 TEST_F(OutlineGlowActiveTest, Weapon) {
     mockConfig.expectGetVariable<outline_glow_vars::GlowWeapons>(true);
+    EXPECT_CALL(mockBaseWeapon, baseEntity()).WillRepeatedly(testing::ReturnRef(mockBaseEntity));
+    EXPECT_CALL(mockBaseWeapon, grenadeKind()).WillOnce(testing::Return(Optional<cs2::GrenadeKind>{}));
     EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(false));
     EXPECT_CALL(mockBaseEntity, applyGlowRecursively(outline_glow_params::kFallbackColor, outline_glow_params::kWeaponGlowRange));
-    outlineGlow.applyGlow()(WeaponOutlineGlow{mockHookContext}, mockBaseEntity, EntityTypeInfo{EntityTypeInfo::indexOf<cs2::C_DEagle>()});
+    outlineGlow.applyGlow()(WeaponOutlineGlow{mockHookContext}, mockBaseWeapon, EntityTypeInfo{EntityTypeInfo::indexOf<cs2::C_DEagle>()});
 }
 
 class OutlineGlowNonDefaultAlphaTest : public OutlineGlowActiveTest {
@@ -219,7 +225,9 @@ TEST_F(OutlineGlowNonDefaultRangeTest, NonDefaultGlowRangeIsUsedForWeapons) {
     mockConfig.expectGetVariable<outline_glow_vars::GlowWeapons>(true);
     mockConfig.expectGetVariable<outline_glow_vars::MolotovHue>(outline_glow_vars::MolotovHue::ValueType{color::HueInteger{50}});
 
+    EXPECT_CALL(mockBaseWeapon, baseEntity()).WillRepeatedly(testing::ReturnRef(mockBaseEntity));
+    EXPECT_CALL(mockBaseWeapon, grenadeKind()).WillOnce(testing::Return(Optional<cs2::GrenadeKind>{cs2::GrenadeKind::Molotov}));
     EXPECT_CALL(mockBaseEntity, hasOwner()).WillOnce(testing::Return(false));
     EXPECT_CALL(mockBaseEntity, applyGlowRecursively(cs2::Color{255, 233, 127, outline_glow_params::kGlowAlpha}, outline_glow_params::kWeaponGlowRange));
-    outlineGlow.applyGlow()(WeaponOutlineGlow{mockHookContext}, mockBaseEntity, EntityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>()});
+    outlineGlow.applyGlow()(WeaponOutlineGlow{mockHookContext}, mockBaseWeapon, EntityTypeInfo{EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>()});
 }
