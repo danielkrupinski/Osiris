@@ -28,6 +28,11 @@ public:
         return hookContext.entityClassifier().classifyEntity(identity ? identity->entityClass : nullptr);
     }
 
+    [[nodiscard]] const cs2::CEntityClass* entityClass() const noexcept
+    {
+        return identity ? identity->entityClass : nullptr;
+    }
+
     [[nodiscard]] decltype(auto) entity() const noexcept
     {
         return hookContext.template make<BaseEntity>(identity ? static_cast<cs2::C_BaseEntity*>(identity->entity) : nullptr);

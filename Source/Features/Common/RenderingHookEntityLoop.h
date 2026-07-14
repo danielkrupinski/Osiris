@@ -36,6 +36,10 @@ private:
 
         if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
             auto&& playerPawn = baseEntity.template as<PlayerPawn>();
+            playerPawn.weapons().forEach([this](const auto& weaponEntity) {
+                const auto entityClass = weaponEntity.entityIdentity().entityClass();
+                hookContext.entityClassifier().registerWeaponClass(entityClass);
+            });
             hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(playerPawn);
             updateModelGlow<PlayerModelGlow>(playerPawn, entityTypeInfo);
             applyOutlineGlow<PlayerOutlineGlow>(playerPawn, entityTypeInfo);

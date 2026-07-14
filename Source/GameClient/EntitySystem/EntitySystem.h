@@ -1,6 +1,10 @@
 #pragma once
 
+#include <Platform/Macros/IsPlatform.h>
+
+#if !IS_WIN64()
 #include <cstring>
+#endif
 
 #include <CS2/Classes/Entities/CEntityInstance.h>
 #include <CS2/Classes/EntitySystem/CConcreteEntityList.h>
@@ -58,6 +62,16 @@ public:
 
     [[nodiscard]] cs2::CEntityClass* findEntityClass(const char* className) const noexcept
     {
+#if IS_WIN64()
+        const auto findEntityClass = hookContext.patternSearchResults().template get<FindEntityClassFunctionPointer>();
+        const auto gameEntitySystem = entitySystem();
+        if (!findEntityClass || !gameEntitySystem || !className)
+            return nullptr;
+        return findEntityClass(gameEntitySystem, className, nullptr);
+#else
+        if (!className)
+            return nullptr;
+
         const auto entityClasses = getEntityClasses();
         if (!entityClasses)
             return nullptr;
@@ -67,6 +81,7 @@ public:
                 return entityClasses->memory[i].value;
         }
         return nullptr;
+#endif
     }
 
 private:
@@ -101,10 +116,12 @@ private:
         return hookContext.patternSearchResults().template get<EntityListOffset>().of(entitySystem()).get();
     }
 
+#if !IS_WIN64()
     [[nodiscard]] auto getEntityClasses() const noexcept
     {
         return hookContext.patternSearchResults().template get<OffsetToEntityClasses>().of(entitySystem()).get();
     }
+#endif
 
     HookContext& hookContext;
 };

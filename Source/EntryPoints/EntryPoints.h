@@ -6,7 +6,6 @@
 
 [[NOINLINE]] void finishInit(auto& hookContext)
 {
-    hookContext.entityClassifier().init(hookContext);
     if (const auto mainMenu{hookContext.patternSearchResults().template get<MainMenuPanelPointer>()}; mainMenu && *mainMenu)
         hookContext.template make<PanoramaGUI>().init(hookContext.template make<PanoramaUiPanel>((*mainMenu)->uiPanel));
     hookContext.config().init();
@@ -72,6 +71,7 @@ void ViewRenderHook_onRenderStart(cs2::CViewRender* thisptr) noexcept
     soundWatcher.update();
     SoundFeatures{hookContext.soundWatcherState(), hookContext.hooks().viewRenderHook, hookContext}.runOnViewMatrixUpdate();
 
+    hookContext.entityClassifier().init(hookContext);
     hookContext.make<NoScopeInaccuracyVis>().update();
     hookContext.make<RenderingHookEntityLoop>().run();
     hookContext.make<GlowSceneObjects>().removeUnreferencedObjects();
