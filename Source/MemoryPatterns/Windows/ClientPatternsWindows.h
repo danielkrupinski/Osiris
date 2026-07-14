@@ -1,6 +1,7 @@
 #pragma once
 
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/SceneObjectPatternTypes.h>
 #include <MemorySearch/CodePattern.h>
 
 struct ClientPatterns {
@@ -17,7 +18,8 @@ struct ClientPatterns {
             .template addPattern<ViewRenderPointer, CodePattern{"48 89 05 ? ? ? ? 48 8B C8 48 85 C0"}.add(3).abs()>()
             .template addPattern<LocalPlayerControllerPointer, CodePattern{"48 83 3D ? ? ? ? 00 0F 95"}.add(3).abs(5)>()
             .template addPattern<ManageGlowSceneObjectPointer, CodePattern{"E8 ? ? ? ? 48 8B 4F ? 0F 28 7C"}.add(1).abs()>()
-            .template addPattern<SetSceneObjectAttributeFloat4, CodePattern{"E8 ? ? ? ? FF C6 48 83 C3 ? 49 3B"}.add(1).abs()>()
+            .template addPattern<SetSceneObjectAttributeFloat4, CodePattern{"E8 ? ? ? ? 48 BB ? ? ? ? ? ? ? ? 44 8B 44 24 ? 49 8B 84 24"}.add(1).abs()>()
+            .template addPattern<OffsetToSceneObjectAttributes, CodePattern{"49 8B 8E ? ? ? ? 4C 8D 44 24 ? 41 0F 10 C1 BA B0 C9 4E 24 66 0F 7F"}.add(3).read()>()
             .template addPattern<PointerToClientMode, CodePattern{"57 48 83 EC ? 33 DB 48 8D 3D ? ? ? ? 48 8D"}.add(10).abs()>();
     }
 };
