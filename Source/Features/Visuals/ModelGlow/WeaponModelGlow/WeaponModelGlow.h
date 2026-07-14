@@ -4,8 +4,7 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
-#include <CS2/Classes/Entities/WeaponEntities.h>
-#include <GameClient/Entities/EntityClassifier.h>
+#include <GameClient/Entities/BaseWeapon.h>
 #include <Features/Visuals/ModelGlow/ModelGlowConfigVariables.h>
 #include <Features/Visuals/ModelGlow/ModelGlowParams.h>
 #include <Features/Visuals/ModelGlow/ModelGlowState.h>
@@ -47,14 +46,14 @@ public:
         return &Weapon_sceneObjectUpdater;
     }
 
-    [[nodiscard]] Optional<color::HueInteger> hue(EntityTypeInfo entityTypeInfo) const
+    [[nodiscard]] Optional<color::HueInteger> hue(auto&& weapon) const
     {
-        switch (entityTypeInfo.typeIndex) {
-        case EntityTypeInfo::indexOf<cs2::C_MolotovGrenade>():
-        case EntityTypeInfo::indexOf<cs2::C_IncendiaryGrenade>(): return GET_CONFIG_VAR(model_glow_vars::MolotovHue);
-        case EntityTypeInfo::indexOf<cs2::C_Flashbang>(): return GET_CONFIG_VAR(model_glow_vars::FlashbangHue);
-        case EntityTypeInfo::indexOf<cs2::C_HEGrenade>(): return GET_CONFIG_VAR(model_glow_vars::HEGrenadeHue);
-        case EntityTypeInfo::indexOf<cs2::C_SmokeGrenade>(): return GET_CONFIG_VAR(model_glow_vars::SmokeGrenadeHue);
+        switch (weapon.grenadeKind().valueOr(cs2::GrenadeKind::None)) {
+        case cs2::GrenadeKind::Molotov:
+        case cs2::GrenadeKind::Incendiary: return GET_CONFIG_VAR(model_glow_vars::MolotovHue);
+        case cs2::GrenadeKind::Flashbang: return GET_CONFIG_VAR(model_glow_vars::FlashbangHue);
+        case cs2::GrenadeKind::HEGrenade: return GET_CONFIG_VAR(model_glow_vars::HEGrenadeHue);
+        case cs2::GrenadeKind::SmokeGrenade: return GET_CONFIG_VAR(model_glow_vars::SmokeGrenadeHue);
         default: return {};
         }
     }

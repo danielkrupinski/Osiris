@@ -1,6 +1,6 @@
 #pragma once
 
-#include "C_CSWeaponBase.h"
+#include <CS2/Classes/Entities/C_CSWeaponBase.h>
 
 namespace cs2
 {
@@ -107,22 +107,26 @@ struct C_WeaponTaser : C_CSWeaponBase {
 struct C_Knife : C_CSWeaponBase {
 };
 
-struct C_Flashbang : C_CSWeaponBase {
+struct C_BaseCSGrenade : C_CSWeaponBase {
+    using m_flThrowStrength = float;
 };
 
-struct C_HEGrenade : C_CSWeaponBase {
+struct C_Flashbang : C_BaseCSGrenade {
 };
 
-struct C_SmokeGrenade : C_CSWeaponBase {
+struct C_HEGrenade : C_BaseCSGrenade {
 };
 
-struct C_MolotovGrenade : C_CSWeaponBase {
+struct C_SmokeGrenade : C_BaseCSGrenade {
 };
 
-struct C_IncendiaryGrenade : C_CSWeaponBase {
+struct C_MolotovGrenade : C_BaseCSGrenade {
 };
 
-struct C_DecoyGrenade : C_CSWeaponBase {
+struct C_IncendiaryGrenade : C_BaseCSGrenade {
+};
+
+struct C_DecoyGrenade : C_BaseCSGrenade {
 };
 
 struct C_C4 : C_CSWeaponBase {

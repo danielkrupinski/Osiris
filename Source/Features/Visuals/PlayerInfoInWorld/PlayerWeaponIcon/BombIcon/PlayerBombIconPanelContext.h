@@ -17,13 +17,13 @@ public:
         if (GET_CONFIG_VAR(player_info_vars::BombCarrierIconEnabled))
             return playerPawn.isCarryingC4();
         if (GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled))
-            return playerPawn.carriedC4().isBeingPlanted().valueOr(false);
+            return playerPawn.isPlantingC4();
         return false;
     }
 
     [[nodiscard]] bool shouldShowPlantingColor(auto&& playerPawn) const noexcept
     {
-        return GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled) && playerPawn.carriedC4().isBeingPlanted().valueOr(false);
+        return GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled) && playerPawn.isPlantingC4();
     }
 
     [[nodiscard]] auto& state() const noexcept

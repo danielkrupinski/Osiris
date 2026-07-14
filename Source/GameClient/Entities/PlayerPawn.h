@@ -133,12 +133,21 @@ public:
 
     [[nodiscard]] bool isCarryingC4() const noexcept
     {
-        return weapons().template has<C4>();
+        bool isCarrying = false;
+        weapons().forEach([&isCarrying](auto&& weaponEntity) {
+            isCarrying = isCarrying || weaponEntity.template as<BaseWeapon>().isC4();
+        });
+        return isCarrying;
     }
 
-    [[nodiscard]] decltype(auto) carriedC4() const noexcept
+    [[nodiscard]] bool isPlantingC4() const noexcept
     {
-        return weapons().template get<C4>();
+        bool isPlanting = false;
+        weapons().forEach([&isPlanting](auto&& weaponEntity) {
+            if (weaponEntity.template as<BaseWeapon>().isC4())
+                isPlanting = weaponEntity.template as<C4>().isBeingPlanted().valueOr(false);
+        });
+        return isPlanting;
     }
 
     [[nodiscard]] float getRemainingFlashBangTime() const noexcept

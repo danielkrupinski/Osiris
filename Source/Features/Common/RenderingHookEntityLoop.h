@@ -45,9 +45,6 @@ private:
             applyOutlineGlow<PlayerOutlineGlow>(playerPawn, entityTypeInfo);
             if (bombPlantAlertVisibility != Visibility::Visible)
                 bombPlantAlertVisibility = hookContext.template make<BombPlantAlert>().show(playerPawn);
-        } else if (entityTypeInfo.template is<cs2::C_C4>()) {
-            updateModelGlow<DroppedBombModelGlow>(baseEntity.template as<BaseWeapon>(), entityTypeInfo);
-            applyOutlineGlow<DroppedBombOutlineGlow>(baseEntity, entityTypeInfo);
         } else if (entityTypeInfo.template is<cs2::CBaseAnimGraph>()) {
             updateModelGlow<DefuseKitModelGlow>(baseEntity, entityTypeInfo);
             applyOutlineGlow<DefuseKitOutlineGlow>(baseEntity, entityTypeInfo);
@@ -59,9 +56,19 @@ private:
         } else if (entityTypeInfo.isGrenadeProjectile()) {
             updateModelGlow<GrenadeProjectileModelGlow>(baseEntity, entityTypeInfo);
             applyOutlineGlow<GrenadeProjectileOutlineGlow>(baseEntity, entityTypeInfo);
+        } else if (entityTypeInfo.template is<cs2::C_C4>()) {
+            auto&& weapon = baseEntity.template as<BaseWeapon>();
+            updateModelGlow<DroppedBombModelGlow>(weapon, entityTypeInfo);
+            applyOutlineGlow<DroppedBombOutlineGlow>(baseEntity, entityTypeInfo);
         } else if (entityTypeInfo.isWeapon()) {
-            updateModelGlow<WeaponModelGlow>(baseEntity.template as<BaseWeapon>(), entityTypeInfo);
-            applyOutlineGlow<WeaponOutlineGlow>(baseEntity, entityTypeInfo);
+            auto&& weapon = baseEntity.template as<BaseWeapon>();
+            if (weapon.isC4()) {
+                updateModelGlow<DroppedBombModelGlow>(weapon, entityTypeInfo);
+                applyOutlineGlow<DroppedBombOutlineGlow>(baseEntity, entityTypeInfo);
+            } else {
+                updateModelGlow<WeaponModelGlow>(weapon, entityTypeInfo);
+                applyOutlineGlow<WeaponOutlineGlow>(weapon, entityTypeInfo);
+            }
         }
     }
 

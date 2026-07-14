@@ -2,6 +2,7 @@
 
 #include "GlobalContext/GlobalContext.h"
 #include "Hooks/PeepEventsHook.h"
+#include <Platform/Macros/IsPlatform.h>
 #include "Utils/ReturnAddress.h"
 
 [[NOINLINE]] void finishInit(auto& hookContext)
@@ -49,16 +50,19 @@ int SDLHook_PeepEvents(void* events, int numevents, int action, unsigned minType
         const auto entityTypeInfo = baseEntity.classify();
         if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>())
             hookContext.template make<ModelGlow>().onUnload()(PlayerModelGlow{hookContext}, baseEntity.template as<PlayerPawn>());
-        else if (entityTypeInfo.template is<cs2::C_C4>())
-            hookContext.template make<ModelGlow>().onUnload()(DroppedBombModelGlow{hookContext}, baseEntity.template as<BaseWeapon>());
         else if (entityTypeInfo.template is<cs2::CBaseAnimGraph>())
             hookContext.template make<ModelGlow>().onUnload()(DefuseKitModelGlow{hookContext}, baseEntity);
         else if (entityTypeInfo.template is<cs2::CPlantedC4>())
             hookContext.template make<ModelGlow>().onUnload()(TickingBombModelGlow{hookContext}, baseEntity.template as<PlantedC4>());
         else if (entityTypeInfo.isGrenadeProjectile())
             hookContext.template make<ModelGlow>().onUnload()(GrenadeProjectileModelGlow{hookContext}, baseEntity);
-        else if (entityTypeInfo.isWeapon())
-            hookContext.template make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, baseEntity.template as<BaseWeapon>());
+        else if (entityTypeInfo.isWeapon()) {
+            auto&& weapon = baseEntity.template as<BaseWeapon>();
+            if (weapon.isC4())
+                hookContext.template make<ModelGlow>().onUnload()(DroppedBombModelGlow{hookContext}, weapon);
+            else
+                hookContext.template make<ModelGlow>().onUnload()(WeaponModelGlow{hookContext}, weapon);
+        }
     });
 }
 
@@ -109,10 +113,11 @@ LINUX_ONLY([[gnu::aligned(8)]]) std::uint64_t Weapon_sceneObjectUpdater(cs2::C_C
 {
     HookContext<GlobalContext> hookContext;
     const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater(weapon, unknown, unknownBool);
-    if (auto&& c4 = hookContext.make<BaseWeapon>(weapon).template cast<C4>())
-        hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(DroppedBombModelGlow{hookContext}, c4.baseWeapon(), EntityTypeInfo{});
+    auto baseWeapon = hookContext.make<BaseWeapon>(weapon);
+    if (baseWeapon.isC4())
+        hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(DroppedBombModelGlow{hookContext}, baseWeapon, EntityTypeInfo{});
     else
-        hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(WeaponModelGlow{hookContext}, hookContext.make<BaseWeapon>(weapon), hookContext.make<BaseWeapon>(weapon).baseEntity().classify());
+        hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(WeaponModelGlow{hookContext}, baseWeapon, baseWeapon.baseEntity().classify());
     return originalReturnValue;
 }
 
