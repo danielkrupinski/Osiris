@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Platform/Macros/FunctionAttributes.h>
-#include <Platform/Macros/IsPlatform.h>
 #include <MemoryPatterns/PatternTypes/UiEnginePatternTypes.h>
 
 template <typename HookContext>
@@ -37,9 +36,11 @@ public:
 
     [[nodiscard]] cs2::CPanoramaSymbol makeSymbol(int type, const char* text) noexcept
     {
-        if (hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>() && thisptr())
-            return hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>()(*thisptr(), type, text);
-        return -1;
+        const auto makeSymbolFunction = hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>();
+        const auto uiEngineStorage = thisptr();
+        if (!makeSymbolFunction || !uiEngineStorage || !*uiEngineStorage || !text || !*text)
+            return -1;
+        return makeSymbolFunction(*uiEngineStorage, type, text);
     }
 
     void registerEventHandler(cs2::CPanoramaSymbol symbol, cs2::CUIPanel* panel, cs2::CUtlAbstractDelegate handler) noexcept

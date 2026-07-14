@@ -7,6 +7,7 @@
 #include <GameClient/Hud/HudState.h>
 #include <GameClient/MemAllocState.h>
 #include <GameClient/Panorama/PanoramaSymbols.h>
+#include <GameClient/Panorama/StylePropertySymbolMap.h>
 #include <OutlineGlow/GlowSceneObjectState.h>
 #include <GameClient/DLLs/Tier0Dll.h>
 #include <GameClient/Entities/EntityClassifier.h>
@@ -19,7 +20,9 @@
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheState.h>
 #include <MemoryPatterns/AllMemoryPatternSearchResults.h>
 #include <MemoryPatterns/MemoryPatterns.h>
+#include <MemoryPatterns/PatternTypes/PanelStylePatternTypes.h>
 #include <MemorySearch/PatternNotFoundLogger.h>
+#include <Platform/Macros/IsPlatform.h>
 #include "UnloadFlag.h"
 #include <Hooks/Hooks.h>
 #include <Hooks/PeepEventsHook.h>
@@ -44,7 +47,11 @@ struct FullGlobalContext {
         : patternSearchResults{memoryPatterns}
         , fileNameSymbolTableState{tier0Dll}
         , memAllocState{tier0Dll}
+#if IS_WIN64()
+        , stylePropertySymbolsAndVMTs{StylePropertySymbolMap{patternSearchResults.get<FindStylePropertySymbolFunctionPointer>()}, VmtFinder{panoramaDLL.getVmtFinderParams()}}
+#else
         , stylePropertySymbolsAndVMTs{StylePropertySymbolMap{memoryPatterns.panelStylePatterns().stylePropertiesSymbols()}, VmtFinder{panoramaDLL.getVmtFinderParams()}}
+#endif
         , hooks{
             peepEventsHook,
             patternSearchResults.get<ViewRenderPointer>(),

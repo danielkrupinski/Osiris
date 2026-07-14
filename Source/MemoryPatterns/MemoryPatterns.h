@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Platform/Macros/IsPlatform.h>
+
 #if IS_WIN64()
 #include "Windows/WindowsPatterns.h"
 #elif IS_LINUX()
@@ -20,7 +22,9 @@ struct MemoryPatterns {
     return type<PatternFinders>{patternFinders}; \
 }
 
+#if IS_LINUX()
     MEMORY_PATTERNS(PanelStylePatterns, panelStylePatterns)
+#endif
     MEMORY_PATTERNS(SdlPatterns, sdlPatterns)
 
 #undef MEMORY_PATTERNS
