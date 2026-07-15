@@ -736,7 +736,7 @@ u8R"(
   var _grenadePredictionTab = createSubTab(visuals, 'grenade_prediction');
   _grenadePredictionTab.style.overflow = 'squish squish';
 
-  var grenadePredictionTab = $.CreatePanel('Panel', _grenadePredictionTab, '', { style: 'flow-children: down; margin-right: 40px; overflow: squish scroll;' });
+  var grenadePredictionTab = $.CreatePanel('Panel', _grenadePredictionTab, '', { style: 'flow-children: down; horizontal-align: center; overflow: squish scroll;' });
 
   var grenadePredictionMaster = createSection(grenadePredictionTab, 'Grenade Prediction');
   createOnOffDropDown(grenadePredictionMaster, "Master Switch", 'visuals', 'grenade_prediction_enable');
