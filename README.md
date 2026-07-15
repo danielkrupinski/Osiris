@@ -6,7 +6,9 @@
 Cross-platform (Windows, Linux) game hack for **Counter-Strike 2** with GUI and rendering based on game's Panorama UI. Compatible with the latest game update on Steam.
 
 ## What's new
-
+* 14 July 2026
+  * Added Grenade Prediction
+  
 * 04 November 2025
     * Improved smoothness of "Player Info in World" on moving players
 
