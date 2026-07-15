@@ -104,6 +104,7 @@ public:
             && entityClass == entityClasses[utils::typeIndex<EntityType, cs2::EntityClasses>()].load(std::memory_order_acquire);
     }
 
+    // PlayerWeapons remains a defensive, provenance-backed positive fallback.
     void registerWeaponClass(const cs2::CEntityClass* entityClass) noexcept
     {
         cacheWeaponClass(entityClass);

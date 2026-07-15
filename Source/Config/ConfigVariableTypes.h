@@ -11,6 +11,7 @@
 #include <Features/Visuals/OutlineGlow/OutlineGlowConfigVariables.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
 #include <Features/Visuals/ViewmodelMod/ViewmodelModConfigVariables.h>
+#include <Features/Visuals/GrenadePrediction/GrenadePredictionConfigVariables.h>
 #include <Utils/TypeList.h>
 
 using ConfigVariableTypes = TypeList<
@@ -98,5 +99,9 @@ using ConfigVariableTypes = TypeList<
     viewmodel_mod_vars::ModifyFov,
     viewmodel_mod_vars::Fov,
     no_scope_inaccuracy_vis_vars::Enabled,
-    BombPlantAlertEnabled
+    BombPlantAlertEnabled,
+    grenade_prediction_vars::Enabled,
+    grenade_prediction_vars::TrajectoryHue,
+    grenade_prediction_vars::BounceHue,
+    grenade_prediction_vars::BounceFriction
 >;

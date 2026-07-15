@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+
 #include <Platform/Macros/IsPlatform.h>
 
 #if !IS_WIN64()

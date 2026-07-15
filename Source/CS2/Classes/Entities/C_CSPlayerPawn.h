@@ -4,6 +4,7 @@
 #include <CS2/Classes/SceneObjectUpdaterHandle_t.h>
 
 #include "C_BaseModelEntity.h"
+#include <CS2/Classes/Vector.h>
 
 namespace cs2
 {
@@ -21,6 +22,7 @@ struct C_CSPlayerPawn : C_BaseModelEntity {
     using m_flFlashBangTime = float;
     using sceneObjectUpdaterHandle = SceneObjectUpdaterHandle_t*;
     using m_bIsScoped = bool;
+    using m_angEyeAngles = cs2::Vector;
 };
 
 }

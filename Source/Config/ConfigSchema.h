@@ -166,6 +166,13 @@ private:
         configConversion.uint(u8"Fov", loadVariable<viewmodel_mod_vars::Fov>(), saveVariable<viewmodel_mod_vars::Fov>());
         configConversion.endObject();
 
+        configConversion.beginObject(u8"GrenadePrediction");
+        configConversion.boolean(u8"Enabled", loadVariable<grenade_prediction_vars::Enabled>(), saveVariable<grenade_prediction_vars::Enabled>());
+        configConversion.uint(u8"TrajectoryHue", loadVariable<grenade_prediction_vars::TrajectoryHue>(), saveVariable<grenade_prediction_vars::TrajectoryHue>());
+        configConversion.uint(u8"BounceHue", loadVariable<grenade_prediction_vars::BounceHue>(), saveVariable<grenade_prediction_vars::BounceHue>());
+        configConversion.uint(u8"BounceFriction", loadVariable<grenade_prediction_vars::BounceFriction>(), saveVariable<grenade_prediction_vars::BounceFriction>());
+        configConversion.endObject();
+
         configConversion.endObject();
     }
 

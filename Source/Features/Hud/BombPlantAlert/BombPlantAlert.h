@@ -25,7 +25,8 @@ public:
         if (!GET_CONFIG_VAR(BombPlantAlertEnabled))
             return Visibility::Hidden;
 
-        auto&& bomb = playerPawn.getActiveWeapon().template cast<C4>();
+        auto&& activeWeapon = playerPawn.getActiveWeapon();
+        auto&& bomb = activeWeapon.template cast<C4>();
         if (!shouldShowPlantAlert(bomb))
             return Visibility::Hidden;
 

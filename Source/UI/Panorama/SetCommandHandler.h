@@ -2,6 +2,7 @@
 
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
+#include <Features/Visuals/GrenadePrediction/GrenadePredictionConfigVariables.h>
 #include <GameClient/Panorama/Slider.h>
 #include <GameClient/Panorama/TextEntry.h>
 #include <Platform/Macros/FunctionAttributes.h>
@@ -49,6 +50,10 @@ private:
             handleIntSlider<viewmodel_mod_vars::Fov>("viewmodel_fov");
         } else if (feature == "viewmodel_fov_text") {
             handleIntSliderTextEntry<viewmodel_mod_vars::Fov>("viewmodel_fov");
+        } else if (feature == "grenade_prediction_bounce_friction") {
+            handleIntSlider<grenade_prediction_vars::BounceFriction>("grenade_prediction_bounce_friction");
+        } else if (feature == "grenade_prediction_bounce_friction_text") {
+            handleIntSliderTextEntry<grenade_prediction_vars::BounceFriction>("grenade_prediction_bounce_friction");
         }
     }
 

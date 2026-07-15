@@ -1,7 +1,9 @@
 #pragma once
 
 #include <CS2/Panorama/CUIPanel.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
 #include <GameClient/Panorama/PanoramaUiPanel.h>
+#include <HookContext/HookContextMacros.h>
 
 template <typename HookContext>
 class PlayerBombIconPanelContext {
@@ -17,13 +19,13 @@ public:
         if (GET_CONFIG_VAR(player_info_vars::BombCarrierIconEnabled))
             return playerPawn.isCarryingC4();
         if (GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled))
-            return playerPawn.isPlantingC4();
+            return playerPawn.carriedC4().isBeingPlanted().valueOr(false);
         return false;
     }
 
     [[nodiscard]] bool shouldShowPlantingColor(auto&& playerPawn) const noexcept
     {
-        return GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled) && playerPawn.isPlantingC4();
+        return GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled) && playerPawn.carriedC4().isBeingPlanted().valueOr(false);
     }
 
     [[nodiscard]] auto& state() const noexcept

@@ -204,6 +204,14 @@ $.Osiris = (function () {
     });
 
     $.CreatePanel('Label', viewmodelTabButton, '', { text: "Viewmodel" });
+
+    var grenadePredictionTabButton = $.CreatePanel('RadioButton', centerContainer, 'grenade_prediction_button', {
+        group: "VisualsNavBar",
+        class: "content-navbar__tabs__btn",
+        onactivate: "$.Osiris.navigateToSubTab('visuals', 'grenade_prediction');"
+    });
+
+    $.CreatePanel('Label', grenadePredictionTabButton, '', { text: "Grenade Prediction" });
   };
 
   var createCombatNavbar = function () {
@@ -459,9 +467,6 @@ u8R"(
         style: "border: 2px solid #000000a0; border-radius: 5px; margin-left: 10px; width: 25px; vertical-align: center; height: 25px;"
     });
   }
-)"
-// split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
-u8R"(
   var combat = createCombatTab();
   var sniperRiflesTab = createSubTab(combat, 'sniper_rifles');
   var noScope = createSection(sniperRiflesTab, 'No scope');
@@ -590,7 +595,9 @@ u8R"(
   createYesNoDropDown(hostageOutlineGlow, "Glow Hostages", 'visuals', 'hostage_outline_glow');
   separator(hostageOutlineGlow);
   createHueSlider(hostageOutlineGlow, "Hostage Hue", 'outline_glow_hostage_hue', 0, 359);
-
+)"
+// split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
+u8R"(
   var _modelGlowTab = createSubTab(visuals, 'model_glow');
   _modelGlowTab.style.overflow = 'squish squish';
   _modelGlowTab.style.flowChildren = 'right';
@@ -725,6 +732,25 @@ u8R"(
   createYesNoDropDown(viewmodelFov, "Modify Viewmodel Fov", 'visuals', 'viewmodel_fov_mod');
   separator(viewmodelFov);
   createSlider(viewmodelFov, "Fov", 'viewmodel_fov', 40, 90);
+
+  var _grenadePredictionTab = createSubTab(visuals, 'grenade_prediction');
+  _grenadePredictionTab.style.overflow = 'squish squish';
+
+  var grenadePredictionTab = $.CreatePanel('Panel', _grenadePredictionTab, '', { style: 'flow-children: down; margin-right: 40px; overflow: squish scroll;' });
+
+  var grenadePredictionMaster = createSection(grenadePredictionTab, 'Grenade Prediction');
+  createOnOffDropDown(grenadePredictionMaster, "Master Switch", 'visuals', 'grenade_prediction_enable');
+  separator(grenadePredictionMaster);
+  separator(grenadePredictionMaster);
+  createHueSlider(grenadePredictionMaster, "Trajectory Color", 'grenade_prediction_trajectory_hue', 0, 359);
+  separator(grenadePredictionMaster);
+  createHueSlider(grenadePredictionMaster, "Bounce Color", 'grenade_prediction_bounce_hue', 0, 359);
+  separator(grenadePredictionMaster);
+  separator(grenadePredictionMaster);
+)"
+// split the string literal because MSVC does not support string literals longer than 16k chars - error C2026
+u8R"(  createSlider(grenadePredictionMaster, 'Bounce Friction (0 = none, 200 = 0.200)', 'grenade_prediction_bounce_friction', 0, 200);
+
 
   $.Osiris.navigateToSubTab('visuals', 'player_info');
 

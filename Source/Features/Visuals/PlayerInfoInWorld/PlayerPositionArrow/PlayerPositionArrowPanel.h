@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include <CS2/Classes/Entities/CCSPlayerController.h>
 #include <CS2/Constants/ColorConstants.h>
 #include <GameClient/Entities/TeamNumber.h>
 

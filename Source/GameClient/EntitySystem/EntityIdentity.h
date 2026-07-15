@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Classes/Entities/C_BaseEntity.h>
+#include <CS2/Classes/EntitySystem/CEntityClass.h>
 #include <CS2/Classes/EntitySystem/CEntityIdentity.h>
 
 template <typename HookContext>

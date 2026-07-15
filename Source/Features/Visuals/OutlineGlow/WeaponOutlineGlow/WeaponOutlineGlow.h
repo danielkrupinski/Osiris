@@ -2,10 +2,12 @@
 
 #include <utility>
 
-#include <GameClient/Entities/BaseWeapon.h>
+#include <CS2/Classes/Entities/WeaponEntities.h>
+#include <GameClient/Entities/EntityClassifier.h>
 #include <Features/Visuals/OutlineGlow/OutlineGlowParams.h>
 #include <HookContext/HookContextMacros.h>
 #include <Utils/ColorUtils.h>
+#include <Features/Visuals/GrenadePrediction/GrenadeKind.h>
 
 template <typename HookContext>
 class WeaponOutlineGlow {
@@ -25,9 +27,12 @@ public:
         return !weapon.baseEntity().hasOwner().valueOr(true);
     }
 
-    [[nodiscard]] Optional<color::HueInteger> hue(auto&& weapon) const
+    [[nodiscard]] Optional<color::HueInteger> hue(auto&& weapon) const noexcept
     {
-        switch (weapon.grenadeKind().valueOr(cs2::GrenadeKind::None)) {
+        const auto kind = weapon.grenadeKind();
+        if (!kind.hasValue())
+            return {};
+        switch (kind.value()) {
         case cs2::GrenadeKind::Molotov:
         case cs2::GrenadeKind::Incendiary: return GET_CONFIG_VAR(outline_glow_vars::MolotovHue);
         case cs2::GrenadeKind::Flashbang: return GET_CONFIG_VAR(outline_glow_vars::FlashbangHue);

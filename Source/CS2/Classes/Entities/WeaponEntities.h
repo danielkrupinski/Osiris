@@ -17,18 +17,6 @@ struct C_WeaponElite : C_CSWeaponBase {
 struct C_WeaponCZ75a : C_CSWeaponBase {
 };
 
-struct C_CSWeaponBaseGun : C_CSWeaponBase {
-};
-
-struct C_CSWeaponBaseShotgun : C_CSWeaponBase {
-};
-
-struct C_WeaponP250 : C_CSWeaponBaseGun {
-};
-
-struct C_WeaponTec9 : C_CSWeaponBaseGun {
-};
-
 struct C_WeaponFiveSeven : C_CSWeaponBase {
 };
 
@@ -44,22 +32,10 @@ struct C_WeaponMP7 : C_CSWeaponBase {
 struct C_WeaponMP9 : C_CSWeaponBase {
 };
 
-struct C_WeaponUMP45 : C_CSWeaponBaseGun {
-};
-
-struct C_WeaponP90 : C_CSWeaponBaseGun {
-};
-
 struct C_WeaponBizon : C_CSWeaponBase {
 };
 
 struct C_WeaponMag7 : C_CSWeaponBase {
-};
-
-struct C_WeaponSawedoff : C_CSWeaponBaseShotgun {
-};
-
-struct C_WeaponXM1014 : C_CSWeaponBaseShotgun {
 };
 
 struct C_WeaponNOVA : C_CSWeaponBase {
@@ -83,13 +59,7 @@ struct C_AK47 : C_CSWeaponBase {
 struct C_WeaponM4A1 : C_CSWeaponBase {
 };
 
-struct C_WeaponSG556 : C_CSWeaponBaseGun {
-};
-
 struct C_WeaponAug : C_CSWeaponBase {
-};
-
-struct C_WeaponSSG08 : C_CSWeaponBaseGun {
 };
 
 struct C_WeaponAWP : C_CSWeaponBase {
@@ -98,10 +68,40 @@ struct C_WeaponAWP : C_CSWeaponBase {
 struct C_WeaponG3SG1 : C_CSWeaponBase {
 };
 
+struct C_WeaponTaser : C_CSWeaponBase {
+};
+
+struct C_CSWeaponBaseGun : C_CSWeaponBase {
+};
+
+struct C_CSWeaponBaseShotgun : C_CSWeaponBase {
+};
+
+struct C_WeaponP250 : C_CSWeaponBaseGun {
+};
+
+struct C_WeaponSSG08 : C_CSWeaponBaseGun {
+};
+
+struct C_WeaponSG556 : C_CSWeaponBaseGun {
+};
+
+struct C_WeaponSawedoff : C_CSWeaponBaseShotgun {
+};
+
+struct C_WeaponUMP45 : C_CSWeaponBaseGun {
+};
+
+struct C_WeaponXM1014 : C_CSWeaponBaseShotgun {
+};
+
 struct C_WeaponSCAR20 : C_CSWeaponBaseGun {
 };
 
-struct C_WeaponTaser : C_CSWeaponBase {
+struct C_WeaponTec9 : C_CSWeaponBaseGun {
+};
+
+struct C_WeaponP90 : C_CSWeaponBaseGun {
 };
 
 struct C_Knife : C_CSWeaponBase {

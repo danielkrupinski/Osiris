@@ -21,6 +21,21 @@ struct Vector {
         return Vector{a.x - b.x, a.y - b.y, a.z - b.z};
     }
 
+    [[nodiscard]] friend constexpr Vector operator+(const Vector& a, const Vector& b) noexcept
+    {
+        return Vector{a.x + b.x, a.y + b.y, a.z + b.z};
+    }
+
+    [[nodiscard]] friend constexpr Vector operator*(const Vector& v, float s) noexcept
+    {
+        return Vector{v.x * s, v.y * s, v.z * s};
+    }
+
+    [[nodiscard]] constexpr float dot(const Vector& other) const noexcept
+    {
+        return x * other.x + y * other.y + z * other.z;
+    }
+
     [[nodiscard]] bool operator==(const Vector&) const = default;
 };
 

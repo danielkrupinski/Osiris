@@ -4,6 +4,7 @@
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
 #include <GameClient/Panorama/PanoramaUiPanel.h>
+#include <HookContext/HookContextMacros.h>
 
 template <typename HookContext>
 class PlayerActiveWeaponAmmoPanelContext {

@@ -4,7 +4,6 @@
 #include <CS2/Classes/Entities/C_BaseEntity.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
-
 #include "BaseEntity.h"
 
 template <typename HookContext>

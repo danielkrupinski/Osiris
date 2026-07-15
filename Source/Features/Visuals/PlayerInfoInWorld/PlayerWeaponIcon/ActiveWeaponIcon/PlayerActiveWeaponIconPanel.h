@@ -3,7 +3,6 @@
 #include <utility>
 
 #include <Common/Visibility.h>
-#include <GameClient/Entities/C4.h>
 #include <GameClient/Panorama/ImagePanel.h>
 #include <Utils/CString.h>
 #include <Utils/StringBuilder.h>
@@ -20,15 +19,28 @@ public:
 
     void update(auto&& playerPawn, Visibility bombIconVisibility) const noexcept
     {
-        if (!context.config().template getVariable<player_info_vars::ActiveWeaponIconEnabled>() || (bombIconVisibility == Visibility::Visible && playerPawn.getActiveWeapon().template is<C4>())) {
+        if (!context.config().template getVariable<player_info_vars::ActiveWeaponIconEnabled>()) {
             context.panel().setVisible(false);
             return;
         }
 
-        auto weaponName = CString{playerPawn.getActiveWeapon().getName()};
-        if (!weaponName.string)
+        const auto activeWeapon = playerPawn.getActiveWeapon();
+        if (bombIconVisibility == Visibility::Visible && activeWeapon.isC4()) {
+            context.panel().setVisible(false);
             return;
-        weaponName.skipPrefix("weapon_");
+        }
+
+        const auto definitionName = activeWeapon.getName();
+        if (!definitionName) {
+            context.panel().setVisible(false);
+            return;
+        }
+
+        auto weaponName = CString{definitionName};
+        if (!weaponName.skipPrefix("weapon_")) {
+            context.panel().setVisible(false);
+            return;
+        }
 
         context.panel().setVisible(true);
 

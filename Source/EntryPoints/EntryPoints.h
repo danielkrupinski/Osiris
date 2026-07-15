@@ -113,11 +113,13 @@ LINUX_ONLY([[gnu::aligned(8)]]) std::uint64_t Weapon_sceneObjectUpdater(cs2::C_C
 {
     HookContext<GlobalContext> hookContext;
     const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater(weapon, unknown, unknownBool);
+
     auto baseWeapon = hookContext.make<BaseWeapon>(weapon);
     if (baseWeapon.isC4())
         hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(DroppedBombModelGlow{hookContext}, baseWeapon, EntityTypeInfo{});
     else
         hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(WeaponModelGlow{hookContext}, baseWeapon, baseWeapon.baseEntity().classify());
+
     return originalReturnValue;
 }
 

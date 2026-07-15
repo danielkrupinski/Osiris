@@ -95,6 +95,11 @@ public:
         return baseEntity().absOrigin();
     }
 
+    [[nodiscard]] decltype(auto) absVelocity() const noexcept
+    {
+        return baseEntity().absVelocity();
+    }
+
     [[nodiscard]] bool isControlledByLocalPlayer() const noexcept
     {
         return playerController() == hookContext.localPlayerController();
@@ -133,21 +138,22 @@ public:
 
     [[nodiscard]] bool isCarryingC4() const noexcept
     {
-        bool isCarrying = false;
-        weapons().forEach([&isCarrying](auto&& weaponEntity) {
-            isCarrying = isCarrying || weaponEntity.template as<BaseWeapon>().isC4();
+        bool found = false;
+        weapons().forEach([&found](auto&& weaponEntity) {
+            if (weaponEntity.template is<C4>())
+                found = true;
         });
-        return isCarrying;
+        return found;
     }
 
-    [[nodiscard]] bool isPlantingC4() const noexcept
+    [[nodiscard]] decltype(auto) carriedC4() const noexcept
     {
-        bool isPlanting = false;
-        weapons().forEach([&isPlanting](auto&& weaponEntity) {
-            if (weaponEntity.template as<BaseWeapon>().isC4())
-                isPlanting = weaponEntity.template as<C4>().isBeingPlanted().valueOr(false);
+        cs2::C_BaseEntity* c4Entity = nullptr;
+        weapons().forEach([&c4Entity](auto&& weaponEntity) {
+            if (weaponEntity.template is<C4>())
+                c4Entity = weaponEntity;
         });
-        return isPlanting;
+        return hookContext.template make<C4>(static_cast<cs2::C_C4*>(c4Entity));
     }
 
     [[nodiscard]] float getRemainingFlashBangTime() const noexcept
@@ -182,6 +188,11 @@ public:
     [[nodiscard]] decltype(auto) isUsingSniperRifle() const
     {
         return getActiveWeapon().isSniperRifle();
+    }
+
+    [[nodiscard]] auto eyeAngles() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToEyeAngles>().of(playerPawn).toOptional();
     }
 
 private:

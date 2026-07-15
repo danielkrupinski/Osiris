@@ -9,7 +9,9 @@
 #include <Features/Visuals/OutlineGlow/OutlineGlow.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
+#include <Platform/Macros/IsPlatform.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlert.h>
+#include <Features/Visuals/GrenadePrediction/GrenadePrediction.h>
 
 template <typename HookContext>
 class RenderingHookEntityLoop {
@@ -22,14 +24,24 @@ public:
     void run() const noexcept
     {
         auto bombPlantAlertVisibility = Visibility::Hidden;
-        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this, &bombPlantAlertVisibility](const auto& entityIdentity) { handleEntityIdentity(entityIdentity, bombPlantAlertVisibility); });
+        cs2::C_CSPlayerPawn* localPlayerPawn = nullptr;
+        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this, &bombPlantAlertVisibility, &localPlayerPawn](const auto& entityIdentity) { handleEntityIdentity(entityIdentity, bombPlantAlertVisibility, localPlayerPawn); });
+#if IS_WIN64()
+        auto&& grenadePrediction = hookContext.template make<GrenadePrediction<HookContext>>();
+        if (localPlayerPawn) {
+            auto&& playerPawn = hookContext.template make<PlayerPawn>(localPlayerPawn);
+            grenadePrediction.handleGrenadePrediction(playerPawn, playerPawn.getActiveWeapon());
+        } else {
+            grenadePrediction.clearPrediction();
+        }
+#endif
         hookContext.template make<ModelGlow>().postUpdateInMainThread();
         if (bombPlantAlertVisibility == Visibility::Hidden)
             hookContext.template make<BombPlantAlert>().hide();
     }
 
 private:
-    void handleEntityIdentity(const cs2::CEntityIdentity& entityIdentity, Visibility& bombPlantAlertVisibility) const noexcept
+    void handleEntityIdentity(const cs2::CEntityIdentity& entityIdentity, Visibility& bombPlantAlertVisibility, cs2::C_CSPlayerPawn*& localPlayerPawn) const noexcept
     {
         const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(entityIdentity.entityClass);
         auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
@@ -41,6 +53,8 @@ private:
                 hookContext.entityClassifier().registerWeaponClass(entityClass);
             });
             hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(playerPawn);
+            if (playerPawn.isControlledByLocalPlayer())
+                localPlayerPawn = static_cast<cs2::C_CSPlayerPawn*>(entityIdentity.entity);
             updateModelGlow<PlayerModelGlow>(playerPawn, entityTypeInfo);
             applyOutlineGlow<PlayerOutlineGlow>(playerPawn, entityTypeInfo);
             if (bombPlantAlertVisibility != Visibility::Visible)

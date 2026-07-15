@@ -26,5 +26,6 @@ STRONG_TYPE_ALIAS(EntityClassParentNodeOffset, FieldOffset<cs2::CEntityClass, cs
 STRONG_TYPE_ALIAS(EntityClassParentOuterOffset, FieldOffset<cs2::CEntityClassParentNode, cs2::CEntityClass*, std::uint8_t>);
 STRONG_TYPE_ALIAS(EntityClassParentNodeOffsetConsistency, std::uint8_t);
 #else
+// Entity-class registration ancestry is Windows-only until the Linux descriptor ABI is available.
 STRONG_TYPE_ALIAS(OffsetToEntityClasses, FieldFieldOffset<cs2::CGameEntitySystem, cs2::CGameEntitySystem::EntityClasses, std::int32_t, offsetof(cs2::CGameEntitySystem::EntityClasses, memory)>);
 #endif
