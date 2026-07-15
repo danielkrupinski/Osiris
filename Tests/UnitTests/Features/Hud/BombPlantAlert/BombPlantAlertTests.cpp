@@ -4,6 +4,7 @@
 #include <Features/Hud/BombPlantAlert/BombPlantAlert.h>
 #include <Mocks/Features/Hud/BombPlantAlert/MockBombPlantAlertPanelFactory.h>
 #include <Mocks/HudMocks/MockHud.h>
+#include <Mocks/MockBaseEntity.h>
 #include <Mocks/MockBaseWeapon.h>
 #include <Mocks/MockClientPanel.h>
 #include <Mocks/MockConfig.h>
@@ -21,6 +22,7 @@ protected:
     testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockConfig> mockConfig;
     testing::StrictMock<MockPlayerPawn> mockPlayerPawn;
+    testing::StrictMock<MockBaseEntity> mockBaseEntity;
     testing::StrictMock<MockBaseWeapon> mockBaseWeapon;
     testing::StrictMock<MockC4> mockC4;
     testing::StrictMock<MockGameRules> mockGameRules;
@@ -100,11 +102,16 @@ TEST_P(BombPlantAlertNotVisibleTest, BombPlantAlertIsNotShown) {
     mockConfig.expectGetVariable<BombPlantAlertEnabled>(GetParam().featureEnabled);
 
     EXPECT_CALL(mockHookContext, config()).WillOnce(testing::ReturnRef(mockConfig));
-    EXPECT_CALL(mockPlayerPawn, getActiveWeapon()).WillRepeatedly(testing::ReturnRef(mockBaseWeapon));
-    EXPECT_CALL(mockBaseWeapon, castToC4()).WillRepeatedly(testing::ReturnRef(mockC4));
-    EXPECT_CALL(mockC4, operatorBool()).WillRepeatedly(testing::Return(GetParam().playerIsHoldingBomb));
-    EXPECT_CALL(mockC4, isBeingPlanted()).WillRepeatedly(testing::Return(GetParam().bombIsBeingPlanted));
-    EXPECT_CALL(mockC4, timeToArmingEnd()).WillRepeatedly(testing::Return(GetParam().timeToBombArmingEnd));
+    if (GetParam().featureEnabled) {
+        EXPECT_CALL(mockPlayerPawn, getActiveWeapon()).WillOnce(testing::ReturnRef(mockBaseWeapon));
+        EXPECT_CALL(mockBaseWeapon, castToC4()).WillOnce(testing::ReturnRef(mockC4));
+        EXPECT_CALL(mockC4, operatorBool()).WillOnce(testing::Return(GetParam().playerIsHoldingBomb));
+        if (GetParam().playerIsHoldingBomb) {
+            EXPECT_CALL(mockC4, isBeingPlanted()).WillOnce(testing::Return(GetParam().bombIsBeingPlanted));
+            if (GetParam().bombIsBeingPlanted.valueOr(false))
+                EXPECT_CALL(mockC4, timeToArmingEnd()).WillOnce(testing::Return(GetParam().timeToBombArmingEnd));
+        }
+    }
 
     EXPECT_EQ(bombPlantAlert.show(mockPlayerPawn), Visibility::Hidden);
 }

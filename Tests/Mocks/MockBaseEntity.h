@@ -2,6 +2,7 @@
 
 #include <type_traits>
 #include <CS2/Classes/Color.h>
+#include <GameClient/Entities/C4.h>
 #include <GameClient/Entities/BaseModelEntity.h>
 #include <GameClient/Entities/PlayerPawn.h>
 #include <GameClient/Entities/SmokeGrenadeProjectile.h>
@@ -12,6 +13,7 @@
 struct MockHookContext;
 struct MockModelEntity;
 struct MockSmokeGrenadeProjectile;
+struct MockC4;
 
 struct MockBaseEntity {
     MOCK_METHOD(void, applyGlowRecursively, (cs2::Color color, int range));
@@ -22,6 +24,7 @@ struct MockBaseEntity {
     MOCK_METHOD(MockSmokeGrenadeProjectile&, asSmokeGrenadeProjectile, ());
     MOCK_METHOD(MockModelEntity&, asModelEntity, ());
     MOCK_METHOD(MockPlayerPawn&, castToPlayerPawn, ());
+    MOCK_METHOD(MockC4&, asC4, ());
     
     auto& baseEntity()
     {
@@ -35,6 +38,8 @@ struct MockBaseEntity {
             return asSmokeGrenadeProjectile();
         } else if constexpr (std::is_same_v<EntityType<MockHookContext>, BaseModelEntity<MockHookContext>>) {
             return asModelEntity();
+        } else if constexpr (std::is_same_v<EntityType<MockHookContext>, C4<MockHookContext>>) {
+            return asC4();
         }
     }
 
