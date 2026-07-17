@@ -46,6 +46,14 @@ static_assert(std::is_standard_layout_v<CStylePropertyZIndex>);
 static_assert(sizeof(CStylePropertyZIndex) == WIN64_LINUX(24, 16));
 static_assert(offsetof(CStylePropertyZIndex, zindex) == WIN64_LINUX(16, 12));
 
+struct CStylePropertyRotate2DCentered : CStyleProperty {
+    BASE_STYLE_PROPERTY_FIELDS();
+    float m_flDegrees;
+};
+static_assert(std::is_standard_layout_v<CStylePropertyRotate2DCentered>);
+static_assert(sizeof(CStylePropertyRotate2DCentered) == WIN64_LINUX(24, 16));
+static_assert(offsetof(CStylePropertyRotate2DCentered, m_flDegrees) == WIN64_LINUX(16, 12));
+
 struct CStylePropertyHeight : CStyleProperty {
     BASE_STYLE_PROPERTY_FIELDS();
     CUILength m_Height;

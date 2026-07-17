@@ -11,6 +11,7 @@ constexpr auto kStylePropertyTypeNames = TypedStaticStringPool{}
     .add<CStylePropertyWidth>(WIN64_LINUX(".?AVCStylePropertyWidth@panorama@@", "N8panorama19CStylePropertyWidthE"))
     .add<CStylePropertyOpacity>(WIN64_LINUX(".?AVCStylePropertyOpacity@panorama@@", "N8panorama21CStylePropertyOpacityE"))
     .add<CStylePropertyZIndex>(WIN64_LINUX(".?AVCStylePropertyZIndex@panorama@@", "N8panorama20CStylePropertyZIndexE"))
+    .add<CStylePropertyRotate2DCentered>(WIN64_LINUX(".?AVCStylePropertyRotate2DCentered@panorama@@", "N8panorama30CStylePropertyRotate2DCenteredE"))
     .add<CStylePropertyHeight>(WIN64_LINUX(".?AVCStylePropertyHeight@panorama@@", "N8panorama20CStylePropertyHeightE"))
     .add<CStylePropertyImageShadow>(WIN64_LINUX(".?AVCStylePropertyImageShadow@panorama@@", "N8panorama25CStylePropertyImageShadowE"))
     .add<CStylePropertyPosition>(WIN64_LINUX(".?AVCStylePropertyPosition@panorama@@", "N8panorama22CStylePropertyPositionE"))

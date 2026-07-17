@@ -166,6 +166,11 @@ public:
         setStyleProperty(propertyFactory().zIndex(zIndex));
     }
 
+    void setRotate2dCentered(float degrees) const noexcept
+    {
+        setStyleProperty(propertyFactory().rotate2dCentered(degrees));
+    }
+
     void setImageShadow(const PanelShadowParams& params) const noexcept
     {
         setStyleProperty(propertyFactory().imageShadow(params));

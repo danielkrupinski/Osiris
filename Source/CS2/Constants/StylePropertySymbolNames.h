@@ -10,6 +10,7 @@ constexpr auto kStylePropertySymbolNames = TypedStaticStringPool{}
     .add<CStylePropertyWidth>("width")
     .add<CStylePropertyOpacity>("opacity")
     .add<CStylePropertyZIndex>("z-index")
+    .add<CStylePropertyRotate2DCentered>("pre-transform-rotate2d")
     .add<CStylePropertyHeight>("height")
     .add<CStylePropertyImageShadow>("img-shadow")
     .add<CStylePropertyPosition>("position")

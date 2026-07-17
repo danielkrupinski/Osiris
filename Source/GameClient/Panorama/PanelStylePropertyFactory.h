@@ -68,6 +68,20 @@ struct PanelStylePropertyFactory {
         return {};
     }
 
+    [[nodiscard]] std::optional<cs2::CStylePropertyRotate2DCentered> rotate2dCentered(float degrees) const noexcept
+    {
+        const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyRotate2DCentered>();
+        const auto symbol = symbolsAndVMTs.getSymbol<cs2::CStylePropertyRotate2DCentered>();
+        if (vmt && symbol.isValid())
+            return cs2::CStylePropertyRotate2DCentered{
+                .vmt = vmt,
+                .m_symPropertyName = symbol,
+                .m_bDisallowTransition = false,
+                .m_flDegrees = degrees
+            };
+        return {};
+    }
+
     [[nodiscard]] std::optional<cs2::CStylePropertyHeight> height(cs2::CUILength height) const noexcept
     {
         const auto vmt = symbolsAndVMTs.getVmt<cs2::CStylePropertyHeight>();
