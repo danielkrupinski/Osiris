@@ -42,6 +42,6 @@ jobs:
     - name: build functional tests
       run: cmake --build build --target FunctionalTests --config ${{ matrix.configuration }}
     - name: run unit tests
-      run: ctest -R ^Unit --test-dir build --output-on-failure --no-tests=error --schedule-random -j $env:NUMBER_OF_PROCESSORS
+      run: ctest -R ^Unit --test-dir build -C ${{ matrix.configuration }} --output-on-failure --no-tests=error --schedule-random -j $env:NUMBER_OF_PROCESSORS
     - name: run functional tests
-      run: ctest -R ^Functional --test-dir build --output-on-failure --no-tests=error --schedule-random -j $env:NUMBER_OF_PROCESSORS
+      run: ctest -R ^Functional --test-dir build -C ${{ matrix.configuration }} --output-on-failure --no-tests=error --schedule-random -j $env:NUMBER_OF_PROCESSORS
