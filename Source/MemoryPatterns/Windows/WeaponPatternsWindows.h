@@ -12,6 +12,7 @@ struct WeaponPatterns {
             .template addPattern<PointerToGetInaccuracyFunction, CodePattern{"48 89 5C 24 ? 55 56 57 48 81 EC ? ? ? ? 44"}>()
             .template addPattern<PointerToGetSpreadFunction, CodePattern{"48 83 EC ? 48 63 91"}>()
             .template addPattern<OffsetToThrowStrength, CodePattern{"48 8D 8B ? ? ? ? 48 8D 54 24 ? 85"}.add(3).read()>()
-            .template addPattern<OffsetToPinPulled, CodePattern{"48 83 EC 28 80 B9 ? ? ? ? 00 75 10 E8 ? ? ? ? 84 C0 74 07"}.add(6).read()>();
+            .template addPattern<OffsetToPinPulled, CodePattern{"48 83 EC 28 80 B9 ? ? ? ? 00 75 10 E8 ? ? ? ? 84 C0 74 07"}.add(6).read()>()
+            .template addPattern<OffsetToThrowTime, CodePattern{"F3 0F 10 35 ? ? ? ? 48 8D 95 ? ? ? ? 0F 28 D6 48 8D 8D ? ? ? ? E8 ? ? ? ? F3 0F 10 86 ? ? ? ? 0F 2E 00 7A ? 74 ? F3 0F 10 00 F3 0F 11 86 ? ? ? ?"}.add(34).read()>();
     }
 };

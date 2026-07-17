@@ -2,12 +2,15 @@
 
 #include <cstdint>
 
-#include <CS2/Classes/Entities/C_CSWeaponBase.h>
+#include <CS2/Classes/Entities/WeaponEntities.h>
 #include <Utils/FieldOffset.h>
 #include <Utils/StrongTypeAlias.h>
 
 template <typename FieldType, typename OffsetType>
 using WeaponOffset = FieldOffset<cs2::C_CSWeaponBase, FieldType, OffsetType>;
+
+template <typename FieldType, typename OffsetType>
+using GrenadeWeaponOffset = FieldOffset<cs2::C_BaseCSGrenade, FieldType, OffsetType>;
 
 STRONG_TYPE_ALIAS(OffsetToClipAmmo, WeaponOffset<cs2::C_CSWeaponBase::m_iClip1, std::int32_t>);
 STRONG_TYPE_ALIAS(OffsetToWeaponSceneObjectUpdaterHandle, WeaponOffset<cs2::C_CSWeaponBase::sceneObjectUpdaterHandle, std::int32_t>);
@@ -15,3 +18,4 @@ STRONG_TYPE_ALIAS(PointerToGetInaccuracyFunction, cs2::C_CSWeaponBase::GetInaccu
 STRONG_TYPE_ALIAS(PointerToGetSpreadFunction, cs2::C_CSWeaponBase::GetSpread*);
 STRONG_TYPE_ALIAS(OffsetToThrowStrength, WeaponOffset<cs2::C_CSWeaponBase::m_flThrowStrength, std::int32_t>);
 STRONG_TYPE_ALIAS(OffsetToPinPulled, WeaponOffset<cs2::C_CSWeaponBase::m_bPinPulled, std::int32_t>);
+STRONG_TYPE_ALIAS(OffsetToThrowTime, GrenadeWeaponOffset<cs2::C_BaseCSGrenade::m_fThrowTime, std::int32_t>);

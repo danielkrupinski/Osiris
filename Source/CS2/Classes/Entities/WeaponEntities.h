@@ -109,6 +109,7 @@ struct C_Knife : C_CSWeaponBase {
 
 struct C_BaseCSGrenade : C_CSWeaponBase {
     using m_flThrowStrength = float;
+    using m_fThrowTime = float;
 };
 
 struct C_Flashbang : C_BaseCSGrenade {
