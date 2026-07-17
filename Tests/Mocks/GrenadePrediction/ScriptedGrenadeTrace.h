@@ -45,9 +45,9 @@ template <typename HookContext>
 struct GrenadeSimulatorTestAccess {
     using Simulator = GrenadeSimulator<HookContext>;
 
-    [[nodiscard]] static StepResult step(Simulator& simulator, cs2::Vector& pos, cs2::Vector& velocity, cs2::GrenadeKind kind, void* skipEntity = nullptr, float friction = 0.0f) noexcept
+    [[nodiscard]] static StepResult step(Simulator& simulator, cs2::Vector& pos, cs2::Vector& velocity, cs2::GrenadeKind kind, void* skipEntity = nullptr) noexcept
     {
-        return simulator.step(pos, velocity, kind, skipEntity, friction);
+        return simulator.step(pos, velocity, kind, skipEntity);
     }
 
     [[nodiscard]] static bool shouldDetonate(const Simulator& simulator, cs2::GrenadeKind kind, int tick) noexcept

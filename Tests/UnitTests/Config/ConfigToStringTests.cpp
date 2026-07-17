@@ -29,6 +29,22 @@ protected:
     std::array<char8_t, 4096> buffer{};
 };
 
+TEST(ConfigToStringFloatTest, WritesOneDecimalDigit)
+{
+    std::array<char8_t, 32> buffer{};
+    ConfigStringConversionState conversionState{};
+    ConfigToString configToString{buffer, conversionState};
+
+    configToString.beginRoot();
+    configToString.floatValue(u8"Minimum", [](float) noexcept {}, []() noexcept { return 0.1f; });
+    configToString.floatValue(u8"Maximum", [](float) noexcept {}, []() noexcept { return 60.0f; });
+    const auto writtenBytes = configToString.endRoot();
+
+    constexpr auto kExpected = u8"{\"Minimum\":0.1,\"Maximum\":60.0}";
+    EXPECT_EQ(writtenBytes, std::char_traits<char8_t>::length(kExpected));
+    EXPECT_TRUE(std::ranges::equal(std::span{buffer}.first(writtenBytes), std::u8string_view{kExpected}));
+}
+
 TEST_P(ConfigToStringTest, TestConfigToStringConversion) {
     const auto& param = std::get<1>(GetParam());
 

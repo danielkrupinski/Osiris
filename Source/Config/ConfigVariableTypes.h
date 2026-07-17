@@ -103,5 +103,6 @@ using ConfigVariableTypes = TypeList<
     grenade_prediction_vars::Enabled,
     grenade_prediction_vars::TrajectoryHue,
     grenade_prediction_vars::BounceHue,
-    grenade_prediction_vars::BounceFriction
+    grenade_prediction_vars::AlwaysShowLastCache,
+    grenade_prediction_vars::CacheDuration
 >;

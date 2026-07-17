@@ -60,6 +60,12 @@ public:
             valueSetter(value);
     }
 
+    void floatValue(const char8_t* key, auto&& valueSetter, auto&& /* valueGetter */) noexcept
+    {
+        if (float value; parseFloat(key, value))
+            valueSetter(value);
+    }
+
 private:
     [[nodiscard]] bool parseBool(const char8_t* key, bool& value) noexcept
     {
@@ -83,6 +89,22 @@ private:
         if (shouldReadMe()) {
             const auto previousReadIndex = readIndex;
             if (readUntilStartOfValue(key) && parseUint(value)) {
+                parsed = true;
+                markElementReadAtCurrentNestingLevel();
+            } else {
+                readIndex = previousReadIndex;
+            }
+        }
+        increaseIndexInNestingLevel();
+        return parsed;
+    }
+
+    [[nodiscard]] bool parseFloat(const char8_t* key, float& value) noexcept
+    {
+        bool parsed = false;
+        if (shouldReadMe()) {
+            const auto previousReadIndex = readIndex;
+            if (readUntilStartOfValue(key) && parseFloat(value)) {
                 parsed = true;
                 markElementReadAtCurrentNestingLevel();
             } else {
@@ -184,6 +206,28 @@ private:
             }
         }
         return false;
+    }
+
+    [[nodiscard]] bool parseFloat(float& result) noexcept
+    {
+        std::uint64_t integerPart{};
+        if (!parseUint(integerPart))
+            return false;
+
+        result = static_cast<float>(integerPart);
+        if (readIndex == buffer.size() || buffer[readIndex] != u8'.')
+            return true;
+
+        ++readIndex;
+        float placeValue = 0.1f;
+        bool parsedFraction = false;
+        while (readIndex < buffer.size() && buffer[readIndex] >= u8'0' && buffer[readIndex] <= u8'9') {
+            result += static_cast<float>(buffer[readIndex] - u8'0') * placeValue;
+            placeValue *= 0.1f;
+            ++readIndex;
+            parsedFraction = true;
+        }
+        return parsedFraction;
     }
 
     [[nodiscard]] bool parseBool(bool& result) noexcept

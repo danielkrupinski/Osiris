@@ -39,13 +39,17 @@ private:
             return oneByteConfigVariables[OneByteConfigVariables::template indexOf<ConfigVariable>()];
         else if constexpr (TwoByteConfigVariables::contains<ConfigVariable>())
             return twoByteConfigVariables[TwoByteConfigVariables::template indexOf<ConfigVariable>()];
+        else if constexpr (FourByteConfigVariables::contains<ConfigVariable>())
+            return fourByteConfigVariables[FourByteConfigVariables::template indexOf<ConfigVariable>()];
         else
             static_assert(!std::is_same_v<ConfigVariable, ConfigVariable>, "Unknown type");
     }
 
     using OneByteConfigVariables = ConfigVariableTypes::filter<Projected<UnpackConfigVariable, WithSizeOf<1>::Equal>::Value>;
     using TwoByteConfigVariables = ConfigVariableTypes::filter<Projected<UnpackConfigVariable, WithSizeOf<2>::Equal>::Value>;
+    using FourByteConfigVariables = ConfigVariableTypes::filter<Projected<UnpackConfigVariable, WithSizeOf<4>::Equal>::Value>;
 
     std::array<std::byte[1], OneByteConfigVariables::size()> oneByteConfigVariables;
     std::array<std::byte[2], TwoByteConfigVariables::size()> twoByteConfigVariables;
+    std::array<std::byte[4], FourByteConfigVariables::size()> fourByteConfigVariables;
 };

@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <set>
+#include <string_view>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -61,6 +62,12 @@ TEST_F(ConfigSchemaTest, SchemaIsValid) {
         ++nestingLevels.back();
     }));
 
+    EXPECT_CALL(mockConfigConversion, floatValue(testing::_, testing::_, testing::_)).WillRepeatedly(testing::Invoke([this] {
+        EXPECT_GT(nestingLevels.size(), 0);
+        EXPECT_LT(nestingLevels.back(), config_params::kMaxObjectIndex);
+        ++nestingLevels.back();
+    }));
+
     configSchema.performConversion(mockConfigConversion);
 }
 
@@ -90,6 +97,16 @@ TEST_F(ConfigSchemaTest, EachConfigVariableIsLoadedOnce) {
                     configVariableIndexes.insert(configVariableIndex);
                 })));
             valueSetter(std::uint64_t{}); 
+        })));
+
+    EXPECT_CALL(mockConfigConversion, floatValue(testing::_, testing::_, testing::_))
+        .WillRepeatedly(testing::WithArg<1>(testing::Invoke([this](auto valueSetter) {
+            EXPECT_CALL(mockConfig, setVariableWithoutAutoSave(testing::_, testing::_))
+                .WillOnce(testing::WithArg<0>(testing::Invoke([this](std::size_t configVariableIndex) {
+                    EXPECT_FALSE(configVariableIndexes.contains(configVariableIndex));
+                    configVariableIndexes.insert(configVariableIndex);
+                })));
+            valueSetter(0.1f);
         })));
 
     configSchema.performConversion(mockConfigConversion);
@@ -126,6 +143,50 @@ TEST_F(ConfigSchemaTest, EachConfigVariableIsSavedOnce) {
             valueGetter(); 
         })));
 
+    EXPECT_CALL(mockConfigConversion, floatValue(testing::_, testing::_, testing::_))
+        .WillRepeatedly(testing::WithArg<2>(testing::Invoke([this](auto valueGetter) {
+            EXPECT_CALL(mockConfig, getVariable(testing::_))
+                .WillOnce(testing::WithArg<0>(testing::Invoke([this](std::size_t configVariableIndex) {
+                    EXPECT_FALSE(configVariableIndexes.contains(configVariableIndex));
+                    configVariableIndexes.insert(configVariableIndex);
+                    return std::any{};
+            })));
+            valueGetter();
+        })));
+
     configSchema.performConversion(mockConfigConversion);
     EXPECT_EQ(configVariableIndexes.size(), ConfigVariableTypes::size());
+}
+
+TEST_F(ConfigSchemaTest, CacheDurationLoadNormalizesArbitraryPrecisionToTenths) {
+    EXPECT_CALL(mockConfigConversion, beginRoot());
+    EXPECT_CALL(mockConfigConversion, endRoot());
+    EXPECT_CALL(mockConfigConversion, beginObject(testing::_)).Times(testing::AnyNumber());
+    EXPECT_CALL(mockConfigConversion, endObject()).Times(testing::AnyNumber());
+    EXPECT_CALL(mockConfigConversion, boolean(testing::_, testing::_, testing::_)).Times(testing::AnyNumber());
+    EXPECT_CALL(mockConfigConversion, uint(testing::_, testing::_, testing::_)).Times(testing::AnyNumber());
+    EXPECT_CALL(mockHookContext, config()).WillRepeatedly(testing::ReturnRef(mockConfig));
+
+    EXPECT_CALL(mockConfigConversion, floatValue(testing::_, testing::_, testing::_))
+        .WillOnce(testing::Invoke([](const char8_t* key, auto valueSetter, auto) {
+            ASSERT_EQ(std::u8string_view{key}, u8"CacheDuration");
+            valueSetter(1.25f);
+            valueSetter(1.23f);
+        }));
+
+    {
+        testing::InSequence sequence;
+        EXPECT_CALL(mockConfig, setVariableWithoutAutoSave(
+            ConfigVariableTypes::indexOf<grenade_prediction_vars::CacheDuration>(),
+            testing::Truly([](const std::any& value) {
+                return std::any_cast<grenade_prediction_vars::CacheDuration::ValueType>(value) == grenade_prediction_vars::CacheDuration::ValueType{grenade_prediction_vars::normalizeCacheDuration(1.25f)};
+            })));
+        EXPECT_CALL(mockConfig, setVariableWithoutAutoSave(
+            ConfigVariableTypes::indexOf<grenade_prediction_vars::CacheDuration>(),
+            testing::Truly([](const std::any& value) {
+                return std::any_cast<grenade_prediction_vars::CacheDuration::ValueType>(value) == grenade_prediction_vars::CacheDuration::ValueType{grenade_prediction_vars::normalizeCacheDuration(1.23f)};
+            })));
+    }
+
+    configSchema.performConversion(mockConfigConversion);
 }

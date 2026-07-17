@@ -26,6 +26,22 @@ struct MockConfigValueSetter {
     }
 };
 
+TEST(ConfigFromStringFloatTest, ParsesIntegerLookingAndDecimalValues)
+{
+    ConfigStringConversionState conversionState{};
+    ConfigFromString configFromString{u8"{\"Integer\":5,\"Decimal\":0.1}", conversionState};
+    float integerValue{};
+    float decimalValue{};
+
+    configFromString.beginRoot();
+    configFromString.floatValue(u8"Integer", [&integerValue](float value) noexcept { integerValue = value; }, []() noexcept { return 0.0f; });
+    configFromString.floatValue(u8"Decimal", [&decimalValue](float value) noexcept { decimalValue = value; }, []() noexcept { return 0.0f; });
+    static_cast<void>(configFromString.endRoot());
+
+    EXPECT_FLOAT_EQ(integerValue, 5.0f);
+    EXPECT_FLOAT_EQ(decimalValue, 0.1f);
+}
+
 struct ConfigFromStringTestParam {
     std::u8string_view bufferContent{};
     ConfigStringConversionState conversionState{};

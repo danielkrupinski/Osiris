@@ -34,12 +34,11 @@ namespace grenade_prediction_params
     struct GrenadePhysics {
         float gravityScale;
         float elasticity;
-        float friction;   // used by engine in surface-sliding; not applied in-flight
     };
 
     // Regression physics values shared by all supported grenade kinds.
     constexpr GrenadePhysics getGrenadePhysics(cs2::GrenadeKind /*kind*/) {
-        return {0.40f, 0.45f, 0.20f};
+        return {0.40f, 0.45f};
     }
 
     // --- Throw parameters ---
@@ -57,6 +56,9 @@ namespace grenade_prediction_params
     constexpr float kThrowZOffsetScale = 12.0f;
 
     // --- Detonation times ---
+    // Client CGrenadeTracer extends supported grenade horizons by this amount.
+    constexpr float kClientTracerHorizonPadding = 0.125f;
+
     // Regression fuse and safety-cap values.
     constexpr float kDetonateTimeHeFlash = 1.5f;
     constexpr float kDetonateTimeMolotov = 2.0f;

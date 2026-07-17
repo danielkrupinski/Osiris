@@ -31,7 +31,7 @@ public:
     {
     }
 
-    void simulate(Trajectory& traj, cs2::Vector start, cs2::Vector velocity, cs2::GrenadeKind kind, void* skipEntity, float frictionOverride = 0.0f) noexcept
+    void simulate(Trajectory& traj, cs2::Vector start, cs2::Vector velocity, cs2::GrenadeKind kind, void* skipEntity) noexcept
     {
         using namespace grenade_prediction_params;
 
@@ -54,7 +54,7 @@ public:
             }
 
             cs2::Vector prevPos = pos;
-            StepResult result = step(pos, vel, kind, skipEntity, frictionOverride);
+            StepResult result = step(pos, vel, kind, skipEntity);
 
             // An empty Optional is a trace failure, not a clear trace. Never retain
             // partial points as a valid trajectory when any required trace failed.
@@ -214,7 +214,7 @@ private:
         return hookContext.template make<EngineTrace>().traceGrenadeHull(start, end, skipEntity);
     }
 
-    StepResult step(cs2::Vector& pos, cs2::Vector& vel, cs2::GrenadeKind kind, void* skipEntity, float frictionOverride) noexcept
+    StepResult step(cs2::Vector& pos, cs2::Vector& vel, cs2::GrenadeKind kind, void* skipEntity) noexcept
     {
         using namespace grenade_prediction_params;
 
@@ -248,13 +248,13 @@ private:
         result.hit = true;
         result.hitPos = exactHitPos;
         result.contacts[result.contactsCount++] = exactHitPos;
-        const auto collisionResult = resolveCollision(traceResult.value(), pos, vel, kind, skipEntity, frictionOverride, result);
+        const auto collisionResult = resolveCollision(traceResult.value(), pos, vel, kind, skipEntity, result);
         result.traceSucceeded = collisionResult.traceSucceeded;
         result.impactDetonate = collisionResult.impactDetonate;
         return result;
     }
 
-    CollisionResult applyContactResponse(const TraceResult& trace, cs2::Vector& vel, cs2::GrenadeKind kind, float frictionOverride) noexcept
+    CollisionResult applyContactResponse(const TraceResult& trace, cs2::Vector& vel, cs2::GrenadeKind kind) noexcept
     {
         using namespace grenade_prediction_params;
 
@@ -267,24 +267,6 @@ private:
         auto physics = getGrenadePhysics(kind);
         cs2::Vector newVel = clipVelocity(vel, trace.normal, 2.0f);
         newVel = newVel * physics.elasticity;
-
-        // With overbounce=2.0, clipVelocity reflects the
-        // normal component (doesn't zero it). Applying friction to all 3 axes
-        // would incorrectly damp the bounce height. Friction must only affect
-        // the tangential (sliding) component — decompose, damp, recombine.
-        // frictionOverride is passed from the UI slider (0..200 → 0.000..0.200).
-        if (frictionOverride > 0.0f) {
-            float normalSpeed = newVel.dot(trace.normal);
-            cs2::Vector normalComp{trace.normal.x * normalSpeed, trace.normal.y * normalSpeed, trace.normal.z * normalSpeed};
-            cs2::Vector tangentComp{newVel.x - normalComp.x, newVel.y - normalComp.y, newVel.z - normalComp.z};
-
-            float frictionRetain = 1.0f - frictionOverride;
-            tangentComp.x *= frictionRetain;
-            tangentComp.y *= frictionRetain;
-            tangentComp.z *= frictionRetain;
-
-            newVel = cs2::Vector{normalComp.x + tangentComp.x, normalComp.y + tangentComp.y, normalComp.z + tangentComp.z};
-        }
 
         // Entity-specific steep-bounce damping (normal.z > 0.7,
         // speed² > 96000) ONLY applies when the grenade hits a PLAYER or NPC entity,
@@ -302,11 +284,11 @@ private:
         return {};
     }
 
-    CollisionResult resolveCollision(const TraceResult& trace, cs2::Vector& pos, cs2::Vector& vel, cs2::GrenadeKind kind, void* skipEntity, float frictionOverride, StepResult& result) noexcept
+    CollisionResult resolveCollision(const TraceResult& trace, cs2::Vector& pos, cs2::Vector& vel, cs2::GrenadeKind kind, void* skipEntity, StepResult& result) noexcept
     {
         using namespace grenade_prediction_params;
 
-        auto collisionResult = applyContactResponse(trace, vel, kind, frictionOverride);
+        auto collisionResult = applyContactResponse(trace, vel, kind);
         if (collisionResult.impactDetonate || collisionResult.stopped)
             return collisionResult;
 
@@ -327,7 +309,7 @@ private:
             pos = post.value().endPos;
             remaining *= (1.0f - post.value().fraction);
             result.contacts[result.contactsCount++] = pos;
-            collisionResult = applyContactResponse(post.value(), vel, kind, frictionOverride);
+            collisionResult = applyContactResponse(post.value(), vel, kind);
             if (collisionResult.impactDetonate || collisionResult.stopped)
                 return collisionResult;
         }
@@ -349,10 +331,11 @@ private:
             case cs2::GrenadeKind::Molotov:
             case cs2::GrenadeKind::Incendiary:
                 // Mid-air detonation: if no valid flat surface hit within time limit, explodes harmlessly.
-                return elapsed > kDetonateTimeMolotov;
+                return static_cast<float>(tick + 1) * kSimDt > kDetonateTimeMolotov + kClientTracerHorizonPadding;
             case cs2::GrenadeKind::Flashbang:
             case cs2::GrenadeKind::HEGrenade:
-                return elapsed > kDetonateTimeHeFlash;
+                // After this step, terminate only once the client tracer horizon has been exceeded.
+                return static_cast<float>(tick + 1) * kSimDt > kDetonateTimeHeFlash + kClientTracerHorizonPadding;
             default:
                 return false;
         }

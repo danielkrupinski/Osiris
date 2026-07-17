@@ -3,6 +3,8 @@
 #include <Features/Common/InWorldPanels.h>
 #include <Features/Common/FeatureToggle.h>
 #include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
+#include <MemoryPatterns/PatternTypes/GlobalVarsPatternTypes.h>
+#include <GameClient/GlobalVars.h>
 #include <CS2/Classes/Entities/C_CSPlayerPawn.h>
 #include <CS2/Classes/Entities/WeaponEntities.h>
 #include <CS2/Classes/Entities/C_CSWeaponBase.h>
@@ -36,46 +38,70 @@ public:
             return;
         }
 
+        const auto alive = playerPawn.isAlive();
+        if (!alive.has_value() || !*alive) {
+            clearPrediction();
+            return;
+        }
+
         if (!context().condition().shouldRun()) {
             clearPrediction();
             return;
         }
 
-        // Detect grenade type from active weapon
+        auto& state = context().state();
+        const auto curtime = hookContext.globalVars().curtime();
+        const bool hasCurtime = curtime.hasValue();
+        const float currentCurtime = hasCurtime ? curtime.value() : 0.0f;
+        updateCacheForTime(hasCurtime, currentCurtime);
+
+        // Detect grenade type from active weapon.
         auto weaponPtr = static_cast<cs2::C_BaseEntity*>(activeWeapon.baseEntity());
         if (!weaponPtr) {
-            clearPrediction();
+            state.throwObservation.reset();
+            hideLivePrediction();
+            renderLastCommittedTrajectory(hasCurtime, currentCurtime);
             return;
-        }
-
-        auto& state = context().state();
-        if (state.cachedThrowStrengthWeapon != weaponPtr) {
-            state.cachedThrowStrengthWeapon = weaponPtr;
-            state.cachedThrowStrength = 1.0f;
         }
 
         const auto kind = activeWeapon.grenadeKind();
         if (!kind.hasValue()) {
-            if (activeWeapon.getName()) {
-                state.cachedThrowStrength = 1.0f;
-                state.cachedThrowStrengthWeapon = nullptr;
-                drawTrajectory(context().state().cachedTrajectory);
-            } else {
-                clearPrediction();
-            }
+            state.throwObservation.reset();
+            hideLivePrediction();
+            renderLastCommittedTrajectory(hasCurtime, currentCurtime);
             return;
         }
 
+        // Consume the pin edge before any simulation inputs are evaluated, so a
+        // failed release frame cannot be retried on subsequent pin=false frames.
+        const auto pinPulledOpt = hookContext.patternSearchResults().template get<OffsetToPinPulled>()
+            .of(static_cast<cs2::C_CSWeaponBase*>(weaponPtr)).toOptional();
+        if (!pinPulledOpt.hasValue()) {
+            state.throwObservation.reset();
+            hideLivePrediction();
+            renderLastCommittedTrajectory(hasCurtime, currentCurtime);
+            return;
+        }
+        const bool releaseEdge = state.throwObservation.observePinState(weaponPtr, pinPulledOpt.value());
+        if (pinPulledOpt.value()) {
+            const auto throwStrengthOpt = hookContext.patternSearchResults().template get<OffsetToThrowStrength>()
+                .of(static_cast<cs2::C_CSWeaponBase*>(weaponPtr)).toOptional();
+            if (throwStrengthOpt.hasValue())
+                state.throwObservation.retainThrowStrength(throwStrengthOpt.value());
+        }
+        const float throwStrength = state.throwObservation.retainedThrowStrength;
 
         auto eyeAngles = playerPawn.eyeAngles();
         if (!eyeAngles.hasValue()) {
-            hideCurrentPrediction();
+            hideLivePrediction();
+            renderLastCommittedTrajectory(hasCurtime, currentCurtime);
             return;
         }
 
         auto absOrigin = playerPawn.absOrigin();
         if (!absOrigin.hasValue()) {
-            hideCurrentPrediction();
+            hideLivePrediction();
+            renderLastCommittedTrajectory(hasCurtime, currentCurtime);
             return;
         }
 
@@ -99,28 +125,6 @@ public:
 
         float baseVelocity = grenade_prediction_params::kBaseThrowVelocity;
 
-        // Read throw strength from weapon entity (pattern-based offset)
-        // Cache the value while pin is pulled. When pin is released (throw animation),
-        // m_bPinPulled goes false instantly but the grenade hasn't spawned yet —
-        // use the cached value to prevent the prediction from flickering to 1.0f.
-        float throwStrength = state.cachedThrowStrength;
-        {
-            auto pinPulledOpt = hookContext.patternSearchResults().template get<OffsetToPinPulled>()
-                .of(static_cast<cs2::C_CSWeaponBase*>(weaponPtr)).toOptional();
-
-            if (pinPulledOpt.hasValue() && pinPulledOpt.value()) {
-                auto throwStrengthOpt = hookContext.patternSearchResults().template get<OffsetToThrowStrength>()
-                    .of(static_cast<cs2::C_CSWeaponBase*>(weaponPtr)).toOptional();
-                if (throwStrengthOpt.hasValue()) {
-                    float ts = throwStrengthOpt.value();
-                    if (ts >= 0.0f && ts <= 1.0f) {
-                        throwStrength = ts;
-                        state.cachedThrowStrength = ts;
-                    }
-                }
-            }
-        }
-
         // Get player entity to skip self-collision in traces
         auto playerEntity = static_cast<cs2::C_BaseEntity*>(playerPawn.baseEntity());
 
@@ -130,7 +134,8 @@ public:
         // Pitch correction and Z offset are handled internally by computeSpawnPosition
         auto spawnPos = simulator.computeSpawnPosition(eyePos, viewAngles, throwStrength, static_cast<void*>(playerEntity));
         if (!spawnPos.hasValue()) {
-            hideCurrentPrediction();
+            hideLivePrediction();
+            renderLastCommittedTrajectory(hasCurtime, currentCurtime);
             return;
         }
 
@@ -148,46 +153,53 @@ public:
             }
         }
 
-        // Read friction from config (0..200 integer → 0.000..0.200 float)
-        // Use slider to find the exact friction value. 0 = no friction, 200 = 0.200.
-        float frictionOverride = 0.0f;
-        {
-            auto frictionVar = context().config().template getVariable<grenade_prediction_vars::BounceFriction>();
-            frictionOverride = static_cast<float>(static_cast<std::uint8_t>(frictionVar)) / 1000.0f;
-        }
-
         auto& traj = state.tempTrajectory;
-        simulator.simulate(traj, spawnPos.value(), initialVelocity, kind.value(), static_cast<void*>(playerEntity), frictionOverride);
+        simulator.simulate(traj, spawnPos.value(), initialVelocity, kind.value(), static_cast<void*>(playerEntity));
 
         if (!traj.valid || traj.pointsCount == 0) {
-            // A held grenade must never render an earlier throw after a failed simulation.
-            hideCurrentPrediction();
+            hideLivePrediction();
+            renderLastCommittedTrajectory(hasCurtime, currentCurtime);
             return;
         }
 
-        state.cachedTrajectory = traj;
-        drawTrajectory(traj);
+        if (state.throwObservation.canCommitRelease(releaseEdge)) {
+            state.lastCommittedTrajectory = traj;
+            if (hasCurtime) {
+                state.lastCommitCurtime = currentCurtime;
+                state.hasCommitCurtime = true;
+            } else if (state.hasLastValidCurtime) {
+                state.lastCommitCurtime = state.lastValidCurtime;
+                state.hasCommitCurtime = true;
+            } else {
+                state.lastCommitCurtime = 0.0f;
+                state.hasCommitCurtime = false;
+            }
+        }
+        drawTrajectory(traj, state.liveContainerPanelHandle);
+        renderLastCommittedTrajectory(hasCurtime, currentCurtime);
     }
 
     void clearPrediction() noexcept
     {
         auto& state = context().state();
-        state.cachedThrowStrength = 1.0f;
-        state.cachedThrowStrengthWeapon = nullptr;
-        invalidateTrajectory(state.cachedTrajectory);
+        state.throwObservation.reset();
+        state.lastCommitCurtime = 0.0f;
+        state.lastValidCurtime = 0.0f;
+        state.hasCommitCurtime = false;
+        state.hasLastValidCurtime = false;
+        invalidateTrajectory(state.lastCommittedTrajectory);
         invalidateTrajectory(state.tempTrajectory);
-        hideContainerPanel();
+        hideContainerPanel(state.liveContainerPanelHandle);
+        hideContainerPanel(state.lastCacheContainerPanelHandle);
     }
 
 private:
 
-    void hideCurrentPrediction() noexcept
+    void hideLivePrediction() noexcept
     {
         auto& state = context().state();
         invalidateTrajectory(state.tempTrajectory);
-        // Do not permit a subsequent freeze-mode draw to reveal a failed throw.
-        invalidateTrajectory(state.cachedTrajectory);
-        hideContainerPanel();
+        hideContainerPanel(state.liveContainerPanelHandle);
     }
 
     static void invalidateTrajectory(Trajectory& trajectory) noexcept
@@ -198,21 +210,52 @@ private:
         trajectory.validLanding = false;
     }
 
-    void hideContainerPanel() noexcept
+    void updateCacheForTime(bool hasCurtime, float curtime) noexcept
     {
-        auto&& panel = hookContext.template make<PanelHandle>(context().state().containerPanelHandle).get();
+        auto& state = context().state();
+        const auto alwaysShow = static_cast<bool>(context().config().template getVariable<grenade_prediction_vars::AlwaysShowLastCache>());
+        const auto duration = static_cast<float>(context().config().template getVariable<grenade_prediction_vars::CacheDuration>());
+        if (state.cacheVisibility(alwaysShow, duration, hasCurtime, curtime) == LastGrenadeCacheVisibility::Invalidate) {
+            invalidateTrajectory(state.lastCommittedTrajectory);
+            state.hasCommitCurtime = false;
+            hideContainerPanel(state.lastCacheContainerPanelHandle);
+        }
+    }
+
+    void renderLastCommittedTrajectory(bool hasCurtime, float curtime) noexcept
+    {
+        auto& state = context().state();
+        const auto alwaysShow = static_cast<bool>(context().config().template getVariable<grenade_prediction_vars::AlwaysShowLastCache>());
+        const auto duration = static_cast<float>(context().config().template getVariable<grenade_prediction_vars::CacheDuration>());
+        switch (state.cacheVisibility(alwaysShow, duration, hasCurtime, curtime)) {
+        case LastGrenadeCacheVisibility::Show:
+            drawTrajectory(state.lastCommittedTrajectory, state.lastCacheContainerPanelHandle);
+            break;
+        case LastGrenadeCacheVisibility::Invalidate:
+            invalidateTrajectory(state.lastCommittedTrajectory);
+            state.hasCommitCurtime = false;
+            [[fallthrough]];
+        case LastGrenadeCacheVisibility::Hide:
+            hideContainerPanel(state.lastCacheContainerPanelHandle);
+            break;
+        }
+    }
+
+    void hideContainerPanel(cs2::PanelHandle& containerPanelHandle) noexcept
+    {
+        auto&& panel = hookContext.template make<PanelHandle>(containerPanelHandle).get();
         if (panel)
             panel.setVisible(false);
     }
 
-    void drawTrajectory(const Trajectory& traj) noexcept
+    void drawTrajectory(const Trajectory& traj, cs2::PanelHandle& containerPanelHandle) noexcept
     {
         if (!traj.valid || traj.pointsCount == 0) {
-            hideContainerPanel();
+            hideContainerPanel(containerPanelHandle);
             return;
         }
 
-        auto&& containerPanel = getContainerPanel();
+        auto&& containerPanel = getContainerPanel(containerPanelHandle);
         if (!containerPanel)
             return;
 
@@ -341,9 +384,9 @@ private:
         }
     }
 
-    [[nodiscard]] decltype(auto) getContainerPanel() const noexcept
+    [[nodiscard]] decltype(auto) getContainerPanel(cs2::PanelHandle& containerPanelHandle) const noexcept
     {
-        return hookContext.template make<PanelHandle>(context().state().containerPanelHandle)
+        return hookContext.template make<PanelHandle>(containerPanelHandle)
             .getOrInit(createContainerPanel());
     }
 

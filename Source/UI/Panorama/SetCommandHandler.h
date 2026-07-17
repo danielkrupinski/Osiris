@@ -8,6 +8,7 @@
 #include <Platform/Macros/FunctionAttributes.h>
 #include <Utils/StringParser.h>
 #include "Tabs/VisualsTab/HueSlider.h"
+#include "Tabs/VisualsTab/FloatSlider.h"
 #include "Tabs/VisualsTab/IntSlider.h"
 
 template <typename HookContext>
@@ -50,10 +51,10 @@ private:
             handleIntSlider<viewmodel_mod_vars::Fov>("viewmodel_fov");
         } else if (feature == "viewmodel_fov_text") {
             handleIntSliderTextEntry<viewmodel_mod_vars::Fov>("viewmodel_fov");
-        } else if (feature == "grenade_prediction_bounce_friction") {
-            handleIntSlider<grenade_prediction_vars::BounceFriction>("grenade_prediction_bounce_friction");
-        } else if (feature == "grenade_prediction_bounce_friction_text") {
-            handleIntSliderTextEntry<grenade_prediction_vars::BounceFriction>("grenade_prediction_bounce_friction");
+        } else if (feature == "grenade_prediction_cache_duration") {
+            handleFloatSlider<grenade_prediction_vars::CacheDuration>("grenade_prediction_cache_duration");
+        } else if (feature == "grenade_prediction_cache_duration_text") {
+            handleFloatSliderTextEntry<grenade_prediction_vars::CacheDuration>("grenade_prediction_cache_duration");
         }
     }
 
@@ -103,6 +104,56 @@ private:
         const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
         auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
         return hookContext.template make<IntSlider>(mainMenu.findChildInLayoutFile(sliderId));
+    }
+
+    template <typename ConfigVariable>
+    void handleFloatSlider(const char* sliderId) const noexcept
+    {
+        const auto newVariableValue = grenade_prediction_vars::normalizeCacheDuration(handleFloatSlider(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable)));
+        getFloatSlider(sliderId).updateTextEntry(newVariableValue);
+        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
+    }
+
+    [[nodiscard]] float handleFloatSlider(const char* sliderId, float min, float max, float current) const noexcept
+    {
+        float value{};
+        if (!parser.parseFloat(value) || value == current || value < min || value > max)
+            return current;
+
+        auto&& slider = getFloatSlider(sliderId);
+        slider.updateTextEntry(value);
+        return value;
+    }
+
+    template <typename ConfigVariable>
+    void handleFloatSliderTextEntry(const char* sliderId) const noexcept
+    {
+        const auto newVariableValue = grenade_prediction_vars::normalizeCacheDuration(handleFloatSliderTextEntry(sliderId, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax, GET_CONFIG_VAR(ConfigVariable)));
+        getFloatSlider(sliderId).updateSlider(newVariableValue);
+        hookContext.config().template setVariable<ConfigVariable>(typename ConfigVariable::ValueType{newVariableValue});
+    }
+
+    [[nodiscard]] float handleFloatSliderTextEntry(const char* sliderId, float min, float max, float current) const noexcept
+    {
+        auto&& slider = getFloatSlider(sliderId);
+        float value{};
+        if (!parser.parseFloat(value) || value < min || value > max) {
+            slider.updateTextEntry(current);
+            return current;
+        }
+
+        if (value == current)
+            return current;
+
+        slider.updateSlider(value);
+        return value;
+    }
+
+    [[nodiscard]] decltype(auto) getFloatSlider(const char* sliderId) const noexcept
+    {
+        const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
+        auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
+        return hookContext.template make<FloatSlider>(mainMenu.findChildInLayoutFile(sliderId));
     }
 
     StringParser& parser;

@@ -7,6 +7,18 @@
 
 namespace grenade_prediction_vars
 {
+    [[nodiscard]] constexpr float normalizeCacheDuration(float value) noexcept
+    {
+        constexpr float kMin = 0.1f;
+        constexpr float kMax = 60.0f;
+
+        if (!(value >= kMin))
+            return kMin;
+        if (value >= kMax)
+            return kMax;
+        return static_cast<float>(static_cast<unsigned int>(value * 10.0f + 0.5f)) * 0.1f;
+    }
+
     CONFIG_VARIABLE(Enabled, bool, false);
     constexpr HueVariableParams kTrajectoryHue{.min = 0, .max = 359, .def = 0};
     constexpr HueVariableParams kBounceHue{.min = 0, .max = 359, .def = 120};
@@ -14,8 +26,8 @@ namespace grenade_prediction_vars
     CONFIG_VARIABLE_HUE(TrajectoryHue, kTrajectoryHue);
     CONFIG_VARIABLE_HUE(BounceHue, kBounceHue);
 
-    // BounceFriction: integer 0..200 representing 0.000..0.200 (/1000 when used).
-    // Default 0 (no friction) until user tunes it via slider.
-    constexpr RangeConstrainedVariableParams<std::uint8_t> kBounceFriction{.min = 0, .max = 200, .def = 0};
-    CONFIG_VARIABLE_RANGE(BounceFriction, kBounceFriction);
+    CONFIG_VARIABLE(AlwaysShowLastCache, bool, false);
+
+    constexpr RangeConstrainedVariableParams<float> kCacheDuration{.min = 0.1f, .max = 60.0f, .def = 0.1f};
+    CONFIG_VARIABLE_RANGE(CacheDuration, kCacheDuration);
 }

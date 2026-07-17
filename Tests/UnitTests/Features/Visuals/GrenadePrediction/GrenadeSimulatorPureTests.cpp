@@ -63,27 +63,18 @@ TEST(GrenadeSimulatorPureTest, ClipsOnlyVelocityMovingIntoSurface)
     EXPECT_EQ(Simulator::clipVelocity({10.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, 2.0f).x, 10.0f);
 }
 
-TEST(GrenadeSimulatorPureTest, FrictionDampsOnlyTheTangentialBounceComponent)
+TEST(GrenadeSimulatorPureTest, DetonatesAfterPaddedClientTracerHorizonBoundaries)
 {
     GrenadeSimulatorTestHookContext context;
     Simulator simulator{context};
-    context.trace.push(TraceResult{0.5f, {}, {0.0f, 0.0f, 1.0f}});
-    context.trace.clearAfterScript();
-    cs2::Vector position{};
-    cs2::Vector velocity{100.0f, 0.0f, -64.0f};
-    GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::step(simulator, position, velocity, cs2::GrenadeKind::HEGrenade, nullptr, 0.2f);
-    EXPECT_NEAR(velocity.x, 36.0f, 0.001f);
-    EXPECT_NEAR(velocity.z, 31.0640625f, 0.001f);
-}
-
-TEST(GrenadeSimulatorPureTest, DetonatesStrictlyAfterFuseBoundary)
-{
-    GrenadeSimulatorTestHookContext context;
-    Simulator simulator{context};
-    EXPECT_FALSE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::HEGrenade, 96));
-    EXPECT_TRUE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::HEGrenade, 97));
-    EXPECT_FALSE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::Molotov, 128));
-    EXPECT_TRUE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::Molotov, 129));
+    EXPECT_FALSE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::HEGrenade, 103));
+    EXPECT_TRUE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::HEGrenade, 104));
+    EXPECT_FALSE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::Flashbang, 103));
+    EXPECT_TRUE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::Flashbang, 104));
+    EXPECT_FALSE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::Molotov, 135));
+    EXPECT_TRUE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::Molotov, 136));
+    EXPECT_FALSE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::Incendiary, 135));
+    EXPECT_TRUE(GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::shouldDetonate(simulator, cs2::GrenadeKind::Incendiary, 136));
 }
 
 }

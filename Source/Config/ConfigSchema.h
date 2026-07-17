@@ -170,7 +170,8 @@ private:
         configConversion.boolean(u8"Enabled", loadVariable<grenade_prediction_vars::Enabled>(), saveVariable<grenade_prediction_vars::Enabled>());
         configConversion.uint(u8"TrajectoryHue", loadVariable<grenade_prediction_vars::TrajectoryHue>(), saveVariable<grenade_prediction_vars::TrajectoryHue>());
         configConversion.uint(u8"BounceHue", loadVariable<grenade_prediction_vars::BounceHue>(), saveVariable<grenade_prediction_vars::BounceHue>());
-        configConversion.uint(u8"BounceFriction", loadVariable<grenade_prediction_vars::BounceFriction>(), saveVariable<grenade_prediction_vars::BounceFriction>());
+        configConversion.boolean(u8"AlwaysShowLastCache", loadVariable<grenade_prediction_vars::AlwaysShowLastCache>(), saveVariable<grenade_prediction_vars::AlwaysShowLastCache>());
+        configConversion.floatValue(u8"CacheDuration", loadVariable<grenade_prediction_vars::CacheDuration>(), saveVariable<grenade_prediction_vars::CacheDuration>());
         configConversion.endObject();
 
         configConversion.endObject();
@@ -229,6 +230,11 @@ private:
                     hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(typename ConfigVariable::ValueType{std::clamp(hue, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax)});
                 } else if constexpr (std::is_same_v<std::uint8_t, typename ConfigVariable::ValueType::ValueType>) {
                     hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(typename ConfigVariable::ValueType{std::clamp(saturateCast<std::uint8_t>(value), ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax)});
+                } else if constexpr (std::is_same_v<float, typename ConfigVariable::ValueType::ValueType>) {
+                    if constexpr (std::is_same_v<ConfigVariable, grenade_prediction_vars::CacheDuration>)
+                        hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(typename ConfigVariable::ValueType{grenade_prediction_vars::normalizeCacheDuration(value)});
+                    else
+                        hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(typename ConfigVariable::ValueType{std::clamp(value, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax)});
                 } else {
                     static_assert(!std::is_same_v<ConfigVariable, ConfigVariable>, "Unsupported type");
                 }

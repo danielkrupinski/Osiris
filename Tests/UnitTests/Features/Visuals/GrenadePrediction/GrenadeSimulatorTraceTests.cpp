@@ -100,29 +100,22 @@ TEST_F(GrenadeSimulatorTraceTest, CapsCornerResolutionAtFourPostBouncePasses)
     EXPECT_EQ(context.trace.calls, 5);
 }
 
-TEST_F(GrenadeSimulatorTraceTest, SecondaryContactsUseFrictionAndCanDetonateMolotov)
+TEST_F(GrenadeSimulatorTraceTest, SecondaryContactsApplyResponseAndCanDetonateMolotov)
 {
     context.trace.push(TraceResult{0.5f, {}, {-1.0f, 0.0f, 0.0f}});
     context.trace.push(TraceResult{0.5f, {}, {0.0f, 0.0f, 1.0f}});
     context.trace.clearAfterScript();
     cs2::Vector position{};
     cs2::Vector velocity{1000.0f, 0.0f, -64.0f};
-    const auto result = GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::step(simulator, position, velocity, cs2::GrenadeKind::HEGrenade, nullptr, 0.2f);
+    const auto result = GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::step(simulator, position, velocity, cs2::GrenadeKind::HEGrenade);
     EXPECT_EQ(result.contactsCount, 2);
     EXPECT_GT(velocity.squareLength(), 0.0f);
 
     context.trace.calls = context.trace.resultCount = 0;
     context.trace.push(TraceResult{0.5f, {}, {-1.0f, 0.0f, 0.0f}});
     context.trace.push(TraceResult{0.5f, {}, {0.0f, 0.0f, 1.0f}});
-    cs2::Vector velocityWithoutFriction{1000.0f, 0.0f, -64.0f};
-    GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::step(simulator, position, velocityWithoutFriction, cs2::GrenadeKind::HEGrenade);
-    EXPECT_LT(Math::abs(velocity.x), Math::abs(velocityWithoutFriction.x));
-
-    context.trace.calls = context.trace.resultCount = 0;
-    context.trace.push(TraceResult{0.5f, {}, {-1.0f, 0.0f, 0.0f}});
-    context.trace.push(TraceResult{0.5f, {}, {0.0f, 0.0f, 1.0f}});
     cs2::Vector molotovVelocity{1000.0f, 0.0f, -64.0f};
-    const auto molotov = GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::step(simulator, position, molotovVelocity, cs2::GrenadeKind::Molotov, nullptr, 0.2f);
+    const auto molotov = GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::step(simulator, position, molotovVelocity, cs2::GrenadeKind::Molotov);
     EXPECT_EQ(molotov.contactsCount, 2);
     EXPECT_TRUE(molotov.impactDetonate);
     EXPECT_EQ(molotovVelocity.squareLength(), 0.0f);

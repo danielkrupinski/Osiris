@@ -16,6 +16,7 @@
 #include "Tabs/VisualsTab/PlayerOutlineGlowColorModeDropdownSelectionChangeHandler.h"
 #include "Tabs/VisualsTab/PlayerOutlineGlowColorModeDropdownSelectionChangeHandler.h"
 #include "Tabs/VisualsTab/PlayerOutlineGlowDropdownSelectionChangeHandler.h"
+#include "Tabs/VisualsTab/FloatSlider.h"
 #include <Features/Visuals/GrenadePrediction/GrenadePredictionConfigVariables.h>
 
 template <typename HookContext>
@@ -135,6 +136,7 @@ private:
     void initGrenadePredictionTab(auto&& guiPanel) const
     {
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, grenade_prediction_vars::Enabled>>(guiPanel, "grenade_prediction_enable");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, grenade_prediction_vars::AlwaysShowLastCache>>(guiPanel, "grenade_prediction_always_show_last_cache");
         registerHueSliderUpdateHandler<grenade_prediction_vars::TrajectoryHue, "grenade_prediction_trajectory_hue">(guiPanel);
         registerHueSliderUpdateHandler<grenade_prediction_vars::BounceHue, "grenade_prediction_bounce_hue">(guiPanel);
     }
@@ -243,8 +245,10 @@ private:
     void updateGrenadePredictionTab(auto&& mainMenu) const noexcept
     {
         setDropDownSelectedIndex(mainMenu, "grenade_prediction_enable", !GET_CONFIG_VAR(grenade_prediction_vars::Enabled));
+        setDropDownSelectedIndex(mainMenu, "grenade_prediction_always_show_last_cache", !GET_CONFIG_VAR(grenade_prediction_vars::AlwaysShowLastCache));
         updateHueSlider<grenade_prediction_vars::TrajectoryHue>(mainMenu, "grenade_prediction_trajectory_hue");
         updateHueSlider<grenade_prediction_vars::BounceHue>(mainMenu, "grenade_prediction_bounce_hue");
+        updateFloatSlider(mainMenu, "grenade_prediction_cache_duration", GET_CONFIG_VAR(grenade_prediction_vars::CacheDuration));
     }
 
     template <typename ConfigVariable>
@@ -256,6 +260,13 @@ private:
     void updateSlider(auto&& mainMenu, const char* sliderId, std::uint8_t value) const noexcept
     {
         auto&& slider = hookContext.template make<IntSlider>(mainMenu.findChildInLayoutFile(sliderId));
+        slider.updateSlider(value);
+        slider.updateTextEntry(value);
+    }
+
+    void updateFloatSlider(auto&& mainMenu, const char* sliderId, float value) const noexcept
+    {
+        auto&& slider = hookContext.template make<FloatSlider>(mainMenu.findChildInLayoutFile(sliderId));
         slider.updateSlider(value);
         slider.updateTextEntry(value);
     }

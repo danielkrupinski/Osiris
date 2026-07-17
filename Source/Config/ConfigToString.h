@@ -66,6 +66,11 @@ public:
         writeUint(key, valueGetter());
     }
 
+    void floatValue(const char8_t* key, auto&& /* valueSetter */, auto&& valueGetter) noexcept
+    {
+        writeFloat(key, valueGetter());
+    }
+
 private:
     void writeBool(const char8_t* key, bool value) noexcept
     {
@@ -84,6 +89,18 @@ private:
         if (shouldWriteMe()) {
             const auto previousWriteIndex = writeIndex;
             if (writeCommaAfterPreviousElement() && writeKey(key) && writeUint(value))
+                increaseConversionIndexInNestingLevel();
+            else
+                writeIndex = previousWriteIndex;
+        }
+        increaseIndexInNestingLevel();
+    }
+
+    void writeFloat(const char8_t* key, float value) noexcept
+    {
+        if (shouldWriteMe()) {
+            const auto previousWriteIndex = writeIndex;
+            if (writeCommaAfterPreviousElement() && writeKey(key) && writeFloat(value))
                 increaseConversionIndexInNestingLevel();
             else
                 writeIndex = previousWriteIndex;
@@ -165,6 +182,14 @@ private:
 
         std::reverse(buffer.data() + beginIndex, buffer.data() + writeIndex);
         return true;
+    }
+
+    [[nodiscard]] bool writeFloat(float value) noexcept
+    {
+        if (value < 0.0f)
+            return false;
+        const auto tenths = static_cast<std::uint64_t>(value * 10.0f + 0.5f);
+        return writeUint(tenths / 10) && writeChar(u8'.') && writeChar(u8"0123456789"[tenths % 10]);
     }
 
     [[nodiscard]] bool writeBool(bool value) noexcept
