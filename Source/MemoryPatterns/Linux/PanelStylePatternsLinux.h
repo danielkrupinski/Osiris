@@ -19,6 +19,6 @@ struct PanelStylePatterns {
 
     [[nodiscard]] cs2::CPanelStyle::StylePropertySymbols* stylePropertiesSymbols() const noexcept
     {
-        return patternFinders.panoramaPatternFinder("DE 48 C7 05 ? ? ? ? 00 00 00 00 48 8D"_pat).add(4).abs(8).template as<cs2::CPanelStyle::StylePropertySymbols*>();
+        return patternFinders.panoramaPatternFinder("4C 8D 3D ? ? ? ? 44 0F"_pat).add(3).abs().template as<cs2::CPanelStyle::StylePropertySymbols*>();
     }
 };

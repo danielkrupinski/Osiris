@@ -32,8 +32,9 @@ public:
 
     [[nodiscard]] auto attributes() const noexcept
     {
-        hookContext.template make<SceneSystem>().allocateAttributeList(sceneObject);
-        return hookContext.template make<SceneObjectAttributes>(hookContext.patternSearchResults().template get<OffsetToSceneObjectAttributes>().of(sceneObject).valueOr(nullptr));
+        if (!attributesPointer())
+            hookContext.template make<SceneSystem>().allocateAttributeList(sceneObject);
+        return hookContext.template make<SceneObjectAttributes>(attributesPointer());
     }
 
     [[nodiscard]] auto isCulledByFirstPersonView() const noexcept
@@ -51,6 +52,11 @@ private:
     [[nodiscard]] auto renderableFlags() const noexcept
     {
         return hookContext.patternSearchResults().template get<OffsetToSceneObjectRenderableFlags>().of(sceneObject).toOptional();
+    }
+
+    [[nodiscard]] auto attributesPointer() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToSceneObjectAttributes>().of(sceneObject).valueOr(nullptr);
     }
 
     HookContext& hookContext;

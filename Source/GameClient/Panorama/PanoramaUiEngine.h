@@ -38,7 +38,7 @@ public:
     [[nodiscard]] cs2::CPanoramaSymbol makeSymbol(int type, const char* text) noexcept
     {
         if (hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>() && thisptr())
-            return hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>()(*thisptr(), type, text);
+            return hookContext.patternSearchResults().template get<MakeSymbolFunctionPointer>()(WIN64_ONLY(*thisptr(),) type, text);
         return -1;
     }
 
