@@ -66,10 +66,10 @@ namespace grenade_prediction_params
     constexpr float kDetonateTimeSmokeCap = 18.0f;
 
     // --- Panel visual sizes (pixels) ---
-    constexpr float kDotPanelCreationSize = 4.0f;
-    constexpr float kTrajectoryDotSize = 3.0f;
+    constexpr float kTrajectoryLineThickness = 2.0f;
     constexpr float kBounceDotSize = 8.0f;
     constexpr float kEndMarkerSize = 10.0f;
+    constexpr float kUpdateInterval = 1.0f / 90.0f;
 
     // End-position marker (orange) hue
     constexpr auto kEndMarkerHue = color::Hue{30.0f / 360.0f};
