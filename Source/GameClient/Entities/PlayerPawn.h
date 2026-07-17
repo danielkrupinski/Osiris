@@ -16,6 +16,7 @@
 #include "BaseEntity.h"
 #include "C4.h"
 #include "HostageServices.h"
+#include <GameClient/Entities/PlayerMovementServices.h>
 #include "WeaponServices.h"
 
 class EntityFromHandleFinder;
@@ -60,6 +61,11 @@ public:
     [[nodiscard]] decltype(auto) weapons() const noexcept
     {
         return weaponServices().weapons();
+    }
+
+    [[nodiscard]] decltype(auto) movementServices() const noexcept
+    {
+        return hookContext.template make<PlayerMovementServices>(playerPawn);
     }
 
     [[nodiscard]] TeamNumber teamNumber() const noexcept
