@@ -11,6 +11,10 @@ namespace grenade_prediction_params
     // current client/server binary parity.
 
     constexpr float kSimDt = 1.0f / 64.0f;
+    // kSimDt remains the outer lifecycle tick. Movement/contact integration is
+    // performed twice within each outer tick to improve collision timing.
+    constexpr int   kMovementSubsteps = 2;
+    constexpr float kMovementSubstepDt = 1.0f / 128.0f;
     constexpr float kSvGravity = 800.0f;
     // Regression stop-speed value: speed² < 400.0 (speed < 20 u/s).
     constexpr float kStopSpeedSq = 400.0f;
@@ -27,8 +31,7 @@ namespace grenade_prediction_params
     constexpr float kStopDisplacementSq = 1.42e-14f; // FLT_EPSILON squared
 
     constexpr int   kMaxBounces = 20;
-    constexpr int   kMaxCollisionPasses = 4;
-    constexpr float kRemainingFractionEpsilon = 0.001f;
+    constexpr float kOptionalContinuationFractionThreshold = 0.5f;
 
     // --- Per-grenade physics ---
     struct GrenadePhysics {

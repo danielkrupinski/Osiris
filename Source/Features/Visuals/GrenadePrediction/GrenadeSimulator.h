@@ -15,7 +15,7 @@ struct StepResult {
     bool hit = false;            // collision occurred
     cs2::Vector hitPos{};        // first exact surface contact point
     int contactsCount{};
-    cs2::Vector contacts[grenade_prediction_params::kMaxCollisionPasses + 1]{};
+    cs2::Vector contacts[grenade_prediction_params::kMovementSubsteps]{};
                                  // NOTE: pos is advanced past this by remaining-fraction
                                  // motion inside resolveCollision, so hitPos != pos after step.
 };
@@ -184,6 +184,13 @@ public:
         };
     }
 
+    // IDA's separate helper for optional continuation displacement.
+    static cs2::Vector serverPushOff(cs2::Vector point, cs2::Vector normal, float scale) noexcept
+    {
+        float pushOff = (std::max)(-point.dot(normal) * scale, 0.0f) + grenade_prediction_params::kClipPushOff;
+        return point + normal * pushOff;
+    }
+
     static cs2::Vector forwardFromAngles(float pitch, float yaw) noexcept
     {
         float p = pitch * 3.14159265f / 180.0f;
@@ -218,6 +225,25 @@ private:
     {
         using namespace grenade_prediction_params;
 
+        StepResult result;
+        for (int substep = 0; substep < kMovementSubsteps; ++substep) {
+            const auto substepResult = movementSubstep(pos, vel, kind, skipEntity, result);
+            if (!substepResult.traceSucceeded) {
+                result.traceSucceeded = false;
+                return result;
+            }
+            if (substepResult.impactDetonate) {
+                result.impactDetonate = true;
+                return result;
+            }
+        }
+        return result;
+    }
+
+    CollisionResult movementSubstep(cs2::Vector& pos, cs2::Vector& vel, cs2::GrenadeKind kind, void* skipEntity, StepResult& result) noexcept
+    {
+        using namespace grenade_prediction_params;
+
         // Apply gravity using Velocity Verlet (half-step) integration.
         // Reference doc (Section 3) specifies:
         //   v_z(t+1) = v_z(t) + a_z * dt
@@ -227,8 +253,8 @@ private:
         auto physics = getGrenadePhysics(kind);
         float gravity = kSvGravity * physics.gravityScale;
         float oldVelZ = vel.z;
-        vel.z -= gravity * kSimDt;
-        cs2::Vector moveVec{vel.x * kSimDt, vel.y * kSimDt, (oldVelZ + vel.z) * 0.5f * kSimDt};
+        vel.z -= gravity * kMovementSubstepDt;
+        cs2::Vector moveVec{vel.x * kMovementSubstepDt, vel.y * kMovementSubstepDt, (oldVelZ + vel.z) * 0.5f * kMovementSubstepDt};
 
         cs2::Vector endPos = pos + moveVec;
 
@@ -244,14 +270,11 @@ private:
 
         cs2::Vector exactHitPos = traceResult.value().endPos;
         pos = exactHitPos;
-        StepResult result;
         result.hit = true;
-        result.hitPos = exactHitPos;
-        result.contacts[result.contactsCount++] = exactHitPos;
-        const auto collisionResult = resolveCollision(traceResult.value(), pos, vel, kind, skipEntity, result);
-        result.traceSucceeded = collisionResult.traceSucceeded;
-        result.impactDetonate = collisionResult.impactDetonate;
-        return result;
+        if (result.contactsCount == 0)
+            result.hitPos = exactHitPos;
+        appendContact(result, exactHitPos);
+        return resolvePrimaryContinuation(traceResult.value(), pos, vel, kind, skipEntity);
     }
 
     CollisionResult applyContactResponse(const TraceResult& trace, cs2::Vector& vel, cs2::GrenadeKind kind) noexcept
@@ -284,34 +307,44 @@ private:
         return {};
     }
 
-    CollisionResult resolveCollision(const TraceResult& trace, cs2::Vector& pos, cs2::Vector& vel, cs2::GrenadeKind kind, void* skipEntity, StepResult& result) noexcept
+    static void appendContact(StepResult& result, cs2::Vector contact) noexcept
+    {
+        constexpr int kContactsCapacity = grenade_prediction_params::kMovementSubsteps;
+        if (result.contactsCount < kContactsCapacity)
+            result.contacts[result.contactsCount++] = contact;
+    }
+
+    CollisionResult resolvePrimaryContinuation(const TraceResult& primary, cs2::Vector& pos, cs2::Vector& vel, cs2::GrenadeKind kind, void* skipEntity) noexcept
     {
         using namespace grenade_prediction_params;
 
-        auto collisionResult = applyContactResponse(trace, vel, kind);
+        auto collisionResult = applyContactResponse(primary, vel, kind);
         if (collisionResult.impactDetonate || collisionResult.stopped)
             return collisionResult;
 
-        // Bound same-tick corner contacts while applying the primary response to each.
-        float remaining = 1.0f - trace.fraction;
-        for (int pass = 0; pass < kMaxCollisionPasses && remaining > kRemainingFractionEpsilon; ++pass) {
-            cs2::Vector postEnd = pos + (vel * (remaining * kSimDt));
-            auto post = traceGrenadeHull(pos, postEnd, skipEntity);
+        // Verified explicit server callback topology. Lower trace-provider callback re-entry
+        // remains unknown and is deliberately not modeled by this explicit layer.
+        cs2::Vector mandatoryMove = vel * ((1.0f - primary.fraction) * kMovementSubstepDt);
+        const auto mandatory = traceGrenadeHull(pos, pos + mandatoryMove, skipEntity);
+        if (!mandatory.hasValue())
+            return {.traceSucceeded = false};
 
-            if (!post.hasValue())
+        if (mandatory.value().fraction >= 1.0f)
+            pos = pos + mandatoryMove;
+        else
+            pos = mandatory.value().endPos;
+
+        if (mandatory.value().fraction < kOptionalContinuationFractionThreshold) {
+            cs2::Vector secondInput = mandatoryMove * (1.0f - mandatory.value().fraction);
+            cs2::Vector secondMove = serverPushOff(secondInput, mandatory.value().normal, 2.0f);
+            const auto optional = traceGrenadeHull(pos, pos + secondMove, skipEntity);
+            if (!optional.hasValue())
                 return {.traceSucceeded = false};
 
-            if (post.value().fraction >= 1.0f) {
-                pos = postEnd;
-                break;
-            }
-
-            pos = post.value().endPos;
-            remaining *= (1.0f - post.value().fraction);
-            result.contacts[result.contactsCount++] = pos;
-            collisionResult = applyContactResponse(post.value(), vel, kind);
-            if (collisionResult.impactDetonate || collisionResult.stopped)
-                return collisionResult;
+            if (optional.value().fraction >= 1.0f)
+                pos = pos + secondMove;
+            else
+                pos = optional.value().endPos;
         }
 
         return {};

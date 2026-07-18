@@ -22,7 +22,16 @@ TEST_F(GrenadeSimulatorRegressionTest, FreeFlightHeAndFlashUsePaddedTracerHorizo
         context.trace.clearAfterScript();
         simulator.simulate(trajectory, {}, {100.0f, 0.0f, 0.0f}, kind, nullptr);
         ASSERT_TRUE(trajectory.valid);
-        EXPECT_EQ(context.trace.calls, 105);
+        EXPECT_EQ(context.trace.calls, 210);
+        // The outer loop stores tick zero and then every two 1/64-second outer ticks.
+        // Tick 104 is the final cadence point; the post-step endpoint is appended separately.
+        ASSERT_EQ(trajectory.pointsCount, 54);
+        EXPECT_NEAR(trajectory.points[0].x, 0.0f, 0.001f);
+        EXPECT_NEAR(trajectory.points[1].x, 3.125f, 0.001f);
+        EXPECT_NEAR(trajectory.points[1].z, -0.15625f, 0.001f);
+        EXPECT_NEAR(trajectory.points[52].x, 162.5f, 0.001f);
+        EXPECT_NEAR(trajectory.points[53].x, 164.0625f, 0.001f);
+        EXPECT_NEAR(trajectory.points[53].z, -430.6640625f, 0.001f);
         EXPECT_NEAR(trajectory.endPos.x, 164.0625f, 0.001f);
         EXPECT_NEAR(trajectory.endPos.z, -430.6640625f, 0.001f);
     }
@@ -35,7 +44,7 @@ TEST_F(GrenadeSimulatorRegressionTest, FuseAndMidairTimeoutKinematics)
     simulator.simulate(trajectory, {}, {}, cs2::GrenadeKind::Molotov, nullptr);
     EXPECT_TRUE(trajectory.valid);
     EXPECT_FALSE(trajectory.validLanding);
-    EXPECT_EQ(context.trace.calls, 137);
+    EXPECT_EQ(context.trace.calls, 274);
     // -0.5 * (800 * .4) * (137 / 64)² = -733.1640625.
     EXPECT_NEAR(trajectory.endPos.z, -733.1640625f, 0.001f);
 }
@@ -50,7 +59,7 @@ TEST_F(GrenadeSimulatorRegressionTest, FloorBounceAppliesReflectionAndElasticity
     const auto result = GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::step(simulator, position, velocity, cs2::GrenadeKind::HEGrenade);
     ASSERT_TRUE(result.hit);
     EXPECT_NEAR(velocity.x, 45.0f, 0.001f);
-    EXPECT_NEAR(velocity.z, 31.0640625f, 0.001f);
+    EXPECT_NEAR(velocity.z, 27.4390625f, 0.001f);
 }
 
 TEST_F(GrenadeSimulatorRegressionTest, WallBounceAppliesReflectionEquation)
@@ -63,7 +72,7 @@ TEST_F(GrenadeSimulatorRegressionTest, WallBounceAppliesReflectionEquation)
     const auto result = GrenadeSimulatorTestAccess<GrenadeSimulatorTestHookContext>::step(simulator, position, velocity, cs2::GrenadeKind::HEGrenade);
     ASSERT_TRUE(result.hit);
     EXPECT_NEAR(velocity.x, -28.8140625f, 0.001f);
-    EXPECT_NEAR(velocity.z, -2.25f, 0.001f);
+    EXPECT_NEAR(velocity.z, -3.625f, 0.001f);
 }
 
 }
