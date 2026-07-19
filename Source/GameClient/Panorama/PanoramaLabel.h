@@ -29,7 +29,7 @@ struct PanoramaLabel {
     void setTextInternal(const char* value, int textType, bool trustedSource) const noexcept
     {
         if (panel && setTextInternalFunction())
-            setTextInternalFunction()(panel, value, textType, trustedSource);
+            setTextInternalFunction()(panel, value, textType, trustedSource, false);
     }
 
 private:

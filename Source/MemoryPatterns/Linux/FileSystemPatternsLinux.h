@@ -7,7 +7,7 @@ struct FileSystemPatterns {
     [[nodiscard]] static consteval auto addSoundSystemPatterns(auto soundSystemPatterns) noexcept
     {
         return soundSystemPatterns
-            .template addPattern<FileSystemPointer, CodePattern{"3D ? ? ? ? 48 8B 07 31"}.add(1).abs()>();
+            .template addPattern<FileSystemPointer, CodePattern{"4C 8D 3D ? ? ? ? 49 8B ? 48 85 FF"}.add(3).abs()>();
     }
 
     [[nodiscard]] static consteval auto addFileSystemPatterns(auto fileSystemPatterns) noexcept

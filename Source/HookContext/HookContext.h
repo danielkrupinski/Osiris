@@ -267,9 +267,9 @@ struct HookContext {
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {
-        const auto* const plantedC4s = fullGlobalContext.patternSearchResults.template get<PlantedC4sPointer>();
-        if (plantedC4s && plantedC4s->size > 0)
-            return plantedC4s->memory[0];
+        const auto* const plantedC4 = fullGlobalContext.patternSearchResults.template get<PlantedC4sPointer>();
+        if (plantedC4)
+            return *plantedC4;
         return nullptr;
     }
 
