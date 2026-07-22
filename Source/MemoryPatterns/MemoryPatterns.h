@@ -32,6 +32,7 @@ constexpr auto kClientPatterns = []() consteval {
         .ADD_PATTERNS(BaseModelEntityPatterns)
         .ADD_PATTERNS(C4Patterns)
         .ADD_PATTERNS(ClientPatterns)
+        .ADD_PATTERNS(CSGOInputPatterns)
         .ADD_PATTERNS(CvarPatterns)
         .ADD_PATTERNS(EntityPatterns)
         .ADD_PATTERNS(EntitySystemPatterns)
