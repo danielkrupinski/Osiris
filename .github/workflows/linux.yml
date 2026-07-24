@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-24.04]
-        compiler: [g++-11, g++-13, g++-14, g++-15, g++-16, clang++-18, clang++-19, clang++-20, clang++-21, clang++-22]
+        compiler: [g++-13, g++-14, g++-15, g++-16, clang++-18, clang++-19, clang++-20, clang++-21, clang++-22]
         configuration: [Debug, Release]
         exclude:
           - os: ubuntu-22.04
@@ -29,8 +29,6 @@ jobs:
             compiler: clang++-21
           - os: ubuntu-22.04
             compiler: clang++-22
-          - os: ubuntu-24.04
-            compiler: g++-11
         include:
           - os: ubuntu-24.04
             compiler: g++-15
