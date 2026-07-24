@@ -9,4 +9,4 @@ struct RangeConstrainedVariableParams {
     T min, max, def;
 };
 
-using HueVariableParams = RangeConstrainedVariableParams<color::HueInteger::UnderlyingType>;
+using HueVariableParams = RangeConstrainedVariableParams<color::HueInteger>;
