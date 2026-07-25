@@ -7,18 +7,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-24.04]
+        os: [ubuntu-26.04]
         compiler: [g++-14, g++-15, g++-16, clang++-18, clang++-19, clang++-20, clang++-21, clang++-22]
         configuration: [Debug, Release]
         include:
           - os: ubuntu-24.04
-            compiler: g++-15
-            container: ubuntu:25.04
+            compiler: clang++-18
+            configuration: Debug
           - os: ubuntu-24.04
-            compiler: g++-16
-            container: ubuntu:26.04
-
-    container: ${{ matrix.container }}
+            compiler: clang++-18
+            configuration: Release
 
     steps:
     - uses: actions/checkout@v6
@@ -28,29 +26,11 @@ jobs:
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh 19
-    - name: prepare clang++-20
-      if: matrix.compiler == 'clang++-20'
-      run: |
-        wget https://apt.llvm.org/llvm.sh
-        chmod +x llvm.sh
-        sudo ./llvm.sh 20
-    - name: prepare clang++-21
-      if: matrix.compiler == 'clang++-21'
-      run: |
-        wget https://apt.llvm.org/llvm.sh
-        chmod +x llvm.sh
-        sudo ./llvm.sh 21
-    - name: prepare clang++-22
-      if: matrix.compiler == 'clang++-22'
-      run: |
-        wget https://apt.llvm.org/llvm.sh
-        chmod +x llvm.sh
-        sudo ./llvm.sh 22
-    - name: prepare in docker
-      if: matrix.container
+    - name: prepare g++-16
+      if: matrix.compiler == 'g++-16'
       run: |
         apt update
-        apt install -y cmake git ${{ matrix.compiler }}
+        apt install -y g++-16
     - name: configure
       run: CXX=${{ matrix.compiler }} cmake -Werror=dev -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DENABLE_TESTS="unit;functional" -DCMAKE_COMPILE_WARNING_AS_ERROR=1 -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=4 -B build
     - name: build source
