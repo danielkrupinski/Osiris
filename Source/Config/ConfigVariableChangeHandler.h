@@ -26,18 +26,6 @@ public:
     {
     }
 
-    template <typename ConfigVariable>
-    void onConfigVariableValueChanged(ConfigVariable::ValueType newValue) const noexcept
-    {
-        onConfigVariableValueChanged(newValue, std::type_identity<ConfigVariable>{});
-    }
-
-private:
-    template <typename ConfigVariable>
-    void onConfigVariableValueChanged(ConfigVariable::ValueType /* newValue */, std::type_identity<ConfigVariable>) const noexcept
-    {
-    }
-
     #define ON_CHANGE(ConfigVariable) \
     void onConfigVariableValueChanged(ConfigVariable::ValueType newValue, std::type_identity<ConfigVariable>) const noexcept
 
@@ -217,6 +205,7 @@ private:
 
     #undef ON_CHANGE
 
+private:
     [[nodiscard]] auto& modelGlowDeactivationFlags() const
     {
         return hookContext.featuresStates().visualFeaturesStates.modelGlowState.deactivationFlags;

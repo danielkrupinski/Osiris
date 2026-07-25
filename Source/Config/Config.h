@@ -56,7 +56,12 @@ public:
     template <typename ConfigVariable>
     void setVariableWithoutAutoSave(ConfigVariable::ValueType newValue) noexcept
     {
-        changeVariableValue<ConfigVariable>(newValue);
+        if constexpr (hasChangeHandler<ConfigVariable>()) {
+            if (getVariable<ConfigVariable>() != newValue)
+                invokeChangeHandler<ConfigVariable>(newValue);
+        }
+
+        state().configVariables.template storeVariableValue<ConfigVariable>(newValue);
     }
 
     void restoreDefaults() noexcept
@@ -114,12 +119,26 @@ public:
 
 private:
     template <typename ConfigVariable>
+    void invokeChangeHandler(ConfigVariable::ValueType newValue)
+    {
+        ConfigVariableChangeHandler{hookContext}.onConfigVariableValueChanged(newValue, std::type_identity<ConfigVariable>{});
+    }
+
+    template <typename ConfigVariable>
+    [[nodiscard]] static constexpr bool hasChangeHandler() noexcept
+    {
+        return requires {{ ConfigVariableChangeHandler{hookContext}.onConfigVariableValueChanged(ConfigVariable::kDefaultValue, std::type_identity<ConfigVariable>{}) }; };
+    }
+
+    template <typename ConfigVariable>
     bool changeVariableValue(ConfigVariable::ValueType newValue) noexcept
     {
         if (getVariable<ConfigVariable>() == newValue)
             return false;
 
-        ConfigVariableChangeHandler{hookContext}.template onConfigVariableValueChanged<ConfigVariable>(newValue);
+        if constexpr (hasChangeHandler<ConfigVariable>())
+            invokeChangeHandler<ConfigVariable>(newValue);
+
         state().configVariables.template storeVariableValue<ConfigVariable>(newValue);
         return true;
     }
