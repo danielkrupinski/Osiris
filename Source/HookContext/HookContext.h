@@ -64,9 +64,9 @@ struct HookContext {
         return fullGlobalContext.inWorldPanelsState;
     }
 
-    [[nodiscard]] InWorldPanelsPerHookState& inWorldPanelsPerHookState() noexcept
+    [[nodiscard]] InWorldPanelsPerHookState& inWorldPanelsPerHookState() const noexcept
     {
-        return _inWorldPanelsPerHookState;
+        return fullGlobalContext.inWorldPanelsPerHookState;
     }
 
     [[nodiscard]] PlayerInfoPanelCacheState& playerInfoPanelCacheState() const noexcept
@@ -74,9 +74,15 @@ struct HookContext {
         return fullGlobalContext.playerInfoPanelCacheState;
     }
 
-    [[nodiscard]] PlayerInfoPanelCachePerHookState& playerInfoPanelCachePerHookState() noexcept
+    [[nodiscard]] PlayerInfoPanelCachePerHookState& playerInfoPanelCachePerHookState() const noexcept
     {
-        return _playerInfoPanelCachePerHookState;
+        return fullGlobalContext.playerInfoPanelCachePerHookState;
+    }
+
+    void clearRenderHookState() const noexcept
+    {
+        inWorldPanelsPerHookState() = {};
+        playerInfoPanelCachePerHookState() = {};
     }
 
     [[nodiscard]] PanoramaGuiState& panoramaGuiState() const noexcept
@@ -274,6 +280,4 @@ private:
     }
 
     GlobalContext::Complete& fullGlobalContext;
-    InWorldPanelsPerHookState _inWorldPanelsPerHookState;
-    PlayerInfoPanelCachePerHookState _playerInfoPanelCachePerHookState;
 };

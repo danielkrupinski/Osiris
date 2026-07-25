@@ -66,6 +66,7 @@ int SDLHook_PeepEvents(void* events, int numevents, int action, unsigned minType
 void ViewRenderHook_onRenderStart(cs2::CViewRender* thisptr) noexcept
 {
     HookContext<GlobalContext> hookContext;
+    hookContext.clearRenderHookState();
     hookContext.hooks().viewRenderHook.getOriginalOnRenderStart()(thisptr);
     hookContext.make<InWorldPanels>().updateState();
     SoundWatcher<decltype(hookContext)> soundWatcher{hookContext.soundWatcherState(), hookContext};
