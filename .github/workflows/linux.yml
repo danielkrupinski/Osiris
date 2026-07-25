@@ -29,8 +29,8 @@ jobs:
     - name: prepare g++-16
       if: matrix.compiler == 'g++-16'
       run: |
-        apt update
-        apt install -y g++-16
+        sudo apt-get update
+        sudo apt-get install g++-16
     - name: configure
       run: CXX=${{ matrix.compiler }} cmake -Werror=dev -DCMAKE_BUILD_TYPE=${{ matrix.configuration }} -DENABLE_TESTS="unit;functional" -DCMAKE_COMPILE_WARNING_AS_ERROR=1 -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=4 -B build
     - name: build source
