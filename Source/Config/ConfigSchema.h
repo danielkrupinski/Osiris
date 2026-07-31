@@ -37,12 +37,40 @@ private:
         configConversion.boolean(u8"Enabled", loadVariable<triggerbot_vars::Enabled>(), saveVariable<triggerbot_vars::Enabled>());
         configConversion.boolean(u8"VisibilityCheck", loadVariable<triggerbot_vars::VisibilityCheck>(), saveVariable<triggerbot_vars::VisibilityCheck>());
         configConversion.boolean(u8"FlashImmunity", loadVariable<triggerbot_vars::FlashImmunity>(), saveVariable<triggerbot_vars::FlashImmunity>());
+        configConversion.uint(u8"FireCooldownMs", loadVariable<triggerbot_vars::FireCooldownMs>(), saveVariable<triggerbot_vars::FireCooldownMs>());
+        configConversion.uint(u8"PixelRadius", loadVariable<triggerbot_vars::PixelRadius>(), saveVariable<triggerbot_vars::PixelRadius>());
+        configConversion.boolean(u8"FirearmsOnly", loadVariable<triggerbot_vars::FirearmsOnly>(), saveVariable<triggerbot_vars::FirearmsOnly>());
         configConversion.endObject();
 
         configConversion.beginObject(u8"Aimbot");
         configConversion.boolean(u8"Enabled", loadVariable<aimbot_vars::Enabled>(), saveVariable<aimbot_vars::Enabled>());
         configConversion.boolean(u8"Smooth", loadVariable<aimbot_vars::Smooth>(), saveVariable<aimbot_vars::Smooth>());
         configConversion.uint(u8"FovRadius", loadVariable<aimbot_vars::FovRadius>(), saveVariable<aimbot_vars::FovRadius>());
+        configConversion.uint(u8"AimPoint", loadVariable<aimbot_vars::AimPoint>(), saveVariable<aimbot_vars::AimPoint>());
+        configConversion.boolean(u8"PredictVelocity", loadVariable<aimbot_vars::PredictVelocity>(), saveVariable<aimbot_vars::PredictVelocity>());
+        configConversion.boolean(u8"Humanization", loadVariable<aimbot_vars::Humanization>(), saveVariable<aimbot_vars::Humanization>());
+        configConversion.uint(u8"HotKey", loadVariable<aimbot_vars::HotKey>(), saveVariable<aimbot_vars::HotKey>());
+        configConversion.boolean(u8"SilentAim", loadVariable<aimbot_vars::SilentAim>(), saveVariable<aimbot_vars::SilentAim>());
+        configConversion.uint(u8"KillCooldown", loadVariable<aimbot_vars::KillCooldown>(), saveVariable<aimbot_vars::KillCooldown>());
+        configConversion.uint(u8"MissChance", loadVariable<aimbot_vars::MissChance>(), saveVariable<aimbot_vars::MissChance>());
+        configConversion.uint(u8"MovementPenalty", loadVariable<aimbot_vars::MovementPenalty>(), saveVariable<aimbot_vars::MovementPenalty>());
+        configConversion.uint(u8"LockBreakInterval", loadVariable<aimbot_vars::LockBreakInterval>(), saveVariable<aimbot_vars::LockBreakInterval>());
+        configConversion.uint(u8"LockMode", loadVariable<aimbot_vars::LockMode>(), saveVariable<aimbot_vars::LockMode>());
+        configConversion.boolean(u8"LockIndicator", loadVariable<aimbot_vars::LockIndicator>(), saveVariable<aimbot_vars::LockIndicator>());
+        configConversion.endObject();
+
+        configConversion.beginObject(u8"ThirdPerson");
+        configConversion.boolean(u8"Enabled", loadVariable<thirdperson_vars::Enabled>(), saveVariable<thirdperson_vars::Enabled>());
+        configConversion.endObject();
+
+        configConversion.beginObject(u8"BoneDumper");
+        configConversion.boolean(u8"Enabled", loadVariable<bone_dumper_vars::Enabled>(), saveVariable<bone_dumper_vars::Enabled>());
+        configConversion.endObject();
+
+        configConversion.beginObject(u8"BHop");
+        configConversion.boolean(u8"Enabled", loadVariable<bhop_vars::Enabled>(), saveVariable<bhop_vars::Enabled>());
+        configConversion.boolean(u8"AutoStrafe", loadVariable<bhop_vars::AutoStrafe>(), saveVariable<bhop_vars::AutoStrafe>());
+        configConversion.boolean(u8"Humanization", loadVariable<bhop_vars::Humanization>(), saveVariable<bhop_vars::Humanization>());
         configConversion.endObject();
 
         configConversion.endObject();
@@ -244,6 +272,8 @@ private:
                     hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(typename ConfigVariable::ValueType{std::clamp(hue, ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax)});
                 } else if constexpr (std::is_same_v<std::uint8_t, typename ConfigVariable::ValueType::ValueType>) {
                     hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(typename ConfigVariable::ValueType{std::clamp(saturateCast<std::uint8_t>(value), ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax)});
+                } else if constexpr (std::is_same_v<std::uint16_t, typename ConfigVariable::ValueType::ValueType>) {
+                    hookContext.config().template setVariableWithoutAutoSave<ConfigVariable>(typename ConfigVariable::ValueType{std::clamp(saturateCast<std::uint16_t>(value), ConfigVariable::ValueType::kMin, ConfigVariable::ValueType::kMax)});
                 } else {
                     static_assert(!std::is_same_v<ConfigVariable, ConfigVariable>, "Unsupported type");
                 }

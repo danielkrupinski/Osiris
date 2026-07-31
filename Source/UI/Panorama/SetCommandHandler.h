@@ -34,10 +34,30 @@ struct SetCommandHandler {
 private:
     void handleCombatSection() noexcept
     {
-        if (const auto feature = parser.getLine('/'); feature == "aimbot_radius") {
+        if (const auto feature = parser.getLine('/'); feature == "triggerbot_cooldown") {
+            handleIntSlider<triggerbot_vars::FireCooldownMs>("triggerbot_cooldown");
+        } else if (feature == "triggerbot_cooldown_text") {
+            handleIntSliderTextEntry<triggerbot_vars::FireCooldownMs>("triggerbot_cooldown");
+        } else if (feature == "triggerbot_radius") {
+            handleIntSlider<triggerbot_vars::PixelRadius>("triggerbot_radius");
+        } else if (feature == "triggerbot_radius_text") {
+            handleIntSliderTextEntry<triggerbot_vars::PixelRadius>("triggerbot_radius");
+        } else if (feature == "aimbot_radius") {
             handleIntSlider<aimbot_vars::FovRadius>("aimbot_radius");
         } else if (feature == "aimbot_radius_text") {
             handleIntSliderTextEntry<aimbot_vars::FovRadius>("aimbot_radius");
+        } else if (feature == "aimbot_cooldown") {
+            handleIntSlider<aimbot_vars::KillCooldown>("aimbot_cooldown");
+        } else if (feature == "aimbot_cooldown_text") {
+            handleIntSliderTextEntry<aimbot_vars::KillCooldown>("aimbot_cooldown");
+        } else if (feature == "aimbot_miss") {
+            handleIntSlider<aimbot_vars::MissChance>("aimbot_miss");
+        } else if (feature == "aimbot_miss_text") {
+            handleIntSliderTextEntry<aimbot_vars::MissChance>("aimbot_miss");
+        } else if (feature == "aimbot_lock_break") {
+            handleIntSlider<aimbot_vars::LockBreakInterval>("aimbot_lock_break");
+        } else if (feature == "aimbot_lock_break_text") {
+            handleIntSliderTextEntry<aimbot_vars::LockBreakInterval>("aimbot_lock_break");
         }
     }
 

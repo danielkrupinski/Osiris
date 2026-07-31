@@ -2,6 +2,9 @@
 
 #include <Config/LanguageConfigVariables.h>
 #include <Features/Combat/Aimbot/AimbotConfigVariables.h>
+#include <Features/Combat/BHop/BHopConfigVariables.h>
+#include <Features/Combat/ThirdPerson/ThirdPersonConfigVariables.h>
+#include <Features/Combat/BoneDumper/BoneDumperConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlertConfigVariables.h>
 #include <Features/Hud/BombTimer/BombTimerConfigVariables.h>
@@ -108,9 +111,28 @@ using ConfigVariableTypes = TypeList<
     triggerbot_vars::Enabled,
     triggerbot_vars::VisibilityCheck,
     triggerbot_vars::FlashImmunity,
+    triggerbot_vars::FireCooldownMs,
+    triggerbot_vars::PixelRadius,
+    triggerbot_vars::FirearmsOnly,
     aimbot_vars::Enabled,
     aimbot_vars::Smooth,
     aimbot_vars::FovRadius,
+    aimbot_vars::AimPoint,
+    aimbot_vars::PredictVelocity,
+    aimbot_vars::Humanization,
+    aimbot_vars::HotKey,
+    aimbot_vars::SilentAim,
+    aimbot_vars::KillCooldown,
+    aimbot_vars::MissChance,
+    aimbot_vars::MovementPenalty,
+    aimbot_vars::LockBreakInterval,
+    aimbot_vars::LockMode,
+    aimbot_vars::LockIndicator,
+    bhop_vars::Enabled,
+    bhop_vars::AutoStrafe,
+    bhop_vars::Humanization,
+    thirdperson_vars::Enabled,
+    bone_dumper_vars::Enabled,
     SpectatorListEnabled,
     BombPlantAlertEnabled
 >;

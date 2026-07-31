@@ -1,0 +1,12 @@
+ultralytics>=8.2.0
+dxcam>=0.0.7
+opencv-python>=4.9.0
+numpy>=1.26.0
+pyyaml>=6.0
+pynput>=1.7.6
+torch>=2.2.0
+onnx>=1.16.0
+onnxruntime-gpu>=1.17.0
+flask>=3.0
+# tensorrt 需手动安装 (匹配CUDA版本)
+# nvidia-tensorrt

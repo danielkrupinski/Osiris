@@ -448,6 +448,18 @@ ASALocalRun/
 /cmake-build-claude/_deps/googletest-build/googletest/CMakeFiles/Export/0c08b8e77dd885bfe55a19a9659d9fc1/GTestTargets-release.cmake
 /cmake-build-claude/_deps/googletest-build/googletest/CMakeFiles/Export/0c08b8e77dd885bfe55a19a9659d9fc1/GTestTargets-relwithdebinfo.cmake
 /hashcat_sessions.db
+
+# Local CMake builds and runtime artifacts
+/cmake-build-*/
+/runs/
+
+# Visual Aimbot local environments, datasets and generated models
+/Source/Features/Combat/VisualAimbot/**/.venv*/
+/Source/Features/Combat/VisualAimbot/**/__pycache__/
+/Source/Features/Combat/VisualAimbot/**/dataset/
+/Source/Features/Combat/VisualAimbot/**/runs/
+*.pt
+*.engine
 /cmake-build-claude/_deps/googletest-build/googlemock/INSTALL.vcxproj
 /cmake-build-claude/_deps/googletest-build/googletest/INSTALL.vcxproj
 /cmake-build-claude/_deps/googletest-build/INSTALL.vcxproj

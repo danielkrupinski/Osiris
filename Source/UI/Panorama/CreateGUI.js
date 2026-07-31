@@ -17,6 +17,9 @@ $.Osiris = (function () {
     sniper_rifles:      { en: "Sniper rifles",      zh: "狙击步枪" },
     triggerbot:         { en: "Triggerbot",         zh: "自动扳机" },
     aimbot:             { en: "Aimbot",             zh: "自动瞄准" },
+    data_collection:    { en: "Data Collection",    zh: "数据采集" },
+    bhop:               { en: "BunnyHop",           zh: "连跳" },
+    thirdperson:        { en: "Third Person",       zh: "第三人称" },
     player_info_in_world:{ en: "Player Info In World", zh: "世界玩家信息" },
     outline_glow:       { en: "Outline Glow",       zh: "轮廓发光" },
     model_glow:         { en: "Model Glow",         zh: "模型发光" },
@@ -25,6 +28,9 @@ $.Osiris = (function () {
     sec_no_scope:       { en: "No scope",           zh: "无准镜" },
     sec_triggerbot:     { en: "Triggerbot",         zh: "自动扳机" },
     sec_aimbot:         { en: "Aimbot",             zh: "自动瞄准" },
+    sec_bone_dumper:    { en: "Bone Dumper [YOLO labels]", zh: "骨骼标签导出器[YOLO数据集]" },
+    sec_bhop:           { en: "BunnyHop + Auto-strafe", zh: "连跳+自动加速" },
+    sec_thirdperson:    { en: "Third Person",       zh: "第三人称" },
     sec_bomb:           { en: "Bomb",               zh: "炸弹" },
     sec_killfeed:       { en: "Killfeed",           zh: "击杀信息" },
     sec_time:           { en: "Time",               zh: "时间" },
@@ -94,11 +100,49 @@ $.Osiris = (function () {
     lbl_inacc_vis:      { en: "Visualize Inaccuracy When Not Using a Scope", zh: "未开镜时显示不准确度" },
     lbl_triggerbot:     { en: "Triggerbot",         zh: "自动扳机" },
     lbl_triggerbot_vis: { en: "Visibility check",    zh: "可见性检查" },
+    lbl_triggerbot_cd:  { en: "Fire cooldown [ms]",   zh: "射击冷却[毫秒]" },
+    lbl_triggerbot_rad: { en: "Trigger radius [px]",   zh: "触发半径[像素]" },
+    lbl_triggerbot_weapon: { en: "Firearms only [no knife/nade]", zh: "仅枪械[无刀/雷]" },
     lbl_flash_immunity: { en: "Flash immunity",       zh: "闪光免疫" },
     lbl_aimbot:         { en: "Aimbot",              zh: "自动瞄准" },
     lbl_aimbot_smooth:  { en: "Smooth follow [off = instant snap]", zh: "平滑跟随，关闭则瞬移" },
+    lbl_aimbot_silent:  { en: "Silent aim [crosshair invisible]", zh: "静默瞄准[准星不可见]" },
+    lbl_kill_cooldown:  { en: "Kill cooldown [N kills pause]", zh: "击杀冷却[连续N杀暂停]" },
+    lbl_miss_chance:    { en: "Miss chance [%]",          zh: "空枪概率 [%]" },
+    lbl_move_penalty:   { en: "Movement penalty",       zh: "移动惩罚" },
+    opt_move_off:       { en: "Off [all weapons]",      zh: "关闭[所有武器]" },
+    opt_move_rifles:    { en: "Rifles/AWP only",        zh: "仅步枪/狙击枪" },
+    opt_move_all:       { en: "All weapons",            zh: "所有武器" },
+    lbl_lock_break:     { en: "Lock break [frames]",     zh: "锁定中断[帧]" },
+    lbl_lock_mode:      { en: "Lock mode",              zh: "锁定模式" },
+    opt_lock_crosshair:  { en: "Crosshair [FOV]",         zh: "准星[视野内]" },
+    opt_lock_closest:    { en: "Closest [360]",          zh: "最近[360度]" },
+    lbl_indicator:      { en: "Lock indicator [glow]",   zh: "锁定指示器[发光]" },
+    // BHop labels
+    lbl_thirdperson:    { en: "Third Person",           zh: "第三人称" },
+    lbl_bhop:           { en: "BunnyHop",               zh: "连跳" },
+    lbl_bhop_strafe:    { en: "Auto-strafe [speed]",     zh: "自动加速" },
+    lbl_bhop_humanize:  { en: "Jump timing randomize",  zh: "跳跃时机随机化" },
     lbl_aimbot_radius:  { en: "FOV radius [px]",     zh: "检测半径 [像素]" },
     lbl_aimbot_preview: { en: "Preview [based on 1920x1080]", zh: "预览[基于1920x1080]" },
+    lbl_aimbot_aim_point:  { en: "Aim point",          zh: "瞄准位置" },
+    lbl_aimbot_hotkey:     { en: "Aim assist hotkey",  zh: "瞄准辅助热键" },
+    opt_hk_always:         { en: "Always on",          zh: "始终生效" },
+    opt_hk_rmb:            { en: "Hold Right Mouse",   zh: "按住右键" },
+    opt_hk_m5:             { en: "Hold Mouse 5",       zh: "按住侧键 5" },
+    opt_hk_shift:          { en: "Hold Shift",         zh: "按住 Shift" },
+    opt_hk_caps:           { en: "CapsLock toggle",    zh: "CapsLock 切换" },
+    lbl_bone_dumper:       { en: "Dump labels to C:\\temp\\cs2_labels\\latest.json", zh: "导出标签到 C:\\temp\\cs2_labels\\latest.json" },
+    lbl_aimbot_predict:    { en: "Velocity prediction", zh: "速度预判" },
+    lbl_aimbot_humanize:   { en: "Humanization [anti-VAC]", zh: "拟人化[反VAC]" },
+    opt_head:              { en: "Head",               zh: "头" },
+    opt_neck:              { en: "Neck",               zh: "脖子" },
+    opt_chest:             { en: "Chest",              zh: "胸部" },
+    opt_stomach:           { en: "Stomach",            zh: "肚子" },
+    opt_pelvis:            { en: "Pelvis",             zh: "骨盆" },
+)"
+// split — MSVC string literal limit ~16k chars; translation table grew past
+u8R"(
     // Hue labels
     hue_player_blue:    { en: "Player Blue Hue",    zh: "玩家蓝色色相" },
     hue_player_green:   { en: "Player Green Hue",   zh: "玩家绿色色相" },
@@ -448,6 +492,28 @@ u8R"(
     });
 
     $.CreatePanel('Label', aimbotTabButton, '', { text: tr('aimbot') });
+
+    var dataCollectionTabButton = $.CreatePanel('RadioButton', centerContainer, 'data_collection_button', {
+      group: "CombatNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToSubTab('combat', 'data_collection');"
+    });
+
+    $.CreatePanel('Label', dataCollectionTabButton, '', { text: tr('data_collection') });
+
+    var bhopTabButton = $.CreatePanel('RadioButton', centerContainer, 'bhop_button', {
+      group: "CombatNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToSubTab('combat', 'bhop');"
+    });
+    $.CreatePanel('Label', bhopTabButton, '', { text: tr('bhop') });
+
+    var thirdpersonTabButton = $.CreatePanel('RadioButton', centerContainer, 'thirdperson_button', {
+      group: "CombatNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToSubTab('combat', 'thirdperson');"
+    });
+    $.CreatePanel('Label', thirdpersonTabButton, '', { text: tr('thirdperson') });
   };
 
   createNavbar();
@@ -716,6 +782,12 @@ u8R"(
   createYesNoDropDown(triggerbot, "lbl_triggerbot_vis", 'combat', 'triggerbot_visibility');
   separator(triggerbot);
   createYesNoDropDown(triggerbot, "lbl_flash_immunity", 'combat', 'triggerbot_flash');
+  separator(triggerbot);
+  createSlider(triggerbot, "lbl_triggerbot_cd", 'triggerbot_cooldown', 50, 500, 'combat');
+  separator(triggerbot);
+  createSlider(triggerbot, "lbl_triggerbot_rad", 'triggerbot_radius', 20, 200, 'combat');
+  separator(triggerbot);
+  createYesNoDropDown(triggerbot, "lbl_triggerbot_weapon", 'combat', 'triggerbot_weapon_only');
 
   var aimbotTab = createSubTab(combat, 'aimbot');
   var aimbot = createSection(aimbotTab, 'sec_aimbot');
@@ -723,6 +795,28 @@ u8R"(
   createYesNoDropDown(aimbot, "lbl_aimbot", 'combat', 'aimbot_switch');
   separator(aimbot);
   createYesNoDropDown(aimbot, "lbl_aimbot_smooth", 'combat', 'aimbot_smooth');
+  separator(aimbot);
+  createDropDown(aimbot, "lbl_aimbot_aim_point", 'combat', 'aimbot_aim_point', ['opt_head', 'opt_neck', 'opt_chest', 'opt_stomach', 'opt_pelvis']);
+  separator(aimbot);
+  createDropDown(aimbot, "lbl_aimbot_hotkey", 'combat', 'aimbot_hotkey', ['opt_hk_always', 'opt_hk_rmb', 'opt_hk_m5', 'opt_hk_shift', 'opt_hk_caps']);
+  separator(aimbot);
+  createYesNoDropDown(aimbot, "lbl_aimbot_predict", 'combat', 'aimbot_predict_velocity');
+  separator(aimbot);
+  createYesNoDropDown(aimbot, "lbl_aimbot_humanize", 'combat', 'aimbot_humanization');
+  separator(aimbot);
+  createYesNoDropDown(aimbot, "lbl_aimbot_silent", 'combat', 'aimbot_silent');
+  separator(aimbot);
+  createSlider(aimbot, "lbl_kill_cooldown", 'aimbot_cooldown', 2, 20, 'combat');
+  separator(aimbot);
+  createSlider(aimbot, "lbl_miss_chance", 'aimbot_miss', 0, 25, 'combat');
+  separator(aimbot);
+  createDropDown(aimbot, "lbl_move_penalty", 'combat', 'aimbot_move', ['opt_move_off', 'opt_move_rifles', 'opt_move_all']);
+  separator(aimbot);
+  createSlider(aimbot, "lbl_lock_break", 'aimbot_lock_break', 15, 120, 'combat');
+  separator(aimbot);
+  createDropDown(aimbot, "lbl_lock_mode", 'combat', 'aimbot_lock_mode', ['opt_lock_crosshair', 'opt_lock_closest']);
+  separator(aimbot);
+  createYesNoDropDown(aimbot, "lbl_indicator", 'combat', 'aimbot_indicator');
   separator(aimbot);
 
   var aimbotRadiusCircle = null;
@@ -753,6 +847,25 @@ u8R"(
     text: '+',
     style: 'horizontal-align: center; vertical-align: center; color: #ffffff; font-size: 28px; font-weight: bold;'
   });
+
+  var dataCollectionTab = createSubTab(combat, 'data_collection');
+  var boneDumperSec = createSection(dataCollectionTab, 'sec_bone_dumper');
+  separator(boneDumperSec);
+  createYesNoDropDown(boneDumperSec, "lbl_bone_dumper", 'combat', 'bone_dumper_switch');
+
+  var bhopTab = createSubTab(combat, 'bhop');
+  var bhopSec = createSection(bhopTab, 'sec_bhop');
+  separator(bhopSec);
+  createYesNoDropDown(bhopSec, "lbl_bhop", 'combat', 'bhop_switch');
+  separator(bhopSec);
+  createYesNoDropDown(bhopSec, "lbl_bhop_strafe", 'combat', 'bhop_strafe');
+  separator(bhopSec);
+  createYesNoDropDown(bhopSec, "lbl_bhop_humanize", 'combat', 'bhop_humanize');
+
+  var thirdpersonTab = createSubTab(combat, 'thirdperson');
+  var tpSec = createSection(thirdpersonTab, 'sec_thirdperson');
+  separator(tpSec);
+  createYesNoDropDown(tpSec, "lbl_thirdperson", 'combat', 'thirdperson_switch');
 
   $.Osiris.navigateToSubTab('combat', 'sniper_rifles');
 
@@ -816,6 +929,10 @@ u8R"(
   createYesNoDropDown(playerIcons, "lbl_hostage_rescue", 'visuals', 'player_info_hostage_rescue');
   separator(playerIcons);
   createYesNoDropDown(playerIcons, "lbl_blinded", 'visuals', 'player_info_blinded');
+)"
+// split string literal (MSVC C2026 limit ~16K)
+u8R"(
+// continue
 
   var outlineGlowTab = createSubTab(visuals, 'outline_glow');
 

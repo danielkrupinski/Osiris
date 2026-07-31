@@ -20,6 +20,24 @@ public:
         if (!selectedOption)
             return -1;
 
+        // Osiris creates dropdown options with their numeric index as the
+        // panel ID. Reading that ID is stable even if a CS2 update inserts
+        // internal children into the dropdown menu. Counting all children
+        // made option "0" report as index 2 after the latest UI update.
+        const auto* optionId = hookContext.uiPanel(selectedOption).panelId();
+        if (optionId && optionId[0] >= '0' && optionId[0] <= '9') {
+            int optionIndex = 0;
+            const auto* cursor = optionId;
+            while (*cursor >= '0' && *cursor <= '9') {
+                optionIndex = optionIndex * 10 + (*cursor - '0');
+                ++cursor;
+            }
+            if (*cursor == '\0')
+                return optionIndex;
+        }
+
+        // Keep compatibility with dropdowns whose options do not use numeric
+        // IDs.
         int i = 0;
         for (auto&& child : uiPanel().children()) {
             if (child == selectedOption)

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAC-HUD</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --amber: #FF7417;
+    --amber-dim: rgba(255,116,23,0.35);
+    --amber-glow: rgba(255,116,23,0.12);
+    --cyan: #00F0FF;
+    --cyan-glow: rgba(0,240,255,0.20);
+    --red: #FF3B3B;
+    --text: rgba(255,255,255,0.88);
+    --text-dim: rgba(255,255,255,0.42);
+    --bg-panel: rgba(6,8,12,0.55);
+    --border: rgba(255,255,255,0.08);
+    --font: 'Share Tech Mono', 'Consolas', 'Courier New', monospace;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: transparent;
+    font-family: var(--font);
+    color: var(--text);
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: none;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  /* ── Scan-line overlay ─────────────────────────── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── Center FOV ring ───────────────────────────── */
+  .fov-ring {
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 300px; height: 300px;
+    margin-left: -150px; margin-top: -150px;
+    border-radius: 50%;
+    border: 1.5px solid var(--amber-dim);
+    box-shadow:
+      0 0 30px var(--amber-glow),
+      inset 0 0 30px var(--amber-glow);
+    pointer-events: none;
+    z-index: 10;
+    animation: fovPulse 3s ease-in-out infinite;
+  }
+  @keyframes fovPulse {
+    0%,100% { box-shadow: 0 0 25px var(--amber-glow), inset 0 0 25px var(--amber-glow); }
+    50%     { box-shadow: 0 0 40px var(--amber-glow), inset 0 0 40px var(--amber-glow); }
+  }
+
+  .fov-ring::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 50%; transform: translateX(-50%);
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber);
+  }
+  .fov-ring::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 50%; transform: translateX(-50%);
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber);
+  }
+
+  /* tick marks */
+  .fov-tick { position:fixed; pointer-events:none; z-index:11; }
+  .fov-tick::before {
+    content:''; position:absolute;
+    width:6px; height:1px;
+    background:var(--amber-dim);
+  }
+
+  /* ── Lock-On indicator ─────────────────────────── */
+  .lock-indicator {
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    pointer-events: none;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .lock-indicator.active { opacity: 1; }
+
+  .lock-diamond {
+    position: absolute;
+    width: 40px; height: 40px;
+    top: -20px; left: -20px;
+    border: 2px solid var(--cyan);
+    transform: rotate(45deg);
+    box-shadow: 0 0 15px var(--cyan-glow), inset 0 0 8px var(--cyan-glow);
+    animation: lockRotate 2s linear infinite;
+  }
+  @keyframes lockRotate {
+    0%   { transform: rotate(45deg) scale(1);   border-color: var(--cyan); }
+    50%  { transform: rotate(45deg) scale(1.08); border-color: #80F8FF; }
+    100% { transform: rotate(45deg) scale(1);   border-color: var(--cyan); }
+  }
+
+  .lock-lines {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 120px; height: 120px;
+    margin: -60px 0 0 -60px;
+  }
+  .lock-line {
+    position: absolute;
+    background: var(--cyan);
+    opacity: 0.5;
+    box-shadow: 0 0 6px var(--cyan);
+  }
+  .lock-line.n  { top:0; left:50%; width:1px; height:12px; margin-left:-0.5px; }
+  .lock-line.s  { bottom:0; left:50%; width:1px; height:12px; margin-left:-0.5px; }
+  .lock-line.w  { top:50%; left:0; width:12px; height:1px; margin-top:-0.5px; }
+  .lock-line.e  { top:50%; right:0; width:12px; height:1px; margin-top:-0.5px; }
+  .lock-line.nw { top:6px; left:6px; width:1px; height:10px; transform:rotate(-45deg); transform-origin:top left; }
+  .lock-line.ne { top:6px; right:6px; width:1px; height:10px; transform:rotate(45deg); transform-origin:top right; }
+  .lock-line.sw { bottom:6px; left:6px; width:1px; height:10px; transform:rotate(45deg); transform-origin:bottom left; }
+  .lock-line.se { bottom:6px; right:6px; width:1px; height:10px; transform:rotate(-45deg); transform-origin:bottom right; }
+
+  /* ── Status panels ─────────────────────────────── */
+  .panel {
+    position: fixed;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: none;
+    z-index: 30;
+    padding: 10px 16px;
+    min-width: 140px;
+  }
+
+  /* Top-left bracket */
+  .panel-tl {
+    top: 24px; left: 24px;
+    clip-path: polygon(
+      0 0, 100% 0, 100% calc(100% - 12px),
+      calc(100% - 12px) 100%, 0 100%
+    );
+  }
+  .panel-tl::before {
+    content: ''; position: absolute;
+    top: 0; right: 0;
+    width: 12px; height: 12px;
+    border-top: 2px solid var(--amber);
+    border-right: 2px solid var(--amber);
+  }
+
+  /* Top-right bracket */
+  .panel-tr {
+    top: 24px; right: 24px;
+    clip-path: polygon(
+      12px 0, 100% 0, 100% 100%,
+      0 100%, 0 calc(100% - 12px)
+    );
+  }
+  .panel-tr::before {
+    content: ''; position: absolute;
+    top: 0; left: 0;
+    width: 12px; height: 12px;
+    border-top: 2px solid var(--amber);
+    border-left: 2px solid var(--amber);
+  }
+
+  /* Bottom bar */
+  .panel-bottom {
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    padding: 10px 28px;
+    border-radius: 2px;
+  }
+
+  /* ── Panel content ─────────────────────────────── */
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+  .stat-label {
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+  .stat-value {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .stat-value.active  { color: var(--cyan); text-shadow: 0 0 8px var(--cyan-glow); }
+  .stat-value.amber  { color: var(--amber); }
+  .stat-value.red    { color: var(--red); text-shadow: 0 0 6px rgba(255,59,59,0.3); }
+
+  .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .status-dot.on  { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: dotBlink 1.5s ease-in-out infinite; }
+  .status-dot.off { background: var(--red); box-shadow: 0 0 6px rgba(255,59,59,0.5); }
+  @keyframes dotBlink {
+    0%,100% { opacity: 1; }
+    50%     { opacity: 0.4; }
+  }
+
+  /* Target distance readout */
+  .dist-readout {
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  /* ── Corner decorative brackets ────────────────── */
+  .corner-bracket {
+    position: fixed;
+    width: 40px; height: 40px;
+    pointer-events: none;
+    z-index: 25;
+  }
+  .corner-bracket::before,
+  .corner-bracket::after {
+    content: ''; position: absolute;
+    background: rgba(255,255,255,0.12);
+  }
+  .corner-bracket.bl { bottom:24px; left:24px; }
+  .corner-bracket.br { bottom:24px; right:24px; }
+  .corner-bracket.bl::before { bottom:0; left:0; width:16px; height:1px; }
+  .corner-bracket.bl::after  { bottom:0; left:0; width:1px; height:16px; }
+  .corner-bracket.br::before { bottom:0; right:0; width:16px; height:1px; }
+  .corner-bracket.br::after  { bottom:0; right:0; width:1px; height:16px; }
+
+  /* ── Hit marker (brief flash on target lock) ────── */
+  .hit-flash {
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    pointer-events: none;
+    z-index: 15;
+  }
+  .hit-flash.flash {
+    animation: hitFlash 0.3s ease-out;
+  }
+  @keyframes hitFlash {
+    0%   { box-shadow: 0 0 0px var(--cyan); }
+    50%  { box-shadow: 0 0 80px var(--cyan); }
+    100% { box-shadow: 0 0 0px transparent; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- FOV ring -->
+  <div class="fov-ring" id="fovRing"></div>
+
+  <!-- Lock-on diamond -->
+  <div class="lock-indicator" id="lockIndicator">
+    <div class="lock-diamond"></div>
+    <div class="lock-lines">
+      <div class="lock-line n"></div>
+      <div class="lock-line s"></div>
+      <div class="lock-line w"></div>
+      <div class="lock-line e"></div>
+      <div class="lock-line nw"></div>
+      <div class="lock-line ne"></div>
+      <div class="lock-line sw"></div>
+      <div class="lock-line se"></div>
+    </div>
+  </div>
+
+  <!-- Hit flash -->
+  <div class="hit-flash" id="hitFlash"></div>
+
+  <!-- Top-left: AIMBOT status -->
+  <div class="panel panel-tl" id="panelStatus">
+    <div class="stat-row">
+      <span class="stat-label">SYS</span>
+      <span class="stat-value active" id="sysStatus">
+        <span class="status-dot on"></span>ACTIVE
+      </span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">TGT</span>
+      <span class="stat-value" id="tgtStatus">--</span>
+    </div>
+  </div>
+
+  <!-- Top-right: Performance -->
+  <div class="panel panel-tr" id="panelPerf">
+    <div class="stat-row">
+      <span class="stat-label">FPS</span>
+      <span class="stat-value amber" id="perfFps">--</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">LAT</span>
+      <span class="stat-value" id="perfLat">--ms</span>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="panel panel-bottom" id="panelBottom">
+    <div class="stat-row">
+      <span class="stat-label">INF</span>
+      <span class="stat-value amber" id="botInfer">--</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">DET</span>
+      <span class="stat-value" id="botDetect">0</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">DIST</span>
+      <span class="stat-value" id="botDist">--</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">MODEL</span>
+      <span class="stat-value amber" id="botModel">YOLOv8n</span>
+    </div>
+  </div>
+
+  <!-- Corner brackets -->
+  <div class="corner-bracket bl"></div>
+  <div class="corner-bracket br"></div>
+
+<script>
+  const FOV_RADIUS_DEFAULT = 150;
+  let lastTargetState = false;
+
+  function setLock(on) {
+    const el = document.getElementById('lockIndicator');
+    const flash = document.getElementById('hitFlash');
+    if (on && !lastTargetState) {
+      // Just acquired target
+      flash.classList.remove('flash');
+      void flash.offsetWidth; // reflow
+      flash.classList.add('flash');
+    }
+    el.classList.toggle('active', on);
+    lastTargetState = on;
+  }
+
+  function updateFovSize(radiusPx) {
+    const ring = document.getElementById('fovRing');
+    const size = radiusPx * 2;
+    ring.style.width = size + 'px';
+    ring.style.height = size + 'px';
+    ring.style.marginLeft = (-radiusPx) + 'px';
+    ring.style.marginTop = (-radiusPx) + 'px';
+  }
+
+  async function poll() {
+    try {
+      const resp = await fetch('http://127.0.0.1:18921/status');
+      if (!resp.ok) throw new Error('not ok');
+      const s = await resp.json();
+
+      // System status
+      const sysEl = document.getElementById('sysStatus');
+      if (s.aimbot_active) {
+        sysEl.innerHTML = '<span class="status-dot on"></span>ACTIVE';
+        sysEl.className = 'stat-value active';
+      } else {
+        sysEl.innerHTML = '<span class="status-dot off"></span>STANDBY';
+        sysEl.className = 'stat-value red';
+      }
+
+      // Target
+      document.getElementById('tgtStatus').textContent =
+        s.has_target ? 'LOCKED' : 'NO TARGET';
+
+      // Lock indicator
+      setLock(s.has_target);
+
+      // Perf
+      document.getElementById('perfFps').textContent = s.fps || '--';
+      document.getElementById('perfLat').textContent =
+        s.latency_ms != null ? s.latency_ms.toFixed(1) + 'ms' : '--ms';
+
+      // Bottom
+      document.getElementById('botInfer').textContent =
+        s.inference_ms != null ? s.inference_ms.toFixed(1) + 'ms' : '--';
+      document.getElementById('botDetect').textContent = s.detection_count || 0;
+      document.getElementById('botDist').textContent =
+        s.target_distance != null ? s.target_distance.toFixed(0) + 'u' : '--';
+
+      // FOV size
+      if (s.fov_radius) updateFovSize(s.fov_radius);
+
+    } catch (e) {
+      // Server not running yet — retry
+      const sysEl = document.getElementById('sysStatus');
+      sysEl.innerHTML = '<span class="status-dot off"></span>WAITING';
+      sysEl.className = 'stat-value red';
+    }
+  }
+
+  updateFovSize(FOV_RADIUS_DEFAULT);
+  setInterval(poll, 100);
+  poll();
+</script>
+</body>
+</html>

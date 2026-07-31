@@ -10,6 +10,9 @@
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
 #include <Features/Combat/Aimbot/Aimbot.h>
+#include <Features/Combat/BHop/BHop.h>
+#include <Features/Combat/ThirdPerson/ThirdPerson.h>
+#include <Features/Combat/BoneDumper/BoneDumper.h>
 #include <Features/Combat/Triggerbot/Triggerbot.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlert.h>
 #include <Features/Hud/SpectatorList/SpectatorList.h>
@@ -30,21 +33,24 @@ public:
         auto spectatorList = hookContext.template make<SpectatorList>();
         auto triggerbot = hookContext.template make<Triggerbot>();
         auto aimbot = hookContext.template make<Aimbot>();
-        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this, &bombPlantAlertVisibility, &spectatorList, &triggerbot, &aimbot](const auto& entityIdentity) {
-            handleEntityIdentity(entityIdentity, bombPlantAlertVisibility, spectatorList, triggerbot, aimbot);
+        auto boneDumper = hookContext.template make<BoneDumper>();
+        boneDumper.beginFrame();
+        hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this, &bombPlantAlertVisibility, &spectatorList, &triggerbot, &aimbot, &boneDumper](const auto& entityIdentity) {
+            handleEntityIdentity(entityIdentity, bombPlantAlertVisibility, spectatorList, triggerbot, aimbot, boneDumper);
         });
+        boneDumper.endFrame();
         hookContext.template make<ModelGlow>().postUpdateInMainThread();
         if (bombPlantAlertVisibility == Visibility::Hidden)
             hookContext.template make<BombPlantAlert>().hide();
         spectatorList.render();
-        // Aimbot runs first so its angle write lands before the Triggerbot's
-        // fire check (Triggerbot uses the tight on-target radius).
+        hookContext.template make<BHop>().run();
+        hookContext.template make<ThirdPerson>().run();
         aimbot.execute();
         triggerbot.execute();
     }
 
 private:
-    void handleEntityIdentity(const cs2::CEntityIdentity& entityIdentity, Visibility& bombPlantAlertVisibility, SpectatorList<HookContext>& spectatorList, Triggerbot<HookContext>& triggerbot, Aimbot<HookContext>& aimbot) const noexcept
+    void handleEntityIdentity(const cs2::CEntityIdentity& entityIdentity, Visibility& bombPlantAlertVisibility, SpectatorList<HookContext>& spectatorList, Triggerbot<HookContext>& triggerbot, Aimbot<HookContext>& aimbot, BoneDumper<HookContext>& boneDumper) const noexcept
     {
         const auto entityTypeInfo = hookContext.entityClassifier().classifyEntity(entityIdentity.entityClass);
         auto&& baseEntity = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(entityIdentity.entity));
@@ -58,6 +64,7 @@ private:
             applyOutlineGlow<PlayerOutlineGlow>(playerPawn, entityTypeInfo);
             triggerbot.checkPlayer(playerPawn);
             aimbot.checkPlayer(playerPawn);
+            boneDumper.addEnemy(playerPawn);
             if (bombPlantAlertVisibility != Visibility::Visible)
                 bombPlantAlertVisibility = hookContext.template make<BombPlantAlert>().show(playerPawn);
         } else if (entityTypeInfo.template is<cs2::C_C4>()) {

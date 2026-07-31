@@ -4,6 +4,7 @@
 
 #include <Features/Combat/Aimbot/AimbotConfigVariables.h>
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVis.h>
+#include <Features/Combat/ThirdPerson/ThirdPersonConfigVariables.h>
 #include <Features/Combat/Triggerbot/TriggerbotConfigVariables.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlert.h>
 #include <Features/Hud/SpectatorList/SpectatorList.h>
@@ -192,7 +193,7 @@ private:
 
     ON_CHANGE(viewmodel_mod_vars::Enabled)
     {
-        if (newValue == true && GET_CONFIG_VAR(viewmodel_mod_vars::ModifyFov))
+        if (newValue && GET_CONFIG_VAR(viewmodel_mod_vars::ModifyFov))
             hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
         else
             hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
@@ -200,10 +201,18 @@ private:
 
     ON_CHANGE(viewmodel_mod_vars::ModifyFov)
     {
-        if (newValue == true && GET_CONFIG_VAR(viewmodel_mod_vars::Enabled))
+        if (newValue && GET_CONFIG_VAR(viewmodel_mod_vars::Enabled))
             hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
         else
             hookContext.template make<ClientModeHooks>().restoreGetViewmodelFov();
+    }
+
+    ON_CHANGE(thirdperson_vars::Enabled)
+    {
+        if (newValue)
+            hookContext.template make<ClientModeHooks>().hookOverrideView();
+        else
+            hookContext.template make<ClientModeHooks>().restoreOverrideView();
     }
 
     ON_CHANGE(triggerbot_vars::Enabled)

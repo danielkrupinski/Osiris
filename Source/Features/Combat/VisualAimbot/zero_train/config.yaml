@@ -1,0 +1,40 @@
+# CS2 Visual Aimbot — 定制训练模型配置
+
+model:
+  # TensorRT engine (1.4ms @ RTX 4060) — 编译自 Osiris BoneDumper 数据集
+  path: D:/CLionProjects/Osiris/Source/Features/Combat/VisualAimbot/train/runs/detect/cs2_yolo/weights/best.pt
+  half: true
+
+capture:
+  width: 2560
+  height: 1600
+  max_fps: 60
+
+# 瞄准参数
+aim:
+  fov_radius_px: 200          # 准心检测半径 (放大)
+  confidence: 0.35            # 降低置信度阈值, 更容易检测
+  min_box_height: 10          # 小框也接受
+  smooth_factor: 0.7          # 加大平滑因子 = 更快移动到目标
+  head_offset_ratio: 0.5      # 定制模型直接检测头，框中心 = 头部
+  aim_key: "f8"               # 切换键 (F8)
+  toggle_mode: true           # true=切换, false=按住
+  start_active: true          # true=启动即开启瞄准
+
+# 队伍颜色过滤 — 定制模型直接检测 head/body，跳过 HSV 过滤
+color_filter: false
+
+team_colors:
+  t:
+    lower: [0, 80, 80]
+    upper: [15, 255, 255]
+  ct:
+    lower: [100, 80, 80]
+    upper: [130, 255, 255]
+
+# 类别映射 (class 0=head, class 1=body)
+target_class: 0               # 瞄准 class 0 (头部)
+
+# 调试可视化
+visualize: false
+debug_console: true

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Combat/Aimbot/AimbotState.h"
+#include "Combat/BHop/BHopState.h"
+#include "Combat/BoneDumper/BoneDumperState.h"
 #include "Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisState.h"
 #include "Combat/Triggerbot/TriggerbotState.h"
 #include "Hud/HudFeaturesStates.h"
@@ -12,4 +14,6 @@ struct FeaturesStates {
     NoScopeInaccuracyVisState noScopeInaccuracyVisState;
     TriggerbotState triggerbotState;
     AimbotState aimbotState;
+    BoneDumperState boneDumperState;
+    BHopState bhopState;
 };

@@ -251,6 +251,11 @@ public:
         return getParentWindow().getUiScaleFactor();
     }
 
+    [[nodiscard]] const char* panelId() const noexcept
+    {
+        return getId();
+    }
+
 private:
     template <typename StyleProperty>
     void setStyleProperty(std::optional<StyleProperty> styleProperty) const

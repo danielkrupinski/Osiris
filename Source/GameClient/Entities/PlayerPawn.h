@@ -46,6 +46,7 @@ public:
         return playerPawn != nullptr;
     }
 
+
     template <template <typename...> typename EntityType>
     [[nodiscard]] decltype(auto) cast() const noexcept
     {
@@ -102,8 +103,7 @@ public:
         if (!playerPawn)
             return {};
 
-        const auto gameSceneNode = *reinterpret_cast<std::byte**>(
-            reinterpret_cast<std::byte*>(playerPawn) + kOffsetToGameSceneNode);
+        const auto gameSceneNode = gameSceneNodePointer();
         if (!gameSceneNode)
             return {};
 
@@ -113,7 +113,17 @@ public:
             return {};
 
         const auto boneData = boneArray + static_cast<std::int32_t>(boneIndex) * kBoneDataStride;
-        return *reinterpret_cast<const cs2::Vector*>(boneData);
+        const auto modelPos = *reinterpret_cast<const cs2::Vector*>(boneData);
+
+        // Transform model-space bone position to world-space using m_nodeToWorld
+        // Source 2 matrix3x4_t = 4 column vectors each 3 floats: [col0][col1][col2][col3]
+        // world = col0 * x + col1 * y + col2 * z + col3 (translation)
+        const auto m = reinterpret_cast<const float*>(gameSceneNode + kNodeToWorldOffset);
+        return cs2::Vector{
+            m[0]*modelPos.x + m[3]*modelPos.y + m[6]*modelPos.z  + m[9],
+            m[1]*modelPos.x + m[4]*modelPos.y + m[7]*modelPos.z  + m[10],
+            m[2]*modelPos.x + m[5]*modelPos.y + m[8]*modelPos.z + m[11]
+        };
     }
 
     [[nodiscard]] Optional<cs2::Vector> headPosition() const noexcept
@@ -129,6 +139,42 @@ public:
     [[nodiscard]] Optional<cs2::Vector> stomachPosition() const noexcept
     {
         return bonePosition(cs2::BoneIndex::Stomach);
+    }
+
+    [[nodiscard]] bool isDormant() const noexcept
+    {
+        if (!playerPawn)
+            return true;
+        const auto sceneNode = gameSceneNodePointer();
+        if (!sceneNode)
+            return true;
+        return *reinterpret_cast<bool*>(sceneNode + kDormantOffset);
+    }
+
+    // m_vecAbsVelocity on C_BaseEntity. World-space velocity in units/sec.
+    [[nodiscard]] cs2::Vector absVelocity() const noexcept
+    {
+        if (!playerPawn)
+            return {};
+        return *reinterpret_cast<const cs2::Vector*>(
+            reinterpret_cast<const std::byte*>(playerPawn) + kOffsetToAbsVelocity);
+    }
+
+    // m_vecViewOffset on C_BaseModelEntity. Offset from absOrigin to the eye
+    // position. Game updates this every frame including crouch/jump animations,
+    // so absOrigin + viewOffset is the *real* eye location even when the
+    // player is ducked or mid-animation. Schema-verified by cs2-dumper.
+    [[nodiscard]] cs2::Vector viewOffset() const noexcept
+    {
+        if (!playerPawn)
+            return {};
+        return *reinterpret_cast<const cs2::Vector*>(
+            reinterpret_cast<const std::byte*>(playerPawn) + kOffsetToViewOffset);
+    }
+
+    [[nodiscard]] cs2::C_CSPlayerPawn* rawPointer() const noexcept
+    {
+        return playerPawn;
     }
 
     [[nodiscard]] bool isControlledByLocalPlayer() const noexcept
@@ -212,6 +258,13 @@ public:
     }
 
 private:
+    [[nodiscard]] std::byte* gameSceneNodePointer() const noexcept
+    {
+        return reinterpret_cast<std::byte*>(
+            hookContext.patternSearchResults().template get<OffsetToGameSceneNode>()
+                .of(playerPawn).valueOr(nullptr));
+    }
+
     [[nodiscard]] auto sceneObjectUpdaterHandle() const noexcept
     {
         return hookContext.patternSearchResults().template get<OffsetToPlayerPawnSceneObjectUpdaterHandle>().of(playerPawn).valueOr(nullptr);
@@ -228,9 +281,14 @@ private:
     }
 
     // Hardcoded offsets for bone position reading (from cs2-dumper schema).
-    static constexpr std::ptrdiff_t kOffsetToGameSceneNode{0x330};
-    static constexpr std::ptrdiff_t kOffsetToModelState{0x150};
+    static constexpr std::ptrdiff_t kOffsetToModelState{0x140};
     static constexpr std::ptrdiff_t kOffsetToBoneArray{0x80};
+    // C_BaseEntity::m_vecAbsVelocity (cs2-dumper, build 14171).
+    static constexpr std::ptrdiff_t kOffsetToAbsVelocity{0x3F8};
+    // C_BaseModelEntity::m_vecViewOffset (cs2-dumper, build 14171).
+    static constexpr std::ptrdiff_t kOffsetToViewOffset{0xE78};
+    static constexpr std::ptrdiff_t kNodeToWorldOffset{0x10};
+    static constexpr std::ptrdiff_t kDormantOffset{0x103};
     static constexpr std::ptrdiff_t kBoneDataStride{32};
 
     HookContext& hookContext;

@@ -1,0 +1,13 @@
+# YOLO-NAS 训练环境
+super-gradients>=4.9.0
+torch>=2.2.0
+torchvision>=0.17.0
+onnx>=1.16.0
+onnxruntime-gpu>=1.17.0
+opencv-python>=4.9.0
+numpy>=1.26.0
+pyyaml>=6.0
+labelImg>=1.8.6
+# tensorrt 需手动安装 (匹配CUDA版本)
+# nvidia-tensorrt
+dxcam>=0.0.7

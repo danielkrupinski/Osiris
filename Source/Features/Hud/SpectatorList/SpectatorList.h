@@ -83,6 +83,17 @@ private:
         if (!localPlayerController)
             return std::nullopt;
 
+        // When alive: the list shows players whose camera is on US, so the
+        // "watched pawn" is our own pawn.
+        // When dead/spectating: we want to see the co-spectators of whoever
+        // we are currently watching, so the watched pawn is our observer
+        // target's pawn (falls back to our own handle if no target).
+        if (localPlayerController.isPawnAlive().value_or(false))
+            return localPlayerController.playerPawnHandle();
+
+        if (const auto observerTarget = localPlayerController.observerTargetHandle())
+            return observerTarget;
+
         return localPlayerController.playerPawnHandle();
     }
 
