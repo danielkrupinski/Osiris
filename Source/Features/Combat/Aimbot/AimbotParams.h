@@ -20,7 +20,7 @@ constexpr float kAimPointZOffset[5]{64.0f, 56.0f, 48.0f, 36.0f, 20.0f};
 // "we aim where the enemy WAS one frame ago" lag. CS2 server-side lag
 // compensation already handles network latency for the shot itself, so we
 // only need ~1 frame of prediction here.
-constexpr float kVelocityPredictionTimeSeconds{0.015f};
+constexpr float kVelocityPredictionTimeSeconds{0.010f};
 
 // ===== Humanization / concealment constants =====
 // Each value injects small amounts of controlled randomness to defeat VACnet /
@@ -30,7 +30,7 @@ constexpr float kVelocityPredictionTimeSeconds{0.015f};
 // Human aim always has ~0.1-0.3° of natural micro-tremor — we keep it on the
 // low end so snap-mode accuracy isn't degraded while still defeating "exact
 // bone-to-eye" XGuardian signatures.
-constexpr float kAimJitterMaxDegrees{0.08f};
+constexpr float kAimJitterMaxDegrees{0.02f};
 
 // Smooth factor range for per-engagement randomization. Re-rolled whenever
 // the target changes so the convergence rate is different for each enemy.
@@ -44,21 +44,14 @@ constexpr float kSmoothFactorDriftMax{0.015f};
 // VACnet flags >30° single-frame flicks as impossible for humans.
 constexpr float kMaxAngleDeltaPerFrame{22.0f};
 
-// Probability of skipping an aim update this frame, creating natural gaps.
-// Kept low — every skip is one frame where a moving target drifts away from
-// the locked angle.
-constexpr float kFrameSkipProbability{0.03f};
-
-// Velocity prediction time randomization range (seconds).
-// Reduced from 25-75ms because CS2 hitscan + server lag compensation means we
-// shouldn't be aiming "ahead" much — only enough to cover one render frame.
-constexpr float kVelocityPredictionTimeMin{0.008f};
-constexpr float kVelocityPredictionTimeMax{0.025f};
+// Keep tracking continuous. Other humanization stages already shape the
+// trajectory without dropping updates on moving targets.
+constexpr float kFrameSkipProbability{0.0f};
 
 // Max spatial offset added to the aim target position (game units).
 // This noise is angularly amplified by 1/distance — large at close range, so
 // we keep it very small (≤0.1° at all practical distances).
-constexpr float kBoneOffsetMaxUnits{0.20f};
+constexpr float kBoneOffsetMaxUnits{0.05f};
 
 // ===== Woodworth two-component motor model =====
 // Phase durations in REAL SECONDS — framerate-independent so the engagement
@@ -96,8 +89,8 @@ constexpr float kReferenceFps{60.0f};
 // Phase advances in radians-per-second so the visible vibration frequency
 // matches real human hand tremor independent of framerate.
 constexpr float kTremorPhaseSpeedRadPerSec{33.0f}; // ~5.2 Hz fundamental
-constexpr float kTremorAmpMoving{0.06f};   // ~0.06° during move (was 0.18)
-constexpr float kTremorAmpHold{0.025f};    // ~0.025° while held on target
+constexpr float kTremorAmpMoving{0.02f};
+constexpr float kTremorAmpHold{0.01f};
 
 // Kill cooldown: max successive kills before aimbot pauses. DM spawns
 // produce rapid kill chains that VACnet flags. Range 3-15 kills, default 5.
@@ -105,11 +98,11 @@ constexpr auto kKillCooldown = RangeConstrainedVariableParams<std::uint8_t>{.min
 
 // Miss chance: per-engagement probability of intentionally missing a shot.
 // Scrambles the headshot-ratio statistic. Range 0-25%.
-constexpr auto kMissChance = RangeConstrainedVariableParams<std::uint8_t>{.min = 0, .max = 25, .def = 8};
+constexpr auto kMissChance = RangeConstrainedVariableParams<std::uint8_t>{.min = 0, .max = 25, .def = 0};
 // Lock-break: after N consecutive frames locked, disengage for 2-6 frames.
 // Lower = more human-like but more frequent disconnects from target.
 // Range 15-120 frames (~0.25-2s at 60fps).
-constexpr auto kLockBreakInterval = RangeConstrainedVariableParams<std::uint8_t>{.min = 15, .max = 120, .def = 40};
+constexpr auto kLockBreakInterval = RangeConstrainedVariableParams<std::uint8_t>{.min = 15, .max = 120, .def = 120};
 
 // Sanity bounds for the per-frame delta time. Outside this range we use a
 // 60fps fallback — protects against zeroed/paused curtime and from sudden

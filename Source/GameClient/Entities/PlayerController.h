@@ -161,10 +161,10 @@ private:
         return std::nullopt;
     }
 
-    static constexpr std::ptrdiff_t kOffsetToPlayerPawnHandle{0x90C};
-    static constexpr std::ptrdiff_t kOffsetToObserverPawnHandle{0x910};
-    static constexpr std::ptrdiff_t kOffsetToPawnIsAlive{0x914};
-    static constexpr std::ptrdiff_t kOffsetToObserverServices{0x11F8};
+    static constexpr std::ptrdiff_t kOffsetToPlayerPawnHandle{0x914};
+    static constexpr std::ptrdiff_t kOffsetToObserverPawnHandle{0x918};
+    static constexpr std::ptrdiff_t kOffsetToPawnIsAlive{0x91C};
+    static constexpr std::ptrdiff_t kOffsetToObserverServices{0x1220};
     static constexpr std::ptrdiff_t kOffsetToObserverTarget{0x4C};
 
     HookContext& hookContext;

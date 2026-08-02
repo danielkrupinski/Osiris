@@ -147,10 +147,23 @@ private:
         const auto localPawn = getLocalPlayerPawn();
         if (!localPawn)
             return;
-        const auto flashEndTime = hookContext.patternSearchResults()
-            .template get<OffsetToFlashBangEndTime>().of(localPawn).get();
-        if (flashEndTime && *flashEndTime > 0.0f)
-            *const_cast<float*>(flashEndTime) = 0.0f;
+
+        // C_CSPlayerPawnBase::m_flFlashBangTime at hardcoded offset 0x1414
+        // (cs2-dumper 2026-07, verified against current client.dll).
+        //
+        // Do NOT use the code-pattern scan for this — pattern scans CAN match
+        // the wrong instruction and return a non-null pointer that silently
+        // points to unrelated memory.  The fallback-to-hardcoded guard only
+        // fires when the pattern FAILS; a mis-resolved field is NOT caught.
+        auto* const f = reinterpret_cast<std::byte*>(localPawn) + kFlashBangTimeOffset;
+        *reinterpret_cast<float*>(f + 0x0)  = 0.0f;   // m_flFlashBangTime
+        *reinterpret_cast<float*>(f + 0x4)  = 0.0f;   // m_flFlashScreenshotAlpha
+        *reinterpret_cast<float*>(f + 0x8)  = 0.0f;   // m_flFlashOverlayAlpha
+        *reinterpret_cast<bool*>( f + 0xC)  = false;  // m_bFlashBuildUp
+        *reinterpret_cast<bool*>( f + 0xD)  = true;   // m_bFlashDspHasBeenCleared
+        *reinterpret_cast<bool*>( f + 0xE)  = true;   // m_bFlashScreenshotHasBeenGrabbed
+        *reinterpret_cast<float*>(f + 0x10) = 0.0f;   // m_flFlashMaxAlpha
+        *reinterpret_cast<float*>(f + 0x14) = 0.0f;   // m_flFlashDuration
     }
 
     [[nodiscard]] bool isHoldingFirearm() const noexcept
@@ -313,6 +326,8 @@ private:
         return fastCos(x - 1.57079633f);
     }
 
+    // C_CSPlayerPawnBase::m_flFlashBangTime (cs2-dumper, 2026-07 build).
+    static constexpr std::ptrdiff_t kFlashBangTimeOffset{0x1414};
     static constexpr float kDegToRad{0.01745329252f};
     static constexpr float kPlayerHalfWidth{16.0f};
     static constexpr float kPlayerHeight{72.0f};

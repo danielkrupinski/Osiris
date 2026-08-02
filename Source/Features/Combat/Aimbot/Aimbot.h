@@ -83,10 +83,7 @@ public:
         cs2::Vector predOffset{};
         if (GET_CONFIG_VAR(aimbot_vars::PredictVelocity)) {
             const auto v = playerPawn.absVelocity();
-            const auto predTime = humanizationEnabled
-                ? randRange(aimbot_params::kVelocityPredictionTimeMin,
-                            aimbot_params::kVelocityPredictionTimeMax)
-                : aimbot_params::kVelocityPredictionTimeSeconds;
+            const auto predTime = aimbot_params::kVelocityPredictionTimeSeconds;
             predOffset = cs2::Vector{
                 v.x * predTime,
                 v.y * predTime,
@@ -113,6 +110,11 @@ public:
                 // means the bone array offset is stale and we got garbage.
                 if (bx * bx + by * by + bz * bz < 10000.0f) {
                     aimPos = bp;
+                    // CS2 bone 6 (Head) sits at the skull base / neck joint.
+                    // The head hitbox centre is ~3 world-units above that.
+                    // Shift Z up so the lock lands centre-head instead of neck.
+                    if (aimPoint == AimbotAimPoint::Head)
+                        aimPos.z += kHeadBoneZBias;
                     boneValid = true;
                 }
             }
@@ -295,6 +297,8 @@ public:
                     computeAimAngle(eyePos, bestCandidate.aimPos, pitch, yaw);
                 }
 
+                compensateRecoil(localPawn, pitch, yaw);
+
                 if (humanizationEnabled) {
                     pitch += randRange(-aimbot_params::kAimJitterMaxDegrees,
                                         aimbot_params::kAimJitterMaxDegrees);
@@ -408,6 +412,35 @@ private:
         const auto hyp = fastSqrt(deltaX * deltaX + deltaY * deltaY);
         pitch = -fastAtan2(deltaZ, hyp) * kRadToDeg;
         clampAngles(pitch, yaw);
+    }
+
+    void compensateRecoil(cs2::C_CSPlayerPawn* localPawn, float& pitch, float& yaw) const noexcept
+    {
+#if IS_WIN64()
+        // C_CSPlayerPawn::m_aimPunchAngle is the authoritative weapon-recoil
+        // punch that the game actually uses for bullet trajectory. It is
+        // (0,0,0) when not firing. Do NOT use CameraServices::
+        // m_vecCsViewPunchAngle here — that field includes camera shake and
+        // rendering offsets that are non-zero even between shots, which makes
+        // the lock point drift above the target.
+        if (!isReadableMemory(localPawn, kAimPunchAngleOffset + sizeof(cs2::Vector)))
+            return;
+
+        const auto punch = *reinterpret_cast<const cs2::Vector*>(
+            reinterpret_cast<const std::byte*>(localPawn) + kAimPunchAngleOffset);
+        // Reject a stale pointer or a transient invalid schema read.
+        if (punch.x <= -45.0f || punch.x >= 45.0f
+            || punch.y <= -45.0f || punch.y >= 45.0f)
+            return;
+
+        pitch -= punch.x * kWeaponRecoilScale;
+        yaw -= punch.y * kWeaponRecoilScale;
+        clampAngles(pitch, yaw);
+#else
+        (void)localPawn;
+        (void)pitch;
+        (void)yaw;
+#endif
     }
 
     static void clampAngles(float& pitch, float& yaw) noexcept
@@ -949,6 +982,15 @@ private:
 
     static constexpr std::ptrdiff_t kViewAngleOffset{0x12C0};
     static constexpr std::ptrdiff_t kEyeAnglesOffset{0x3340};
+    // CS2 head bone (index 6) is the skull-base / neck joint, ~3 units below
+    // the head-hitbox centre. Lift aim so shots land centre-head, not neck.
+    static constexpr float kHeadBoneZBias{3.0f};
+    // C_CSPlayerPawn::m_aimPunchAngle — the authoritative weapon-recoil
+    // punch (QAngle at 3 floats), stable at 0x1584 across CS2 builds since
+    // mid-2025. This is what the game uses for bullet trajectory; it is
+    // (0,0,0) when not firing.
+    static constexpr std::ptrdiff_t kAimPunchAngleOffset{0x1584};
+    static constexpr float kWeaponRecoilScale{2.0f};
     // Speed² threshold for "running". CS2 walk speed ~130u/s, run ~250u/s.
     // Gate at 140² ≈ 19600 separates walk/crouch from full run.
     static constexpr float kRunSpeedThresholdSq{19600.0f};

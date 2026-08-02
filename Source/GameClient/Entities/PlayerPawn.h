@@ -113,17 +113,10 @@ public:
             return {};
 
         const auto boneData = boneArray + static_cast<std::int32_t>(boneIndex) * kBoneDataStride;
-        const auto modelPos = *reinterpret_cast<const cs2::Vector*>(boneData);
-
-        // Transform model-space bone position to world-space using m_nodeToWorld
-        // Source 2 matrix3x4_t = 4 column vectors each 3 floats: [col0][col1][col2][col3]
-        // world = col0 * x + col1 * y + col2 * z + col3 (translation)
-        const auto m = reinterpret_cast<const float*>(gameSceneNode + kNodeToWorldOffset);
-        return cs2::Vector{
-            m[0]*modelPos.x + m[3]*modelPos.y + m[6]*modelPos.z  + m[9],
-            m[1]*modelPos.x + m[4]*modelPos.y + m[7]*modelPos.z  + m[10],
-            m[2]*modelPos.x + m[5]*modelPos.y + m[8]*modelPos.z + m[11]
-        };
+        // The cached bone array stores world-space transforms. Applying
+        // m_nodeToWorld again double-translates the position and makes the
+        // aimbot reject valid bones as being too far from the pawn origin.
+        return *reinterpret_cast<const cs2::Vector*>(boneData);
     }
 
     [[nodiscard]] Optional<cs2::Vector> headPosition() const noexcept
@@ -283,11 +276,10 @@ private:
     // Hardcoded offsets for bone position reading (from cs2-dumper schema).
     static constexpr std::ptrdiff_t kOffsetToModelState{0x140};
     static constexpr std::ptrdiff_t kOffsetToBoneArray{0x80};
-    // C_BaseEntity::m_vecAbsVelocity (cs2-dumper, build 14171).
+    // C_BaseEntity::m_vecAbsVelocity (cs2-dumper, build 14173).
     static constexpr std::ptrdiff_t kOffsetToAbsVelocity{0x3F8};
-    // C_BaseModelEntity::m_vecViewOffset (cs2-dumper, build 14171).
+    // C_BaseModelEntity::m_vecViewOffset (cs2-dumper, build 14173).
     static constexpr std::ptrdiff_t kOffsetToViewOffset{0xE78};
-    static constexpr std::ptrdiff_t kNodeToWorldOffset{0x10};
     static constexpr std::ptrdiff_t kDormantOffset{0x103};
     static constexpr std::ptrdiff_t kBoneDataStride{32};
 
