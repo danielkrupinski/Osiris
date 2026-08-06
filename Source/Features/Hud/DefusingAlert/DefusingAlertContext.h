@@ -8,7 +8,6 @@
 #include <GameClient/Panorama/PanoramaUiEngine.h>
 #include <Utils/Lvalue.h>
 
-#include "DefusingAlertCondition.h"
 #include "DefusingAlertPanel.h"
 #include "DefusingAlertPanelParams.h"
 #include "DefusingAlertState.h"
@@ -29,11 +28,6 @@ public:
 
         updatePanelHandles();
         return uiEngine().getPanelFromHandle(state().defusingAlertContainerPanelHandle);
-    }
-
-    [[nodiscard]] auto defusingAlertCondition() const noexcept
-    {
-        return DefusingAlertCondition{*this};
     }
 
     [[nodiscard]] auto defusingAlertPanel() const noexcept

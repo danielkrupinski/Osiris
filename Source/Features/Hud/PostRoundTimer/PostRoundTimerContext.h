@@ -3,7 +3,6 @@
 #include <GameClient/Panorama/PanoramaLabel.h>
 #include <GameClient/Panorama/PanelHandle.h>
 
-#include "PostRoundTimerCondition.h"
 #include "PostRoundTimerPanel.h"
 #include "PostRoundTimerPanelFactory.h"
 
@@ -37,11 +36,6 @@ struct PostRoundTimerContext {
     [[nodiscard]] decltype(auto) countdownContainerPanel() const noexcept
     {
         return countdownContainerPanelHandle().getOrInit(createCountdownContainerPanel());
-    }
-
-    [[nodiscard]] auto condition() const noexcept
-    {
-        return PostRoundTimerCondition{*this};
     }
 
     [[nodiscard]] auto postRoundTimerPanel() const noexcept

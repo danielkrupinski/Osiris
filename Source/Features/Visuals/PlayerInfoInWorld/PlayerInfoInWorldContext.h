@@ -1,7 +1,5 @@
 #pragma once
 
-#include "PlayerInfoInWorldCondition.h"
-
 template <typename HookContext>
 class PlayerInfoInWorldContext {
 public:
@@ -13,11 +11,6 @@ public:
     [[nodiscard]] auto& state() const noexcept
     {
         return hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState;
-    }
-
-    [[nodiscard]] decltype(auto) condition() const noexcept
-    {
-        return hookContext.template make<PlayerInfoInWorldCondition<PlayerInfoInWorldContext>>();
     }
 
     [[nodiscard]] decltype(auto) config() const noexcept

@@ -138,7 +138,6 @@
     <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertState.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombSiteIconPanel.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimer.h" />
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerCondition.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerConfigVariables.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerContext.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h" />
@@ -147,7 +146,6 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerState.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerTextPanel.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlert.h" />
-    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertCondition.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertConfigVariables.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertContext.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanel.h" />
@@ -159,7 +157,6 @@
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverConfigVariables.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverContext.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h" />
-    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerCondition.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerConfigVariables.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerContext.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanel.h" />
@@ -232,7 +229,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoContainerPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorld.h" />
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldCondition.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldConfigVariables.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldPanelFactory.h" />

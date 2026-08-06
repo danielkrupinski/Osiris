@@ -2,35 +2,38 @@
 #include <gtest/gtest.h>
 
 #include <Features/Hud/DefusingAlert/DefusingAlert.h>
-#include <Mocks/DefusingAlertMocks/MockDefusingAlertCondition.h>
 #include <Mocks/DefusingAlertMocks/MockDefusingAlertContext.h>
 #include <Mocks/DefusingAlertMocks/MockDefusingAlertPanel.h>
+#include <Mocks/MockConfig.h>
 #include <Mocks/MockHookContext.h>
 
 class DefusingAlertTest : public testing::Test {
 protected:
+    DefusingAlertTest()
+    {
+        EXPECT_CALL(mockDefusingAlertContext, config()).WillRepeatedly(testing::ReturnRef(mockConfig));
+    }
+
     void shouldRun(bool b)
     {
-        EXPECT_CALL(mockDefusingAlertCondition, shouldRun()).WillOnce(testing::Return(b));
+        mockConfig.expectGetVariable<DefusingAlertEnabled>(b);
     }
 
     void shouldShowDefuseAlert(bool b)
     {
-        EXPECT_CALL(mockDefusingAlertCondition, shouldShowDefuseAlert()).WillOnce(testing::Return(b));
+        EXPECT_CALL(mockDefusingAlertContext, hasC4BeingDefused()).WillOnce(testing::Return(b));
     }
 
     testing::StrictMock<MockDefusingAlertContext> mockDefusingAlertContext;
-    testing::StrictMock<MockDefusingAlertCondition> mockDefusingAlertCondition;
     testing::StrictMock<MockDefusingAlertPanel> mockDefusingAlertPanel;
+    testing::StrictMock<MockConfig> mockConfig;
 
     DefusingAlert<MockHookContext, MockDefusingAlertContext&> defusingAlert{mockDefusingAlertContext};
 };
 
 TEST_F(DefusingAlertTest, DoesNotRunIfShouldNotRun) {
     shouldRun(false);
-    
-    EXPECT_CALL(mockDefusingAlertContext, defusingAlertCondition()).WillOnce(testing::ReturnRef(mockDefusingAlertCondition));
-    EXPECT_CALL(mockDefusingAlertCondition, shouldShowDefuseAlert()).Times(0);
+
     EXPECT_CALL(mockDefusingAlertContext, defusingAlertPanel()).Times(0);
 
     defusingAlert.run();
@@ -40,7 +43,6 @@ TEST_F(DefusingAlertTest, ShowsAndUpdatesDefusingAlertPanelWhenDefusingAlertShou
     shouldRun(true);
     shouldShowDefuseAlert(true);
 
-    EXPECT_CALL(mockDefusingAlertContext, defusingAlertCondition()).WillOnce(testing::ReturnRef(mockDefusingAlertCondition));
     EXPECT_CALL(mockDefusingAlertContext, defusingAlertPanel()).WillOnce(testing::ReturnRef(mockDefusingAlertPanel));
     EXPECT_CALL(mockDefusingAlertPanel, showAndUpdate());
 
@@ -51,7 +53,6 @@ TEST_F(DefusingAlertTest, HidesDefusingAlertPanelWhenDefusingAlertShouldNotBeSho
     shouldRun(true);
     shouldShowDefuseAlert(false);
 
-    EXPECT_CALL(mockDefusingAlertContext, defusingAlertCondition()).WillOnce(testing::ReturnRef(mockDefusingAlertCondition));
     EXPECT_CALL(mockDefusingAlertContext, defusingAlertPanel()).WillOnce(testing::ReturnRef(mockDefusingAlertPanel));
     EXPECT_CALL(mockDefusingAlertPanel, hide());
 

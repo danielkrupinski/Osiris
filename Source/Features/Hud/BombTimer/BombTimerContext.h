@@ -6,7 +6,6 @@
 #include <Utils/Lvalue.h>
 
 #include "BombSiteIconPanel.h"
-#include "BombTimerCondition.h"
 #include "BombTimerPanel.h"
 #include "BombTimerPanelFactory.h"
 #include "BombTimerTextPanel.h"
@@ -27,11 +26,6 @@ struct BombTimerContext {
     [[nodiscard]] auto tickingC4() const noexcept
     {
         return *_context.plantedC4();
-    }
-
-    [[nodiscard]] auto bombTimerCondition() const noexcept
-    {
-        return BombTimerCondition{*this};
     }
 
     [[nodiscard]] auto bombTimerPanel() const noexcept

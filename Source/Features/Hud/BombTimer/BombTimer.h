@@ -3,6 +3,7 @@
 #include <utility>
 
 #include <Common/Visibility.h>
+#include "BombTimerConfigVariables.h"
 #include "BombTimerContext.h"
 
 template <typename HookContext, typename Context = BombTimerContext<HookContext>>
@@ -14,13 +15,12 @@ public:
     {
     }
 
-    [[nodiscard]] Visibility update() const noexcept
+    [[nodiscard]] Visibility update() const
     {
-        decltype(auto) condition{context.bombTimerCondition()};
-        if (!condition.shouldRun())
+        if (!shouldRun())
             return Visibility::Hidden;
 
-        if (condition.shouldShowBombTimer()) {
+        if (shouldShowBombTimer()) {
             context.bombTimerPanel().showAndUpdate();
             return Visibility::Visible;
         } else {
@@ -29,18 +29,18 @@ public:
         }
     }
 
-    void forceHide() const noexcept
+    void forceHide() const
     {
-        if (context.bombTimerCondition().shouldRun())
+        if (shouldRun())
             context.bombTimerPanel().hide();
     }
 
-    void onDisable() const noexcept
+    void onDisable() const
     {
         context.bombTimerPanel().hide();
     }
 
-    void onUnload() const noexcept
+    void onUnload() const
     {
         auto&& uiEngine = context.uiEngine();
         uiEngine.deletePanelByHandle(context.state().bombTimerPanelHandle);
@@ -48,5 +48,15 @@ public:
     }
 
 private:
+    [[nodiscard]] bool shouldRun() const
+    {
+        return context.config().template getVariable<BombTimerEnabled>();
+    }
+
+    [[nodiscard]] bool shouldShowBombTimer() const
+    {
+        return context.bombPlantedPanel().isVisible().valueOr(true) && context.hasTickingC4();
+    }
+
     Context context;
 };

@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <Common/Visibility.h>
+#include "PostRoundTimerConfigVariables.h"
 #include "PostRoundTimerContext.h"
 
 template <typename HookContext, typename Context = PostRoundTimerContext<HookContext>>
@@ -13,15 +14,14 @@ public:
     {
     }
 
-    [[nodiscard]] Visibility update() const noexcept
+    [[nodiscard]] Visibility update() const
     {
         using enum Visibility;
 
-        auto&& condition = context.condition();
-        if (!condition.shouldRun())
+        if (!shouldRun())
             return Hidden;
 
-        if (condition.shouldShowPostRoundTimer()) {
+        if (shouldShowPostRoundTimer()) {
             context.postRoundTimerPanel().showAndUpdate();
             return Visible;
         } else {
@@ -30,16 +30,26 @@ public:
         }
     }
 
-    void onDisable() const noexcept
+    void onDisable() const
     {
         context.postRoundTimerPanel().hide();
     }
 
-    void onUnload() const noexcept
+    void onUnload() const
     {
         context.uiEngine().deletePanelByHandle(context.state().countdownContainerPanelHandle);
     }
 
 private:
+    [[nodiscard]] bool shouldRun() const
+    {
+        return context.config().template getVariable<PostRoundTimerEnabled>();
+    }
+
+    [[nodiscard]] bool shouldShowPostRoundTimer() const
+    {
+        return context.gameRules().hasScheduledRoundRestart() && !context.isGameRoundTimeVisible();
+    }
+
     Context context;
 };

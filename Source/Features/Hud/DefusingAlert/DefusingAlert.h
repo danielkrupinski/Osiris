@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include "DefusingAlertConfigVariables.h"
 #include "DefusingAlertContext.h"
 
 template <typename HookContext, typename Context = DefusingAlertContext<HookContext>>
@@ -15,11 +16,10 @@ public:
 
     void run() const noexcept
     {
-        decltype(auto) condition{context.defusingAlertCondition()};
-        if (!condition.shouldRun())
+        if (!shouldRun())
             return;
 
-        if (condition.shouldShowDefuseAlert())
+        if (shouldShowDefuseAlert())
             context.defusingAlertPanel().showAndUpdate();
         else
             context.defusingAlertPanel().hide();
@@ -36,5 +36,15 @@ public:
     }
 
 private:
+    [[nodiscard]] bool shouldRun() const noexcept
+    {
+        return context.config().template getVariable<DefusingAlertEnabled>();
+    }
+
+    [[nodiscard]] bool shouldShowDefuseAlert() const noexcept
+    {
+        return context.hasC4BeingDefused();
+    }
+
     Context context;
 };

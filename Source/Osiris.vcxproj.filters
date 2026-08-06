@@ -835,9 +835,6 @@
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertPanel.h">
       <Filter>Features\Hud\DefusingAlert</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerCondition.h">
-      <Filter>Features\Hud\BombTimer</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertContext.h">
       <Filter>Features\Hud\DefusingAlert</Filter>
     </ClInclude>
@@ -856,9 +853,6 @@
     <ClInclude Include="CS2\Constants\IconURLs.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertCondition.h">
-      <Filter>Features\Hud\DefusingAlert</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\HudFeaturesStates.h">
       <Filter>Features\Hud</Filter>
     </ClInclude>
@@ -872,9 +866,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h">
-      <Filter>Features\Hud\PostRoundTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerCondition.h">
       <Filter>Features\Hud\PostRoundTimer</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerContext.h">
@@ -1043,9 +1034,6 @@
       <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorld.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldCondition.h">
       <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldContext.h">
