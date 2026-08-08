@@ -122,7 +122,6 @@
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisConfigVariables.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisParams.h" />
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVisState.h" />
-    <ClInclude Include="Features\Common\FeatureToggle.h" />
     <ClInclude Include="Features\Common\InWorldPanelIndex.h" />
     <ClInclude Include="Features\Common\InWorldPanelListEntry.h" />
     <ClInclude Include="Features\Common\InWorldPanels.h" />

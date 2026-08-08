@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Features/Common/InWorldPanels.h>
-#include <Features/Common/FeatureToggle.h>
 #include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
 #include <Hooks/ViewRenderHook.h>
 

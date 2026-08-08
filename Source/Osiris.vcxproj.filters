@@ -1399,9 +1399,6 @@
     <ClInclude Include="Utils\Bits.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Common\FeatureToggle.h">
-      <Filter>Features\Common</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Common\RenderingHookEntityLoop.h">
       <Filter>Features\Common</Filter>
     </ClInclude>
