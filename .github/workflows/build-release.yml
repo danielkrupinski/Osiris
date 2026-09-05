@@ -1,0 +1,29 @@
+name: Build and Release DLL
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build C++ Project (Release x64)
+      run: |
+        msbuild /m /p:Configuration=Release /p:Platform=x64
+
+    - name: Create Release and Upload DLL
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          **/*.dll
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
