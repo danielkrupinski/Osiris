@@ -151,7 +151,6 @@
     <ClInclude Include="Features\Hud\HudFeaturesStates.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserver.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverConfigVariables.h" />
-    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverContext.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerConfigVariables.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerContext.h" />
