@@ -814,16 +814,7 @@
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\BombTimer\BombSiteIconPanel.h">
-      <Filter>Features\Hud\BombTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerTextPanel.h">
-      <Filter>Features\Hud\BombTimer</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimerState.h">
-      <Filter>Features\Hud\BombTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerContext.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimer.h">

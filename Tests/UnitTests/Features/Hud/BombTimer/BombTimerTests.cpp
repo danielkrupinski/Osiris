@@ -2,17 +2,23 @@
 #include <gtest/gtest.h>
 
 #include <Features/Hud/BombTimer/BombTimer.h>
-#include <Mocks/BombTimerMocks/MockBombTimerContext.h>
 #include <Mocks/BombTimerMocks/MockBombTimerPanel.h>
+#include <Mocks/BombTimerMocks/MockBombTimerPanelFactory.h>
 #include <Mocks/MockConfig.h>
 #include <Mocks/MockHookContext.h>
 #include <Mocks/MockPanel.h>
+#include <Mocks/HudMocks/MockHud.h>
+#include <Mocks/MockPlantedC4.h>
+#include <Mocks/MockPanoramaUiEngine.h>
+#include <Mocks/MockClientPanel.h>
+#include <Mocks/MockLabelPanel.h>
+#include <Mocks/MockImagePanel.h>
 
 class BombTimerTest : public testing::Test {
 protected:
     BombTimerTest()
     {
-        EXPECT_CALL(mockBombTimerContext, config()).WillRepeatedly(testing::ReturnRef(mockConfig));
+        EXPECT_CALL(mockHookContext, config()).WillRepeatedly(testing::ReturnRef(mockConfig));
     }
 
     void bombTimerEnabled(bool b)
@@ -20,11 +26,12 @@ protected:
         mockConfig.expectGetVariable<BombTimerEnabled>(b);
     }
 
-    testing::StrictMock<MockBombTimerContext> mockBombTimerContext;
-    testing::StrictMock<MockBombTimerPanel> mockBombTimerPanel;
+    testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockConfig> mockConfig;
+    testing::StrictMock<MockHud> mockHud;
+    testing::StrictMock<MockBombTimerPanel> mockBombTimerPanel;
 
-    BombTimer<MockHookContext, MockBombTimerContext&> bombTimer{mockBombTimerContext};
+    BombTimer<MockHookContext> bombTimer{mockHookContext};
 };
 
 TEST_F(BombTimerTest, DoesNotRunIfShouldNotRun) {
@@ -35,7 +42,7 @@ TEST_F(BombTimerTest, DoesNotRunIfShouldNotRun) {
 TEST_F(BombTimerTest, ForceHidesPanelIfShouldRun) {
     bombTimerEnabled(true);
 
-    EXPECT_CALL(mockBombTimerContext, bombTimerPanel()).WillOnce(testing::ReturnRef(mockBombTimerPanel));
+    EXPECT_CALL(mockHookContext, makeBombTimerPanel()).WillOnce(testing::ReturnRef(mockBombTimerPanel));
     EXPECT_CALL(mockBombTimerPanel, hide());
     
     bombTimer.forceHide();
@@ -47,14 +54,16 @@ TEST_F(BombTimerTest, DoesNotForceHidePanelIfShouldNotRun) {
 }
 
 TEST_F(BombTimerTest, OnDisableHidesBombTimerPanel) {
-    EXPECT_CALL(mockBombTimerContext, bombTimerPanel()).WillOnce(testing::ReturnRef(mockBombTimerPanel));
+    EXPECT_CALL(mockHookContext, makeBombTimerPanel()).WillOnce(testing::ReturnRef(mockBombTimerPanel));
     EXPECT_CALL(mockBombTimerPanel, hide());
     bombTimer.onDisable();
 }
 
 struct BombTimerUpdateTestParam {
     Optional<bool> bombPlantedPanelVisible{};
-    bool hasTickingC4{};
+    bool hasPlantedC4{};
+    Optional<bool> isBombTicking{};
+    Optional<float> timeToExplosion{};
     Visibility expectedBombTimerVisibility{};
 };
 
@@ -64,31 +73,103 @@ protected:
 };
 
 TEST_P(BombTimerUpdateTestWithParam, Update) {
-    const auto& p = GetParam();
     bombTimerEnabled(true);
+    testing::StrictMock<MockPlantedC4> mockPlantedC4;
 
-    EXPECT_CALL(mockBombTimerContext, bombPlantedPanel()).Times(testing::AtMost(1)).WillRepeatedly(testing::ReturnRef(mockBombPlantedPanel));
-    EXPECT_CALL(mockBombPlantedPanel, isVisible()).Times(testing::AtMost(1)).WillRepeatedly(testing::Return(p.bombPlantedPanelVisible));
-    EXPECT_CALL(mockBombTimerContext, hasTickingC4()).Times(testing::AtMost(1)).WillRepeatedly(testing::Return(p.hasTickingC4));
+    EXPECT_CALL(mockHookContext, hud()).Times(testing::AtMost(1)).WillRepeatedly(testing::ReturnRef(mockHud));
+    EXPECT_CALL(mockHud, bombPlantedPanel()).Times(testing::AtMost(1)).WillRepeatedly(testing::ReturnRef(mockBombPlantedPanel));
+    EXPECT_CALL(mockBombPlantedPanel, isVisible()).Times(testing::AtMost(1)).WillRepeatedly(testing::Return(GetParam().bombPlantedPanelVisible));
+    EXPECT_CALL(mockHookContext, makeBombTimerPanel()).WillOnce(testing::ReturnRef(mockBombTimerPanel));
+    EXPECT_CALL(mockHookContext, plantedC4()).WillOnce(testing::ReturnRef(mockPlantedC4));
 
-    EXPECT_CALL(mockBombTimerContext, bombTimerPanel()).WillOnce(testing::ReturnRef(mockBombTimerPanel));
+    EXPECT_CALL(mockPlantedC4, operatorBool()).Times(testing::AtMost(1)).WillRepeatedly(testing::Return(GetParam().hasPlantedC4));
+    EXPECT_CALL(mockPlantedC4, isTicking()).Times(testing::AtMost(1)).WillRepeatedly(testing::Return(GetParam().isBombTicking));
+    EXPECT_CALL(mockPlantedC4, getTimeToExplosion()).Times(testing::AtMost(1)).WillRepeatedly(testing::Return(GetParam().timeToExplosion));
 
-    if (p.expectedBombTimerVisibility == Visibility::Visible)
-        EXPECT_CALL(mockBombTimerPanel, showAndUpdate());
+    if (GetParam().expectedBombTimerVisibility == Visibility::Visible)
+        EXPECT_CALL(mockBombTimerPanel, showAndUpdate(testing::Ref(mockPlantedC4)));
 
-    if (p.expectedBombTimerVisibility == Visibility::Hidden)
+    if (GetParam().expectedBombTimerVisibility == Visibility::Hidden)
         EXPECT_CALL(mockBombTimerPanel, hide());
     
-    EXPECT_EQ(bombTimer.update(), p.expectedBombTimerVisibility);
+    EXPECT_EQ(bombTimer.update(), GetParam().expectedBombTimerVisibility);
 }
 
 INSTANTIATE_TEST_SUITE_P(, BombTimerUpdateTestWithParam, testing::ValuesIn(
     std::to_array<BombTimerUpdateTestParam>({
-        {.bombPlantedPanelVisible = std::nullopt, .hasTickingC4 = true, .expectedBombTimerVisibility = Visibility::Visible},
-        {.bombPlantedPanelVisible = true, .hasTickingC4 = true, .expectedBombTimerVisibility = Visibility::Visible},
-        {.bombPlantedPanelVisible = false, .hasTickingC4 = true, .expectedBombTimerVisibility = Visibility::Hidden},
-        {.bombPlantedPanelVisible = std::nullopt, .hasTickingC4 = false, .expectedBombTimerVisibility = Visibility::Hidden},
-        {.bombPlantedPanelVisible = true, .hasTickingC4 = false, .expectedBombTimerVisibility = Visibility::Hidden},
-        {.bombPlantedPanelVisible = false, .hasTickingC4 = false, .expectedBombTimerVisibility = Visibility::Hidden}
+        {
+            .bombPlantedPanelVisible = true,
+            .hasPlantedC4 = true,
+            .isBombTicking = true,
+            .timeToExplosion = 5.5f,
+            .expectedBombTimerVisibility = Visibility::Visible
+        },
+
+        {
+            .bombPlantedPanelVisible = std::nullopt,
+            .hasPlantedC4 = true,
+            .isBombTicking = true,
+            .timeToExplosion = 5.5f,
+            .expectedBombTimerVisibility = Visibility::Visible
+        },
+        {
+            .bombPlantedPanelVisible = true,
+            .hasPlantedC4 = true,
+            .isBombTicking = true,
+            .timeToExplosion = 5.5f,
+            .expectedBombTimerVisibility = Visibility::Visible
+        },
+        {
+            .bombPlantedPanelVisible = false,
+            .hasPlantedC4 = true,
+            .isBombTicking = true,
+            .timeToExplosion = 5.5f,
+            .expectedBombTimerVisibility = Visibility::Hidden
+        },
+
+        {
+            .bombPlantedPanelVisible = true,
+            .hasPlantedC4 = false,
+            .isBombTicking = true,
+            .timeToExplosion = 5.5f,
+            .expectedBombTimerVisibility = Visibility::Hidden
+        },
+
+        {
+            .bombPlantedPanelVisible = true,
+            .hasPlantedC4 = true,
+            .isBombTicking = false,
+            .timeToExplosion = 5.5f,
+            .expectedBombTimerVisibility = Visibility::Hidden
+        },
+        {
+            .bombPlantedPanelVisible = true,
+            .hasPlantedC4 = true,
+            .isBombTicking = std::nullopt,
+            .timeToExplosion = 5.5f,
+            .expectedBombTimerVisibility = Visibility::Visible
+        },
+
+        {
+            .bombPlantedPanelVisible = true,
+            .hasPlantedC4 = true,
+            .isBombTicking = true,
+            .timeToExplosion = 0.0f,
+            .expectedBombTimerVisibility = Visibility::Hidden
+        },
+        {
+            .bombPlantedPanelVisible = true,
+            .hasPlantedC4 = true,
+            .isBombTicking = true,
+            .timeToExplosion = -0.1f,
+            .expectedBombTimerVisibility = Visibility::Hidden
+        },
+        {
+            .bombPlantedPanelVisible = true,
+            .hasPlantedC4 = true,
+            .isBombTicking = true,
+            .timeToExplosion = std::nullopt,
+            .expectedBombTimerVisibility = Visibility::Hidden
+        }
     })
 ));

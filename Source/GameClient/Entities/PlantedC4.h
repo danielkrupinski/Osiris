@@ -56,6 +56,11 @@ public:
         return baseEntity().absOrigin().andThen(toNearestBombsiteIndex());
     }
 
+    explicit operator bool() const noexcept
+    {
+        return plantedC4 != nullptr;
+    }
+
 private:
     [[nodiscard]] auto toNearestBombsiteIndex() const noexcept
     {

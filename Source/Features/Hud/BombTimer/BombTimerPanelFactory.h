@@ -24,7 +24,7 @@ public:
         return utils::lvalue<decltype(panel)>(panel);
     }
 
-    decltype(auto) createBombSiteIconPanel(auto&& parentPanel) const noexcept
+    decltype(auto) createBombsiteIconPanel(auto&& parentPanel) const noexcept
     {
         using namespace bomb_timer_panel_params::bombsite_icon_panel_params;
 

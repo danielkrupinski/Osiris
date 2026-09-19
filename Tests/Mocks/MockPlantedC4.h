@@ -15,4 +15,10 @@ struct MockPlantedC4 {
     MOCK_METHOD(Optional<bool>, canBeDefused, ());
     MOCK_METHOD(Optional<bool>, isTicking, ());
     MOCK_METHOD(MockBaseEntity&, baseEntity, ());
+    MOCK_METHOD(bool, operatorBool, ());
+
+    explicit operator bool()
+    {
+        return operatorBool();
+    }
 };
