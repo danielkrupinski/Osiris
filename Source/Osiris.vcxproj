@@ -294,7 +294,6 @@
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManagerContext.h" />
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelState.h" />
     <ClInclude Include="GameClient\Hud\DeathNotice.h" />
-    <ClInclude Include="GameClient\Hud\DeathNoticeContext.h" />
     <ClInclude Include="GameClient\Hud\DeathNotices.h" />
     <ClInclude Include="GameClient\Hud\Hud.h" />
     <ClInclude Include="GameClient\Hud\HudContext.h" />
