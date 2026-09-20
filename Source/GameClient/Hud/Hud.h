@@ -4,52 +4,53 @@
 
 #include "DeathNotices.h"
 
-template <typename Context>
-struct Hud {
-    explicit Hud(Context context) noexcept
-        : context{context}
+template <typename HookContext>
+class Hud {
+public:
+    explicit Hud(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     [[nodiscard]] decltype(auto) deathNotices() noexcept
     {
-        return context.deathNoticesPanelHandle().getOrInit(findVisibleDeathNoticesPanel()).template as<DeathNotices>();
+        return deathNoticesPanelHandle().getOrInit(findVisibleDeathNoticesPanel()).template as<DeathNotices>();
     }
 
     [[nodiscard]] decltype(auto) timerTextPanel() noexcept
     {
-        return context.timerTextPanelHandle().getOrInit(findTimerTextPanel());
+        return timerTextPanelHandle().getOrInit(findTimerTextPanel());
     }
 
     [[nodiscard]] decltype(auto) getHudReticle() noexcept
     {
-        return context.panel().findChildInLayoutFile(cs2::panel_id::HudReticle);
+        return panel().findChildInLayoutFile(cs2::panel_id::HudReticle);
     }
 
     [[nodiscard]] decltype(auto) scoreAndTimeAndBomb() noexcept
     {
-        return context.scoreAndTimeAndBombPanelHandle().getOrInit(findScoreAndTimeAndBombPanel());
+        return scoreAndTimeAndBombPanelHandle().getOrInit(findScoreAndTimeAndBombPanel());
     }
 
     [[nodiscard]] decltype(auto) bombStatus() noexcept
     {
-        return context.bombStatusPanelHandle().getOrInit(findBombStatusPanel());
+        return bombStatusPanelHandle().getOrInit(findBombStatusPanel());
     }
 
     [[nodiscard]] decltype(auto) hudTeamCounter() noexcept
     {
-        return context.panel().findChildInLayoutFile(cs2::panel_id::HudTeamCounter);
+        return panel().findChildInLayoutFile(cs2::panel_id::HudTeamCounter);
     }
 
     [[nodiscard]] decltype(auto) bombPlantedPanel() noexcept
     {
-        return context.bombPlantedPanelHandle().getOrInit(findBombPlantedPanel());
+        return bombPlantedPanelHandle().getOrInit(findBombPlantedPanel());
     }
 
 private:
     [[nodiscard]] decltype(auto) hudDeathNotice() noexcept
     {
-        return context.panel().findChildInLayoutFile(cs2::panel_id::HudDeathNotice);
+        return panel().findChildInLayoutFile(cs2::panel_id::HudDeathNotice);
     }
 
     [[nodiscard]] auto findVisibleDeathNoticesPanel() noexcept
@@ -62,7 +63,7 @@ private:
     [[nodiscard]] auto findBombStatusPanel() noexcept
     {
         return [this] {
-            context.resetBombStatusVisibility();
+            resetBombStatusVisibility();
             return scoreAndTimeAndBomb().findChildInLayoutFile(cs2::panel_id::BombStatus);
         };
     }
@@ -88,5 +89,43 @@ private:
         };
     }
 
-    Context context;
+    [[nodiscard]] auto panel() noexcept
+    {
+        auto&& hud = hookContext.patternSearchResults().template get<HudPanelPointer>();
+        if (hud && *hud)
+            return hookContext.template make<PanoramaUiPanel>((*hud)->uiPanel);
+        return hookContext.template make<PanoramaUiPanel>(nullptr);
+    }
+
+    [[nodiscard]] auto deathNoticesPanelHandle() noexcept
+    {
+        return hookContext.template make<PanelHandle>(hookContext.hudState().deathNoticesPanelHandle);
+    }
+
+    [[nodiscard]] auto scoreAndTimeAndBombPanelHandle() noexcept
+    {
+        return hookContext.template make<PanelHandle>(hookContext.hudState().scoreAndTimeAndBombPanelHandle);
+    }
+
+    [[nodiscard]] auto bombStatusPanelHandle() noexcept
+    {
+        return hookContext.template make<PanelHandle>(hookContext.hudState().bombStatusPanelHandle);
+    }
+
+    [[nodiscard]] auto bombPlantedPanelHandle() noexcept
+    {
+        return hookContext.template make<PanelHandle>(hookContext.hudState().bombPlantedPanelHandle);
+    }
+
+    [[nodiscard]] auto timerTextPanelHandle() noexcept
+    {
+        return hookContext.template make<PanelHandle>(hookContext.hudState().timerTextPanelHandle);
+    }
+
+    void resetBombStatusVisibility() noexcept
+    {
+        hookContext.bombStatusPanelState().resetVisibility();
+    }
+
+    HookContext& hookContext;
 };

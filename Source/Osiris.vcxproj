@@ -296,7 +296,6 @@
     <ClInclude Include="GameClient\Hud\DeathNotice.h" />
     <ClInclude Include="GameClient\Hud\DeathNotices.h" />
     <ClInclude Include="GameClient\Hud\Hud.h" />
-    <ClInclude Include="GameClient\Hud\HudContext.h" />
     <ClInclude Include="GameClient\Hud\HudState.h" />
     <ClInclude Include="GameClient\MemAlloc.h" />
     <ClInclude Include="GameClient\MemAllocState.h" />
