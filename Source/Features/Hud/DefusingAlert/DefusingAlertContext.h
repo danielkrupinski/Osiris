@@ -37,13 +37,13 @@ public:
 
     [[nodiscard]] auto c4BeingDefused() const noexcept
     {
-        return *context.plantedC4();
+        return context.plantedC4();
     }
 
     [[nodiscard]] bool hasC4BeingDefused() const noexcept
     {
         const auto plantedC4{context.plantedC4()};
-        return plantedC4 && plantedC4->isBeingDefused();
+        return plantedC4 && plantedC4.isBeingDefused();
     }
 
     [[nodiscard]] DefusingAlertState& state() const noexcept

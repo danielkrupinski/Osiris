@@ -2,24 +2,37 @@
 
 #include <utility>
 
+#include <HookContext/HookContextMacros.h>
 #include "KillfeedPreserverConfigVariables.h"
-#include "KillfeedPreserverContext.h"
 
-template <typename HookContext, typename Context = KillfeedPreserverContext<HookContext>>
+template <typename HookContext>
 class KillfeedPreserver {
 public:
-    template <typename... Args>
-    KillfeedPreserver(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit KillfeedPreserver(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
-    void run() noexcept
+    void run() const
     {
-        if (context.config().template getVariable<KillfeedPreserverEnabled>())
-            context.deathNotices().forEach(context.preserveDeathNotice());
+        if (GET_CONFIG_VAR(KillfeedPreserverEnabled))
+            deathNotices().forEach(preserveDeathNotice());
     }
 
 private:
-    Context context;
+    [[nodiscard]] decltype(auto) deathNotices() const
+    {
+        return hookContext.hud().deathNotices();
+    }
+
+    [[nodiscard]] auto preserveDeathNotice() const
+    {
+        return [](auto&& deathNotice)
+        {
+            if (deathNotice.isLocalPlayerKiller() && deathNotice.wasSpawnedThisRound().valueOr(false))
+                deathNotice.markAsJustSpawned();
+        };
+    }
+
+    HookContext& hookContext;
 };

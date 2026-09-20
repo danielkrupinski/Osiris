@@ -3,6 +3,8 @@
 #include <gmock/gmock.h>
 #include <Features/FeaturesStates.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlertPanelFactory.h>
+#include <Features/Hud/BombTimer/BombTimer.h>
+#include <Features/Hud/BombTimer/BombTimerPanelFactory.h>
 #include <GameClient/Panorama/PanelHandle.h>
 #include <GameClient/Crosshair.h>
 #include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
@@ -21,6 +23,9 @@ struct MockPlayerController;
 struct MockPlayerPawn;
 struct MockViewToProjectionMatrix;
 struct MockBombPlantAlertPanelFactory;
+struct MockBombTimerPanelFactory;
+struct MockBombTimerPanel;
+struct MockPlantedC4;
 
 class OsirisDirectoryPath;
 
@@ -41,7 +46,10 @@ struct MockHookContext {
     MOCK_METHOD(MockCrosshair&, makeCrosshair, ());
     MOCK_METHOD(MockPanoramaUiEngine&, makePanoramaUiEngine, ());
     MOCK_METHOD(MockBombPlantAlertPanelFactory&, makeBombPlantAlertPanelFactory, ());
+    MOCK_METHOD(MockBombTimerPanelFactory&, makeBombTimerPanelFactory, ());
+    MOCK_METHOD(MockBombTimerPanel&, makeBombTimerPanel, ());
     MOCK_METHOD(Optional<float>, localPlayerBulletInaccuracy, ());
+    MOCK_METHOD(MockPlantedC4&, plantedC4, ());
 
     template <template <typename> typename T, typename... Args>
     [[nodiscard]] decltype(auto) make(Args&&... args)
@@ -56,6 +64,10 @@ struct MockHookContext {
             return makePanoramaUiEngine(std::forward<Args>(args)...);
         } else if constexpr (std::is_same_v<T<MockHookContext>, BombPlantAlertPanelFactory<MockHookContext>>) {
             return makeBombPlantAlertPanelFactory(std::forward<Args>(args)...);
+        } else if constexpr (std::is_same_v<T<MockHookContext>, BombTimerPanelFactory<MockHookContext>>) {
+            return makeBombTimerPanelFactory(std::forward<Args>(args)...);
+        } else if constexpr (std::is_same_v<T<MockHookContext>, BombTimerPanel<MockHookContext>>) {
+            return makeBombTimerPanel(std::forward<Args>(args)...);
         }
     }
 };

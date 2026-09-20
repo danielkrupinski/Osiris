@@ -135,15 +135,12 @@
     <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertPanelParams.h" />
     <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertParams.h" />
     <ClInclude Include="Features\Hud\BombPlantAlert\BombPlantAlertState.h" />
-    <ClInclude Include="Features\Hud\BombTimer\BombSiteIconPanel.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimer.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerConfigVariables.h" />
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerContext.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanelFactory.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanelParams.h" />
     <ClInclude Include="Features\Hud\BombTimer\BombTimerState.h" />
-    <ClInclude Include="Features\Hud\BombTimer\BombTimerTextPanel.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlert.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertConfigVariables.h" />
     <ClInclude Include="Features\Hud\DefusingAlert\DefusingAlertContext.h" />
@@ -154,7 +151,6 @@
     <ClInclude Include="Features\Hud\HudFeaturesStates.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserver.h" />
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverConfigVariables.h" />
-    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverContext.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerConfigVariables.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerContext.h" />

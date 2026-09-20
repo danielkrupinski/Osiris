@@ -3,60 +3,77 @@
 #include <utility>
 
 #include <Common/Visibility.h>
+#include <HookContext/HookContextMacros.h>
 #include "BombTimerConfigVariables.h"
-#include "BombTimerContext.h"
+#include "BombTimerPanel.h"
 
-template <typename HookContext, typename Context = BombTimerContext<HookContext>>
+template <typename HookContext>
 class BombTimer {
 public:
-    template <typename... Args>
-    explicit BombTimer(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit BombTimer(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
     [[nodiscard]] Visibility update() const
     {
-        if (!shouldRun())
+        if (!enabled())
             return Visibility::Hidden;
 
-        if (shouldShowBombTimer()) {
-            context.bombTimerPanel().showAndUpdate();
+        auto&& plantedC4 = hookContext.plantedC4();
+        if (shouldShowBombTimer(plantedC4)) {
+            bombTimerPanel().showAndUpdate(plantedC4);
             return Visibility::Visible;
         } else {
-            context.bombTimerPanel().hide();
+            bombTimerPanel().hide();
             return Visibility::Hidden;
         }
     }
 
     void forceHide() const
     {
-        if (shouldRun())
-            context.bombTimerPanel().hide();
+        if (enabled())
+            bombTimerPanel().hide();
     }
 
     void onDisable() const
     {
-        context.bombTimerPanel().hide();
+        bombTimerPanel().hide();
     }
 
     void onUnload() const
     {
-        auto&& uiEngine = context.uiEngine();
-        uiEngine.deletePanelByHandle(context.state().bombTimerPanelHandle);
-        uiEngine.deletePanelByHandle(context.state().bombTimerContainerPanelHandle);
+        hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(state().bombTimerContainerPanelHandle);
     }
 
 private:
-    [[nodiscard]] bool shouldRun() const
+    [[nodiscard]] bool enabled() const
     {
-        return context.config().template getVariable<BombTimerEnabled>();
+        return GET_CONFIG_VAR(BombTimerEnabled);
     }
 
-    [[nodiscard]] bool shouldShowBombTimer() const
+    [[nodiscard]] bool shouldShowBombTimer(auto&& plantedC4) const
     {
-        return context.bombPlantedPanel().isVisible().valueOr(true) && context.hasTickingC4();
+        return bombPlantedPanel().isVisible().valueOr(true)
+            && plantedC4
+            && plantedC4.isTicking().valueOr(true)
+            && plantedC4.getTimeToExplosion().greaterThan(0.0f).valueOr(false);
     }
 
-    Context context;
+    [[nodiscard]] decltype(auto) bombTimerPanel() const
+    {
+        return hookContext.template make<BombTimerPanel>();
+    }
+
+    [[nodiscard]] decltype(auto) bombPlantedPanel() const
+    {
+        return hookContext.hud().bombPlantedPanel();
+    }
+
+    [[nodiscard]] auto& state() const
+    {
+        return hookContext.featuresStates().hudFeaturesStates.bombTimerState;
+    }
+
+    HookContext& hookContext;
 };

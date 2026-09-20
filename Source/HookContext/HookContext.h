@@ -148,7 +148,7 @@ struct HookContext {
 
     [[nodiscard]] auto plantedC4() noexcept
     {
-        return std::optional{make<PlantedC4<HookContext>>(getPlantedC4())};
+        return make<PlantedC4<HookContext>>(getPlantedC4());
     }
 
     [[nodiscard]] auto cvarSystem() noexcept

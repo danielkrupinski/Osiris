@@ -4,6 +4,4 @@
 
 struct BombTimerState {
     cs2::PanelHandle bombTimerContainerPanelHandle;
-    cs2::PanelHandle bombSiteIconPanelHandle;
-    cs2::PanelHandle bombTimerPanelHandle;
 };

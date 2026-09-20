@@ -11,6 +11,7 @@ struct MockClientPanel;
 struct PanelFontParams;
 struct PanelAlignmentParams;
 struct PanelMarginParams;
+struct MockPanoramaUiPanelChildPanels;
 
 struct MockPanel {
     MOCK_METHOD(void, setParent, (const MockPanel& parent));
@@ -33,4 +34,14 @@ struct MockPanel {
     MOCK_METHOD(void, setMargin, (const PanelMarginParams& params));
     MOCK_METHOD(cs2::PanelHandle, getHandle, ());
     MOCK_METHOD(MockClientPanel&, clientPanel, ());
+    MOCK_METHOD(MockPanoramaUiPanelChildPanels&, children, ());
+};
+
+struct MockPanoramaUiPanelChildPanels {
+    MOCK_METHOD(MockPanel&, operatorSubscript, (std::size_t index));
+
+    decltype(auto) operator[](std::size_t index)
+    {
+        return operatorSubscript(index);
+    }
 };
