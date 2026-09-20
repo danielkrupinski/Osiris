@@ -464,7 +464,6 @@
     <ClInclude Include="MemorySearch\BytePatternView.h" />
     <ClInclude Include="MemorySearch\TempPatternPool.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObject.h" />
-    <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectPointer.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjects.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectsState.h" />

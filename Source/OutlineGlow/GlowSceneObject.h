@@ -1,53 +1,105 @@
 #pragma once
 
+#include <cstring>
 #include <utility>
 
 #include <CS2/Classes/Color.h>
-#include "GlowSceneObjectContext.h"
+#include <CS2/Classes/Glow.h>
+#include <GameClient/SceneSystem/SceneObject.h>
+#include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
+#include <MemoryPatterns/PatternTypes/GlowSceneObjectPatternTypes.h>
+#include <Platform/Macros/IsPlatform.h>
 
-template <typename HookContext, typename Context = GlowSceneObjectContext<HookContext>>
+#include "GlowSceneObjectPointer.h"
+
+template <typename HookContext>
 class GlowSceneObject {
 public:
-    template <typename... Args>
-    GlowSceneObject(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    GlowSceneObject(HookContext& hookContext, GlowSceneObjectPointer* glowSceneObjectPointer) noexcept
+        : hookContext{hookContext}
+        , glowSceneObjectPointer{glowSceneObjectPointer}
     {
     }
 
     [[nodiscard]] decltype(auto) baseSceneObject() const noexcept
     {
-        return context.baseSceneObject();
+        return hookContext.template make<SceneObject>(glowSceneObject());
     }
 
     void apply(auto&& sceneObject, cs2::Color color, int glowRange = 0) const noexcept
     {
-        context.applyGlow(sceneObject, color, glowRange);
+        applyGlow(sceneObject, color, glowRange);
         storeGlowSceneObjectClass();
     }
 
     void setGlowEntity(auto&& entity) const noexcept
     {
-        context.glowEntity() = entity;
+        glowEntity() = entity;
     }
 
     [[nodiscard]] decltype(auto) getAttachedSceneObject() const noexcept
     {
-        return context.attachedSceneObject().valueOr(nullptr);
+        return attachedSceneObject().valueOr(nullptr);
     }
 
     [[nodiscard]] auto isValidGlowSceneObject() const noexcept
     {
-        return baseSceneObject().objectClass().equal(context.storedGlowSceneObjectClass());
+        return baseSceneObject().objectClass().equal(storedGlowSceneObjectClass());
     }
 
 private:
     void storeGlowSceneObjectClass() const noexcept
     {
-        if (auto& storedGlowSceneObjectClass = context.storedGlowSceneObjectClass(); storedGlowSceneObjectClass == 0xFF) {
+        if (auto& storedGlowSceneObjectClass_ = storedGlowSceneObjectClass(); storedGlowSceneObjectClass_ == 0xFF) {
             if (const auto objectClass = baseSceneObject().objectClass(); objectClass.hasValue())
-                storedGlowSceneObjectClass = objectClass.value();
+                storedGlowSceneObjectClass_ = objectClass.value();
         }
     }
 
-    Context context;
+    void applyGlow(auto&& sceneObject, cs2::Color color, int glowRange) const noexcept
+    {
+        if (!sceneObject || !glowSceneObjectPointer)
+            return;
+
+        if (const auto manageGlowSceneObject = hookContext.patternSearchResults().template get<ManageGlowSceneObjectPointer>()) {
+            cs2::CGlowHelperSceneObject* tempGlowSceneObject{glowSceneObject()};
+            cs2::CGlowHelperSceneObject* dummy{nullptr};
+            float colorFloat[4]{color.r() / 255.0f, color.g() / 255.0f, color.b() / 255.0f, color.a() / 255.0f};
+
+#if IS_WIN64()
+            manageGlowSceneObject(&tempGlowSceneObject, &dummy, sceneObject, colorFloat, 0, static_cast<float>(glowRange), 3, 1.0f);
+#elif IS_LINUX()
+            double colorDouble[2];
+            static_assert(sizeof(colorFloat) == sizeof(colorDouble));
+            std::memcpy(colorDouble, colorFloat, sizeof(colorFloat));
+            manageGlowSceneObject(&tempGlowSceneObject, &dummy, sceneObject, 3, colorDouble[0], colorDouble[1], 0.0f, static_cast<float>(glowRange), 1.0f);
+#endif
+            glowSceneObjectPointer->setValue(tempGlowSceneObject);
+        }
+    }
+
+    [[nodiscard]] decltype(auto) glowEntity() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToGlowSceneObjectEntity>().of(glowSceneObject());
+    }
+
+    [[nodiscard]] decltype(auto) attachedSceneObject() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToGlowSceneObjectAttachedSceneObject>().of(glowSceneObject());
+    }
+
+    [[nodiscard]] auto& storedGlowSceneObjectClass() const noexcept
+    {
+        return hookContext.glowSceneObjectState().glowSceneObjectClass;
+    }
+
+    [[nodiscard]] cs2::CGlowHelperSceneObject* glowSceneObject() const noexcept
+    {
+        if (glowSceneObjectPointer)
+            return glowSceneObjectPointer->value();
+        return nullptr;
+    }
+
+    HookContext& hookContext;
+    GlowSceneObjectPointer* glowSceneObjectPointer;
 };
