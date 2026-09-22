@@ -838,9 +838,6 @@
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserver.h">
       <Filter>Features\Hud\KillfeedPreserver</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverContext.h">
-      <Filter>Features\Hud\KillfeedPreserver</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Constants\IconURLs.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
@@ -960,9 +957,6 @@
     </ClInclude>
     <ClInclude Include="MemoryPatterns\Windows\SceneSystemPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h">
-      <Filter>OutlineGlow</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Optional.h">
       <Filter>Utils</Filter>
@@ -1481,9 +1475,6 @@
       <Filter>GameClient\EntitySystem</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Hud\DeathNotice.h">
-      <Filter>GameClient\Hud</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClient\Hud\DeathNoticeContext.h">
       <Filter>GameClient\Hud</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Hud\DeathNotices.h">

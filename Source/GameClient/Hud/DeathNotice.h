@@ -3,50 +3,61 @@
 #include <cstdint>
 #include <utility>
 
+#include <CS2/Panorama/CUIPanel.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
 #include <Utils/StringBuilder.h>
 #include <Utils/StringParser.h>
 
-#include "DeathNoticeContext.h"
-
-template <typename HookContext, typename Context = DeathNoticeContext<HookContext>>
+template <typename HookContext>
 class DeathNotice {
 public:
-    template <typename... Args>
-    explicit DeathNotice(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    DeathNotice(HookContext& hookContext, cs2::CUIPanel* uiPanel) noexcept
+        : hookContext{hookContext}
+        , uiPanel{uiPanel}
     {
     }
 
-    [[nodiscard]] bool isLocalPlayerKiller() const noexcept
+    [[nodiscard]] bool isLocalPlayerKiller() const
     {
-        return context.panel().hasClass(context.panoramaSymbols().deathNoticeKillerSymbol);
+        return panel().hasClass(panoramaSymbols().deathNoticeKillerSymbol);
     }
 
-    [[nodiscard]] auto wasSpawnedThisRound() const noexcept
+    [[nodiscard]] auto wasSpawnedThisRound() const
     {
-        return context.gameRules().roundStartTime().lessEqual(getSpawnTime());
+        return hookContext.gameRules().roundStartTime().lessEqual(getSpawnTime());
     }
 
-    [[nodiscard]] float getSpawnTime() const noexcept
+    [[nodiscard]] float getSpawnTime() const
     {
         float spawnTime = 0.0f;
-        if (const auto spawnTimeString = context.panel().getAttributeString(context.panoramaSymbols().spawnTimeSymbol, ""))
+        if (const auto spawnTimeString = panel().getAttributeString(panoramaSymbols().spawnTimeSymbol, ""))
             StringParser{spawnTimeString}.parseFloat(spawnTime);
         return spawnTime;
     }
 
-    void markAsJustSpawned() const noexcept
+    void markAsJustSpawned() const
     {
-        if (const auto curtime = context.globalVars().curtime(); curtime.hasValue())
+        if (const auto curtime = hookContext.globalVars().curtime(); curtime.hasValue())
             setSpawnTime(curtime.value());
     }
 
-    void setSpawnTime(float spawnTime) const noexcept
+    void setSpawnTime(float spawnTime) const
     {
-        context.panel().setAttributeString(context.panoramaSymbols().spawnTimeSymbol,
+        panel().setAttributeString(panoramaSymbols().spawnTimeSymbol,
             StringBuilderStorage<20>{}.builder().put(static_cast<std::uint64_t>(spawnTime), '.', '0').cstring());
     }
 
 private:
-    Context context;
+    [[nodiscard]] decltype(auto) panel() const
+    {
+        return hookContext.template make<PanoramaUiPanel>(uiPanel);
+    }
+
+    [[nodiscard]] decltype(auto) panoramaSymbols() const
+    {
+        return hookContext.panoramaSymbols();
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* uiPanel;
 };

@@ -11,7 +11,6 @@
 #include <GameClient/Entities/PlayerResource.h>
 #include <GameClient/FileSystem.h>
 #include <GameClient/Hud/Hud.h>
-#include <GameClient/Hud/HudContext.h>
 #include <MemoryPatterns/PatternTypes/ClientPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/CvarPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/GameRulesPatternTypes.h>
@@ -122,7 +121,7 @@ struct HookContext {
 
     [[nodiscard]] auto hud() noexcept
     {
-        return Hud{HudContext{*this}};
+        return Hud{*this};
     }
 
     [[nodiscard]] auto localPlayerController() noexcept

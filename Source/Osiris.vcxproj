@@ -294,10 +294,8 @@
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManagerContext.h" />
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelState.h" />
     <ClInclude Include="GameClient\Hud\DeathNotice.h" />
-    <ClInclude Include="GameClient\Hud\DeathNoticeContext.h" />
     <ClInclude Include="GameClient\Hud\DeathNotices.h" />
     <ClInclude Include="GameClient\Hud\Hud.h" />
-    <ClInclude Include="GameClient\Hud\HudContext.h" />
     <ClInclude Include="GameClient\Hud\HudState.h" />
     <ClInclude Include="GameClient\MemAlloc.h" />
     <ClInclude Include="GameClient\MemAllocState.h" />
@@ -465,7 +463,6 @@
     <ClInclude Include="MemorySearch\BytePatternView.h" />
     <ClInclude Include="MemorySearch\TempPatternPool.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObject.h" />
-    <ClInclude Include="OutlineGlow\GlowSceneObjectContext.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectPointer.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjects.h" />
     <ClInclude Include="OutlineGlow\GlowSceneObjectsState.h" />
