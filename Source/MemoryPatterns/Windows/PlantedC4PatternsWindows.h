@@ -7,7 +7,7 @@ struct PlantedC4Patterns {
     [[nodiscard]] static consteval auto addClientPatterns(auto clientPatterns) noexcept
     {
         return clientPatterns
-            .template addPattern<PlantedC4sPointer, CodePattern{"39 ? ? ? ? ? 7E ? 48 8B ? 48 8B ? ? ? ? ? 48 8B ? 4C 8B ? ? ? ? ?"}.add(14).abs()>()
+            .template addPattern<PlantedC4sPointer, CodePattern{"7E ? ? 8B 0E 48 8B 1D ? ? ? ? 48 8B D3 4C 8B 81 48 01 00 00"}.add(8).abs()>()
             .template addPattern<BombSiteOffset, CodePattern{"41 0F 2F C2 0F 86 ? ? ? ? 8B ? ? ? ? ?"}.add(12).read()>()
             .template addPattern<BombTickingOffset, CodePattern{"44 38 ? ? ? ? ? 74 ? 49 8B ? E8 ? ? ? ? 83"}.add(3).read()>()
             .template addPattern<BombBlowTimeOffset, CodePattern{"F3 0F 10 87 ? ? ? ? F3 0F 11 06"}.add(4).read()>()
