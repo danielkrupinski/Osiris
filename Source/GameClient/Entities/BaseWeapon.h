@@ -6,6 +6,7 @@
 #include <CS2/Classes/CCSWeaponBaseVData.h>
 #include <MemoryPatterns/PatternTypes/WeaponPatternTypes.h>
 #include <MemoryPatterns/PatternTypes/WeaponVDataPatternTypes.h>
+#include <Platform/Macros/IsPlatform.h>
 #include "BaseEntity.h"
 #include "EntityClassifier.h"
 
@@ -86,11 +87,32 @@ private:
 
     [[nodiscard]] Optional<float> spread() const noexcept
     {
+#if IS_WIN64()
+        const auto mode = weaponMode();
+        const auto weaponSpread = weaponSpreadValues();
+        if (mode.hasValue() && weaponSpread.get())
+            return weaponSpread.get()[mode.value() == cs2::CSWeaponMode::Secondary_Mode ? 1 : 0];
+        return {};
+#else
         const auto getSpreadFn = hookContext.patternSearchResults().template get<PointerToGetSpreadFunction>();
         if (baseWeapon && getSpreadFn)
             return getSpreadFn(baseWeapon);
         return {};
+#endif
     }
+
+#if IS_WIN64()
+    [[nodiscard]] auto weaponMode() const noexcept
+    {
+        return hookContext.patternSearchResults().template get<OffsetToWeaponMode>().of(baseWeapon).toOptional();
+    }
+
+    [[nodiscard]] auto weaponSpreadValues() const noexcept
+    {
+        const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(baseEntity().vData().valueOr(nullptr));
+        return hookContext.patternSearchResults().template get<OffsetToWeaponSpread>().arrayOf(vData);
+    }
+#endif
 
     [[nodiscard]] auto sceneObjectUpdaterHandle() const noexcept
     {

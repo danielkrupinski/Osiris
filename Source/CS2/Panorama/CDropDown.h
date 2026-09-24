@@ -17,7 +17,7 @@ struct CDropDown : CPanel2D {
 
 struct CDropDownMenu : CPanel2D {
     CDropDown* dropdown;
-    CPanel2D* selectedChild;
+    PanelHandle selectedOption;
 };
 
 }

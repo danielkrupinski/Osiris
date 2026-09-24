@@ -1,6 +1,7 @@
 #pragma once
 
 #include <CS2/Panorama/CDropDown.h>
+#include <GameClient/Panorama/PanoramaUiEngine.h>
 #include <MemoryPatterns/PatternTypes/PanoramaDropDownPatternTypes.h>
 
 template <typename HookContext>
@@ -32,7 +33,7 @@ public:
 private:
     [[nodiscard]] cs2::CUIPanel* getSelected() const
     {
-        return hookContext.template make<ClientPanel>(dropdownMenu ? dropdownMenu->selectedChild : nullptr).uiPanel();
+        return hookContext.template make<PanoramaUiEngine>().getPanelFromHandle(dropdownMenu ? dropdownMenu->selectedOption : cs2::PanelHandle{});
     }
 
     [[nodiscard]] decltype(auto) uiPanel() const

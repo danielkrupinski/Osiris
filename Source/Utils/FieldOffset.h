@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <concepts>
+#include <type_traits>
 
 #include "OptionalPointee.h"
 
@@ -33,6 +34,17 @@ struct FieldOffset {
         using FieldPointer = FieldType*;
         if (thisptr != nullptr && offset > 0)
             return OptionalPointee{ FieldPointer(BytePointer(thisptr) + offset) };
+        return {};
+    }
+
+    [[nodiscard]] OptionalPointee<std::remove_extent_t<FieldType>> arrayOf(ClassType* thisptr) const noexcept
+        requires std::is_array_v<FieldType>
+    {
+        using BytePointer = std::byte*;
+        using ElementType = std::remove_extent_t<FieldType>;
+        using ElementPointer = ElementType*;
+        if (thisptr != nullptr && offset > 0)
+            return OptionalPointee{ ElementPointer(BytePointer(thisptr) + offset) };
         return {};
     }
 
