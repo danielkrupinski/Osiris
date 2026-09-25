@@ -7,6 +7,6 @@ struct TopLevelWindowPatterns {
     [[nodiscard]] static consteval auto addPanoramaPatterns(auto panoramaPatterns) noexcept
     {
         return panoramaPatterns
-            .template addPattern<UiScaleFactorOffset, CodePattern{"F3 0F 11 47 ? 48 8B"}.add(4).read()>();
+            .template addPattern<UiScaleFactorOffset, CodePattern{"F3 0F 11 47 ? 66 83"}.add(4).read()>();
     }
 };

@@ -68,11 +68,11 @@ public:
     }
 
 private:
-    [[nodiscard]] decltype(auto) uiScaleFactor() const
+    [[nodiscard]] auto uiScaleFactor() const
     {
         const auto scale = uiPanel().getUiScaleFactor().valueOr(1.0f);
         assert(scale >= 0.1f && scale <= 10.0f && "Invalid UI scale factor");
-        return scale;
+        return std::clamp(scale, 0.1f, 10.0f);
     }
 
     HookContext& hookContext;

@@ -81,7 +81,6 @@
     <ClInclude Include="CS2\Constants\AspectRatio.h" />
     <ClInclude Include="CS2\Constants\BombsiteIndex.h" />
     <ClInclude Include="CS2\Constants\ColorConstants.h" />
-    <ClInclude Include="CS2\Constants\CrosshairColorIndex.h" />
     <ClInclude Include="CS2\Constants\DllNames.h" />
     <ClInclude Include="CS2\Constants\EntityHandle.h" />
     <ClInclude Include="CS2\Constants\EntityClasses.h" />
@@ -280,6 +279,7 @@
     <ClInclude Include="GameClient\Entities\SmokeGrenadeProjectile.h" />
     <ClInclude Include="GameClient\Entities\TeamNumber.h" />
     <ClInclude Include="GameClient\Entities\WeaponServices.h" />
+    <ClInclude Include="GameClient\Entities\WeaponVData.h" />
     <ClInclude Include="GameClient\EntitySystem\EntityHandle.h" />
     <ClInclude Include="GameClient\EntitySystem\EntityIdentity.h" />
     <ClInclude Include="GameClient\EntitySystem\EntitySystem.h" />

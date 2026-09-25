@@ -32,7 +32,9 @@ public:
 private:
     [[nodiscard]] cs2::CUIPanel* getSelected() const
     {
-        return hookContext.template make<ClientPanel>(dropdownMenu ? dropdownMenu->selectedChild : nullptr).uiPanel();
+        if (!dropdownMenu)
+            return nullptr;
+        return hookContext.template make<PanoramaUiEngine>().getPanelFromHandle(dropdownMenu->selectedChild);
     }
 
     [[nodiscard]] decltype(auto) uiPanel() const

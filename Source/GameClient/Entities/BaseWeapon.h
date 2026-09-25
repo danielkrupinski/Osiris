@@ -8,6 +8,7 @@
 #include <MemoryPatterns/PatternTypes/WeaponVDataPatternTypes.h>
 #include "BaseEntity.h"
 #include "EntityClassifier.h"
+#include "WeaponVData.h"
 
 template <typename HookContext>
 class BaseWeapon {
@@ -55,8 +56,7 @@ public:
 
     [[nodiscard]] auto getName() const noexcept
     {
-        const auto vData = static_cast<cs2::CCSWeaponBaseVData*>(hookContext.template make<BaseEntity>(baseWeapon).vData().valueOr(nullptr));
-        return hookContext.patternSearchResults().template get<OffsetToWeaponName>().of(vData).valueOr(nullptr);
+        return vData().name().valueOr(nullptr);
     }
 
     [[nodiscard]] auto clipAmmo() const noexcept
@@ -84,17 +84,30 @@ private:
         return {};
     }
 
-    [[nodiscard]] Optional<float> spread() const noexcept
+    [[nodiscard]] Optional<float> spread() const
     {
-        const auto getSpreadFn = hookContext.patternSearchResults().template get<PointerToGetSpreadFunction>();
-        if (baseWeapon && getSpreadFn)
-            return getSpreadFn(baseWeapon);
-        return {};
+        return vData().spread()[spreadIndex()];
     }
 
     [[nodiscard]] auto sceneObjectUpdaterHandle() const noexcept
     {
         return hookContext.patternSearchResults().template get<OffsetToWeaponSceneObjectUpdaterHandle>().of(baseWeapon).valueOr(nullptr);
+    }
+
+    [[nodiscard]] auto spreadIndex() const
+    {
+        using enum cs2::CSWeaponMode;
+        return toUnderlying(weaponMode() == Secondary ? Secondary : Primary);
+    }
+
+    [[nodiscard]] auto weaponMode() const
+    {
+        return hookContext.patternSearchResults().template get<OffsetToWeaponMode>().of(baseWeapon).toOptional();
+    }
+
+    [[nodiscard]] auto vData() const
+    {
+        return hookContext.template make<WeaponVData>(static_cast<cs2::CCSWeaponBaseVData*>(hookContext.template make<BaseEntity>(baseWeapon).vData().valueOr(nullptr)));
     }
 
     HookContext& hookContext;

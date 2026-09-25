@@ -108,13 +108,14 @@ static_assert(offsetof(CStylePropertyAlign, m_eVerticalAlignment) == WIN64_LINUX
 
 struct CStylePropertyWashColor : CStyleProperty {
     BASE_STYLE_PROPERTY_FIELDS();
+    LINUX_ONLY(std::byte pad[2]{};)
     Color color;
     bool fullySet;
 };
 static_assert(std::is_standard_layout_v<CStylePropertyWashColor>);
-static_assert(sizeof(CStylePropertyWashColor) == WIN64_LINUX(24, 16));
-static_assert(offsetof(CStylePropertyWashColor, color) == WIN64_LINUX(16, 10));
-static_assert(offsetof(CStylePropertyWashColor, fullySet) == WIN64_LINUX(20, 14));
+static_assert(sizeof(CStylePropertyWashColor) == 24);
+static_assert(offsetof(CStylePropertyWashColor, color) == WIN64_LINUX(16, 12));
+static_assert(offsetof(CStylePropertyWashColor, fullySet) == WIN64_LINUX(20, 16));
 
 struct CStylePropertyFlowChildren : CStyleProperty {
     BASE_STYLE_PROPERTY_FIELDS();

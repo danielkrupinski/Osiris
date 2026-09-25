@@ -1483,9 +1483,6 @@
     <ClInclude Include="GameClient\Hud\Hud.h">
       <Filter>GameClient\Hud</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\Hud\HudContext.h">
-      <Filter>GameClient\Hud</Filter>
-    </ClInclude>
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanel.h">
       <Filter>GameClient\Hud\BombStatus</Filter>
     </ClInclude>
@@ -1819,9 +1816,6 @@
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\ViewmodelModPreviewPanelState.h">
       <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
     </ClInclude>
-    <ClInclude Include="CS2\Constants\CrosshairColorIndex.h">
-      <Filter>CS2\Constants</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Combat\SniperRifles\NoScopeInaccuracyVis\NoScopeInaccuracyVis.h">
       <Filter>Features\Combat\SniperRifles\NoScopeInaccuracyVis</Filter>
     </ClInclude>
@@ -1935,6 +1929,9 @@
     </ClInclude>
     <ClInclude Include="UI\Panorama\Tabs\VisualsTab\PlayerOutlineGlowDropdownSelectionChangeHandler.h">
       <Filter>UI\Panorama\Tabs\VisualsTab</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClient\Entities\WeaponVData.h">
+      <Filter>GameClient\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

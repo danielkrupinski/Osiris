@@ -26,7 +26,7 @@ public:
     {
         const auto vmt = clientModeInstanceVmtPointer();
         if (vmt && hook().install(hookContext.hooks().clientVmtLengthCalculator, *vmt)) {
-            hookContext.hooks().originalGetViewmodelFov = hook().hook(WIN64_LINUX(27, 28), &ClientModeHook_getViewmodelFov);
+            hookContext.hooks().originalGetViewmodelFov = hook().hook(WIN64_LINUX(28, 29), &ClientModeHook_getViewmodelFov);
         }
     }
 
