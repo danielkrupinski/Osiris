@@ -6,15 +6,22 @@
 #include <Utils/StringBuilder.h>
 #include <Platform/SimpleMessageBox.h>
 
-struct PatternNotFoundLogger {
-    static void onPatternNotFound(BytePattern pattern) noexcept
+class PatternNotFoundLogger {
+public:
+    PatternNotFoundLogger() = default;
+    PatternNotFoundLogger(const PatternNotFoundLogger&) = delete;
+    PatternNotFoundLogger& operator=(const PatternNotFoundLogger&) = delete;
+    PatternNotFoundLogger(PatternNotFoundLogger&&) = delete;
+    PatternNotFoundLogger& operator=(PatternNotFoundLogger&&) = delete;
+
+    void onPatternNotFound(BytePattern pattern) noexcept
     {
-        StringBuilderStorage<500> storage;
-        auto builder = storage.builder();
-
-        assert(false && "Pattern needs to be updated!");
-
-        builder.put("Failed to find pattern ");
+        if (bufferEmpty) {
+            builder.put("Failed to find patterns:\n");
+            bufferEmpty = false;
+        } else {
+            builder.put(" | ");
+        }
 
         bool printedFirst = false;
         const auto wildcardChar{pattern.getWildcardChar()};
@@ -31,9 +38,21 @@ struct PatternNotFoundLogger {
 
             printedFirst = true;
         }
-
-        builder.put('\n');
-
-        SimpleMessageBox{}.showWarning("Osiris", builder.cstring());
     }
+
+    void finish() noexcept
+    {
+        if (!bufferEmpty)
+            SimpleMessageBox{}.showWarning("Osiris", builder.cstring());
+    }
+
+    [[nodiscard]] bool isLogEmpty() const noexcept
+    {
+        return bufferEmpty;
+    }
+
+private:
+    StringBuilderStorage<2000> storage;
+    StringBuilder builder{storage.builder()};
+    bool bufferEmpty = true;
 };

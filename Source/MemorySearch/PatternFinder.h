@@ -30,12 +30,6 @@ public:
     {
     }
 
-    template <std::size_t PatternLength>
-    [[nodiscard]] PatternSearchResult operator()(BytePatternView<PatternLength> patternView) const noexcept
-    {
-        return operator()(patternView.data(), PatternLength);
-    }
-
     [[nodiscard]] auto findPatterns(const auto& patterns) const noexcept
     {
         PatternSearchResults<std::remove_reference_t<decltype(patterns)>> results;
@@ -45,8 +39,9 @@ public:
 
     [[NOINLINE]] void findPatterns(PatternPoolView patterns, PatternSearchResultsView results) const noexcept
     {
-        patterns.forEach([patternIndex = std::size_t{0}, results, this](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation) mutable {
-            auto result = operator()(pattern);
+        NotFoundHandler notFoundHandler;
+        patterns.forEach([patternIndex = std::size_t{0}, results, this, &notFoundHandler](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation) mutable {
+            auto result = operator()(pattern, notFoundHandler);
             result.add(offset);
 
             std::array<std::byte, 8> resultToStore{};
@@ -60,16 +55,9 @@ public:
             results.store(patternIndex, resultToStore);
             ++patternIndex;
         });
-    }
 
-    [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(BytePattern pattern) const noexcept
-    {
-        auto patternFinder = HybridPatternFinder{bytes, pattern};
-        const auto found = patternFinder.findNextOccurrence();
-        assert(patternFinder.findNextOccurrence() == nullptr && "Pattern should be unique!");
-        if (!found)
-            NotFoundHandler::onPatternNotFound(pattern);
-        return makeResult(found, pattern.length());
+        notFoundHandler.finish();
+        assert(notFoundHandler.isLogEmpty() && "Patterns needs to be updated!");
     }
 
     template <std::size_t PatternLength>
@@ -86,9 +74,14 @@ public:
     }
 
 private:
-    [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(const char* pattern, std::size_t size) const noexcept
+    [[nodiscard]] [[NOINLINE]] PatternSearchResult operator()(BytePattern pattern, NotFoundHandler& notFoundHandler) const noexcept
     {
-        return operator()(BytePattern{{pattern, size}, kPatternStringWildcard});
+        auto patternFinder = HybridPatternFinder{bytes, pattern};
+        const auto found = patternFinder.findNextOccurrence();
+        assert(patternFinder.findNextOccurrence() == nullptr && "Pattern should be unique!");
+        if (!found)
+            notFoundHandler.onPatternNotFound(pattern);
+        return makeResult(found, pattern.length());
     }
 
     [[nodiscard]] bool matchesPatternAtAddress(GenericPointer address, BytePattern pattern) const noexcept
