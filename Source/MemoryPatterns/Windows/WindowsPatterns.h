@@ -4,6 +4,7 @@
 #include "C4PatternsWindows.h"
 #include "ClientPatternsWindows.h"
 #include "ConVarPatternsWindows.h"
+#include "CSGOInputPatternsWindows.h"
 #include "CvarPatternsWindows.h"
 #include "EntityPatternsWindows.h"
 #include "EntitySystemPatternsWindows.h"
