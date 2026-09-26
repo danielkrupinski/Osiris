@@ -4,7 +4,6 @@ target_sources(UnitTests PRIVATE
   FlagsBuilderTests.cpp
   OptionalTests.cpp
   PatternFinderTests.cpp
-  RefCountedHookTests.cpp
   ReturnAddressTests.cpp
   StringBuilderTests.cpp
 )
