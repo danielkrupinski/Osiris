@@ -550,7 +550,6 @@
     <ClInclude Include="Utils\Optional.h" />
     <ClInclude Include="Utils\OptionalPointee.h" />
     <ClInclude Include="Utils\Pad.h" />
-    <ClInclude Include="Utils\PrivateTag.h" />
     <ClInclude Include="Utils\ReturnAddress.h" />
     <ClInclude Include="Utils\StringBuilder.h" />
     <ClInclude Include="Utils\StringParser.h" />
