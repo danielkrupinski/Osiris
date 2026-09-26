@@ -97,7 +97,7 @@ $.Osiris = (function () {
 
     var restoreDefaultsButton = $.CreatePanel('Button', leftContainer, 'RestoreDefaultsButton', {
       class: "content-navbar__tabs__btn",
-      style: "margin-left: 5px;",
+      style: "margin-left: 8px;",
       onactivate: "UiToolkitAPI.ShowGenericPopupOneOptionCustomCancelBgStyle('Restore Defaults', 'Are you sure you want to restore default settings in the active config file (default.cfg)?', '', 'RESTORE DEFAULTS', function() { $.Osiris.addCommand('restore_defaults'); }, 'RETURN', function() {}, 'dim');"
     });
 
