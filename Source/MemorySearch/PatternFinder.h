@@ -11,7 +11,6 @@
 #include <Platform/Macros/FunctionAttributes.h>
 #include <Utils/MemorySection.h>
 #include <Utils/GenericPointer.h>
-#include <Utils/SpanSlice.h>
 
 #include "BytePattern.h"
 #include "BytePatternView.h"

@@ -426,9 +426,6 @@
     <ClInclude Include="Utils\ReturnAddress.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\SpanSlice.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\StringBuilder.h">
       <Filter>Utils</Filter>
     </ClInclude>

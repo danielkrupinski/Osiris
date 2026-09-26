@@ -6,6 +6,5 @@ target_sources(UnitTests PRIVATE
   PatternFinderTests.cpp
   RefCountedHookTests.cpp
   ReturnAddressTests.cpp
-  SpanSliceTests.cpp
   StringBuilderTests.cpp
 )
