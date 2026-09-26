@@ -536,7 +536,6 @@
     <ClInclude Include="Utils\EnumFlags.h" />
     <ClInclude Include="Utils\FieldFieldOffset.h" />
     <ClInclude Include="Utils\FieldOffset.h" />
-    <ClInclude Include="Utils\FileSlice.h" />
     <ClInclude Include="Utils\FlagsBuilder.h" />
     <ClInclude Include="Utils\GenericFunctionPointer.h" />
     <ClInclude Include="Utils\GenericPointer.h" />
