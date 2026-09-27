@@ -5,6 +5,7 @@
 #include <Features/Hud/BombPlantAlert/BombPlantAlertPanelFactory.h>
 #include <Features/Hud/BombTimer/BombTimer.h>
 #include <Features/Hud/BombTimer/BombTimerPanelFactory.h>
+#include <Features/Hud/PostRoundTimer/PostRoundTimerPanel.h>
 #include <GameClient/Panorama/PanelHandle.h>
 #include <GameClient/Crosshair.h>
 #include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
@@ -26,6 +27,7 @@ struct MockBombPlantAlertPanelFactory;
 struct MockBombTimerPanelFactory;
 struct MockBombTimerPanel;
 struct MockPlantedC4;
+struct MockPostRoundTimerPanel;
 
 class OsirisDirectoryPath;
 
@@ -48,6 +50,7 @@ struct MockHookContext {
     MOCK_METHOD(MockBombPlantAlertPanelFactory&, makeBombPlantAlertPanelFactory, ());
     MOCK_METHOD(MockBombTimerPanelFactory&, makeBombTimerPanelFactory, ());
     MOCK_METHOD(MockBombTimerPanel&, makeBombTimerPanel, ());
+    MOCK_METHOD(MockPostRoundTimerPanel&, makePostRoundTimerPanel, ());
     MOCK_METHOD(Optional<float>, localPlayerBulletInaccuracy, ());
     MOCK_METHOD(MockPlantedC4&, plantedC4, ());
 
@@ -68,6 +71,8 @@ struct MockHookContext {
             return makeBombTimerPanelFactory(std::forward<Args>(args)...);
         } else if constexpr (std::is_same_v<T<MockHookContext>, BombTimerPanel<MockHookContext>>) {
             return makeBombTimerPanel(std::forward<Args>(args)...);
+        } else if constexpr (std::is_same_v<T<MockHookContext>, PostRoundTimerPanel<MockHookContext>>) {
+            return makePostRoundTimerPanel(std::forward<Args>(args)...);
         }
     }
 };

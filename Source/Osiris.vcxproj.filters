@@ -420,9 +420,6 @@
     <ClInclude Include="Utils\Pad.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\RefCountedHook.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\ReturnAddress.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -805,9 +802,6 @@
     <ClInclude Include="MemoryPatterns\Windows\WeaponPatternsWindows.h">
       <Filter>MemoryPatterns\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\PrivateTag.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Hud\BombTimer\BombTimerPanel.h">
       <Filter>Features\Hud\BombTimer</Filter>
     </ClInclude>
@@ -851,9 +845,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h">
-      <Filter>Features\Hud\PostRoundTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerContext.h">
       <Filter>Features\Hud\PostRoundTimer</Filter>
     </ClInclude>
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanel.h">
@@ -1404,9 +1395,6 @@
     </ClInclude>
     <ClInclude Include="Features\Sound\Details\WatchedSounds.h">
       <Filter>Features\Sound\Details</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\FileSlice.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\ConVars\ConVarsBase.h">
       <Filter>GameClient\ConVars</Filter>

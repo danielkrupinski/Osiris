@@ -5,13 +5,14 @@
 #include "PostRoundTimerPanelParams.h"
 
 template <typename HookContext>
-struct PostRoundTimerPanelFactory {
+class PostRoundTimerPanelFactory {
+public:
     explicit PostRoundTimerPanelFactory(HookContext& hookContext) noexcept
         : hookContext{hookContext}
     {
     }
 
-    decltype(auto) createCountdownContainerPanel(auto&& parentPanel) const noexcept
+    decltype(auto) createCountdownContainerPanel(auto&& parentPanel) const
     {
         using namespace post_round_timer_panel_params::container_panel_params;
 
@@ -21,11 +22,11 @@ struct PostRoundTimerPanelFactory {
         return utils::lvalue<decltype(panel)>(panel);
     }
 
-    decltype(auto) createCountdownTextPanel(auto&& containerPanel) const noexcept
+    decltype(auto) createCountdownTextPanel(auto&& parentPanel) const
     {
         using namespace post_round_timer_panel_params::text_panel_params;
 
-        auto&& panel = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
+        auto&& panel = hookContext.panelFactory().createLabelPanel(parentPanel).uiPanel();
         panel.setWidth(kWidth);
         panel.setMixBlendMode(kMixBlendMode);
         panel.setFont(kFont);

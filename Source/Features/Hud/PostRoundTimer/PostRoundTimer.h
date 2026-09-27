@@ -2,15 +2,19 @@
 
 #include <utility>
 #include <Common/Visibility.h>
-#include "PostRoundTimerConfigVariables.h"
-#include "PostRoundTimerContext.h"
+#include <HookContext/HookContextMacros.h>
+#include <GameClient/Panorama/PanoramaLabel.h>
+#include <GameClient/Panorama/PanelHandle.h>
 
-template <typename HookContext, typename Context = PostRoundTimerContext<HookContext>>
+#include "PostRoundTimerConfigVariables.h"
+#include "PostRoundTimerPanel.h"
+#include "PostRoundTimerPanelFactory.h"
+
+template <typename HookContext>
 class PostRoundTimer {
 public:
-    template <typename... Args>
-    PostRoundTimer(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit PostRoundTimer(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
@@ -18,38 +22,53 @@ public:
     {
         using enum Visibility;
 
-        if (!shouldRun())
+        if (!enabled())
             return Hidden;
 
         if (shouldShowPostRoundTimer()) {
-            context.postRoundTimerPanel().showAndUpdate();
+            postRoundTimerPanel().showAndUpdate();
             return Visible;
         } else {
-            context.postRoundTimerPanel().hide();
+            postRoundTimerPanel().hide();
             return Hidden;
         }
     }
 
     void onDisable() const
     {
-        context.postRoundTimerPanel().hide();
+        postRoundTimerPanel().hide();
     }
 
     void onUnload() const
     {
-        context.uiEngine().deletePanelByHandle(context.state().countdownContainerPanelHandle);
+        hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(state().countdownContainerPanelHandle);
     }
 
 private:
-    [[nodiscard]] bool shouldRun() const
+    [[nodiscard]] bool enabled() const
     {
-        return context.config().template getVariable<PostRoundTimerEnabled>();
+        return GET_CONFIG_VAR(PostRoundTimerEnabled);
     }
 
     [[nodiscard]] bool shouldShowPostRoundTimer() const
     {
-        return context.gameRules().hasScheduledRoundRestart() && !context.isGameRoundTimeVisible();
+        return hookContext.gameRules().hasScheduledRoundRestart() && !isGameRoundTimeVisible();
     }
 
-    Context context;
+    [[nodiscard]] bool isGameRoundTimeVisible() const
+    {
+        return hookContext.hud().timerTextPanel().isVisible().valueOr(false);
+    }
+
+    [[nodiscard]] auto& state() const noexcept
+    {
+        return hookContext.featuresStates().hudFeaturesStates.postRoundTimerState;
+    }
+
+    [[nodiscard]] decltype(auto) postRoundTimerPanel() const
+    {
+        return hookContext.template make<PostRoundTimerPanel>();
+    }
+
+    HookContext& hookContext;
 };

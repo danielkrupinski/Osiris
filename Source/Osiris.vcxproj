@@ -152,7 +152,6 @@
     <ClInclude Include="Features\Hud\KillfeedPreserver\KillfeedPreserverConfigVariables.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimer.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerConfigVariables.h" />
-    <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerContext.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanel.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanelFactory.h" />
     <ClInclude Include="Features\Hud\PostRoundTimer\PostRoundTimerPanelParams.h" />
