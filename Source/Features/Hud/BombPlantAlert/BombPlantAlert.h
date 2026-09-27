@@ -3,7 +3,7 @@
 #include "BombPlantAlertConfigVariables.h"
 #include "BombPlantAlertPanelFactory.h"
 #include "BombPlantAlertParams.h"
-#include "BombPlantAlertTimer.h"
+#include "BombPlantAlertTiming.h"
 #include <CS2/Constants/BombsiteIndex.h>
 #include <CS2/Constants/IconURLs.h>
 #include <Common/Visibility.h>
@@ -58,9 +58,8 @@ private:
     [[nodiscard]] Optional<bool> canFinishArmingBeforeRoundEnd(auto&& bomb) const
     {
         auto&& gameRules = hookContext.gameRules();
-        if (gameRules.isRoundOver().valueOr(false))
-            return false;
-        return bomb.armingEndTime().lessEqual(gameRules.roundEndTime());
+        return bomb_plant_alert_timing::canFinishArmingBeforeRoundEnd(
+            bomb.armingEndTime(), gameRules.roundEndTime(), gameRules.isRoundOver());
     }
 
     [[nodiscard]] bool shouldShowPlantAlert(auto&& bomb) const
@@ -86,9 +85,8 @@ private:
         auto&& timerPanel = getPanel(state().timerPanelHandle);
         const auto timeToArmingEnd = bomb.timeToArmingEnd();
         if (timeToArmingEnd.hasValue()) {
-            const auto remainingTenths = bomb_plant_alert_timer::remainingTenths(timeToArmingEnd.value());
             timerPanel.clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(
-                remainingTenths / 10, '.', remainingTenths % 10).cstring());
+                static_cast<int>(timeToArmingEnd.value()), '.', static_cast<int>(timeToArmingEnd.value() * 10) % 10).cstring());
         }
         timerPanel.setColor(timerColor(canBePlantedBeforeRoundEnd));
     }
