@@ -5,7 +5,9 @@
 #include <Features/Hud/BombPlantAlert/BombPlantAlertPanelFactory.h>
 #include <Features/Hud/BombTimer/BombTimer.h>
 #include <Features/Hud/BombTimer/BombTimerPanelFactory.h>
+#include <Features/Hud/PostRoundTimer/PostRoundTimer.h>
 #include <Features/Hud/PostRoundTimer/PostRoundTimerPanel.h>
+#include <GameClient/Hud/BombStatus/BombStatusPanel.h>
 #include <GameClient/Panorama/PanelHandle.h>
 #include <GameClient/Crosshair.h>
 #include <GameClient/WorldToScreen/ViewToProjectionMatrix.h>
@@ -29,6 +31,9 @@ struct MockBombTimerPanel;
 struct MockPlantedC4;
 struct MockPostRoundTimerPanel;
 struct BombStatusPanelState;
+struct MockPostRoundTimer;
+struct MockBombTimer;
+struct MockBombStatusPanel;
 
 class OsirisDirectoryPath;
 
@@ -55,6 +60,9 @@ struct MockHookContext {
     MOCK_METHOD(Optional<float>, localPlayerBulletInaccuracy, ());
     MOCK_METHOD(MockPlantedC4&, plantedC4, ());
     MOCK_METHOD(BombStatusPanelState&, bombStatusPanelState, ());
+    MOCK_METHOD(MockPostRoundTimer&, makePostRoundTimer, ());
+    MOCK_METHOD(MockBombTimer&, makeBombTimer, ());
+    MOCK_METHOD(MockBombStatusPanel&, makeBombStatusPanel, ());
 
     template <template <typename> typename T, typename... Args>
     [[nodiscard]] decltype(auto) make(Args&&... args)
@@ -75,6 +83,12 @@ struct MockHookContext {
             return makeBombTimerPanel(std::forward<Args>(args)...);
         } else if constexpr (std::is_same_v<T<MockHookContext>, PostRoundTimerPanel<MockHookContext>>) {
             return makePostRoundTimerPanel(std::forward<Args>(args)...);
+        } else if constexpr (std::is_same_v<T<MockHookContext>, PostRoundTimer<MockHookContext>>) {
+            return makePostRoundTimer(std::forward<Args>(args)...);
+        } else if constexpr (std::is_same_v<T<MockHookContext>, BombTimer<MockHookContext>>) {
+            return makeBombTimer(std::forward<Args>(args)...);
+        } else if constexpr (std::is_same_v<T<MockHookContext>, BombStatusPanel<MockHookContext>>) {
+            return makeBombStatusPanel(std::forward<Args>(args)...);
         }
     }
 };

@@ -2,35 +2,52 @@
 
 #include <utility>
 
-#include "BombStatusPanelManagerContext.h"
 #include <Common/Visibility.h>
+#include <Features/Hud/BombTimer/BombTimer.h>
+#include <Features/Hud/PostRoundTimer/PostRoundTimer.h>
 
-template <typename HookContext, typename Context = BombStatusPanelManagerContext<HookContext>>
+#include "BombStatusPanel.h"
+
+template <typename HookContext>
 class BombStatusPanelManager {
 public:
-    template <typename... Args>
-    BombStatusPanelManager(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit BombStatusPanelManager(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
-    void run() const noexcept
+    void run() const
     {
         if (updateFeaturesReplacingBombStatusPanel() == Visibility::Visible)
-            context.bombStatusPanel().hide();
+            bombStatusPanel().hide();
         else
-            context.bombStatusPanel().restore();
+            bombStatusPanel().restore();
     }
 
 private:
-    [[nodiscard]] Visibility updateFeaturesReplacingBombStatusPanel() const noexcept
+    [[nodiscard]] Visibility updateFeaturesReplacingBombStatusPanel() const
     {
-        if (context.postRoundTimer().update() == Visibility::Visible) {
-            context.bombTimer().forceHide();
+        if (postRoundTimer().update() == Visibility::Visible) {
+            bombTimer().forceHide();
             return Visibility::Visible;
         }
-        return context.bombTimer().update();
+        return bombTimer().update();
     }
 
-    Context context;
+    [[nodiscard]] decltype(auto) bombStatusPanel() const
+    {
+        return hookContext.template make<BombStatusPanel>();
+    }
+
+    [[nodiscard]] decltype(auto) postRoundTimer() const
+    {
+        return hookContext.template make<PostRoundTimer>();
+    }
+
+    [[nodiscard]] decltype(auto) bombTimer() const
+    {
+        return hookContext.template make<BombTimer>();
+    }
+
+    HookContext& hookContext;
 };

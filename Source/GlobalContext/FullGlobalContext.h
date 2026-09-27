@@ -26,7 +26,6 @@
 #include <Hooks/Hooks.h>
 #include <Hooks/PeepEventsHook.h>
 #include <GameClient/Hud/BombStatus/BombStatusPanelManager.h>
-#include <GameClient/Hud/BombStatus/BombStatusPanelManagerContext.h>
 #include <GameClient/Hud/BombStatus/BombStatusPanelState.h>
 #include <MemorySearch/PatternFinder.h>
 #include <MemorySearch/PatternSearchResults.h>
