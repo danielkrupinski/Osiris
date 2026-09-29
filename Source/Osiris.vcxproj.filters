@@ -1471,9 +1471,6 @@
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanel.h">
       <Filter>GameClient\Hud\BombStatus</Filter>
     </ClInclude>
-    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelContext.h">
-      <Filter>GameClient\Hud\BombStatus</Filter>
-    </ClInclude>
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManager.h">
       <Filter>GameClient\Hud\BombStatus</Filter>
     </ClInclude>

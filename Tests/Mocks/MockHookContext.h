@@ -28,6 +28,7 @@ struct MockBombTimerPanelFactory;
 struct MockBombTimerPanel;
 struct MockPlantedC4;
 struct MockPostRoundTimerPanel;
+struct BombStatusPanelState;
 
 class OsirisDirectoryPath;
 
@@ -53,6 +54,7 @@ struct MockHookContext {
     MOCK_METHOD(MockPostRoundTimerPanel&, makePostRoundTimerPanel, ());
     MOCK_METHOD(Optional<float>, localPlayerBulletInaccuracy, ());
     MOCK_METHOD(MockPlantedC4&, plantedC4, ());
+    MOCK_METHOD(BombStatusPanelState&, bombStatusPanelState, ());
 
     template <template <typename> typename T, typename... Args>
     [[nodiscard]] decltype(auto) make(Args&&... args)
