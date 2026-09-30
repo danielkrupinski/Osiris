@@ -2,32 +2,48 @@
 
 #include <utility>
 
-#include "PlayerActiveWeaponAmmoPanelContext.h"
 #include <GameClient/Panorama/PanoramaLabel.h>
 #include <Utils/StringBuilder.h>
+#include <CS2/Panorama/CUIPanel.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
 
-template <typename HookContext, typename Context = PlayerActiveWeaponAmmoPanelContext<HookContext>>
+template <typename HookContext>
 class PlayerActiveWeaponAmmoPanel {
 public:
-    template <typename... Args>
-    explicit PlayerActiveWeaponAmmoPanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    PlayerActiveWeaponAmmoPanel(HookContext& hookContext, cs2::CUIPanel* uiPanel, PlayerInfoPanelCacheEntry& cache) noexcept
+        : hookContext{hookContext}
+        , uiPanel{uiPanel}
+        , cache{cache}
     {
     }
 
     void update(auto&& playerPawn) const noexcept
     {
-        if (!context.shouldShowOn(playerPawn)) {
-            context.panel().setVisible(false);
+        if (!shouldShowOn(playerPawn)) {
+            panel().setVisible(false);
             return;
         }
 
-        context.panel().setVisible(true);
+        panel().setVisible(true);
         const auto ammo = playerPawn.getActiveWeapon().clipAmmo().valueOr(-1);
-        if (context.cache().activeWeaponAmmo(ammo))
-            context.panel().children()[0].clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(ammo).cstring());
+        if (cache.activeWeaponAmmo(ammo))
+            panel().children()[0].clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(ammo).cstring());
     }
 
 private:
-    Context context;
+    [[nodiscard]] bool shouldShowOn(auto&& playerPawn) const noexcept
+    {
+        return GET_CONFIG_VAR(player_info_vars::ActiveWeaponAmmoEnabled) && playerPawn.getActiveWeapon().clipAmmo().greaterThan(-1).valueOr(true);
+    }
+
+    [[nodiscard]] decltype(auto) panel() const noexcept
+    {
+        return hookContext.template make<PanoramaUiPanel>(uiPanel);
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* uiPanel;
+    PlayerInfoPanelCacheEntry& cache;
 };
