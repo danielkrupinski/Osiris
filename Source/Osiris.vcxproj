@@ -223,7 +223,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoContainerPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorld.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldConfigVariables.h" />
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldPanelFactory.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldState.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoPanel.h" />

@@ -1009,9 +1009,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorld.h">
       <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldContext.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorldPanelFactory.h">
       <Filter>Features\Visuals\PlayerInfoInWorld</Filter>
     </ClInclude>
@@ -1472,9 +1469,6 @@
       <Filter>GameClient\Hud\BombStatus</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManager.h">
-      <Filter>GameClient\Hud\BombStatus</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelManagerContext.h">
       <Filter>GameClient\Hud\BombStatus</Filter>
     </ClInclude>
     <ClInclude Include="GameClient\Hud\BombStatus\BombStatusPanelState.h">
