@@ -1024,13 +1024,7 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\PlayerActiveWeaponAmmoPanel.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\PlayerActiveWeaponAmmoPanelContext.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanel.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerHealth</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanelContext.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerHealth</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanelParams.h">

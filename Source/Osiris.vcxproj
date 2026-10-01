@@ -217,7 +217,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\ActiveWeaponAmmoPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\ActiveWeaponAmmo\PlayerActiveWeaponAmmoPanel.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanel.h" />
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanelContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerHealth\PlayerHealthPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoContainerPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerInfoInWorld.h" />

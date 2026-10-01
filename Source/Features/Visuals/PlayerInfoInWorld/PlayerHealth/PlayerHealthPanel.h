@@ -4,43 +4,45 @@
 
 #include <CS2/Classes/Color.h>
 #include <CS2/Constants/ColorConstants.h>
+#include <CS2/Panorama/CUIPanel.h>
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldState.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
 #include <GameClient/Panorama/PanoramaLabel.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
 #include <Utils/StringBuilder.h>
 
-#include "PlayerHealthPanelContext.h"
-
-template <typename HookContext, typename Context = PlayerHealthPanelContext<HookContext>>
+template <typename HookContext>
 class PlayerHealthPanel {
 public:
-    template <typename... Args>
-    explicit PlayerHealthPanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    PlayerHealthPanel(HookContext& hookContext, cs2::CUIPanel* uiPanel, PlayerInfoPanelCacheEntry& cache) noexcept
+        : hookContext{hookContext}
+        , uiPanel{uiPanel}
+        , cache{cache}
     {
     }
 
     void update(auto&& playerPawn) const noexcept
     {
-        if (!context.config().template getVariable<player_info_vars::PlayerHealthEnabled>()) {
-            context.panel().setVisible(false);
+        if (!GET_CONFIG_VAR(player_info_vars::PlayerHealthEnabled)) {
+            panel().setVisible(false);
             return;
         }
 
-        context.panel().setVisible(true);
+        panel().setVisible(true);
 
-        auto&& healthValuePanel = context.panel().children()[1];
+        auto&& healthValuePanel = panel().children()[1];
 
-        if (const auto healthTextColor = getColor(playerPawn); context.cache().playerHealthTextColor(healthTextColor))
+        if (const auto healthTextColor = getColor(playerPawn); cache.playerHealthTextColor(healthTextColor))
             healthValuePanel.setColor(healthTextColor);
 
-        if (const auto playerHealth = playerPawn.health().valueOr(0); context.cache().playerHealth(playerHealth))
+        if (const auto playerHealth = playerPawn.health().valueOr(0); cache.playerHealth(playerHealth))
             healthValuePanel.clientPanel().template as<PanoramaLabel>().setText(StringBuilderStorage<10>{}.builder().put(playerHealth).cstring());
     }
 
 private:
     [[nodiscard]] cs2::Color getColor(auto&& playerPawn) const noexcept
     {
-        if (context.config().template getVariable<player_info_vars::PlayerHealthColorMode>() == PlayerHealthTextColor::HealthBased)
+        if (GET_CONFIG_VAR(player_info_vars::PlayerHealthColorMode) == PlayerHealthTextColor::HealthBased)
             return healthColor(playerPawn).value_or(cs2::kColorWhite);
         return cs2::kColorWhite;
     }
@@ -57,5 +59,12 @@ private:
         return color::HSBtoRGB(color::Hue{color::kRedHue + (color::kGreenHue - color::kRedHue) * healthFraction}, color::Saturation{saturation}, color::Brightness{1.0f});
     }
 
-    Context context;
+    [[nodiscard]] decltype(auto) panel() const noexcept
+    {
+        return hookContext.template make<PanoramaUiPanel>(uiPanel);
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* uiPanel;
+    PlayerInfoPanelCacheEntry& cache;
 };
