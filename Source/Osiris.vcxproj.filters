@@ -1036,9 +1036,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanel.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanelContext.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow\PlayerPositionArrowPanelParams.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerPositionArrow</Filter>
     </ClInclude>
@@ -1208,9 +1205,6 @@
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon\PlayerActiveWeaponIconPanel.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon\PlayerActiveWeaponIconPanelContext.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\ActiveWeaponIcon</Filter>
     </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanel.h">
