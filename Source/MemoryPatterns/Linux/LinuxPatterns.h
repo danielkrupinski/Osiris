@@ -4,6 +4,7 @@
 #include "C4PatternsLinux.h"
 #include "ClientPatternsLinux.h"
 #include "ConVarPatternsLinux.h"
+#include "CSGOInputPatternsLinux.h"
 #include "CvarPatternsLinux.h"
 #include "EntityPatternsLinux.h"
 #include "EntitySystemPatternsLinux.h"
