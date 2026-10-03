@@ -240,7 +240,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanel.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanelParams.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanel.h" />
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelContext.h" />
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelParams.h" />
     <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelMod.h" />
     <ClInclude Include="Features\Visuals\ViewmodelMod\ViewmodelModConfigVariables.h" />
