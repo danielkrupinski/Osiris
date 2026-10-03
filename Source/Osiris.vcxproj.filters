@@ -1207,9 +1207,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanel.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanelContext.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanel.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon</Filter>
     </ClInclude>

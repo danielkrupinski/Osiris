@@ -3,31 +3,50 @@
 #include <utility>
 
 #include <Common/Visibility.h>
-#include "PlayerBombIconPanelContext.h"
 
-template <typename HookContext, typename Context = PlayerBombIconPanelContext<HookContext>>
+template <typename HookContext>
 class PlayerBombIconPanel {
 public:
-    template <typename... Args>
-    explicit PlayerBombIconPanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    PlayerBombIconPanel(HookContext& hookContext, cs2::CUIPanel* uiPanel) noexcept
+        : hookContext{hookContext}
+        , uiPanel{uiPanel}
     {
     }
 
     [[nodiscard]] Visibility update(auto&& playerPawn) const noexcept
     {
-        if (!context.shouldShowOnPlayer(playerPawn)) {
-            context.panel().setVisible(false);
+        if (!shouldShowOnPlayer(playerPawn)) {
+            panel().setVisible(false);
             return Visibility::Hidden;
         }
 
-        context.panel().setVisible(true);
-        const auto shouldShowPlantingColor = context.shouldShowPlantingColor(playerPawn);
-        context.panel().children()[0].setVisible(!shouldShowPlantingColor);
-        context.panel().children()[1].setVisible(shouldShowPlantingColor);
+        panel().setVisible(true);
+        const auto shouldShowPlantingColor_ = shouldShowPlantingColor(playerPawn);
+        panel().children()[0].setVisible(!shouldShowPlantingColor_);
+        panel().children()[1].setVisible(shouldShowPlantingColor_);
         return Visibility::Visible;
     }
 
 private:
-    Context context;
+    [[nodiscard]] bool shouldShowOnPlayer(auto&& playerPawn) const noexcept
+    {
+        if (GET_CONFIG_VAR(player_info_vars::BombCarrierIconEnabled))
+            return playerPawn.isCarryingC4();
+        if (GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled))
+            return playerPawn.carriedC4().isBeingPlanted().valueOr(false);
+        return false;
+    }
+
+    [[nodiscard]] bool shouldShowPlantingColor(auto&& playerPawn) const noexcept
+    {
+        return GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled) && playerPawn.carriedC4().isBeingPlanted().valueOr(false);
+    }
+
+    [[nodiscard]] decltype(auto) panel() const noexcept
+    {
+        return hookContext.template make<PanoramaUiPanel>(uiPanel);
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* uiPanel;
 };
