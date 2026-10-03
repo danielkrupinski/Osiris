@@ -1042,9 +1042,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanel.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanelContext.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
-    </ClInclude>
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerStateIcons\PlayerStateIconsPanelParams.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerStateIcons</Filter>
     </ClInclude>
