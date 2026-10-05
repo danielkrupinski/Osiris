@@ -3,6 +3,9 @@
 #include <utility>
 
 #include <Common/Visibility.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
+#include <HookContext/HookContextMacros.h>
 
 template <typename HookContext>
 class PlayerBombIconPanel {
@@ -13,38 +16,42 @@ public:
     {
     }
 
-    [[nodiscard]] Visibility update(auto&& playerPawn) const noexcept
+    [[nodiscard]] Visibility update(auto&& playerPawn) const
     {
-        if (!shouldShowOnPlayer(playerPawn)) {
-            panel().setVisible(false);
-            return Visibility::Hidden;
-        }
+        auto&& panel = hookContext.template make<PanoramaUiPanel>(uiPanel);
+        const auto visibleIcon = computeVisibleIcon(playerPawn);
+        panel.setVisible(visibleIcon != Icon::None);
 
-        panel().setVisible(true);
-        const auto shouldShowPlantingColor_ = shouldShowPlantingColor(playerPawn);
-        panel().children()[0].setVisible(!shouldShowPlantingColor_);
-        panel().children()[1].setVisible(shouldShowPlantingColor_);
+        if (visibleIcon == Icon::None)
+            return Visibility::Hidden;
+
+        auto&& childPanels = panel.children();
+        childPanels[0].setVisible(visibleIcon == Icon::CarryingBomb);
+        childPanels[1].setVisible(visibleIcon == Icon::PlantingBomb);
         return Visibility::Visible;
     }
 
 private:
-    [[nodiscard]] bool shouldShowOnPlayer(auto&& playerPawn) const noexcept
-    {
-        if (GET_CONFIG_VAR(player_info_vars::BombCarrierIconEnabled))
-            return playerPawn.isCarryingC4();
-        if (GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled))
-            return playerPawn.carriedC4().isBeingPlanted().valueOr(false);
-        return false;
-    }
+    enum class Icon {
+        None,
+        CarryingBomb,
+        PlantingBomb
+    };
 
-    [[nodiscard]] bool shouldShowPlantingColor(auto&& playerPawn) const noexcept
+    [[nodiscard]] Icon computeVisibleIcon(auto&& playerPawn) const
     {
-        return GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled) && playerPawn.carriedC4().isBeingPlanted().valueOr(false);
-    }
+        const auto carryingIconEnabled = GET_CONFIG_VAR(player_info_vars::BombCarrierIconEnabled);
+        const auto plantingIconEnabled = GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled);
 
-    [[nodiscard]] decltype(auto) panel() const noexcept
-    {
-        return hookContext.template make<PanoramaUiPanel>(uiPanel);
+        if (!carryingIconEnabled && !plantingIconEnabled)
+            return Icon::None;
+
+        auto&& carriedC4 = playerPawn.carriedC4();
+        if (plantingIconEnabled && carriedC4.isBeingPlanted().valueOr(false))
+            return Icon::PlantingBomb;
+        if (carryingIconEnabled && carriedC4)
+            return Icon::CarryingBomb;
+        return Icon::None;
     }
 
     HookContext& hookContext;

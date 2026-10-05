@@ -34,6 +34,7 @@ struct BombStatusPanelState;
 struct MockPostRoundTimer;
 struct MockBombTimer;
 struct MockBombStatusPanel;
+struct MockPanel;
 
 class OsirisDirectoryPath;
 
@@ -63,6 +64,7 @@ struct MockHookContext {
     MOCK_METHOD(MockPostRoundTimer&, makePostRoundTimer, ());
     MOCK_METHOD(MockBombTimer&, makeBombTimer, ());
     MOCK_METHOD(MockBombStatusPanel&, makeBombStatusPanel, ());
+    MOCK_METHOD(MockPanel&, makePanoramaUiPanel, (cs2::CUIPanel* panel));
 
     template <template <typename> typename T, typename... Args>
     [[nodiscard]] decltype(auto) make(Args&&... args)
@@ -89,6 +91,8 @@ struct MockHookContext {
             return makeBombTimer(std::forward<Args>(args)...);
         } else if constexpr (std::is_same_v<T<MockHookContext>, BombStatusPanel<MockHookContext>>) {
             return makeBombStatusPanel(std::forward<Args>(args)...);
+        } else if constexpr (std::is_same_v<T<MockHookContext>, PanoramaUiPanel<MockHookContext>>) {
+            return makePanoramaUiPanel(std::forward<Args>(args)...);
         }
     }
 };
