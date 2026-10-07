@@ -55,7 +55,7 @@ public:
 private:
     [[nodiscard]] const char* buildVersionText() const noexcept
     {
-        static thread_local char text[64];
+        static char text[64];
         StringBuilder builder{std::span{text}};
         builder.put("Osiris DLL: v", build::kVersion);
         return builder.cstring();
@@ -63,7 +63,7 @@ private:
 
     [[nodiscard]] const char* patternText(const char* name, bool valid) const noexcept
     {
-        static thread_local char text[96];
+        static char text[96];
         StringBuilder builder{std::span{text}};
         builder.put(name, ": ", valid ? "OK" : "FAILED");
         return builder.cstring();
