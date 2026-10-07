@@ -52,7 +52,7 @@ TEST(ConfigFromStringSecurityTest, RejectsUintOverflow) {
     }, [] {
         return std::uint64_t{};
     });
-    configFromString.endRoot();
+    (void)configFromString.endRoot();
 
     EXPECT_FALSE(setterCalled);
 }
