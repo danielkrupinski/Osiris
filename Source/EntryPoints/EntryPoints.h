@@ -18,8 +18,16 @@
 int SDLHook_PeepEvents(void* events, int numevents, int action, unsigned minType, unsigned maxType) noexcept
 {
     const auto initInProgress = !HookContext<GlobalContext>::isGlobalContextComplete();
-    if (initInProgress)
+    if (initInProgress) {
         HookContext<GlobalContext>::initCompleteGlobalContextFromGameThread();
+        auto& globalContext = GlobalContext::instance();
+        if (!globalContext.fullContext().patternSearchResults.isValid()) {
+            const auto originalPeepEvents = globalContext.fullContext().hooks.peepEventsHook.original;
+            globalContext.fullContext().hooks.peepEventsHook.disable();
+            GlobalContext::destroyInstance();
+            return originalPeepEvents ? originalPeepEvents(events, numevents, action, minType, maxType) : 0;
+        }
+    }
 
     HookContext<GlobalContext> hookContext;
 
