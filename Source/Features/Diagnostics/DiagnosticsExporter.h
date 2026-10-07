@@ -104,7 +104,7 @@ private:
         if (baseLength + suffix.length() + 1 > maxPathLength)
             return static_cast<platform::PathCharType*>(nullptr);
 
-        static thread_local platform::PathCharType path[maxPathLength];
+        static platform::PathCharType path[maxPathLength];
         std::ranges::copy_n(basePath, baseLength, path);
         std::ranges::copy(suffix, path + baseLength);
         path[baseLength + suffix.length()] = 0;
