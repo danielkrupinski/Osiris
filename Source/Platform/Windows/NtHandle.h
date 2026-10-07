@@ -8,7 +8,7 @@
 struct NtHandleDeleter {
     void operator()(HANDLE handle) const noexcept
     {
-        if (handle)
+        if (handle && handle != INVALID_HANDLE_VALUE)
             WindowsSyscalls::NtClose(handle);
     }
 };
