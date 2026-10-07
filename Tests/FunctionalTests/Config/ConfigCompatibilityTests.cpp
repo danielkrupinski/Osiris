@@ -174,6 +174,7 @@ protected:
     void setVariableExpectationsCurrent()
     {
         setVariableExpectationsV10();
+        get<player_info_vars::RadarEnabled>() = false;
     }
 
     struct VariableChecker {
