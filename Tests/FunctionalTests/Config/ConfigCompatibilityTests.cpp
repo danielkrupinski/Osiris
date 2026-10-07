@@ -232,7 +232,9 @@ protected:
 };
 
 TEST_F(ConfigCompatibilityTest, ConfigCurrentFileIsUpToDate) {
-    const auto currentConfigFile = readConfigFile("config_current.cfg");
+    auto currentConfigFile = readConfigFile("config_current.cfg");
+    while (!currentConfigFile.empty() && (currentConfigFile.back() == u8'\n' || currentConfigFile.back() == u8'\r'))
+        currentConfigFile.pop_back();
 
     setVariableExpectationsCurrent();
     enableVariableExpectationsForGetting();
