@@ -8,7 +8,7 @@ struct FootstepPanels {
     [[nodiscard]] static SoundVisualizationPanelProperties soundVisualizationPanelProperties() noexcept
     {
         return SoundVisualizationPanelProperties{
-            .svgImagePath = "s2r://panorama/images/icons/equipment/stomp_damage.svg",
+            .svgImagePath = "s2r://panorama/images/icons/equipment/stomp_damage.vsvg",
             .position = SoundVisualizationPosition::AboveOrigin};
     }
 };
