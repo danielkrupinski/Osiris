@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+#include <limits>
 #include <span>
 
 #include "ConfigStringConversionState.h"
@@ -15,6 +17,8 @@ public:
 
     void beginRoot() noexcept
     {
+        if (parsingFailed)
+            return;
         if (shouldReadMe() && skipWhitespaces() && readChar(u8'{'))
             increaseConversionNestingLevel();
         increaseNestingLevel();
@@ -22,6 +26,8 @@ public:
 
     [[nodiscard]] std::size_t endRoot() noexcept
     {
+        if (parsingFailed)
+            return 0;
         if (shouldReadMe() && skipWhitespaces() && readChar(u8'}'))
             markConversionComplete();
         decreaseNestingLevel();
@@ -31,6 +37,8 @@ public:
 
     void beginObject(const char8_t* key) noexcept
     {
+        if (parsingFailed)
+            return;
         if (shouldReadMe()) {
             const auto previousReadIndex = readIndex;
             if (readUntilStartOfValue(key) && readChar(u8'{'))
@@ -43,6 +51,8 @@ public:
 
     void endObject() noexcept
     {
+        if (parsingFailed)
+            return;
         if (shouldReadMe() && skipWhitespaces() && readChar(u8'}'))
             decreaseConversionNestingLevel();
         decreaseNestingLevel();
@@ -50,14 +60,23 @@ public:
 
     void boolean(const char8_t* key, auto&& valueSetter, auto&& /* valueGetter */)
     {
+        if (parsingFailed)
+            return;
         if (bool value; parseBool(key, value))
             valueSetter(value);
     }
 
     void uint(const char8_t* key, auto&& valueSetter, auto&& /* valueGetter */)
     {
+        if (parsingFailed)
+            return;
         if (std::uint64_t value; parseUint(key, value))
             valueSetter(value);
+    }
+
+    [[nodiscard]] bool isValid() const noexcept
+    {
+        return !parsingFailed;
     }
 
 private:
@@ -126,32 +145,47 @@ private:
 
     void increaseNestingLevel() noexcept
     {
-        assert(nestingLevel < config_params::kMaxNestingLevel);
+        if (nestingLevel >= config_params::kMaxNestingLevel) {
+            parsingFailed = true;
+            return;
+        }
         indexInNestingLevel[++nestingLevel] = 0;
     }
 
     void increaseConversionNestingLevel() noexcept
     {
-        assert(conversionState.nestingLevel < config_params::kMaxNestingLevel);
+        if (conversionState.nestingLevel >= config_params::kMaxNestingLevel) {
+            parsingFailed = true;
+            return;
+        }
         conversionState.indexInNestingLevel[conversionState.nestingLevel] = indexInNestingLevel[nestingLevel];
         conversionState.indexInNestingLevel[++conversionState.nestingLevel] = config_params::kInvalidObjectIndex;
     }
 
     void decreaseNestingLevel() noexcept
     {
-        assert(nestingLevel > 0);
-        assert(indexInNestingLevel[nestingLevel - 1] < config_params::kMaxObjectIndex);
+        if (nestingLevel == 0 || indexInNestingLevel[nestingLevel - 1] >= config_params::kMaxObjectIndex) {
+            parsingFailed = true;
+            return;
+        }
         ++indexInNestingLevel[--nestingLevel];
     }
 
     void decreaseConversionNestingLevel() noexcept
     {
-        assert(conversionState.nestingLevel > 0);
+        if (conversionState.nestingLevel == 0) {
+            parsingFailed = true;
+            return;
+        }
         --conversionState.nestingLevel;
     }  
 
     void increaseIndexInNestingLevel() noexcept
     {
+        if (indexInNestingLevel[nestingLevel] >= config_params::kMaxObjectIndex) {
+            parsingFailed = true;
+            return;
+        }
         ++indexInNestingLevel[nestingLevel];
     }
 
@@ -174,11 +208,10 @@ private:
             if (const char c = buffer[readIndex]; c >= u8'0' && c <= u8'9') {
                 parsedAtLeastOneDigit = true;
                 ++readIndex;
-                const auto lastResult = result;
-                result *= 10;
-                result += c - u8'0';
-                if (result < lastResult)
+                const auto digit = static_cast<std::uint64_t>(c - u8'0');
+                if (result > (std::numeric_limits<std::uint64_t>::max() - digit) / 10)
                     return false;
+                result = result * 10 + digit;
             } else {
                 return parsedAtLeastOneDigit;
             }
@@ -247,4 +280,5 @@ private:
     ConfigStringConversionState& conversionState;
     std::array<config_params::ObjectIndexType, config_params::kMaxNestingLevel + 1> indexInNestingLevel{};
     config_params::NestingLevelIndexType nestingLevel{0};
+    bool parsingFailed{false};
 };
