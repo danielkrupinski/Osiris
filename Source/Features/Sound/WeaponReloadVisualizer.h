@@ -8,7 +8,7 @@ struct WeaponReloadPanels {
     [[nodiscard]] static SoundVisualizationPanelProperties soundVisualizationPanelProperties() noexcept
     {
         return SoundVisualizationPanelProperties{
-            .svgImagePath = "s2r://panorama/images/icons/ui/switch_teams_dead.svg",
+            .svgImagePath = "s2r://panorama/images/icons/ui/switch_teams_dead.vsvg",
             .position = SoundVisualizationPosition::AtOrigin};
     }
 };
