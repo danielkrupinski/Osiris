@@ -493,6 +493,7 @@ u8R"(
 
   var playerInfo = createSection(playerInfoTab, 'Player Info In World');
   createDropDown(playerInfo, "Master Switch", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off']);
+  createYesNoDropDown(playerInfo, "Reveal Enemies On In-Game Radar", 'visuals', 'player_info_radar');
 
   var playerPosition = createSection(playerInfoTab, 'Player Position');
   createYesNoDropDown(playerPosition, "Show Player Position Arrow", 'visuals', 'player_info_position');
