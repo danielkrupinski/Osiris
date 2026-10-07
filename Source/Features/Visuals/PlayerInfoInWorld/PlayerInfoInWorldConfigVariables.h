@@ -13,6 +13,7 @@ namespace player_info_vars
 
 CONFIG_VARIABLE(Enabled, bool, false);
 CONFIG_VARIABLE(OnlyEnemies, bool, false);
+CONFIG_VARIABLE(RadarEnabled, bool, false);
 CONFIG_VARIABLE(PlayerPositionArrowEnabled, bool, true);
 CONFIG_VARIABLE(PlayerPositionArrowColorMode, PlayerPositionArrowColorType, PlayerPositionArrowColorType::PlayerOrTeamColor);
 CONFIG_VARIABLE(PlayerHealthEnabled, bool, true);
