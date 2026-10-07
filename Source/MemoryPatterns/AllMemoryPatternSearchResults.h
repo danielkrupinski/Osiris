@@ -31,6 +31,16 @@ struct AllMemoryPatternSearchResults {
             return panoramaPatternSearchResults.get<PatternType>();
     }
 
+    [[nodiscard]] bool isValid() const noexcept
+    {
+        return clientPatternSearchResults.isValid()
+            && sceneSystemPatternSearchResults.isValid()
+            && tier0PatternSearchResults.isValid()
+            && fileSystemPatternSearchResults.isValid()
+            && soundSystemPatternSearchResults.isValid()
+            && panoramaPatternSearchResults.isValid();
+    }
+
     PatternSearchResults<decltype(kClientPatterns)> clientPatternSearchResults;
     PatternSearchResults<decltype(kSceneSystemPatterns)> sceneSystemPatternSearchResults;
     PatternSearchResults<decltype(kTier0Patterns)> tier0PatternSearchResults;
