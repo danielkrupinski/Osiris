@@ -39,7 +39,7 @@ public:
     [[NOINLINE]] void findPatterns(PatternPoolView patterns, auto& results) const noexcept
     {
         NotFoundHandler notFoundHandler;
-        const auto resultView = results.getView();
+        auto resultView = results.getView();
         patterns.forEach([patternIndex = std::size_t{0}, resultView, this, &notFoundHandler](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation) mutable {
             auto result = operator()(pattern, notFoundHandler);
             result.add(offset);
