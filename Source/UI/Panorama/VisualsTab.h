@@ -46,6 +46,7 @@ private:
         initDropDown<PlayerInfoInWorldDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_information_through_walls");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::PlayerPositionArrowEnabled>>(guiPanel, "player_info_position");
         initDropDown<PlayerInfoInWorldPlayerPositionArrowColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_info_position_color");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::RadarEnabled>>(guiPanel, "player_info_radar");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::PlayerHealthEnabled>>(guiPanel, "player_info_health");
         initDropDown<PlayerInfoInWorldPlayerHealthColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_info_health_color");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::ActiveWeaponIconEnabled>>(guiPanel, "player_info_weapon");
@@ -146,6 +147,7 @@ private:
     void updatePlayerInfoInWorldTab(auto&& mainMenu) const noexcept
     {
         setDropDownSelectedIndex(mainMenu, "player_information_through_walls", playerInfoDropDownIndex());
+        setDropDownSelectedIndex(mainMenu, "player_info_radar", !GET_CONFIG_VAR(player_info_vars::RadarEnabled));
         setDropDownSelectedIndex(mainMenu, "player_info_position", !GET_CONFIG_VAR(player_info_vars::PlayerPositionArrowEnabled));
         setDropDownSelectedIndex(mainMenu, "player_info_position_color", static_cast<int>(GET_CONFIG_VAR(player_info_vars::PlayerPositionArrowColorMode)));
         setDropDownSelectedIndex(mainMenu, "player_info_health", !GET_CONFIG_VAR(player_info_vars::PlayerHealthEnabled));
