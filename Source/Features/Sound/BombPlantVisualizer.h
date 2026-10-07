@@ -8,7 +8,7 @@ struct BombPlantPanels {
     [[nodiscard]] static SoundVisualizationPanelProperties soundVisualizationPanelProperties() noexcept
     {
         return SoundVisualizationPanelProperties{
-            .svgImagePath = "s2r://panorama/images/icons/ui/chatwheel_bombat.svg",
+            .svgImagePath = "s2r://panorama/images/icons/ui/chatwheel_bombat.vsvg",
             .svgTextureHeight = 64,
             .position = SoundVisualizationPosition::AboveOrigin};
     }
