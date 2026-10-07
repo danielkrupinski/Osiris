@@ -1,6 +1,8 @@
 name: Release
 
 on:
+  push:
+    branches: [master]
   workflow_dispatch:
     inputs:
       tag:
@@ -48,8 +50,8 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ inputs.tag }}
-        name: ${{ inputs.name }}
+        tag_name: ${{ inputs.tag || 'v2026.10.07' }}
+        name: ${{ inputs.name || 'Osiris 2026-10-07' }}
         generate_release_notes: true
         files: |
           dist/Osiris-Windows-x64.dll
