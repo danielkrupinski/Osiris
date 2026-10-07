@@ -5,7 +5,6 @@
 
 #include <Mocks/BombTimerMocks/MockBombTimer.h>
 #include <Mocks/HudMocks/MockBombStatusPanel.h>
-#include <Mocks/HudMocks/MockBombStatusPanelManagerContext.h>
 #include <Mocks/MockHookContext.h>
 #include <Mocks/PostRoundTimer/MockPostRoundTimer.h>
 
@@ -13,17 +12,17 @@ class BombStatusPanelManagerTest : public testing::Test {
 protected:
     BombStatusPanelManagerTest()
     {
-        EXPECT_CALL(mockContext, postRoundTimer()).WillOnce(testing::ReturnRef(mockPostRoundTimer));
-        EXPECT_CALL(mockContext, bombTimer()).WillOnce(testing::ReturnRef(mockBombTimer));
-        EXPECT_CALL(mockContext, bombStatusPanel()).WillOnce(testing::ReturnRef(mockBombStatusPanel));
+        EXPECT_CALL(mockHookContext, makePostRoundTimer()).WillOnce(testing::ReturnRef(mockPostRoundTimer));
+        EXPECT_CALL(mockHookContext, makeBombTimer()).WillOnce(testing::ReturnRef(mockBombTimer));
+        EXPECT_CALL(mockHookContext, makeBombStatusPanel()).WillOnce(testing::ReturnRef(mockBombStatusPanel));
     }
 
-    testing::StrictMock<MockBombStatusPanelManagerContext> mockContext;
+    testing::StrictMock<MockHookContext> mockHookContext;
     testing::StrictMock<MockPostRoundTimer> mockPostRoundTimer;
     testing::StrictMock<MockBombTimer> mockBombTimer;
     testing::StrictMock<MockBombStatusPanel> mockBombStatusPanel;
 
-    BombStatusPanelManager<MockHookContext, MockBombStatusPanelManagerContext&> bombStatusPanelManager{mockContext};
+    BombStatusPanelManager<MockHookContext> bombStatusPanelManager{mockHookContext};
 };
 
 TEST_F(BombStatusPanelManagerTest, BombStatusPanelAndBombTimerAreHiddenWhenPostRoundTimerIsVisible) {

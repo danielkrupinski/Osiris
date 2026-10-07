@@ -4,7 +4,6 @@
 #include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
 #include <Hooks/ViewRenderHook.h>
 
-#include "PlayerInfoInWorldContext.h"
 #include "PlayerInfoInWorldState.h"
 #include "PlayerPositionArrow/PlayerPositionArrowColorType.h"
 #include "PlayerStateIcons/PlayerStateIconsToShow.h"
@@ -19,7 +18,7 @@ public:
 
     void drawPlayerInformation(auto&& playerPawn) noexcept
     {
-        if (!shouldRun() || !shouldDrawInfoOnPawn(playerPawn))
+        if (!enabled() || !shouldDrawInfoOnPawn(playerPawn))
             return;
 
         const auto absOrigin = playerPawn.absOrigin();
@@ -36,14 +35,9 @@ public:
     }
 
 private:
-    [[nodiscard]] decltype(auto) context() const noexcept
+    [[nodiscard]] bool enabled() const noexcept
     {
-        return hookContext.template make<PlayerInfoInWorldContext>();
-    }
-
-    [[nodiscard]] bool shouldRun() const noexcept
-    {
-        return context().config().template getVariable<player_info_vars::Enabled>();
+        return GET_CONFIG_VAR(player_info_vars::Enabled);
     }
 
     [[nodiscard]] bool shouldDrawInfoOnPawn(auto&& playerPawn) const noexcept
@@ -52,7 +46,7 @@ private:
             && playerPawn.health().greaterThan(0).valueOr(true)
             && !playerPawn.isControlledByLocalPlayer()
             && playerPawn.isTTorCT()
-            && (!context().config().template getVariable<player_info_vars::OnlyEnemies>() || playerPawn.isEnemy().value_or(true));
+            && (!GET_CONFIG_VAR(player_info_vars::OnlyEnemies) || playerPawn.isEnemy().value_or(true));
     }
 
     HookContext& hookContext;

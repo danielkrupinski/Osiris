@@ -3,40 +3,70 @@
 #include <utility>
 
 #include <Common/Visibility.h>
-#include "BombStatusPanelContext.h"
+#include <GameClient/Panorama/PanelHandle.h>
+#include <GameClient/Panorama/PanoramaUiEngine.h>
 
-template <typename HookContext, typename Context = BombStatusPanelContext<HookContext>>
-struct BombStatusPanel {
-    template <typename... Args>
-    explicit BombStatusPanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+template <typename HookContext>
+class BombStatusPanel {
+public:
+    explicit BombStatusPanel(HookContext& hookContext) noexcept
+        : hookContext{hookContext}
     {
     }
 
-    void hide() noexcept
+    void hide()
     {
-        changeVisibility(Visibility::Hidden, [this] { context.bombStatusPanel().setParent(context.invisiblePanel()); });
+        changeVisibility(Visibility::Hidden, [this] { bombStatusPanel().setParent(invisiblePanel()); });
     }
 
-    void restore() noexcept
+    void restore()
     {
-        changeVisibility(Visibility::Visible, [this] { context.bombStatusPanel().setParent(context.scoreAndTimeAndBombPanel()); });
+        changeVisibility(Visibility::Visible, [this] { bombStatusPanel().setParent(scoreAndTimeAndBombPanel()); });
     }
 
-    void onUnload() noexcept
+    void onUnload()
     {
         restore();
-        context.hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(context.hookContext.bombStatusPanelState().invisiblePanelHandle);
+        hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(state().invisiblePanelHandle);
     }
 
 private:
-    void changeVisibility(Visibility targetVisibility, auto performVisibilityChange) noexcept
+    void changeVisibility(Visibility targetVisibility, auto performVisibilityChange)
     {
-        if (auto& visibility = context.visibility(); visibility != targetVisibility) {
+        if (auto& visibility = state().visibility; visibility != targetVisibility) {
             performVisibilityChange();
             visibility = targetVisibility;
         }
     }
     
-    Context context;
+    [[nodiscard]] decltype(auto) bombStatusPanel() const
+    {
+        return hookContext.hud().bombStatus();
+    }
+
+    [[nodiscard]] decltype(auto) scoreAndTimeAndBombPanel() const
+    {
+        return hookContext.hud().scoreAndTimeAndBomb();
+    }
+
+    [[nodiscard]] decltype(auto) invisiblePanel() const
+    {
+        return  hookContext.template make<PanelHandle>(state().invisiblePanelHandle).getOrInit(createInvisiblePanel());
+    }
+
+    [[nodiscard]] decltype(auto) state() const
+    {
+        return hookContext.bombStatusPanelState();
+    }
+
+    [[nodiscard]] decltype(auto) createInvisiblePanel() const noexcept
+    {
+        return [this] () -> decltype(auto) {
+            auto&& invisiblePanel = hookContext.panelFactory().createPanel(scoreAndTimeAndBombPanel()).uiPanel();
+            invisiblePanel.setVisible(false);
+            return utils::lvalue<decltype(invisiblePanel)>(invisiblePanel);
+        };
+    }
+    
+    HookContext& hookContext;
 };

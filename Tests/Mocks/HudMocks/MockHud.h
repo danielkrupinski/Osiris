@@ -11,4 +11,5 @@ struct MockHud {
     MOCK_METHOD(MockPanel&, getHudReticle, ());
     MOCK_METHOD(MockPanel&, scoreAndTimeAndBomb, ());
     MOCK_METHOD(MockPanel&, bombPlantedPanel, ());
+    MOCK_METHOD(MockPanel&, bombStatus, ());
 };

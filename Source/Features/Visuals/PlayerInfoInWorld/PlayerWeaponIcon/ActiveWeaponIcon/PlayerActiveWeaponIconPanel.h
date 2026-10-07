@@ -7,21 +7,20 @@
 #include <GameClient/Panorama/ImagePanel.h>
 #include <Utils/CString.h>
 #include <Utils/StringBuilder.h>
-#include "PlayerActiveWeaponIconPanelContext.h"
 
-template <typename HookContext, typename Context = PlayerActiveWeaponIconPanelContext<HookContext>>
+template <typename HookContext>
 class PlayerActiveWeaponIconPanel {
 public:
-    template <typename... Args>
-    explicit PlayerActiveWeaponIconPanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit PlayerActiveWeaponIconPanel(HookContext& hookContext, cs2::CUIPanel* uiPanel) noexcept
+        : hookContext{hookContext}
+        , uiPanel{uiPanel}
     {
     }
 
     void update(auto&& playerPawn, Visibility bombIconVisibility) const noexcept
     {
-        if (!context.config().template getVariable<player_info_vars::ActiveWeaponIconEnabled>() || (bombIconVisibility == Visibility::Visible && playerPawn.getActiveWeapon().template is<C4>())) {
-            context.panel().setVisible(false);
+        if (!GET_CONFIG_VAR(player_info_vars::ActiveWeaponIconEnabled) || (bombIconVisibility == Visibility::Visible && playerPawn.getActiveWeapon().template is<C4>())) {
+            panel().setVisible(false);
             return;
         }
 
@@ -30,14 +29,14 @@ public:
             return;
         weaponName.skipPrefix("weapon_");
 
-        context.panel().setVisible(true);
+        panel().setVisible(true);
 
         StringBuilderStorage<100> weaponIconPathStorage;
         auto weaponIconPathBuilder = weaponIconPathStorage.builder();
         weaponIconPathBuilder.put("s2r://panorama/images/icons/equipment/", weaponName.string, ".svg");
         const auto weaponIconPath = weaponIconPathBuilder.cstring();
 
-        auto&& weaponIconImagePanel = context.panel().clientPanel().template as<ImagePanel>();
+        auto&& weaponIconImagePanel = panel().clientPanel().template as<ImagePanel>();
         if (shouldUpdateImagePanel(weaponIconImagePanel, weaponIconPath))
             weaponIconImagePanel.setImageSvg(weaponIconPath, 24);
     }
@@ -48,5 +47,11 @@ private:
         return imagePanel.getImagePath() != newImagePath;
     }
 
-    Context context;
+    [[nodiscard]] decltype(auto) panel() const noexcept
+    {
+        return hookContext.template make<PanoramaUiPanel>(uiPanel);
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* uiPanel;
 };

@@ -1,3 +1,4 @@
 add_subdirectory(ModelGlow)
 add_subdirectory(OutlineGlow)
+add_subdirectory(PlayerInfoInWorld)
 add_subdirectory(ViewmodelMod)

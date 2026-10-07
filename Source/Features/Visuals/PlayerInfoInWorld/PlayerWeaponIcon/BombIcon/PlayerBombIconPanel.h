@@ -3,31 +3,57 @@
 #include <utility>
 
 #include <Common/Visibility.h>
-#include "PlayerBombIconPanelContext.h"
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorldConfigVariables.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
+#include <HookContext/HookContextMacros.h>
 
-template <typename HookContext, typename Context = PlayerBombIconPanelContext<HookContext>>
+template <typename HookContext>
 class PlayerBombIconPanel {
 public:
-    template <typename... Args>
-    explicit PlayerBombIconPanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    PlayerBombIconPanel(HookContext& hookContext, cs2::CUIPanel* uiPanel) noexcept
+        : hookContext{hookContext}
+        , uiPanel{uiPanel}
     {
     }
 
-    [[nodiscard]] Visibility update(auto&& playerPawn) const noexcept
+    [[nodiscard]] Visibility update(auto&& playerPawn) const
     {
-        if (!context.shouldShowOnPlayer(playerPawn)) {
-            context.panel().setVisible(false);
-            return Visibility::Hidden;
-        }
+        auto&& panel = hookContext.template make<PanoramaUiPanel>(uiPanel);
+        const auto visibleIcon = computeVisibleIcon(playerPawn);
+        panel.setVisible(visibleIcon != Icon::None);
 
-        context.panel().setVisible(true);
-        const auto shouldShowPlantingColor = context.shouldShowPlantingColor(playerPawn);
-        context.panel().children()[0].setVisible(!shouldShowPlantingColor);
-        context.panel().children()[1].setVisible(shouldShowPlantingColor);
+        if (visibleIcon == Icon::None)
+            return Visibility::Hidden;
+
+        auto&& childPanels = panel.children();
+        childPanels[0].setVisible(visibleIcon == Icon::CarryingBomb);
+        childPanels[1].setVisible(visibleIcon == Icon::PlantingBomb);
         return Visibility::Visible;
     }
 
 private:
-    Context context;
+    enum class Icon {
+        None,
+        CarryingBomb,
+        PlantingBomb
+    };
+
+    [[nodiscard]] Icon computeVisibleIcon(auto&& playerPawn) const
+    {
+        const auto carryingIconEnabled = GET_CONFIG_VAR(player_info_vars::BombCarrierIconEnabled);
+        const auto plantingIconEnabled = GET_CONFIG_VAR(player_info_vars::BombPlantIconEnabled);
+
+        if (!carryingIconEnabled && !plantingIconEnabled)
+            return Icon::None;
+
+        auto&& carriedC4 = playerPawn.carriedC4();
+        if (plantingIconEnabled && carriedC4.isBeingPlanted().valueOr(false))
+            return Icon::PlantingBomb;
+        if (carryingIconEnabled && carriedC4)
+            return Icon::CarryingBomb;
+        return Icon::None;
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* uiPanel;
 };

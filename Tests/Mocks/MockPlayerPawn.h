@@ -6,6 +6,7 @@
 
 struct MockBaseEntity;
 struct MockBaseWeapon;
+struct MockC4;
 struct MockPlayerController;
 
 struct MockPlayerPawn {
@@ -24,6 +25,7 @@ struct MockPlayerPawn {
     MOCK_METHOD(Optional<bool>, isScoped, ());
     MOCK_METHOD(MockBaseWeapon&, getActiveWeapon, ());
     MOCK_METHOD(bool, isUsingSniperRifle, ());
+    MOCK_METHOD(MockC4&, carriedC4, ());
 
     [[nodiscard]] explicit operator bool() const
     {

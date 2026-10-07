@@ -3,38 +3,41 @@
 #include <utility>
 
 #include <CS2/Constants/ColorConstants.h>
+#include <CS2/Panorama/CUIPanel.h>
+#include <Features/Visuals/PlayerInfoInWorld/PlayerInfoPanelCacheEntry.h>
 #include <GameClient/Entities/TeamNumber.h>
+#include <GameClient/Panorama/PanoramaUiPanel.h>
 
 #include "PlayerPositionArrowColorType.h"
-#include "PlayerPositionArrowPanelContext.h"
 
-template <typename HookContext, typename Context = PlayerPositionArrowPanelContext<HookContext>>
+template <typename HookContext>
 class PlayerPositionArrowPanel {
 public:
-    template <typename... Args>
-    explicit PlayerPositionArrowPanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit PlayerPositionArrowPanel(HookContext& hookContext, cs2::CUIPanel* uiPanel, PlayerInfoPanelCacheEntry& cache) noexcept
+        : hookContext{hookContext}
+        , uiPanel{uiPanel}
+        , cache{cache}
     {
     }
 
     void update(auto&& playerPawn) const noexcept
     {
-        if (!context.config().template getVariable<player_info_vars::PlayerPositionArrowEnabled>()) {
-            context.panel().setVisible(false);
+        if (!GET_CONFIG_VAR(player_info_vars::PlayerPositionArrowEnabled)) {
+            panel().setVisible(false);
             return;
         }
 
-        context.panel().setVisible(true);
+        panel().setVisible(true);
 
         const auto arrowColor = getArrowColor(playerPawn);
-        if (context.cache().playerPositionArrowColor(arrowColor))
-            context.panel().setWashColor(arrowColor);
+        if (cache.playerPositionArrowColor(arrowColor))
+            panel().setWashColor(arrowColor);
     }
 
 private:
     [[nodiscard]] cs2::Color getArrowColor(auto&& playerPawn) const noexcept
     {
-        if (context.config().template getVariable<player_info_vars::PlayerPositionArrowColorMode>() == PlayerPositionArrowColorType::PlayerOrTeamColor) {
+        if (GET_CONFIG_VAR(player_info_vars::PlayerPositionArrowColorMode) == PlayerPositionArrowColorType::PlayerOrTeamColor) {
             const auto playerColor = getPlayerColor(playerPawn.playerController().playerColorIndex());
             if (playerColor.has_value())
                 return *playerColor;
@@ -64,5 +67,12 @@ private:
         }
     }
 
-    Context context;
+    [[nodiscard]] decltype(auto) panel() const noexcept
+    {
+        return hookContext.template make<PanoramaUiPanel>(uiPanel);
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* uiPanel;
+    PlayerInfoPanelCacheEntry& cache;
 };

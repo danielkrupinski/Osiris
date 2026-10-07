@@ -2,38 +2,37 @@
 
 #include <utility>
 
-#include "PlayerStateIconsPanelContext.h"
 #include "PlayerStateIconsToShow.h"
 
-template <typename HookContext, typename Context = PlayerStateIconsPanelContext<HookContext>>
+template <typename HookContext>
 class PlayerStateIconsPanel {
 public:
-    template <typename... Args>
-    explicit PlayerStateIconsPanel(Args&&... args) noexcept
-        : context{std::forward<Args>(args)...}
+    explicit PlayerStateIconsPanel(HookContext& hookContext, cs2::CUIPanel* uiPanel, PlayerInfoPanelCacheEntry&) noexcept
+        : hookContext{hookContext}
+        , uiPanel{uiPanel}
     {
     }
 
     void update(auto&& playerPawn) const noexcept
     {
-        if (!context.state().playerStateIconsToShow) {
-            context.panel().setVisible(false);
+        if (!iconsToShow()) {
+            panel().setVisible(false);
             return;
         }
 
-        context.panel().setVisible(true);
+        panel().setVisible(true);
 
-        auto&& playerStateChildren = context.panel().children();
-        playerStateChildren[0].setVisible(context.state().playerStateIconsToShow.template has<DefuseIconPanel>() && playerPawn.isDefusing().valueOr(false));
-        playerStateChildren[1].setVisible(context.state().playerStateIconsToShow.template has<HostagePickupPanel>() && playerPawn.isPickingUpHostage().valueOr(false));
-        playerStateChildren[2].setVisible(context.state().playerStateIconsToShow.template has<HostageRescuePanel>() && playerPawn.isRescuingHostage());
+        auto&& playerStateChildren = panel().children();
+        playerStateChildren[0].setVisible(iconsToShow().template has<DefuseIconPanel>() && playerPawn.isDefusing().valueOr(false));
+        playerStateChildren[1].setVisible(iconsToShow().template has<HostagePickupPanel>() && playerPawn.isPickingUpHostage().valueOr(false));
+        playerStateChildren[2].setVisible(iconsToShow().template has<HostageRescuePanel>() && playerPawn.isRescuingHostage());
         updateBlindedIconPanel(playerStateChildren[3], playerPawn);
     }
 
 private:
     void updateBlindedIconPanel(auto&& blindedIconPanel, auto&& playerPawn) const noexcept
     {
-        if (!context.state().playerStateIconsToShow.template has<BlindedIconPanel>()) {
+        if (!iconsToShow().template has<BlindedIconPanel>()) {
             blindedIconPanel.setVisible(false);
             return;
         }
@@ -52,5 +51,16 @@ private:
         blindedIconPanel.setOpacity(opacity);
     }
 
-    Context context;
+    [[nodiscard]] auto& iconsToShow() const noexcept
+    {
+        return hookContext.featuresStates().visualFeaturesStates.playerInfoInWorldState.playerStateIconsToShow;
+    }
+
+    [[nodiscard]] decltype(auto) panel() const noexcept
+    {
+        return hookContext.template make<PanoramaUiPanel>(uiPanel);
+    }
+
+    HookContext& hookContext;
+    cs2::CUIPanel* uiPanel;
 };
