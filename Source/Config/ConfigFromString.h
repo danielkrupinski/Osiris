@@ -209,7 +209,7 @@ private:
                 parsedAtLeastOneDigit = true;
                 ++readIndex;
                 const auto digit = static_cast<std::uint64_t>(c - u8'0');
-                if (result > (std::numeric_limits<std::uint64_t>::max() - digit) / 10)
+                if (result > ((std::numeric_limits<std::uint64_t>::max)() - digit) / 10)
                     return false;
                 result = result * 10 + digit;
             } else {
