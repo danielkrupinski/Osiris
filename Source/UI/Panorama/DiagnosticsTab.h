@@ -35,14 +35,14 @@ public:
     {
         const auto& patterns = hookContext.patternSearchResults();
         setLabel(mainMenu, "diagnostics_cs2_version", "CS2: runtime module loaded");
-        setLabel(mainMenu, "diagnostics_dll_version", buildVersionText());
+        setVersionLabel(mainMenu);
         setLabel(mainMenu, "diagnostics_pattern_status", patterns.isValid() ? "Signatures: OK" : "Signatures: FAILED");
-        setLabel(mainMenu, "diagnostics_client_patterns", patternText("Client patterns", patterns.clientPatternsValid()));
-        setLabel(mainMenu, "diagnostics_scene_patterns", patternText("Scene system patterns", patterns.sceneSystemPatternsValid()));
-        setLabel(mainMenu, "diagnostics_tier0_patterns", patternText("Tier0 patterns", patterns.tier0PatternsValid()));
-        setLabel(mainMenu, "diagnostics_filesystem_patterns", patternText("Filesystem patterns", patterns.fileSystemPatternsValid()));
-        setLabel(mainMenu, "diagnostics_sound_patterns", patternText("Sound system patterns", patterns.soundSystemPatternsValid()));
-        setLabel(mainMenu, "diagnostics_panorama_patterns", patternText("Panorama patterns", patterns.panoramaPatternsValid()));
+        setPatternLabel(mainMenu, "diagnostics_client_patterns", "Client patterns", patterns.clientPatternsValid());
+        setPatternLabel(mainMenu, "diagnostics_scene_patterns", "Scene system patterns", patterns.sceneSystemPatternsValid());
+        setPatternLabel(mainMenu, "diagnostics_tier0_patterns", "Tier0 patterns", patterns.tier0PatternsValid());
+        setPatternLabel(mainMenu, "diagnostics_filesystem_patterns", "Filesystem patterns", patterns.fileSystemPatternsValid());
+        setPatternLabel(mainMenu, "diagnostics_sound_patterns", "Sound system patterns", patterns.soundSystemPatternsValid());
+        setPatternLabel(mainMenu, "diagnostics_panorama_patterns", "Panorama patterns", patterns.panoramaPatternsValid());
         setLabel(mainMenu, "diagnostics_offsets", "Offsets: radar 0x1E88 + 0x08; dynamic offsets follow signature status");
         setLabel(mainMenu, "diagnostics_safe_mode_status", GET_CONFIG_VAR(diagnostics_vars::SafeModeEnabled) ? "Safe mode: ON" : "Safe mode: OFF");
     }
@@ -53,20 +53,20 @@ public:
     }
 
 private:
-    [[nodiscard]] const char* buildVersionText() const noexcept
+    void setVersionLabel(auto&& mainMenu) const noexcept
     {
-        static char text[64];
+        char text[64];
         StringBuilder builder{std::span{text}};
         builder.put("Osiris DLL: v", build::kVersion);
-        return builder.cstring();
+        setLabel(mainMenu, "diagnostics_dll_version", builder.cstring());
     }
 
-    [[nodiscard]] const char* patternText(const char* name, bool valid) const noexcept
+    void setPatternLabel(auto&& mainMenu, const char* panelId, const char* name, bool valid) const noexcept
     {
-        static char text[96];
+        char text[96];
         StringBuilder builder{std::span{text}};
         builder.put(name, ": ", valid ? "OK" : "FAILED");
-        return builder.cstring();
+        setLabel(mainMenu, panelId, builder.cstring());
     }
 
     void setLabel(auto&& mainMenu, const char* panelId, const char* text) const noexcept
