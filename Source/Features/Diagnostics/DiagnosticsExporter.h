@@ -1,9 +1,11 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <cstddef>
 #include <cstring>
 #include <cwchar>
+#include <span>
 #include <string_view>
 
 #include <BuildConfig.h>
@@ -17,7 +19,6 @@
 #include <Platform/Windows/FileSystem/WindowsFileSystem.h>
 #elif IS_LINUX()
 #include <fcntl.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #include <Platform/Linux/LinuxPlatformApi.h>
 #endif
@@ -43,13 +44,13 @@ public:
         StringBuilderStorage<2048> storage;
         auto diagnostics = storage.builder();
         appendText(diagnostics);
-        const auto path = buildPath();
-        if (!path)
+        std::array<platform::PathCharType, kMaxPathLength> path{};
+        if (!buildPath(path))
             return false;
 
 #if IS_WIN64()
         WindowsFileSystem::createDirectory(hookContext.osirisDirectoryPath().get());
-        const auto handle = WindowsFileSystem::createFileForOverwrite(path);
+        const auto handle = WindowsFileSystem::createFileForOverwrite(path.data());
         if (handle == INVALID_HANDLE_VALUE)
             return false;
         const auto* data = diagnostics.cstring();
@@ -58,7 +59,7 @@ public:
         WindowsSyscalls::NtClose(handle);
         return written == size;
 #elif IS_LINUX()
-        const auto fd = LinuxPlatformApi::open(path, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC | O_NOFOLLOW, 0600);
+        const auto fd = LinuxPlatformApi::open(path.data(), O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC | O_NOFOLLOW, 0600);
         if (fd < 0)
             return false;
         const auto* data = diagnostics.cstring();
@@ -69,6 +70,7 @@ public:
 #endif
     }
 
+private:
     void appendText(StringBuilder& builder) const noexcept
     {
         const auto& patterns = hookContext.patternSearchResults();
@@ -91,24 +93,23 @@ public:
         builder.put("Note: dynamic offsets are validated through the pattern groups above.\n");
     }
 
-private:
-    [[nodiscard]] auto buildPath() const noexcept
+    static constexpr std::size_t kMaxPathLength{512};
+
+    [[nodiscard]] bool buildPath(std::span<platform::PathCharType> path) const noexcept
     {
         constexpr auto suffix = WIN64_LINUX(std::wstring_view{L"\\diagnostics.txt"}, std::string_view{"/diagnostics.txt"});
-        constexpr std::size_t maxPathLength{512};
-        auto basePath = hookContext.osirisDirectoryPath().get();
+        const auto basePath = hookContext.osirisDirectoryPath().get();
         if (!basePath)
-            return static_cast<platform::PathCharType*>(nullptr);
+            return false;
 
         const auto baseLength = WIN64_LINUX(std::wcslen, std::strlen)(basePath);
-        if (baseLength + suffix.length() + 1 > maxPathLength)
-            return static_cast<platform::PathCharType*>(nullptr);
+        if (baseLength + suffix.length() + 1 > path.size())
+            return false;
 
-        static platform::PathCharType path[maxPathLength];
-        std::ranges::copy_n(basePath, baseLength, path);
-        std::ranges::copy(suffix, path + baseLength);
+        std::ranges::copy_n(basePath, baseLength, path.data());
+        std::ranges::copy(suffix, path.data() + baseLength);
         path[baseLength + suffix.length()] = 0;
-        return path;
+        return true;
     }
 
     HookContext& hookContext;
