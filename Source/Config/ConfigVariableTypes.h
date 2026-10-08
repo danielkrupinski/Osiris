@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Features/Combat/SniperRifles/NoScopeInaccuracyVis/NoScopeInaccuracyVisConfigVariables.h>
+#include <Features/Diagnostics/DiagnosticsConfigVariables.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlertConfigVariables.h>
 #include <Features/Hud/BombTimer/BombTimerConfigVariables.h>
 #include <Features/Hud/DefusingAlert/DefusingAlertConfigVariables.h>
@@ -82,6 +83,7 @@ using ConfigVariableTypes = TypeList<
     outline_glow_vars::HostageHue,
     player_info_vars::Enabled,
     player_info_vars::OnlyEnemies,
+    player_info_vars::RadarEnabled,
     player_info_vars::PlayerPositionArrowEnabled,
     player_info_vars::PlayerPositionArrowColorMode,
     player_info_vars::PlayerHealthEnabled,
@@ -98,5 +100,6 @@ using ConfigVariableTypes = TypeList<
     viewmodel_mod_vars::ModifyFov,
     viewmodel_mod_vars::Fov,
     no_scope_inaccuracy_vis_vars::Enabled,
-    BombPlantAlertEnabled
+    BombPlantAlertEnabled,
+    diagnostics_vars::SafeModeEnabled
 >;

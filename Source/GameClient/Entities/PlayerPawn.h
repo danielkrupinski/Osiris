@@ -44,6 +44,11 @@ public:
         return playerPawn != nullptr;
     }
 
+    [[nodiscard]] cs2::C_CSPlayerPawn* raw() const noexcept
+    {
+        return playerPawn;
+    }
+
     template <template <typename...> typename EntityType>
     [[nodiscard]] decltype(auto) cast() const noexcept
     {

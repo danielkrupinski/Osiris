@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GlobalContext/GlobalContext.h"
+#include "Features/Diagnostics/DiagnosticsConfigVariables.h"
 #include "Hooks/PeepEventsHook.h"
 #include "Utils/ReturnAddress.h"
 
@@ -18,8 +19,16 @@
 int SDLHook_PeepEvents(void* events, int numevents, int action, unsigned minType, unsigned maxType) noexcept
 {
     const auto initInProgress = !HookContext<GlobalContext>::isGlobalContextComplete();
-    if (initInProgress)
+    if (initInProgress) {
         HookContext<GlobalContext>::initCompleteGlobalContextFromGameThread();
+        auto& globalContext = GlobalContext::instance();
+        if (!globalContext.fullContext().patternSearchResults.isValid()) {
+            const auto originalPeepEvents = globalContext.fullContext().hooks.peepEventsHook.original;
+            globalContext.fullContext().hooks.peepEventsHook.disable();
+            GlobalContext::destroyInstance();
+            return originalPeepEvents ? originalPeepEvents(events, numevents, action, minType, maxType) : 0;
+        }
+    }
 
     HookContext<GlobalContext> hookContext;
 
@@ -68,18 +77,20 @@ void ViewRenderHook_onRenderStart(cs2::CViewRender* thisptr) noexcept
     HookContext<GlobalContext> hookContext;
     hookContext.clearRenderHookState();
     hookContext.hooks().viewRenderHook.getOriginalOnRenderStart()(thisptr);
-    hookContext.make<InWorldPanels>().updateState();
-    SoundWatcher<decltype(hookContext)> soundWatcher{hookContext.soundWatcherState(), hookContext};
-    soundWatcher.update();
-    SoundFeatures{hookContext.soundWatcherState(), hookContext.hooks().viewRenderHook, hookContext}.runOnViewMatrixUpdate();
+    if (!GET_CONFIG_VAR(diagnostics_vars::SafeModeEnabled)) {
+        hookContext.make<InWorldPanels>().updateState();
+        SoundWatcher<decltype(hookContext)> soundWatcher{hookContext.soundWatcherState(), hookContext};
+        soundWatcher.update();
+        SoundFeatures{hookContext.soundWatcherState(), hookContext.hooks().viewRenderHook, hookContext}.runOnViewMatrixUpdate();
 
-    hookContext.make<NoScopeInaccuracyVis>().update();
-    hookContext.make<RenderingHookEntityLoop>().run();
-    hookContext.make<GlowSceneObjects>().removeUnreferencedObjects();
-    hookContext.make<DefusingAlert>().run();
-    hookContext.make<KillfeedPreserver>().run();
-    hookContext.make<BombStatusPanelManager>().run();
-    hookContext.make<InWorldPanels>().hideUnusedPanels();
+        hookContext.make<NoScopeInaccuracyVis>().update();
+        hookContext.make<RenderingHookEntityLoop>().run();
+        hookContext.make<GlowSceneObjects>().removeUnreferencedObjects();
+        hookContext.make<DefusingAlert>().run();
+        hookContext.make<KillfeedPreserver>().run();
+        hookContext.make<BombStatusPanelManager>().run();
+        hookContext.make<InWorldPanels>().hideUnusedPanels();
+    }
 
     UnloadFlag unloadFlag;
     hookContext.make<PanoramaGUI>().run(unloadFlag);
@@ -96,6 +107,8 @@ LINUX_ONLY([[gnu::aligned(8)]]) std::uint64_t PlayerPawn_sceneObjectUpdater(cs2:
 {
     HookContext<GlobalContext> hookContext;
     const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalPlayerPawnSceneObjectUpdater(playerPawn, unknown, unknownBool);
+    if (GET_CONFIG_VAR(diagnostics_vars::SafeModeEnabled))
+        return originalReturnValue;
 
     auto&& playerPawn_ = hookContext.make<PlayerPawn>(playerPawn);
     if (auto&& previewPlayer = playerPawn_.template cast<PreviewPlayer>(); !previewPlayer)
@@ -110,6 +123,8 @@ LINUX_ONLY([[gnu::aligned(8)]]) std::uint64_t Weapon_sceneObjectUpdater(cs2::C_C
 {
     HookContext<GlobalContext> hookContext;
     const auto originalReturnValue = hookContext.featuresStates().visualFeaturesStates.modelGlowState.originalWeaponSceneObjectUpdater(weapon, unknown, unknownBool);
+    if (GET_CONFIG_VAR(diagnostics_vars::SafeModeEnabled))
+        return originalReturnValue;
     if (auto&& c4 = hookContext.make<BaseWeapon>(weapon).template cast<C4>())
         hookContext.make<ModelGlow>().updateInSceneObjectUpdater()(DroppedBombModelGlow{hookContext}, c4.baseWeapon(), EntityTypeInfo{});
     else
@@ -121,6 +136,8 @@ float ClientModeHook_getViewmodelFov(cs2::ClientModeCSNormal* clientMode) noexce
 {
     HookContext<GlobalContext> hookContext;
     const auto originalFov = hookContext.hooks().originalGetViewmodelFov(clientMode);
+    if (GET_CONFIG_VAR(diagnostics_vars::SafeModeEnabled))
+        return originalFov;
     if (auto&& viewmodelMod = hookContext.template make<ViewmodelMod>(); viewmodelMod.shouldModifyViewmodelFov())
         return viewmodelMod.viewmodelFov();
     return originalFov;

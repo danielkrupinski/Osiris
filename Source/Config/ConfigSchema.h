@@ -20,6 +20,7 @@ public:
         hudObject(configConversion);
         visualsObject(configConversion);
         soundObject(configConversion);
+        diagnosticsObject(configConversion);
         return configConversion.endRoot();
     }
 
@@ -139,6 +140,7 @@ private:
         configConversion.beginObject(u8"PlayerInfoInWorld");
         configConversion.boolean(u8"Enabled", loadVariable<player_info_vars::Enabled>(), saveVariable<player_info_vars::Enabled>());
         configConversion.boolean(u8"OnlyEnemies", loadVariable<player_info_vars::OnlyEnemies>(), saveVariable<player_info_vars::OnlyEnemies>());
+        configConversion.boolean(u8"RadarEnabled", loadVariable<player_info_vars::RadarEnabled>(), saveVariable<player_info_vars::RadarEnabled>());
 
         configConversion.beginObject(u8"PlayerPositionArrow");
         configConversion.boolean(u8"Enabled", loadVariable<player_info_vars::PlayerPositionArrowEnabled>(), saveVariable<player_info_vars::PlayerPositionArrowEnabled>());
@@ -199,6 +201,13 @@ private:
         configConversion.endObject();
 
         configConversion.endObject();
+        configConversion.endObject();
+    }
+
+    void diagnosticsObject(auto&& configConversion)
+    {
+        configConversion.beginObject(u8"Diagnostics");
+        configConversion.boolean(u8"SafeModeEnabled", loadVariable<diagnostics_vars::SafeModeEnabled>(), saveVariable<diagnostics_vars::SafeModeEnabled>());
         configConversion.endObject();
     }
 

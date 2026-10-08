@@ -39,6 +39,8 @@ private:
             SetCommandHandler{parser, hookContext}();
         } else if (command == "restore_defaults") {
             hookContext.config().restoreDefaults();
+        } else if (command == "export_diagnostics") {
+            hookContext.gui().exportDiagnostics();
         }
     }
 

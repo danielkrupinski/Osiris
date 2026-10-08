@@ -10,7 +10,7 @@
 
 namespace player_bomb_icon_panel_params::bomb_icon_panel_params
 {
-    static constexpr auto kImageUrl = "s2r://panorama/images/icons/equipment/c4.svg";
+    static constexpr auto kImageUrl = "s2r://panorama/images/icons/equipment/c4.vsvg";
     static constexpr auto kTextureHeight = 24;
     static constexpr auto kShadowParams = PanelShadowParams{
         .horizontalOffset{cs2::CUILength::pixels(0)},

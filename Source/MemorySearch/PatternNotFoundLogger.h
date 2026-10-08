@@ -16,8 +16,30 @@ public:
 
     void onPatternNotFound(BytePattern pattern) noexcept
     {
+        appendPattern("Failed to find patterns:\n", pattern);
+    }
+
+    void onPatternNotUnique(BytePattern pattern) noexcept
+    {
+        appendPattern("Patterns are not unique:\n", pattern);
+    }
+
+    void finish() noexcept
+    {
+        if (!bufferEmpty)
+            SimpleMessageBox{}.showWarning("Osiris", builder.cstring());
+    }
+
+    [[nodiscard]] bool isLogEmpty() const noexcept
+    {
+        return bufferEmpty;
+    }
+
+private:
+    void appendPattern(const char* prefix, BytePattern pattern) noexcept
+    {
         if (bufferEmpty) {
-            builder.put("Failed to find patterns:\n");
+            builder.put(prefix);
             bufferEmpty = false;
         } else {
             builder.put(" | ");
@@ -40,18 +62,6 @@ public:
         }
     }
 
-    void finish() noexcept
-    {
-        if (!bufferEmpty)
-            SimpleMessageBox{}.showWarning("Osiris", builder.cstring());
-    }
-
-    [[nodiscard]] bool isLogEmpty() const noexcept
-    {
-        return bufferEmpty;
-    }
-
-private:
     StringBuilderStorage<2000> storage;
     StringBuilder builder{storage.builder()};
     bool bufferEmpty = true;

@@ -3,6 +3,7 @@
 #include "BombPlantAlertConfigVariables.h"
 #include "BombPlantAlertPanelFactory.h"
 #include "BombPlantAlertParams.h"
+#include "BombPlantAlertTiming.h"
 #include <CS2/Constants/BombsiteIndex.h>
 #include <CS2/Constants/IconURLs.h>
 #include <Common/Visibility.h>
@@ -57,9 +58,8 @@ private:
     [[nodiscard]] Optional<bool> canFinishArmingBeforeRoundEnd(auto&& bomb) const
     {
         auto&& gameRules = hookContext.gameRules();
-        if (gameRules.isRoundOver().valueOr(false))
-            return false;
-        return bomb.armingEndTime().lessThan(gameRules.roundEndTime());
+        return bomb_plant_alert_timing::canFinishArmingBeforeRoundEnd(
+            bomb.armingEndTime(), gameRules.roundEndTime(), gameRules.isRoundOver());
     }
 
     [[nodiscard]] bool shouldShowPlantAlert(auto&& bomb) const

@@ -8,7 +8,7 @@ struct BombBeepPanels {
     [[nodiscard]] static SoundVisualizationPanelProperties soundVisualizationPanelProperties() noexcept
     {
         return SoundVisualizationPanelProperties{
-            .svgImagePath = "s2r://panorama/images/icons/ui/bomb_c4.svg",
+            .svgImagePath = "s2r://panorama/images/icons/ui/bomb_c4.vsvg",
             .svgTextureHeight = 40,
             .position = SoundVisualizationPosition::AtOrigin};
     }

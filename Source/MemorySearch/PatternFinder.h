@@ -32,14 +32,15 @@ public:
     [[nodiscard]] auto findPatterns(const auto& patterns) const noexcept
     {
         PatternSearchResults<std::remove_reference_t<decltype(patterns)>> results;
-        findPatterns(patterns.getView(), results.getView());
+        findPatterns(patterns.getView(), results);
         return results;
     }
 
-    [[NOINLINE]] void findPatterns(PatternPoolView patterns, PatternSearchResultsView results) const noexcept
+    [[NOINLINE]] void findPatterns(PatternPoolView patterns, auto& results) const noexcept
     {
         NotFoundHandler notFoundHandler;
-        patterns.forEach([patternIndex = std::size_t{0}, results, this, &notFoundHandler](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation) mutable {
+        auto resultView = results.getView();
+        patterns.forEach([patternIndex = std::size_t{0}, resultView, this, &notFoundHandler](BytePattern pattern, std::uint8_t offset, CodePatternOperation operation) mutable {
             auto result = operator()(pattern, notFoundHandler);
             result.add(offset);
 
@@ -51,11 +52,12 @@ public:
             } else if (operation == CodePatternOperation::Read) {
                 resultToStore = result.read();
             }
-            results.store(patternIndex, resultToStore);
+            resultView.store(patternIndex, resultToStore);
             ++patternIndex;
         });
 
         notFoundHandler.finish();
+        results.setValid(notFoundHandler.isLogEmpty());
         assert(notFoundHandler.isLogEmpty() && "Patterns needs to be updated!");
     }
 
@@ -77,7 +79,10 @@ private:
     {
         auto patternFinder = HybridPatternFinder{bytes, pattern};
         const auto found = patternFinder.findNextOccurrence();
-        assert(patternFinder.findNextOccurrence() == nullptr && "Pattern should be unique!");
+        const auto duplicate = found && patternFinder.findNextOccurrence() != nullptr;
+        if (duplicate)
+            notFoundHandler.onPatternNotUnique(pattern);
+        assert(!duplicate && "Pattern should be unique!");
         if (!found)
             notFoundHandler.onPatternNotFound(pattern);
         return makeResult(found, pattern.length());

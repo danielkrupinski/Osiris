@@ -18,6 +18,16 @@ private:
 
     static_assert(OneBytePatternTypes::size() + FourBytePatternTypes::size() + EightBytePatternTypes::size() == PatternPool::PatternTypes::size());
 public:
+    [[nodiscard]] bool isValid() const noexcept
+    {
+        return valid;
+    }
+
+    void setValid(bool value) noexcept
+    {
+        valid = value;
+    }
+
     template <typename T>
     [[nodiscard]] auto get() const noexcept
     {
@@ -41,4 +51,5 @@ private:
     std::array<std::byte, OneBytePatternTypes::size()> oneByteResults;
     std::array<std::byte[4], FourBytePatternTypes::size()> fourByteResults;
     std::array<std::byte[8], EightBytePatternTypes::size()> eightByteResults;
+    bool valid{false};
 };

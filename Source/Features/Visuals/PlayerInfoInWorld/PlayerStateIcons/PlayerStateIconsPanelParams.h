@@ -36,7 +36,7 @@ namespace player_state_icons_panel_params::defuse_icon_panel_params
 
 namespace player_state_icons_panel_params::hostage_icon_panel_params
 {
-    static constexpr auto kImageUrl = "s2r://panorama/images/icons/ui/hostage_transit.svg";
+    static constexpr auto kImageUrl = "s2r://panorama/images/icons/ui/hostage_transit.vsvg";
     static constexpr auto kTextureHeight = 32;
     static constexpr auto kAlignment = PanelAlignmentParams{
         .verticalAlignment = cs2::k_EVerticalAlignmentCenter
@@ -52,7 +52,7 @@ namespace player_state_icons_panel_params::hostage_icon_panel_params
 
 namespace player_state_icons_panel_params::blinded_icon_panel_params
 {
-    static constexpr auto kImageUrl = "s2r://panorama/images/hud/deathnotice/blind_kill.svg";
+    static constexpr auto kImageUrl = "s2r://panorama/images/hud/deathnotice/blind_kill.vsvg";
     static constexpr auto kTextureHeight = 26;
     static constexpr auto kAlignment = PanelAlignmentParams{
         .verticalAlignment = cs2::k_EVerticalAlignmentCenter

@@ -166,7 +166,7 @@ private:
             WindowsSyscalls::NtClose(handle);
         }
 #elif IS_LINUX()
-        if (const auto fd = LinuxPlatformApi::open(state().pathToConfigFile.get(), O_RDONLY); fd >= 0) {
+        if (const auto fd = LinuxPlatformApi::open(state().pathToConfigFile.get(), O_RDONLY | O_CLOEXEC | O_NOFOLLOW); fd >= 0) {
             if (const auto read = LinuxPlatformApi::pread(fd, state().fileOperationBuffer, build::kConfigFileBufferSize, 0); read > 0)
                 state().bufferUsedBytes = static_cast<std::size_t>(read);
             LinuxPlatformApi::close(fd);
@@ -180,16 +180,25 @@ private:
         state().currentFileOperation = ConfigFileOperation::None;
 
         const auto readBytes = state().bufferUsedBytes;
-        assert(readBytes < build::kConfigFileBufferSize && "Currently file must fit into a buffer");
+        if (readBytes >= build::kConfigFileBufferSize)
+            return;
+
         ConfigStringConversionState conversionState;
         std::size_t parsedBytes{0};
+        bool parseSucceeded{true};
         do {
-            assert(conversionState.offset <= readBytes);
+            if (conversionState.offset > readBytes) {
+                parseSucceeded = false;
+                break;
+            }
             ConfigFromString configFromString{std::span{state().fileOperationBuffer + conversionState.offset, readBytes - conversionState.offset}, conversionState};
             parsedBytes = ConfigSchema{hookContext}.performConversion(configFromString);
+            parseSucceeded = configFromString.isValid();
         } while (parsedBytes != 0 && (conversionState.nestingLevel != 0 || conversionState.indexInNestingLevel[0] != 1));
-        
-        assert(readBytes == 0 || (conversionState.nestingLevel == 0 && conversionState.indexInNestingLevel[0] == 1));
+
+        if (!parseSucceeded || (readBytes != 0 && (conversionState.nestingLevel != 0 || conversionState.indexInNestingLevel[0] != 1)))
+            return;
+
         hookContext.gui().updateFromConfig();
     }
 
@@ -220,10 +229,10 @@ private:
             WindowsSyscalls::NtClose(handle);
         }
 #elif IS_LINUX()
-        mkdir(hookContext.osirisDirectoryPath().get(), 0777);
-        mkdir(state().pathToConfigDirectory.get(), 0777);
+        mkdir(hookContext.osirisDirectoryPath().get(), 0700);
+        mkdir(state().pathToConfigDirectory.get(), 0700);
 
-        if (const auto fd = LinuxPlatformApi::open(state().pathToConfigTempFile.get(), O_CREAT | O_WRONLY, 0666); fd >= 0) {
+        if (const auto fd = LinuxPlatformApi::open(state().pathToConfigTempFile.get(), O_CREAT | O_WRONLY | O_TRUNC | O_CLOEXEC | O_NOFOLLOW, 0600); fd >= 0) {
             if (std::cmp_equal(LinuxPlatformApi::write(fd, state().fileOperationBuffer, numberOfBytesToWrite), numberOfBytesToWrite))
                 rename(state().pathToConfigTempFile.get(), state().pathToConfigFile.get());
             LinuxPlatformApi::close(fd);

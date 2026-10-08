@@ -145,6 +145,14 @@ $.Osiris = (function () {
 
     $.CreatePanel('Label', soundTabButton, '', { text: "Sound" });
 
+    var diagnosticsTabButton = $.CreatePanel('RadioButton', centerContainer, 'diagnostics_button', {
+      group: "SettingsNavBar",
+      class: "content-navbar__tabs__btn",
+      onactivate: "$.Osiris.navigateToTab('diagnostics');"
+    });
+
+    $.CreatePanel('Label', diagnosticsTabButton, '', { text: "Diagnostics" });
+
     var rightContainer = $.CreatePanel('Panel', navbar, '', {
         style: "horizontal-align: right; flow-children: right; height: 100%; margin-right: 70px;"
     });
@@ -493,6 +501,7 @@ u8R"(
 
   var playerInfo = createSection(playerInfoTab, 'Player Info In World');
   createDropDown(playerInfo, "Master Switch", 'visuals', 'player_information_through_walls', ['Enemies', 'All Players', 'Off']);
+  createYesNoDropDown(playerInfo, "Reveal Enemies On In-Game Radar", 'visuals', 'player_info_radar');
 
   var playerPosition = createSection(playerInfoTab, 'Player Position');
   createYesNoDropDown(playerPosition, "Show Player Position Arrow", 'visuals', 'player_info_position');
@@ -745,6 +754,35 @@ u8R"(
   createYesNoDropDown(weaponSoundVisualization, "Visualize Weapon Scope Sound", 'sound', 'visualize_scope_sound');
   separator(weaponSoundVisualization);
   createYesNoDropDown(weaponSoundVisualization, "Visualize Weapon Reload Sound", 'sound', 'visualize_reload_sound');
+
+  var diagnostics = createTab('diagnostics');
+
+  var diagnosticsStatus = createSection(diagnostics, 'Runtime status');
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_cs2_version', { class: "SettingsMenuLabel", text: "CS2: checking..." });
+  separator(diagnosticsStatus);
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_dll_version', { class: "SettingsMenuLabel", text: "Osiris DLL: checking..." });
+  separator(diagnosticsStatus);
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_pattern_status', { class: "SettingsMenuLabel", text: "Signatures: checking..." });
+  separator(diagnosticsStatus);
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_client_patterns', { class: "SettingsMenuLabel", text: "Client patterns: checking..." });
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_scene_patterns', { class: "SettingsMenuLabel", text: "Scene system patterns: checking..." });
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_tier0_patterns', { class: "SettingsMenuLabel", text: "Tier0 patterns: checking..." });
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_filesystem_patterns', { class: "SettingsMenuLabel", text: "Filesystem patterns: checking..." });
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_sound_patterns', { class: "SettingsMenuLabel", text: "Sound system patterns: checking..." });
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_panorama_patterns', { class: "SettingsMenuLabel", text: "Panorama patterns: checking..." });
+  separator(diagnosticsStatus);
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_offsets', { class: "SettingsMenuLabel", text: "Offsets: checking..." });
+  $.CreatePanel('Label', diagnosticsStatus, 'diagnostics_safe_mode_status', { class: "SettingsMenuLabel", text: "Safe mode: checking..." });
+
+  var diagnosticsActions = createSection(diagnostics, 'Actions');
+  var exportDiagnosticsButton = $.CreatePanel('Button', diagnosticsActions, 'diagnostics_export', {
+    class: "content-navbar__tabs__btn",
+    style: "horizontal-align: left; margin: 8px;",
+    onactivate: "$.Osiris.addCommand('export_diagnostics');"
+  });
+  $.CreatePanel('Label', exportDiagnosticsButton, '', { text: "Export diagnostics" });
+  separator(diagnosticsActions);
+  createYesNoDropDown(diagnosticsActions, "Safe Mode - disable optional features", 'diagnostics', 'diagnostics_safe_mode');
 
   $.Osiris.navigateToTab('hud');
 })();

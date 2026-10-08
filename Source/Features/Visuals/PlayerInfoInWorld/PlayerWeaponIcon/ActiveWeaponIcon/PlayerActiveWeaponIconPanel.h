@@ -33,7 +33,7 @@ public:
 
         StringBuilderStorage<100> weaponIconPathStorage;
         auto weaponIconPathBuilder = weaponIconPathStorage.builder();
-        weaponIconPathBuilder.put("s2r://panorama/images/icons/equipment/", weaponName.string, ".svg");
+        weaponIconPathBuilder.put("s2r://panorama/images/icons/equipment/", weaponName.string, ".vsvg");
         const auto weaponIconPath = weaponIconPathBuilder.cstring();
 
         auto&& weaponIconImagePanel = panel().clientPanel().template as<ImagePanel>();

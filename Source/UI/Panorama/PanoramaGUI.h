@@ -15,6 +15,7 @@
 
 #include "PanoramaCommandDispatcher.h"
 #include "CombatTab.h"
+#include "DiagnosticsTab.h"
 #include "HudTab.h"
 #include "SoundTab.h"
 #include "VisualsTab.h"
@@ -149,6 +150,7 @@ public:
             state().viewmodelPreviewPanelHandle = guiPanel.findChildInLayoutFile("ViewmodelPreview").getHandle();
 
             hookContext.template make<CombatTab>().init(guiPanel);
+            hookContext.template make<DiagnosticsTab>().init(guiPanel);
             hookContext.template make<HudTab>().init(guiPanel);
             hookContext.template make<VisualsTab>().init(guiPanel);
             hookContext.template make<SoundTab>().init(guiPanel);
@@ -193,6 +195,7 @@ public:
         const auto cmd = guiPanel.getAttributeString(cmdSymbol, "");
         PanoramaCommandDispatcher{cmd, unloadFlag, hookContext}();
         guiPanel.setAttributeString(cmdSymbol, "");
+        updateDiagnosticsStatus();
 
         hookContext.template make<PlayerModelGlowPreview>().update();
         hookContext.template make<PlayerModelGlowPreview>().hookPreviewPlayersSceneObjectUpdaters();
@@ -215,6 +218,19 @@ public:
         hookContext.template make<HudTab>().updateFromConfig(mainMenu);
         hookContext.template make<VisualsTab>().updateFromConfig(mainMenu);
         hookContext.template make<SoundTab>().updateFromConfig(mainMenu);
+        hookContext.template make<DiagnosticsTab>().updateFromConfig(mainMenu);
+    }
+
+    void exportDiagnostics() const noexcept
+    {
+        static_cast<void>(hookContext.template make<DiagnosticsTab>().exportDiagnostics());
+    }
+
+    void updateDiagnosticsStatus() const noexcept
+    {
+        const auto mainMenuPointer = hookContext.patternSearchResults().template get<MainMenuPanelPointer>();
+        auto&& mainMenu = hookContext.template make<ClientPanel>(mainMenuPointer ? *mainMenuPointer : nullptr).uiPanel();
+        hookContext.template make<DiagnosticsTab>().updateStatus(mainMenu);
     }
 
     void onUnload() const noexcept

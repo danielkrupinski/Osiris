@@ -8,7 +8,7 @@ struct WeaponScopePanels {
     [[nodiscard]] static SoundVisualizationPanelProperties soundVisualizationPanelProperties() noexcept
     {
         return SoundVisualizationPanelProperties{
-            .svgImagePath = "s2r://panorama/images/icons/ui/chatwheel_sniperspotted.svg",
+            .svgImagePath = "s2r://panorama/images/icons/ui/chatwheel_sniperspotted.vsvg",
             .position = SoundVisualizationPosition::AtOrigin};
     }
 };

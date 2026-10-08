@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <limits>
 #include <span>
 #include <Windows.h>
 #include <winternl.h>
@@ -11,6 +12,9 @@
 struct WindowsFileSystem {
     static HANDLE openFileForReading(UNICODE_STRING fileName) noexcept
     {
+        if (fileName.Length > (std::numeric_limits<USHORT>::max)() - sizeof(wchar_t))
+            return INVALID_HANDLE_VALUE;
+
         HANDLE handle;
         IO_STATUS_BLOCK statusBlock{};
         OBJECT_ATTRIBUTES objectAttributes{
@@ -21,7 +25,7 @@ struct WindowsFileSystem {
             .SecurityDescriptor = nullptr,
             .SecurityQualityOfService = nullptr
         };
-        if (NT_SUCCESS(WindowsSyscalls::NtCreateFile(&handle, FILE_GENERIC_READ, &objectAttributes, &statusBlock, nullptr, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, FILE_OPEN, FILE_SYNCHRONOUS_IO_NONALERT, nullptr, 0)))
+        if (NT_SUCCESS(WindowsSyscalls::NtCreateFile(&handle, FILE_GENERIC_READ, &objectAttributes, &statusBlock, nullptr, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, FILE_OPEN, FILE_SYNCHRONOUS_IO_NONALERT | FILE_OPEN_REPARSE_POINT, nullptr, 0)))
             return handle;
         return INVALID_HANDLE_VALUE;
     }
@@ -31,6 +35,9 @@ struct WindowsFileSystem {
         HANDLE handle;
         IO_STATUS_BLOCK statusBlock{};
         const auto pathLength = utils::wcslen(ntPath);
+        if (pathLength > (std::numeric_limits<USHORT>::max)() / sizeof(wchar_t))
+            return INVALID_HANDLE_VALUE;
+
         UNICODE_STRING fileName{
             .Length = static_cast<USHORT>(pathLength * sizeof(wchar_t)),
             .MaximumLength = static_cast<USHORT>(pathLength * sizeof(wchar_t)),
@@ -44,7 +51,7 @@ struct WindowsFileSystem {
             .SecurityDescriptor = nullptr,
             .SecurityQualityOfService = nullptr
         };
-        if (NT_SUCCESS(WindowsSyscalls::NtCreateFile(&handle, FILE_GENERIC_WRITE | DELETE, &objectAttributes, &statusBlock, nullptr, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, FILE_SUPERSEDE, FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT, nullptr, 0)))
+        if (NT_SUCCESS(WindowsSyscalls::NtCreateFile(&handle, FILE_GENERIC_WRITE | DELETE, &objectAttributes, &statusBlock, nullptr, FILE_ATTRIBUTE_NORMAL, FILE_SHARE_READ, FILE_SUPERSEDE, FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_OPEN_REPARSE_POINT, nullptr, 0)))
             return handle;
         return INVALID_HANDLE_VALUE;
     }

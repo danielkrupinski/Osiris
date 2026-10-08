@@ -10,6 +10,8 @@
 #include <Features/Visuals/PlayerInfoInWorld/PlayerInfoInWorld.h>
 #include <GameClient/EntitySystem/EntitySystem.h>
 #include <Features/Hud/BombPlantAlert/BombPlantAlert.h>
+#include <Features/Visuals/Radar/Radar.h>
+#include <Features/Diagnostics/DiagnosticsConfigVariables.h>
 
 template <typename HookContext>
 class RenderingHookEntityLoop {
@@ -21,6 +23,9 @@ public:
 
     void run() const noexcept
     {
+        if (GET_CONFIG_VAR(diagnostics_vars::SafeModeEnabled))
+            return;
+
         auto bombPlantAlertVisibility = Visibility::Hidden;
         hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([this, &bombPlantAlertVisibility](const auto& entityIdentity) { handleEntityIdentity(entityIdentity, bombPlantAlertVisibility); });
         hookContext.template make<ModelGlow>().postUpdateInMainThread();
@@ -36,6 +41,7 @@ private:
 
         if (entityTypeInfo.template is<cs2::C_CSPlayerPawn>()) {
             auto&& playerPawn = baseEntity.template as<PlayerPawn>();
+            hookContext.template make<Radar>().update(playerPawn);
             hookContext.template make<PlayerInfoInWorld>().drawPlayerInformation(playerPawn);
             updateModelGlow<PlayerModelGlow>(playerPawn, entityTypeInfo);
             applyOutlineGlow<PlayerOutlineGlow>(playerPawn, entityTypeInfo);

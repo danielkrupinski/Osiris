@@ -41,6 +41,33 @@ protected:
     testing::StrictMock<MockConfigValueSetter> mockConfigValueSetter;
 };
 
+TEST(ConfigFromStringSecurityTest, RejectsUintOverflow) {
+    ConfigStringConversionState conversionState;
+    ConfigFromString configFromString{u8"{\"Value\":18446744073709551616}", conversionState};
+    bool setterCalled{false};
+
+    configFromString.beginRoot();
+    configFromString.uint(u8"Value", [&setterCalled](std::uint64_t) {
+        setterCalled = true;
+    }, [] {
+        return std::uint64_t{};
+    });
+    (void)configFromString.endRoot();
+
+    EXPECT_FALSE(setterCalled);
+}
+
+TEST(ConfigFromStringSecurityTest, RejectsExcessiveNesting) {
+    ConfigStringConversionState conversionState;
+    ConfigFromString configFromString{u8"", conversionState};
+
+    configFromString.beginRoot();
+    for (auto i = 0; i <= config_params::kMaxNestingLevel; ++i)
+        configFromString.beginObject(u8"Object");
+
+    EXPECT_FALSE(configFromString.isValid());
+}
+
 TEST_P(ConfigFromStringTest, TestStringToConfigConversion) {
     const auto& param = std::get<1>(GetParam());
 
