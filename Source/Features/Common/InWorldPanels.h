@@ -28,6 +28,11 @@ public:
 
     void updateState() const noexcept
     {
+        // These indices describe only the current ViewRender pass.  Reset
+        // them before walking entities so a reused hook context can never
+        // advance into another frame's panel/cache entry.
+        perHookState().reset();
+        hookContext.playerInfoPanelCachePerHookState().reset();
         if (!containerPanelExists()) {
             hookContext.template make<PlayerInfoPanelCache>().clear();
             state().reset();

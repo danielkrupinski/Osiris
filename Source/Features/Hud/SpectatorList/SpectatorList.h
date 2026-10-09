@@ -22,17 +22,20 @@ public:
     explicit SpectatorList(HookContext& hookContext) noexcept
         : hookContext{hookContext}
         , enabled{GET_CONFIG_VAR(SpectatorListEnabled)}
-        , watchedPawnHandle{enabled ? getWatchedPawnHandle() : std::nullopt}
     {
     }
 
     void addPotentialSpectator(auto&& playerController) noexcept
     {
-        if (!enabled || !watchedPawnHandle || spectatorCount >= spectatorNames.size())
+        const auto watchedPawnHandle = enabled ? getWatchedPawnHandle() : std::nullopt;
+        if (!watchedPawnHandle || spectatorCount >= spectatorNames.size())
             return;
         if (playerController == hookContext.localPlayerController())
             return;
-        if (playerController.isPawnAlive().value_or(true))
+        // During round transitions the networked alive bit can be briefly
+        // unavailable.  The observer-target check below is authoritative, so
+        // do not discard a valid spectator just because this optional is empty.
+        if (playerController.isPawnAlive().value_or(false))
             return;
         if (playerController.observerTargetHandle() != watchedPawnHandle)
             return;
@@ -146,7 +149,6 @@ private:
 
     HookContext& hookContext;
     bool enabled;
-    std::optional<cs2::CEntityHandle> watchedPawnHandle;
     std::array<const char*, SpectatorListState::kMaxSpectators> spectatorNames{};
     std::size_t spectatorCount{};
 };

@@ -33,7 +33,11 @@ struct CImagePanel : CPanel2D {
     using m_strSource = CUtlString;
 
     using Constructor = void(CImagePanel* thisptr, CPanel2D* parent, const char* id);
+#ifdef _WIN32
+    using SetImage = void(CImagePanel* thisptr, const char* imageUrl);
+#else
     using SetImage = void(CImagePanel* thisptr, const char* imageUrl, const char* defaultImageUrl, ImageProperties* properties);
+#endif
 };
 
 }

@@ -297,7 +297,8 @@ public:
                     computeAimAngle(eyePos, bestCandidate.aimPos, pitch, yaw);
                 }
 
-                compensateRecoil(localPawn, pitch, yaw);
+                // Build 14185 no longer exposes the old pawn aim-punch field.
+                // Do not read a stale offset as an angle; it now overlaps a service pointer.
 
                 if (humanizationEnabled) {
                     pitch += randRange(-aimbot_params::kAimJitterMaxDegrees,
@@ -391,9 +392,13 @@ private:
             return true;
 #if IS_WIN64()
         switch (key) {
-        case AimbotKey::RightMouse: return (GetAsyncKeyState(VK_RBUTTON) & 0x8000) != 0;
-        case AimbotKey::Mouse5:     return (GetAsyncKeyState(VK_XBUTTON2) & 0x8000) != 0;
-        case AimbotKey::Shift:      return (GetAsyncKeyState(VK_SHIFT)    & 0x8000) != 0;
+        case AimbotKey::RightMouse: return isPhysicalKeyDown(VK_RBUTTON);
+        case AimbotKey::Mouse5:
+            // Mouse software and raw-input remappers disagree about which
+            // XBUTTON is called "Mouse 5". Accept either side button so a
+            // valid hold is not lost when the driver reports XBUTTON1.
+            return isPhysicalKeyDown(VK_XBUTTON1) || isPhysicalKeyDown(VK_XBUTTON2);
+        case AimbotKey::Shift:      return isPhysicalKeyDown(VK_SHIFT);
         case AimbotKey::CapsLock:   return (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
         default:                    return true;
         }
@@ -401,6 +406,19 @@ private:
         return true;
 #endif
     }
+
+#if IS_WIN64()
+    [[nodiscard]] static bool isPhysicalKeyDown(int virtualKey) noexcept
+    {
+        // GetAsyncKeyState reflects the real-time state. GetKeyState is a
+        // useful fallback while the game is transitioning focus or an input
+        // overlay temporarily owns the async-key polling path. Only inspect
+        // the high bit so a stale pressed-event bit cannot latch the aimbot.
+        const auto asyncState = GetAsyncKeyState(virtualKey);
+        const auto threadState = GetKeyState(virtualKey);
+        return ((asyncState | threadState) & static_cast<SHORT>(0x8000)) != 0;
+    }
+#endif
 
     void computeAimAngle(const cs2::Vector& eye, const cs2::Vector& target, float& pitch, float& yaw) noexcept
     {
@@ -412,35 +430,6 @@ private:
         const auto hyp = fastSqrt(deltaX * deltaX + deltaY * deltaY);
         pitch = -fastAtan2(deltaZ, hyp) * kRadToDeg;
         clampAngles(pitch, yaw);
-    }
-
-    void compensateRecoil(cs2::C_CSPlayerPawn* localPawn, float& pitch, float& yaw) const noexcept
-    {
-#if IS_WIN64()
-        // C_CSPlayerPawn::m_aimPunchAngle is the authoritative weapon-recoil
-        // punch that the game actually uses for bullet trajectory. It is
-        // (0,0,0) when not firing. Do NOT use CameraServices::
-        // m_vecCsViewPunchAngle here — that field includes camera shake and
-        // rendering offsets that are non-zero even between shots, which makes
-        // the lock point drift above the target.
-        if (!isReadableMemory(localPawn, kAimPunchAngleOffset + sizeof(cs2::Vector)))
-            return;
-
-        const auto punch = *reinterpret_cast<const cs2::Vector*>(
-            reinterpret_cast<const std::byte*>(localPawn) + kAimPunchAngleOffset);
-        // Reject a stale pointer or a transient invalid schema read.
-        if (punch.x <= -45.0f || punch.x >= 45.0f
-            || punch.y <= -45.0f || punch.y >= 45.0f)
-            return;
-
-        pitch -= punch.x * kWeaponRecoilScale;
-        yaw -= punch.y * kWeaponRecoilScale;
-        clampAngles(pitch, yaw);
-#else
-        (void)localPawn;
-        (void)pitch;
-        (void)yaw;
-#endif
     }
 
     static void clampAngles(float& pitch, float& yaw) noexcept
@@ -980,21 +969,15 @@ private:
         return hookContext.featuresStates().aimbotState;
     }
 
-    static constexpr std::ptrdiff_t kViewAngleOffset{0x12C0};
-    static constexpr std::ptrdiff_t kEyeAnglesOffset{0x3340};
+    static constexpr std::ptrdiff_t kViewAngleOffset{0x13A8};
+    static constexpr std::ptrdiff_t kEyeAnglesOffset{0x35F0};
     // CS2 head bone (index 6) is the skull-base / neck joint, ~3 units below
     // the head-hitbox centre. Lift aim so shots land centre-head, not neck.
     static constexpr float kHeadBoneZBias{3.0f};
-    // C_CSPlayerPawn::m_aimPunchAngle — the authoritative weapon-recoil
-    // punch (QAngle at 3 floats), stable at 0x1584 across CS2 builds since
-    // mid-2025. This is what the game uses for bullet trajectory; it is
-    // (0,0,0) when not firing.
-    static constexpr std::ptrdiff_t kAimPunchAngleOffset{0x1584};
-    static constexpr float kWeaponRecoilScale{2.0f};
     // Speed² threshold for "running". CS2 walk speed ~130u/s, run ~250u/s.
     // Gate at 140² ≈ 19600 separates walk/crouch from full run.
     static constexpr float kRunSpeedThresholdSq{19600.0f};
-    static constexpr std::size_t kLocalPawnReadableSize{0x3350};
+    static constexpr std::size_t kLocalPawnReadableSize{0x3600};
     // ===== Movement penalty + weapon awareness =====
     [[nodiscard]] bool shouldSkipWhileMoving() const noexcept
     {

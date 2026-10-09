@@ -107,7 +107,8 @@ private:
         hookContext.template make<PanoramaGUI>().init(hookContext.template make<PanoramaUiPanel>((*mainMenu)->uiPanel));
     hookContext.config().init();
     hookContext.config().scheduleLoad();
-    hookContext.hooks().createMoveHook.install(csgoInputInstance());
+    // In 1.41.8.8, input vtable slot 25 is not CreateMove. Keep silent aim
+    // unavailable until its current callback ABI is verified.
     hookContext.template make<ClientModeHooks>().hookGetViewmodelFov();
     hookContext.template make<ClientModeHooks>().hookOverrideView();
     hookContext.hooks().peepEventsHook.disable();
@@ -323,8 +324,8 @@ namespace {
 
 cs2::C_CSPlayerPawn* getReadableLocalPawn(HookContext<GlobalContext>& hookContext) noexcept
 {
-    constexpr std::size_t kControllerReadableSize{0x910};
-    constexpr std::size_t kPawnReadableSize{0x1228};
+    constexpr std::size_t kControllerReadableSize{0x940};
+    constexpr std::size_t kPawnReadableSize{0x1340};
 
     auto&& localController = hookContext.localPlayerController();
     if (!localController || !isReadableMemory(localController.rawPointer(), kControllerReadableSize))

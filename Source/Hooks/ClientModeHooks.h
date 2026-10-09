@@ -134,7 +134,7 @@ private:
     }
 
     static constexpr auto kOverrideViewIndex{15};
-    static constexpr auto kGetViewmodelFovIndex{27};
+    static constexpr auto kGetViewmodelFovIndex{WIN64_LINUX(28, 29)};
     static constexpr auto kMaxHookIndex{kGetViewmodelFovIndex};
 
     HookContext& hookContext;

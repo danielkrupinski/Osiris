@@ -148,7 +148,7 @@ private:
         if (!localPawn)
             return;
 
-        // C_CSPlayerPawnBase::m_flFlashBangTime at hardcoded offset 0x1414
+        // C_CSPlayerPawnBase::m_flFlashBangTime at hardcoded offset 0x14FC
         // (cs2-dumper 2026-07, verified against current client.dll).
         //
         // Do NOT use the code-pattern scan for this — pattern scans CAN match
@@ -326,8 +326,8 @@ private:
         return fastCos(x - 1.57079633f);
     }
 
-    // C_CSPlayerPawnBase::m_flFlashBangTime (cs2-dumper, 2026-07 build).
-    static constexpr std::ptrdiff_t kFlashBangTimeOffset{0x1414};
+    // C_CSPlayerPawnBase::m_flFlashBangTime (cs2-dumper, build 14185).
+    static constexpr std::ptrdiff_t kFlashBangTimeOffset{0x14FC};
     static constexpr float kDegToRad{0.01745329252f};
     static constexpr float kPlayerHalfWidth{16.0f};
     static constexpr float kPlayerHeight{72.0f};

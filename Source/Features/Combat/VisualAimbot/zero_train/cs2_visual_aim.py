@@ -368,7 +368,7 @@ class CS2VisualAimbot:
         self._client_base = self._get_client_base()
         self._last_pitch: float = 0.0
         self._last_yaw: float = 0.0
-        self._dwViewAngles = 0x23B9C78  # a2x/cs2-dumper build 14171
+        self._dwViewAngles = 0x2576238  # a2x/cs2-dumper build 14185
 
     @staticmethod
     def _get_client_base():

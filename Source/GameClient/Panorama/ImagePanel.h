@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <bit>
 #include <cstddef>
 #include <optional>
@@ -51,6 +52,9 @@ public:
 
     void setImageSvg(const SvgImageParams& params) const noexcept
     {
+        if (!panel || !params.imageUrl)
+            return;
+
         const auto properties{getImageProperties()};
         if (!properties)
             return;
@@ -63,16 +67,21 @@ public:
             properties->presentSvgAttributes |= 1 << static_cast<std::size_t>(cs2::SvgAttributeType::FillColor);
         }
 
-        if (hookContext.patternSearchResults().template get<SetImageFunctionPointer>())
-            hookContext.patternSearchResults().template get<SetImageFunctionPointer>()(panel, params.imageUrl, nullptr, properties);
+        if (const auto setImage{hookContext.patternSearchResults().template get<SetImageFunctionPointer>()}) {
+#ifdef _WIN32
+            setImage(panel, params.imageUrl);
+#else
+            setImage(panel, params.imageUrl, nullptr, properties);
+#endif
+        }
     }
 
 private:
-    [[nodiscard]] decltype(auto) uiScaleFactor() const
+    [[nodiscard]] auto uiScaleFactor() const
     {
         const auto scale = uiPanel().getUiScaleFactor().valueOr(1.0f);
         assert(scale >= 0.1f && scale <= 10.0f && "Invalid UI scale factor");
-        return scale;
+        return std::clamp(scale, 0.1f, 10.0f);
     }
 
     HookContext& hookContext;

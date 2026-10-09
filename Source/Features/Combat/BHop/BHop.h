@@ -37,9 +37,12 @@ public:
     void run() noexcept
     {
         if (!enabled) {
-            if (const auto pawn = getLocalPlayerPawn())
-                clearAutoStrafe(reinterpret_cast<std::byte*>(pawn));
-            releaseJump();
+            if (const auto pawn = getLocalPlayerPawn()) {
+                auto* bytes = reinterpret_cast<std::byte*>(pawn);
+                clearAutoStrafe(bytes);
+                if (state().shouldJump)
+                    releaseJump(bytes);
+            }
             state().wasOnGround = false;
             state().shouldJump = false;
             return;
@@ -47,8 +50,6 @@ public:
 
         const auto pawn = getLocalPlayerPawn();
         if (!pawn || !isReadableMemory(pawn, kPawnReadableSize)) {
-            releaseJump();
-            releaseInjectedSideButton();
             state().wasOnGround = false;
             state().shouldJump = false;
             return;
@@ -59,32 +60,25 @@ public:
         if (!jumpHeld) {
             if (state().shouldJump)
                 releaseJump(bytes);
-            else
-                releaseJump();
             clearAutoStrafe(bytes);
             state().wasOnGround = false;
             state().shouldJump = false;
             return;
         }
 
-        // m_fFlags (C_BaseEntity + 0x3F8), FL_ONGROUND = bit 0.
+        // m_fFlags (C_BaseEntity + 0x3F4), FL_ONGROUND = bit 0.
         const auto flags = *reinterpret_cast<std::uint32_t*>(bytes + kFlagsOffset);
         const bool onGround = (flags & 1) != 0;
         const bool startedAirMove = state().wasOnGround && !onGround;
 
         if (onGround) {
             if (!state().shouldJump && shouldSendJumpThisTick()) {
-                writeJumpButton(true);
                 injectJump(bytes);
                 state().shouldJump = true;
             }
-        } else {
-            if (state().shouldJump) {
-                releaseJump(bytes);
-                state().shouldJump = false;
-            } else {
-                releaseJump();
-            }
+        } else if (state().shouldJump) {
+            releaseJump(bytes);
+            state().shouldJump = false;
         }
 
         state().wasOnGround = onGround;
@@ -117,7 +111,6 @@ private:
 
     void releaseJump(std::byte* pawnBytes = nullptr) noexcept
     {
-        writeJumpButton(false);
         if (!pawnBytes)
             return;
 
@@ -176,7 +169,6 @@ private:
         if (!moveSvcs) {
             state().autoStrafeActive = false;
             state().autoStrafeYawRemaining = 0.0f;
-            releaseInjectedSideButton();
             return;
         }
 
@@ -184,7 +176,6 @@ private:
         *reinterpret_cast<float*>(moveSvcs + kLeftMoveOffset) = 0.0f;
         state().autoStrafeActive = false;
         state().autoStrafeYawRemaining = 0.0f;
-        releaseInjectedSideButton();
     }
 
     [[nodiscard]] static std::byte* readMoveServices(std::byte* pawnBytes) noexcept
@@ -230,54 +221,6 @@ private:
         if (!isHumanized())
             return true;
         return (randU8() & 0x0F) != 0;
-    }
-
-    static void writeJumpButton(bool down) noexcept
-    {
-#if IS_WIN64()
-        const auto clientDll = GetModuleHandleA("client.dll");
-        if (!clientDll)
-            return;
-        *reinterpret_cast<std::uint32_t*>(
-            reinterpret_cast<std::byte*>(clientDll) + cs2::client_dll_offsets::kJumpButton) =
-            down ? kButtonStateDown : kButtonStateUp;
-#endif
-    }
-
-    void writeInjectedSideButton(float sign) noexcept
-    {
-        if (sign < 0.0f) {
-            writeButton(cs2::client_dll_offsets::kLeftButton, true);
-            writeButton(cs2::client_dll_offsets::kRightButton, false);
-            state().injectedSideButton = -1.0f;
-        } else {
-            writeButton(cs2::client_dll_offsets::kRightButton, true);
-            writeButton(cs2::client_dll_offsets::kLeftButton, false);
-            state().injectedSideButton = 1.0f;
-        }
-    }
-
-    void releaseInjectedSideButton() noexcept
-    {
-        if (state().injectedSideButton < 0.0f)
-            writeButton(cs2::client_dll_offsets::kLeftButton, false);
-        else if (state().injectedSideButton > 0.0f)
-            writeButton(cs2::client_dll_offsets::kRightButton, false);
-        state().injectedSideButton = 0.0f;
-    }
-
-    static void writeButton(std::ptrdiff_t offset, bool down) noexcept
-    {
-#if IS_WIN64()
-        const auto clientDll = GetModuleHandleA("client.dll");
-        if (!clientDll)
-            return;
-        *reinterpret_cast<std::uint32_t*>(
-            reinterpret_cast<std::byte*>(clientDll) + offset) =
-            down ? kButtonStateDown : kButtonStateUp;
-#else
-        (void)offset; (void)down;
-#endif
     }
 
     float chooseSweepStrafeSign(bool startedAirMove, bool pressingLeft, bool pressingRight, bool movingBack) noexcept
@@ -414,10 +357,10 @@ private:
         return hookContext.featuresStates().bhopState;
     }
 
-    // Schema offsets verified against a2x/cs2-dumper build 14171.
+    // Schema offsets verified against a2x/cs2-dumper build 14185.
     static constexpr std::ptrdiff_t kFlagsOffset{0x3F4};        // C_BaseEntity::m_fFlags
-    static constexpr std::ptrdiff_t kOnGroundLastTick{0x1B60};
-    static constexpr std::ptrdiff_t kMoveServicesOffset{0x1248};
+    static constexpr std::ptrdiff_t kOnGroundLastTick{0x1D88};
+    static constexpr std::ptrdiff_t kMoveServicesOffset{0x1330};
     static constexpr std::ptrdiff_t kButtonsOffset{0x50};
     static constexpr std::ptrdiff_t kQueuedButtonDownMaskOffset{0x70};
     static constexpr std::ptrdiff_t kQueuedButtonChangeMaskOffset{0x78};
@@ -428,12 +371,10 @@ private:
     static constexpr std::ptrdiff_t kAbsVelocityOffset{0x3F8};
     static constexpr float kMoveScale{450.0f};
     static constexpr float kHopYawSweepDegrees{55.0f};
-    static constexpr std::size_t kPawnReadableSize{0x1228};
-    static constexpr std::size_t kControllerReadableSize{0x910};
+    static constexpr std::size_t kPawnReadableSize{0x1340};
+    static constexpr std::size_t kControllerReadableSize{0x940};
     static constexpr std::size_t kMovementServicesReadableSize{0x244};
     static constexpr std::uint64_t kInJump{0x2ULL};
-    static constexpr std::uint32_t kButtonStateDown{65537};
-    static constexpr std::uint32_t kButtonStateUp{256};
 
     HookContext& hookContext;
     bool enabled;

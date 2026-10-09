@@ -1,5 +1,9 @@
 #pragma once
 
+#include <cassert>
+#include <cstddef>
+#include <type_traits>
+
 #include "Optional.h"
 
 template <typename ValueType>
@@ -24,7 +28,7 @@ public:
         return {};
     }
 
-    [[nodiscard]] ValueType valueOr(const ValueType& defaultValue) const noexcept
+    [[nodiscard]] auto valueOr(const ValueType& defaultValue) const noexcept
     {
         if (pointer)
             return *pointer;
@@ -35,6 +39,17 @@ public:
     {
         if (pointer)
             *pointer = value;
+    }
+
+    [[nodiscard]] auto operator[](std::size_t index) const
+        requires (std::is_bounded_array_v<ValueType>)
+    {
+        using ElementType = std::remove_extent_t<ValueType>;
+        if (pointer) {
+            assert(index < std::extent_v<ValueType>);
+            return Optional<ElementType>{(*pointer)[index]};
+        }
+        return Optional<ElementType>{};
     }
 
 private:

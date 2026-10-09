@@ -7,7 +7,6 @@ struct BHopState {
     bool shouldJump{false};
     bool autoStrafeActive{false};
     float strafeTarget{0.0f};
-    float injectedSideButton{0.0f};
     float autoStrafeYawRemaining{0.0f};
     float lastStrafeTime{0.0f};
     // Humanization: randomly skip some jumps to break the perfect pattern

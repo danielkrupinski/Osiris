@@ -111,14 +111,14 @@ public:
 private:
     [[nodiscard]] const char* sanitizedPlayerName() const noexcept
     {
-        constexpr auto kOffsetFromPlayerColorToSanitizedName{0x18};
+        constexpr auto kOffsetFromPlayerColorToSanitizedName{0x20};
         if (const auto playerColor = offsetToPlayerColor().of(playerControllerPointer).get()) {
             if (const auto name = reinterpret_cast<cs2::CUtlString*>(reinterpret_cast<std::byte*>(playerColor) + kOffsetFromPlayerColorToSanitizedName)->m_pString)
                 return name;
         }
 
         // Fallback from current public schema (CCSPlayerController::m_sSanitizedPlayerName).
-        constexpr auto kFallbackOffsetToSanitizedPlayerName{std::int32_t{0x860}};
+        constexpr auto kFallbackOffsetToSanitizedPlayerName{std::int32_t{0x878}};
         if (playerControllerPointer != nullptr) {
             if (const auto name = reinterpret_cast<cs2::CUtlString*>(reinterpret_cast<std::byte*>(playerControllerPointer) + kFallbackOffsetToSanitizedPlayerName)->m_pString)
                 return name;
@@ -129,7 +129,7 @@ private:
     [[nodiscard]] const char* playerName() const noexcept
     {
         // Fallback from current public schema (CBasePlayerController::m_iszPlayerName).
-        constexpr auto kFallbackOffsetToPlayerName{std::int32_t{0x6F4}};
+        constexpr auto kFallbackOffsetToPlayerName{std::int32_t{0x6FC}};
         if (playerControllerPointer != nullptr)
             return reinterpret_cast<const char*>(reinterpret_cast<const std::byte*>(playerControllerPointer) + kFallbackOffsetToPlayerName);
         return nullptr;
@@ -142,7 +142,7 @@ private:
             return offset;
 
         // Fallback for game builds where the color signature is out-of-date.
-        constexpr auto kFallbackOffsetToPlayerColor{std::int32_t{0x848}};
+        constexpr auto kFallbackOffsetToPlayerColor{std::int32_t{0x858}};
         return decltype(offset){kFallbackOffsetToPlayerColor};
     }
 
@@ -161,10 +161,10 @@ private:
         return std::nullopt;
     }
 
-    static constexpr std::ptrdiff_t kOffsetToPlayerPawnHandle{0x914};
-    static constexpr std::ptrdiff_t kOffsetToObserverPawnHandle{0x918};
-    static constexpr std::ptrdiff_t kOffsetToPawnIsAlive{0x91C};
-    static constexpr std::ptrdiff_t kOffsetToObserverServices{0x1220};
+    static constexpr std::ptrdiff_t kOffsetToPlayerPawnHandle{0x92C};
+    static constexpr std::ptrdiff_t kOffsetToObserverPawnHandle{0x930};
+    static constexpr std::ptrdiff_t kOffsetToPawnIsAlive{0x934};
+    static constexpr std::ptrdiff_t kOffsetToObserverServices{0x1308};
     static constexpr std::ptrdiff_t kOffsetToObserverTarget{0x4C};
 
     HookContext& hookContext;

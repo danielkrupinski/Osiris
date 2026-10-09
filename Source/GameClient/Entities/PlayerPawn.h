@@ -276,10 +276,10 @@ private:
     // Hardcoded offsets for bone position reading (from cs2-dumper schema).
     static constexpr std::ptrdiff_t kOffsetToModelState{0x140};
     static constexpr std::ptrdiff_t kOffsetToBoneArray{0x80};
-    // C_BaseEntity::m_vecAbsVelocity (cs2-dumper, build 14173).
+    // C_BaseEntity::m_vecAbsVelocity (cs2-dumper, build 14177).
     static constexpr std::ptrdiff_t kOffsetToAbsVelocity{0x3F8};
-    // C_BaseModelEntity::m_vecViewOffset (cs2-dumper, build 14173).
-    static constexpr std::ptrdiff_t kOffsetToViewOffset{0xE78};
+    // C_BaseModelEntity::m_vecViewOffset (cs2-dumper, build 14177).
+    static constexpr std::ptrdiff_t kOffsetToViewOffset{0xF60};
     static constexpr std::ptrdiff_t kDormantOffset{0x103};
     static constexpr std::ptrdiff_t kBoneDataStride{32};
 

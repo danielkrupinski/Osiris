@@ -21,6 +21,7 @@ public:
     void clear() const noexcept
     {
         state().cache.clear();
+        perHookState().reset();
     }
 
 private:
