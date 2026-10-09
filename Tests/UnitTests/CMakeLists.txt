@@ -1,7 +1,7 @@
 add_executable(UnitTests)
 
 if(MSVC)
-  target_compile_options(UnitTests PRIVATE "/MP")
+  target_compile_options(UnitTests PRIVATE /MP /bigobj)
 endif()
 
 target_include_directories(UnitTests PRIVATE "${CMAKE_SOURCE_DIR}/Tests" "${CMAKE_SOURCE_DIR}/Source")
