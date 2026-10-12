@@ -11,6 +11,8 @@
 #include <Features/Sound/Details/BombDefuseSound.h>
 #include <Features/Sound/Details/BombPlantSound.h>
 #include <Features/Sound/Details/FootstepSound.h>
+#include <Features/Sound/Details/EnemyFootstepSound.h>
+#include <Features/Sound/EnemyFootstepDirection.h>
 #include <Features/Sound/Details/WeaponReloadSound.h>
 #include <Features/Sound/Details/WeaponScopeSound.h>
 #include <Features/Visuals/ModelGlow/ModelGlowDeactivationFlags.h>
@@ -77,6 +79,22 @@ public:
             hookContext.soundWatcher().template startWatching<FootstepSound>();
         else
             hookContext.soundWatcher().template stopWatching<FootstepSound>();
+    }
+
+    ON_CHANGE(EnemyFootstepDirectionEnabled)
+    {
+        if (newValue)
+            hookContext.soundWatcher().template startWatching<EnemyFootstepSound>();
+        else {
+            hookContext.soundWatcher().template stopWatching<EnemyFootstepSound>();
+            hookContext.template make<EnemyFootstepDirection>().onDisable();
+        }
+    }
+
+    ON_CHANGE(diagnostics_vars::SafeModeEnabled)
+    {
+        if (newValue)
+            hookContext.template make<EnemyFootstepDirection>().onDisable();
     }
 
     ON_CHANGE(WeaponReloadSoundVisualizationEnabled)

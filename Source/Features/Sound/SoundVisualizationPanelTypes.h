@@ -6,6 +6,7 @@ struct BombBeepPanels;
 struct BombDefusePanels;
 struct BombPlantPanels;
 struct FootstepPanels;
+struct EnemyFootstepDirectionPanels;
 struct WeaponReloadPanels;
 struct WeaponScopePanels;
 
@@ -14,5 +15,6 @@ using SoundVisualizationPanelTypes = TypeList<
     BombDefusePanels,
     BombPlantPanels,
     FootstepPanels,
+    EnemyFootstepDirectionPanels,
     WeaponReloadPanels,
     WeaponScopePanels>;

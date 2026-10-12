@@ -23,6 +23,7 @@ using ConfigVariableTypes = TypeList<
     BombDefuseSoundVisualizationEnabled,
     BombPlantSoundVisualizationEnabled,
     FootstepSoundVisualizationEnabled,
+    EnemyFootstepDirectionEnabled,
     WeaponReloadSoundVisualizationEnabled,
     WeaponScopeSoundVisualizationEnabled,
     model_glow_vars::Enabled,

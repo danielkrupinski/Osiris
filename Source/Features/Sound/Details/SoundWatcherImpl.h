@@ -5,12 +5,16 @@
 #include <cstddef>
 #include <string_view>
 #include <tuple>
+#include <type_traits>
 
 #include <CS2/Classes/Sound.h>
 #include <CS2/Classes/Vector.h>
 #include <GameClient/FileSystem.h>
 #include <MemoryPatterns/PatternTypes/SoundSystemPatternTypes.h>
 #include "PlayedSound.h"
+#include "EnemyFootstepSound.h"
+#include "FootstepSource.h"
+#include <GameClient/Entities/PlayerPawn.h>
 #include "WatchedSounds.h"
 #include <Utils/TypeIndex.h>
 
@@ -41,6 +45,8 @@ public:
     {
         assert(isWatching<Sound>());
         state.soundsToWatch.template unset<Sound>();
+        if constexpr (std::is_same_v<Sound, EnemyFootstepSound>)
+            getSoundsOfType<Sound>().clear();
     }
 
     void update() noexcept
@@ -94,8 +100,11 @@ private:
 
         const auto& channelInfo1 = soundChannels.channelInfo1;
         const auto& channelInfo2 = soundChannels.channelInfo2;
+        std::array<FootstepSource, 128> sources;
+        std::size_t sourceCount = 0;
+        bool sourcesCollected = false;
 
-        for (int i = 0; i < channelInfo1.size; ++i) {
+        for (int i = 0; i < (std::min)(channelInfo1.size, channelInfo2.size); ++i) {
             const auto& channel = channelInfo1.memory[i];
             if (!channel.sfx)
                 continue;
@@ -104,30 +113,48 @@ private:
             fileNames.getString(channel.sfx->fileNameHandle, buffer);
             buffer.back() = '\0';
 
-            if (const auto sounds = getSoundsToAddTo(std::string_view{buffer.data()}, channel.guid))
-                sounds->addSound(channel.guid, PlayedSound{ .spawnTime = curtime, .origin = correctSoundOrigin(channelInfo2.memory[i].origin) });
+            if constexpr ((std::is_same_v<Sounds, EnemyFootstepSound> || ...)) {
+                if (!sourcesCollected && isWatching<EnemyFootstepSound>()
+                    && EnemyFootstepSound::isSound(std::string_view{buffer.data()})
+                    && !getSoundsOfType<EnemyFootstepSound>().hasSound(channel.guid)) {
+                    sourcesCollected = true;
+                    hookContext.template make<EntitySystem>().forEachNetworkableEntityIdentity([&](const auto& identity) {
+                        const auto player = hookContext.template make<BaseEntity>(static_cast<cs2::C_BaseEntity*>(identity.entity)).template cast<PlayerPawn>();
+                        if (!player || !player.isTTorCT() || !player.isAlive().value_or(false))
+                            return;
+                        const auto playerOrigin = player.absOrigin();
+                        if (playerOrigin.hasValue() && sourceCount < sources.size())
+                            sources[sourceCount++] = FootstepSource{playerOrigin.value(), player.baseEntity().handle(),
+                                !player.isControlledByLocalPlayer() && player.isEnemy().value_or(false)};
+                    });
+                }
+            }
+            const auto origin = correctSoundOrigin(channelInfo2.memory[i].origin);
+            (collectSound<Sounds>(std::string_view{buffer.data()}, channel.guid, origin, curtime,
+                std::span<const FootstepSource>{sources.data(), sourceCount}), ...);
         }
-    }
-
-    [[nodiscard]] WatchedSounds* getSoundsToAddTo(std::string_view soundName, int guid) noexcept
-    {
-        WatchedSounds* result = nullptr;
-        std::ignore = (getSoundsToAddTo<Sounds>(soundName, guid, result) || ...);
-        return result;
     }
 
     template <typename Sound>
-    [[nodiscard]] bool getSoundsToAddTo(std::string_view soundName, int guid, WatchedSounds*& out) noexcept
+    void collectSound(std::string_view name, int guid, const cs2::Vector& origin,
+        float curtime, std::span<const FootstepSource> sources) noexcept
     {
-        if (!isWatching<Sound>())
-            return false;
-
-        if (Sound::isSound(soundName)) {
-            if (auto& sounds = getSoundsOfType<Sound>(); !sounds.hasSound(guid))
-                out = &sounds;
-            return true;
+        if (!isWatching<Sound>() || !Sound::isSound(name))
+            return;
+        auto& sounds = getSoundsOfType<Sound>();
+        if (sounds.hasSound(guid))
+            return;
+        PlayedSound sound{.spawnTime = curtime, .origin = origin};
+        if constexpr (std::is_same_v<Sound, EnemyFootstepSound>) {
+            sound.source = matchEnemyFootstepSource(origin, sources);
+            if (sound.source.value == cs2::INVALID_EHANDLE_INDEX) {
+                // Never reattribute a rejected channel later as players move.
+                sounds.rememberGuid(guid);
+                return;
+            }
+            sound.firstSpawnTime = curtime;
         }
-        return false;
+        sounds.addSound(guid, sound, Sound::kFadeAwayStart + Sound::kFadeAwayDuration);
     }
 
     [[nodiscard]] static cs2::Vector correctSoundOrigin(cs2::Vector origin) noexcept

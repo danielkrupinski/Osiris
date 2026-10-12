@@ -2,6 +2,7 @@
 
 enum class SoundVisualizationPosition {
     AtOrigin,
+    DirectionArrow,
     AboveOrigin
 };
 

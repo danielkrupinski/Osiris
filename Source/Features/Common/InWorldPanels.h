@@ -61,6 +61,12 @@ public:
             hideUnusedPanels(state().soundVisualizationPanelListHeads[i], perHookState().lastUsedSoundVisualizationPanelIndexes[i]);
     }
 
+    template <typename Type>
+    void hideSoundVisualizationPanels() const noexcept
+    {
+        hideUnusedPanels(state().soundVisualizationPanelListHeads[SoundVisualizationPanelTypes::indexOf<Type>()], InWorldPanelIndex{});
+    }
+
     void onUnload() const noexcept
     {
         hookContext.template make<PanoramaUiEngine>().deletePanelByHandle(state().containerPanelHandle);

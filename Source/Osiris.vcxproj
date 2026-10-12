@@ -176,6 +176,11 @@
     <ClInclude Include="Features\Sound\Details\WatchedSounds.h" />
     <ClInclude Include="Features\Sound\Details\WeaponReloadSound.h" />
     <ClInclude Include="Features\Sound\Details\WeaponScopeSound.h" />
+    <ClInclude Include="Features\Sound\Details\EnemyFootstepSound.h" />
+    <ClInclude Include="Features\Sound\Details\FootstepSource.h" />
+    <ClInclude Include="Features\Sound\Details\FootstepDirectionScript.h" />
+    <ClInclude Include="Features\Sound\Details\FootstepDirectionOpacity.h" />
+    <ClInclude Include="Features\Sound\EnemyFootstepDirection.h" />
     <ClInclude Include="Features\Sound\FootstepVisualizer.h" />
     <ClInclude Include="Features\Sound\SoundFeatures.h" />
     <ClInclude Include="Features\Sound\SoundVisualizationConfigVariables.h" />

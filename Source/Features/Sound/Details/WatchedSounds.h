@@ -10,13 +10,31 @@
 
 class WatchedSounds {
 public:
-    void addSound(int guid, const PlayedSound& sound) noexcept
+    void clear() noexcept
+    {
+        guids.clear();
+        sounds.clear();
+    }
+
+    void rememberGuid(int guid) noexcept
+    {
+        guids.pushBack(guid);
+    }
+
+    void addSound(int guid, const PlayedSound& sound, float lifetime = 0.85f) noexcept
     {
         if (!guids.pushBack(guid))
             return;
 
-        if (const auto soundAtSameOrigin = findSoundAtOrigin(sound.origin)) {
-            soundAtSameOrigin->spawnTime = sound.spawnTime;
+        if (const auto existing = findMatchingSound(sound)) {
+            if (sound.source.value != cs2::INVALID_EHANDLE_INDEX) {
+                // A new burst must fade in again, even if an expired entry is
+                // still retained while its original channel remains active.
+                if (sound.spawnTime < existing->spawnTime || sound.spawnTime - existing->spawnTime > lifetime)
+                    existing->firstSpawnTime = sound.firstSpawnTime;
+                existing->origin = sound.origin;
+            }
+            existing->spawnTime = sound.spawnTime;
         } else if (sounds.pushBack(sound)) {
             std::swap(guids.back(), guids[sounds.getSize() - 1]);
         }
@@ -61,10 +79,16 @@ private:
         return false;
     }
 
-    [[nodiscard]] PlayedSound* findSoundAtOrigin(const cs2::Vector& origin) noexcept
+    [[nodiscard]] PlayedSound* findMatchingSound(const PlayedSound& sound) noexcept
     {
-        if (const auto found = std::ranges::find(sounds, origin, &PlayedSound::origin); found != sounds.end())
-            return found;
+        for (auto& existing : sounds) {
+            if (sound.source.value != cs2::INVALID_EHANDLE_INDEX) {
+                if (existing.source == sound.source)
+                    return &existing;
+            } else if (existing.source.value == cs2::INVALID_EHANDLE_INDEX && existing.origin == sound.origin) {
+                return &existing;
+            }
+        }
         return nullptr;
     }
 

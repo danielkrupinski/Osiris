@@ -11,6 +11,7 @@
 #include <Utils/Lvalue.h>
 
 #include "SoundVisualizationPanelProperties.h"
+#include <GameClient/Panorama/PanoramaUiEngine.h>
 
 template <typename HookContext>
 class SoundVisualizationPanelFactory {
@@ -25,6 +26,33 @@ public:
     {
         auto&& panelFactory = hookContext.panelFactory();
         auto&& containerPanel = panelFactory.createPanel(&parentPanel).uiPanel();
+
+        if (properties.position == SoundVisualizationPosition::DirectionArrow) {
+            containerPanel.setWidth(cs2::CUILength::pixels(40));
+            containerPanel.setHeight(cs2::CUILength::pixels(40));
+            containerPanel.setAlign(PanelAlignmentParams{cs2::k_EHorizontalAlignmentCenter, cs2::k_EVerticalAlignmentCenter});
+            hookContext.template make<PanoramaUiEngine>().runScript(containerPanel, R"(
+(function() {
+  var p = $.GetContextPanel();
+  p.style.transitionProperty = 'opacity';
+  p.style.transitionDuration = '0.06s';
+  p.style.transitionTimingFunction = 'ease-in-out';
+  p.hittest = false;
+  p.hittestchildren = false;
+  var arrow = $.CreatePanel('Panel', p, '');
+  arrow.hittest = false;
+  arrow.style.width = '11px';
+  arrow.style.height = '11px';
+  arrow.style.horizontalAlign = 'center';
+  arrow.style.verticalAlign = 'center';
+  arrow.style.borderTop = '2px solid #eef5ff';
+  arrow.style.borderRight = '2px solid #eef5ff';
+  arrow.style.transform = 'rotateZ(-45deg)';
+  arrow.style.boxShadow = '#a8ccff66 0px 0px 7px 0px';
+})();
+)");
+            return utils::lvalue<decltype(containerPanel)>(containerPanel);
+        }
 
         containerPanel.setWidth(cs2::CUILength::pixels(kWidth));
         containerPanel.setHeight(cs2::CUILength::pixels(kHeight));

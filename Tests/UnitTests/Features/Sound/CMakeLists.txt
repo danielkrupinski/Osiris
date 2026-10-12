@@ -1,0 +1,5 @@
+add_executable(SoundTests FootstepDirectionTests.cpp)
+target_include_directories(SoundTests PRIVATE "${CMAKE_SOURCE_DIR}/Source")
+target_link_libraries(SoundTests PRIVATE gtest_main Threads::Threads)
+set_target_properties(SoundTests PROPERTIES OUTPUT_NAME SoundTestsBin)
+gtest_discover_tests(SoundTests DISCOVERY_TIMEOUT 60 TEST_PREFIX Sound_)

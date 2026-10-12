@@ -742,6 +742,8 @@ u8R"(
   var playerSoundVisualization = createSection(sound, 'Player Sound Visualization');
   separator(playerSoundVisualization);
   createYesNoDropDown(playerSoundVisualization, "Visualize Player Footstep Sound", 'sound', 'visualize_player_footsteps');
+  separator(playerSoundVisualization);
+  createYesNoDropDown(playerSoundVisualization, "Enemy Footstep Direction Arrows", 'sound', 'enemy_footstep_direction');
 
   var bombSoundVisualization = createSection(sound, 'Bomb Sound Visualization');
   createYesNoDropDown(bombSoundVisualization, "Visualize Bomb Plant Sound", 'sound', 'visualize_bomb_plant');
