@@ -180,6 +180,10 @@ private:
         configConversion.boolean(u8"Enabled", loadVariable<FootstepSoundVisualizationEnabled>(), saveVariable<FootstepSoundVisualizationEnabled>());
         configConversion.endObject();
 
+        configConversion.beginObject(u8"EnemyFootstepDirection");
+        configConversion.boolean(u8"Enabled", loadVariable<EnemyFootstepDirectionEnabled>(), saveVariable<EnemyFootstepDirectionEnabled>());
+        configConversion.endObject();
+
         configConversion.beginObject(u8"BombPlant");
         configConversion.boolean(u8"Enabled", loadVariable<BombPlantSoundVisualizationEnabled>(), saveVariable<BombPlantSoundVisualizationEnabled>());
         configConversion.endObject();

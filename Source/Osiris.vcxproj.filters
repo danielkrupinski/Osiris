@@ -517,6 +517,21 @@
     <ClInclude Include="CS2\Constants\SoundNames.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Sound\Details\EnemyFootstepSound.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\FootstepSource.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\FootstepDirectionScript.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\Details\FootstepDirectionOpacity.h">
+      <Filter>Features\Sound\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Sound\EnemyFootstepDirection.h">
+      <Filter>Features\Sound</Filter>
+    </ClInclude>
     <ClInclude Include="Features\Sound\FootstepVisualizer.h">
       <Filter>Features\Sound</Filter>
     </ClInclude>

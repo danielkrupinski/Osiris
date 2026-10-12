@@ -1,0 +1,36 @@
+name: Footstep arrows preview
+
+on:
+  push:
+    branches: [feature/enemy-footstep-arrows]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-release:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: Configure Release and regression tests
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 "-DENABLE_TESTS=unit;functional"
+      - name: Build Windows DLL and regression tests
+        run: cmake --build build --config Release --target Osiris SoundTests FunctionalTests --parallel
+      - name: Run sound and configuration tests
+        run: ctest --test-dir build -C Release -R "^(Sound_|Functional_)" --output-on-failure --no-tests=error
+      - name: Package DLL and checksum
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item 'build/Source/Release/Osiris.dll' 'dist/Osiris-Windows-x64.dll'
+          (Get-FileHash 'dist/Osiris-Windows-x64.dll' -Algorithm SHA256).Hash |
+            Set-Content 'dist/Osiris-Windows-x64.dll.sha256'
+      - name: Upload Windows preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: Osiris-Windows-x64-footstep-arrows
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7

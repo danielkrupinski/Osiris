@@ -176,6 +176,7 @@ protected:
         setVariableExpectationsV10();
         get<player_info_vars::RadarEnabled>() = false;
         get<diagnostics_vars::SafeModeEnabled>() = false;
+        get<EnemyFootstepDirectionEnabled>() = false;
     }
 
     struct VariableChecker {
@@ -332,4 +333,20 @@ TEST_F(ConfigCompatibilityLoadTest, ConfigV9) {
 TEST_F(ConfigCompatibilityLoadTest, ConfigCurrent) {
     setVariableExpectationsCurrent();
     testLoadingConfigFile("config_current.cfg");
+}
+
+TEST_F(ConfigCompatibilityLoadTest, EnemyFootstepDirectionEnabled) {
+    setVariableExpectationsCurrent();
+    get<EnemyFootstepDirectionEnabled>() = true;
+    enableVariableExpectationsForSetting();
+    const auto original = readConfigFile("config_current.cfg");
+    std::u8string text{original.begin(), original.end()};
+    const auto field = u8"\"EnemyFootstepDirection\":{\"Enabled\":false}";
+    const auto position = text.find(field);
+    ASSERT_NE(position, std::u8string::npos);
+    text.replace(position, std::char_traits<char8_t>::length(field),
+        u8"\"EnemyFootstepDirection\":{\"Enabled\":true}");
+    std::vector<char8_t> contents{text.begin(), text.end()};
+    prepareLoadOperation(contents);
+    config.update();
 }

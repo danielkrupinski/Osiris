@@ -14,6 +14,7 @@ public:
     void init(auto&& guiPanel) const
     {
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, FootstepSoundVisualizationEnabled>>(guiPanel, "visualize_player_footsteps");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, EnemyFootstepDirectionEnabled>>(guiPanel, "enemy_footstep_direction");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, BombPlantSoundVisualizationEnabled>>(guiPanel, "visualize_bomb_plant");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, BombBeepSoundVisualizationEnabled>>(guiPanel, "visualize_bomb_beep");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, BombDefuseSoundVisualizationEnabled>>(guiPanel, "visualize_bomb_defuse");
@@ -24,6 +25,7 @@ public:
     void updateFromConfig(auto&& mainMenu) const noexcept
     {
         setDropDownSelectedIndex(mainMenu, "visualize_player_footsteps", !GET_CONFIG_VAR(FootstepSoundVisualizationEnabled));
+        setDropDownSelectedIndex(mainMenu, "enemy_footstep_direction", !GET_CONFIG_VAR(EnemyFootstepDirectionEnabled));
         setDropDownSelectedIndex(mainMenu, "visualize_bomb_plant", !GET_CONFIG_VAR(BombPlantSoundVisualizationEnabled));
         setDropDownSelectedIndex(mainMenu, "visualize_bomb_beep", !GET_CONFIG_VAR(BombBeepSoundVisualizationEnabled));
         setDropDownSelectedIndex(mainMenu, "visualize_bomb_defuse", !GET_CONFIG_VAR(BombDefuseSoundVisualizationEnabled));

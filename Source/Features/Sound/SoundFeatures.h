@@ -14,6 +14,7 @@
 #include "BombDefuseVisualizer.h"
 #include "BombPlantVisualizer.h"
 #include "FootstepVisualizer.h"
+#include "EnemyFootstepDirection.h"
 #include "WeaponReloadVisualizer.h"
 #include "WeaponScopeVisualizer.h"
 
@@ -29,6 +30,7 @@ struct SoundFeatures {
     void runOnViewMatrixUpdate() noexcept
     {
         footstepVisualizer().run();
+        hookContext.template make<EnemyFootstepDirection>().run();
         bombPlantVisualizer().run();
         bombBeepVisualizer().run();
         bombDefuseVisualizer().run();

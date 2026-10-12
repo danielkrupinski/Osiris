@@ -2,6 +2,7 @@
 #include <Features/Sound/Details/BombDefuseSound.h>
 #include <Features/Sound/Details/BombPlantSound.h>
 #include <Features/Sound/Details/FootstepSound.h>
+#include <Features/Sound/Details/EnemyFootstepSound.h>
 #include <Features/Sound/Details/WeaponReloadSound.h>
 #include <Features/Sound/Details/WeaponScopeSound.h>
 
@@ -9,6 +10,7 @@
 
 using SoundWatcherState = SoundWatcherImplState<
     FootstepSound,
+    EnemyFootstepSound,
     BombPlantSound,
     BombBeepSound,
     BombDefuseSound,
