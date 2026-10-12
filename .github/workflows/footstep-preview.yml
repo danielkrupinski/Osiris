@@ -11,6 +11,7 @@ permissions:
 jobs:
   windows-release:
     runs-on: windows-2022
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
       - name: Configure Release and regression tests
