@@ -9,6 +9,7 @@
 #include <CS2/Classes/CSGOInput.h>
 #include <CS2/Offsets/ClientDllOffsets.h>
 #include <Platform/Macros/IsPlatform.h>
+#include <Utils/GlobalViewAngles.h>
 
 #if IS_WIN64()
 #include <Windows.h>
@@ -62,12 +63,8 @@ public:
 #if IS_WIN64()
         if (!enabled)
             return;
-        const auto clientDll = GetModuleHandleA("client.dll");
-        if (!clientDll)
-            return;
-        angles = reinterpret_cast<float*>(
-            reinterpret_cast<std::byte*>(clientDll) + cs2::client_dll_offsets::kViewAngles);
-        if (!isReadableMemory(angles, sizeof(previous)))
+        angles = utils::globalViewAngles();
+        if (!angles)
             return;
 
         previous[0] = angles[0];
@@ -381,10 +378,8 @@ void ClientModeHook_overrideView(cs2::ClientModeCSNormal* thisptr, cs2::CViewSet
     float yaw = setup->m_angView[1];
     if (!isReasonableAngle(pitch) || !isReasonableAngle(yaw)) {
 #if IS_WIN64()
-        const auto clientDll = GetModuleHandleA("client.dll");
-        if (!clientDll) return;
-        const auto* angles = reinterpret_cast<float*>(
-            reinterpret_cast<std::byte*>(clientDll) + cs2::client_dll_offsets::kViewAngles);
+        auto* const angles = utils::globalViewAngles();
+        if (!angles) return;
         pitch = angles[0];
         yaw = angles[1];
 #endif

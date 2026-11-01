@@ -14,6 +14,7 @@
 #include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
 #include <HookContext/HookContextMacros.h>
 #include <Platform/Macros/IsPlatform.h>
+#include <Utils/GlobalViewAngles.h>
 
 #include "AimbotConfigVariables.h"
 #include "AimbotParams.h"
@@ -447,10 +448,9 @@ private:
     {
         float tgtPitch, tgtYaw;
         computeAimAngle(eye, target, tgtPitch, tgtYaw);
-        ensureClientBase();
-        if (!m_clientBase)
-            return 180.0f;
         auto* angles = globalViewAngles();
+        if (!angles)
+            return 180.0f;
         const auto curPitch = angles[0];
         auto curYaw = angles[1];
         auto dPitch = tgtPitch - curPitch;
@@ -463,10 +463,9 @@ private:
     void applySnapAim(float pitchTarget, float yawTarget) noexcept
     {
 #if IS_WIN64()
-        ensureClientBase();
-        if (!m_clientBase)
-            return;
         auto* angles = globalViewAngles();
+        if (!angles)
+            return;
         const auto currentPitch = angles[0];
         const auto currentYaw = angles[1];
 
@@ -522,10 +521,9 @@ private:
     void applySmoothAim(float pitchTarget, float yawTarget) noexcept
     {
 #if IS_WIN64()
-        ensureClientBase();
-        if (!m_clientBase)
-            return;
         auto* angles = globalViewAngles();
+        if (!angles)
+            return;
         const auto currentPitch = angles[0];
         const auto currentYaw = angles[1];
 
@@ -693,10 +691,9 @@ private:
     void writeViewAngles(float pitch, float yaw) noexcept
     {
 #if IS_WIN64()
-        ensureClientBase();
-        if (!m_clientBase)
-            return;
         auto* viewAngles = globalViewAngles();
+        if (!viewAngles)
+            return;
         viewAngles[0] = pitch;
         viewAngles[1] = yaw;
         viewAngles[2] = 0.0f;
@@ -730,22 +727,9 @@ private:
         eyeAngles[1] = yaw;
     }
 
-    void ensureClientBase() noexcept
-    {
-#if IS_WIN64()
-        if (!m_clientBase)
-            m_clientBase = GetModuleHandleA("client.dll");
-#endif
-    }
-
     [[nodiscard]] float* globalViewAngles() noexcept
     {
-#if IS_WIN64()
-        return reinterpret_cast<float*>(
-            reinterpret_cast<std::byte*>(m_clientBase) + cs2::client_dll_offsets::kViewAngles);
-#else
-        return nullptr;
-#endif
+        return utils::globalViewAngles();
     }
 
     [[nodiscard]] static float fastFabs(float x) noexcept { return x < 0.0f ? -x : x; }
@@ -864,21 +848,6 @@ private:
                     return pawn;
             }
         }
-
-#if IS_WIN64()
-        // The controller-to-pawn handle can lag or be unavailable after a
-        // client update. cs2-dumper exposes the authoritative local pawn
-        // pointer, so use it as a guarded fallback.
-        if (const auto clientDll = GetModuleHandleA("client.dll")) {
-            auto* const pawnPointer = reinterpret_cast<cs2::C_CSPlayerPawn**>(
-                reinterpret_cast<std::byte*>(clientDll) + cs2::client_dll_offsets::kLocalPlayerPawn);
-            if (isReadableMemory(pawnPointer, sizeof(*pawnPointer))) {
-                auto* const pawn = *pawnPointer;
-                if (isReadableMemory(pawn, kLocalPawnReadableSize))
-                    return pawn;
-            }
-        }
-#endif
         return nullptr;
     }
 
@@ -1046,9 +1015,4 @@ private:
     bool smoothMode;
     bool humanizationEnabled;
     AimCandidate bestCandidate{};
-#if IS_WIN64()
-    HMODULE m_clientBase{nullptr};
-#else
-    void* m_clientBase{nullptr};
-#endif
 };

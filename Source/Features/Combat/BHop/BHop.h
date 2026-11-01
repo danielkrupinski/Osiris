@@ -8,6 +8,7 @@
 #include <CS2/Classes/Vector.h>
 #include <HookContext/HookContextMacros.h>
 #include <Platform/Macros/IsPlatform.h>
+#include <Utils/GlobalViewAngles.h>
 
 #include "BHopConfigVariables.h"
 #include "BHopState.h"
@@ -203,16 +204,6 @@ private:
                 }
             }
         }
-
-#if IS_WIN64()
-        if (const auto clientDll = GetModuleHandleA("client.dll")) {
-            if (auto* pawn = *reinterpret_cast<cs2::C_CSPlayerPawn**>(
-                    reinterpret_cast<std::byte*>(clientDll) + cs2::client_dll_offsets::kLocalPlayerPawn);
-                isReadableMemory(pawn, kPawnReadableSize)) {
-                return pawn;
-            }
-        }
-#endif
         return nullptr;
     }
 
@@ -273,14 +264,10 @@ private:
     [[nodiscard]] static float* viewAngles() noexcept
     {
 #if IS_WIN64()
-        const auto clientDll = GetModuleHandleA("client.dll");
-        if (!clientDll)
-            return nullptr;
-        auto* angles = reinterpret_cast<float*>(
-            reinterpret_cast<std::byte*>(clientDll) + cs2::client_dll_offsets::kViewAngles);
-        if (!isReadableMemory(angles, sizeof(float) * 3))
-            return nullptr;
-        return angles;
+        // Validated resolver: angles live inside the CCSGOInput singleton
+        // object, not at a raw client.dll RVA (that address went stale and
+        // corrupted neighbouring globals after the 1.41.9.2 update).
+        return utils::globalViewAngles();
 #else
         return nullptr;
 #endif

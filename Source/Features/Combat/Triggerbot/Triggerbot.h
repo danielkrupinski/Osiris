@@ -12,6 +12,7 @@
 #include <GameClient/WorldToScreen/WorldToClipSpaceConverter.h>
 #include <HookContext/HookContextMacros.h>
 #include <Platform/Macros/IsPlatform.h>
+#include <Utils/GlobalViewAngles.h>
 
 #include "TriggerbotConfigVariables.h"
 #include "TriggerbotState.h"
@@ -288,11 +289,8 @@ private:
     [[nodiscard]] ViewAngles readViewAngles() noexcept
     {
 #if IS_WIN64()
-        if (!m_clientBase)
-            m_clientBase = GetModuleHandleA("client.dll");
-        if (!m_clientBase) return {0.0f, 0.0f};
-        auto* a = reinterpret_cast<float*>(
-            reinterpret_cast<std::byte*>(m_clientBase) + cs2::client_dll_offsets::kViewAngles);
+        auto* a = utils::globalViewAngles();
+        if (!a) return {0.0f, 0.0f};
         return {a[0], a[1]};
 #else
         return {0.0f, 0.0f};
@@ -339,9 +337,4 @@ private:
     HookContext& hookContext;
     bool enabled;
     bool targetFound{false};
-#if IS_WIN64()
-    HMODULE m_clientBase{nullptr};
-#else
-    void* m_clientBase{nullptr};
-#endif
 };
