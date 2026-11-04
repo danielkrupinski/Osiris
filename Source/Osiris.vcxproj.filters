@@ -253,6 +253,9 @@
     <Filter Include="EntryPoints">
       <UniqueIdentifier>{95ddae8d-0dcc-4c4c-a44b-04135f59fdc5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameMemoryValidation">
+      <UniqueIdentifier>{9e36352d-5123-42d5-964f-b0f4858c4a90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CS2\Classes\C_CSGameRules.h">
@@ -1216,9 +1219,6 @@
     <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon\PlayerBombIconPanelParams.h">
       <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\BombIcon</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon\PlayerWeaponIconPanelContext.h">
-      <Filter>Features\Visuals\PlayerInfoInWorld\PlayerWeaponIcon</Filter>
-    </ClInclude>
     <ClInclude Include="CS2\Constants\SceneObjectAttributeNames.h">
       <Filter>CS2\Constants</Filter>
     </ClInclude>
@@ -1890,6 +1890,21 @@
     </ClInclude>
     <ClInclude Include="GameClient\Entities\WeaponVData.h">
       <Filter>GameClient\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\Windows\WindowsMemory.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMemoryValidation\GameMemoryValidatorState.h">
+      <Filter>GameMemoryValidation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMemoryValidation\MemoryValidationStatus.h">
+      <Filter>GameMemoryValidation</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMemoryValidation\GameMemoryValidator.h">
+      <Filter>GameMemoryValidation</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform\PlatformMemory.h">
+      <Filter>Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

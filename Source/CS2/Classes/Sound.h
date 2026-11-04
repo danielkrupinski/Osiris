@@ -17,7 +17,7 @@ struct CSfxTable {
 struct ChannelInfo1 {
     CSfxTable* sfx;
     int guid;
-    PAD(60); // TODO: sizeof changed several times and it cannot be read from the binary because it is not stored as a constant. 'sfx' pointer should be checked whether it points to the valid memory to prevent crashes.
+    PAD(60);
 };
 
 static_assert(sizeof(ChannelInfo1) == 72);

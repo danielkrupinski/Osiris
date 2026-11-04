@@ -325,6 +325,9 @@
     <ClInclude Include="GameClient\WorldToScreen\NormalizedDeviceCoordinates.h" />
     <ClInclude Include="GameClient\WorldToScreen\ViewToProjectionMatrix.h" />
     <ClInclude Include="GameClient\WorldToScreen\WorldToClipSpaceConverter.h" />
+    <ClInclude Include="GameMemoryValidation\GameMemoryValidator.h" />
+    <ClInclude Include="GameMemoryValidation\GameMemoryValidatorState.h" />
+    <ClInclude Include="GameMemoryValidation\MemoryValidationStatus.h" />
     <ClInclude Include="GlobalContext\DeferredCompleteObject.h" />
     <ClInclude Include="GlobalContext\FullGlobalContext.h" />
     <ClInclude Include="GlobalContext\GlobalContext.h" />
@@ -464,6 +467,7 @@
     <ClInclude Include="Platform\Macros\IsPlatform.h" />
     <ClInclude Include="Platform\Macros\PlatformSpecific.h" />
     <ClInclude Include="Platform\PlatformApi.h" />
+    <ClInclude Include="Platform\PlatformMemory.h" />
     <ClInclude Include="Platform\PlatformPath.h" />
     <ClInclude Include="Platform\SimpleMessageBox.h" />
     <ClInclude Include="Platform\TypeInfoPrecedingVmt.h" />
@@ -487,6 +491,7 @@
     <ClInclude Include="Platform\Windows\UserDocumentsFolderPath.h" />
     <ClInclude Include="Platform\Windows\Win.h" />
     <ClInclude Include="Platform\Windows\WindowsDynamicLibrary.h" />
+    <ClInclude Include="Platform\Windows\WindowsMemory.h" />
     <ClInclude Include="Platform\Windows\WindowsMessageBox.h" />
     <ClInclude Include="Platform\Windows\WindowsPlatformApi.h" />
     <ClInclude Include="Platform\Windows\WindowsPlatformApiImpl.h" />

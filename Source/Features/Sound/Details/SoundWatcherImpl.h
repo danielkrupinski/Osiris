@@ -9,6 +9,8 @@
 #include <CS2/Classes/Sound.h>
 #include <CS2/Classes/Vector.h>
 #include <GameClient/FileSystem.h>
+#include <GameMemoryValidation/GameMemoryValidator.h>
+#include <GameMemoryValidation/MemoryValidationStatus.h>
 #include <MemoryPatterns/PatternTypes/SoundSystemPatternTypes.h>
 #include "PlayedSound.h"
 #include "WatchedSounds.h"
@@ -90,6 +92,9 @@ private:
 
         const auto fileNames = hookContext.template make<FileSystem<HookContext>>().fileNames();
         if (!fileNames)
+            return;
+
+        if (hookContext.template make<GameMemoryValidator>().checkSoundChannelInfo1SizeValid() == MemoryValidationStatus::Nok)
             return;
 
         const auto& channelInfo1 = soundChannels.channelInfo1;

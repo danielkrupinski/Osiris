@@ -269,6 +269,11 @@ struct HookContext {
         return PlayerResource{*this, nullptr};
     }
 
+    [[nodiscard]] auto& gameMemoryValidatorState() noexcept
+    {
+        return fullGlobalContext.gameMemoryValidatorState;
+    }
+
 private:
     [[nodiscard]] cs2::CPlantedC4* getPlantedC4() const noexcept
     {

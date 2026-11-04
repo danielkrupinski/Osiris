@@ -10,6 +10,10 @@ extern "C" std::size_t systemCall(const SyscallParams* params, ...);
 
 struct IO_APC_ROUTINE;
 
+enum class MEMORY_INFORMATION_CLASS {
+    MemoryBasicInformation = 0
+};
+
 struct WindowsSyscalls {
     static NTSTATUS NtCreateFile(
         HANDLE* fileHandle,
@@ -50,5 +54,11 @@ struct WindowsSyscalls {
     {
         const SyscallParams params{WindowsSyscallIndex::NtClose, reinterpret_cast<std::uintptr_t>(handle)};
         return static_cast<NTSTATUS>(systemCall(&params));
+    }
+
+    static NTSTATUS NtQueryVirtualMemory(HANDLE processHandle, PVOID baseAddress, MEMORY_INFORMATION_CLASS memoryInformationClass, PVOID memoryInformation, SIZE_T memoryInformationLength, PSIZE_T returnLength) noexcept
+    {
+        const SyscallParams params{WindowsSyscallIndex::NtQueryVirtualMemory, reinterpret_cast<std::uintptr_t>(processHandle)};
+        return static_cast<NTSTATUS>(systemCall(&params, baseAddress, memoryInformationClass, memoryInformation, memoryInformationLength, returnLength));
     }
 };
