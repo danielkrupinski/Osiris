@@ -145,6 +145,11 @@ private:
         configConversion.uint(u8"ColorMode", loadVariable<player_info_vars::PlayerPositionArrowColorMode>(), saveVariable<player_info_vars::PlayerPositionArrowColorMode>());
         configConversion.endObject();
 
+        configConversion.beginObject(u8"PlayerName");
+        configConversion.boolean(u8"Enabled", loadVariable<player_info_vars::PlayerNameEnabled>(), saveVariable<player_info_vars::PlayerNameEnabled>());
+        configConversion.uint(u8"ColorMode", loadVariable<player_info_vars::PlayerNameColorMode>(), saveVariable<player_info_vars::PlayerNameColorMode>());
+        configConversion.endObject();
+
         configConversion.beginObject(u8"Health");
         configConversion.boolean(u8"Enabled", loadVariable<player_info_vars::PlayerHealthEnabled>(), saveVariable<player_info_vars::PlayerHealthEnabled>());
         configConversion.uint(u8"ColorMode", loadVariable<player_info_vars::PlayerHealthColorMode>(), saveVariable<player_info_vars::PlayerHealthColorMode>());

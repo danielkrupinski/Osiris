@@ -11,6 +11,8 @@
 #include "PlayerHealth/PlayerHealthPanel.h"
 #include "PlayerHealth/PlayerHealthPanelParams.h"
 #include "PlayerInfoContainerPanelParams.h"
+#include "PlayerName/PlayerNamePanel.h"
+#include "PlayerName/PlayerNamePanelParams.h"
 #include "PlayerPositionArrow/PlayerPositionArrowPanel.h"
 #include "PlayerPositionArrow/PlayerPositionArrowPanelParams.h"
 #include "PlayerStateIcons/PlayerStateIconsPanel.h"
@@ -102,6 +104,18 @@ public:
 
         createHealthIconPanel(healthPanel);
         createHealthTextPanel(healthPanel);
+    }
+
+    void createPanel(std::type_identity<PlayerNamePanel<HookContext>>, auto&& containerPanel) const noexcept
+    {
+        using namespace player_name_panel_params;
+
+        auto&& label = hookContext.panelFactory().createLabelPanel(containerPanel).uiPanel();
+        label.setFont(kFont);
+        label.setAlign(kAlignment);
+        label.setMargin(kMargin);
+        label.setTextShadow(kShadowParams);
+        label.setColor(kColor);
     }
 
 private:

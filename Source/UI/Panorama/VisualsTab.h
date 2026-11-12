@@ -10,6 +10,7 @@
 
 #include "Tabs/VisualsTab/PlayerInfoInWorldDropdownSelectionChangeHandler.h"
 #include "Tabs/VisualsTab/PlayerInfoInWorldPlayerHealthColorModeDropdownSelectionChangeHandler.h"
+#include "Tabs/VisualsTab/PlayerInfoInWorldPlayerNameColorModeDropdownSelectionChangeHandler.h"
 #include "Tabs/VisualsTab/PlayerInfoInWorldPlayerPositionArrowColorModeDropdownSelectionChangeHandler.h"
 #include "Tabs/VisualsTab/PlayerModelGlowColorModeDropdownSelectionChangeHandler.h"
 #include "Tabs/VisualsTab/PlayerModelGlowDropdownSelectionChangeHandler.h"
@@ -46,6 +47,8 @@ private:
         initDropDown<PlayerInfoInWorldDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_information_through_walls");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::PlayerPositionArrowEnabled>>(guiPanel, "player_info_position");
         initDropDown<PlayerInfoInWorldPlayerPositionArrowColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_info_position_color");
+        initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::PlayerNameEnabled>>(guiPanel, "player_info_name");
+        initDropDown<PlayerInfoInWorldPlayerNameColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_info_name_color");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::PlayerHealthEnabled>>(guiPanel, "player_info_health");
         initDropDown<PlayerInfoInWorldPlayerHealthColorModeDropdownSelectionChangeHandler<HookContext>>(guiPanel, "player_info_health_color");
         initDropDown<OnOffDropdownSelectionChangeHandler<HookContext, player_info_vars::ActiveWeaponIconEnabled>>(guiPanel, "player_info_weapon");
@@ -148,6 +151,8 @@ private:
         setDropDownSelectedIndex(mainMenu, "player_information_through_walls", playerInfoDropDownIndex());
         setDropDownSelectedIndex(mainMenu, "player_info_position", !GET_CONFIG_VAR(player_info_vars::PlayerPositionArrowEnabled));
         setDropDownSelectedIndex(mainMenu, "player_info_position_color", static_cast<int>(GET_CONFIG_VAR(player_info_vars::PlayerPositionArrowColorMode)));
+        setDropDownSelectedIndex(mainMenu, "player_info_name", !GET_CONFIG_VAR(player_info_vars::PlayerNameEnabled));
+        setDropDownSelectedIndex(mainMenu, "player_info_name_color", static_cast<int>(GET_CONFIG_VAR(player_info_vars::PlayerNameColorMode)));
         setDropDownSelectedIndex(mainMenu, "player_info_health", !GET_CONFIG_VAR(player_info_vars::PlayerHealthEnabled));
         setDropDownSelectedIndex(mainMenu, "player_info_health_color", static_cast<int>(GET_CONFIG_VAR(player_info_vars::PlayerHealthColorMode)));
         setDropDownSelectedIndex(mainMenu, "player_info_weapon", !GET_CONFIG_VAR(player_info_vars::ActiveWeaponIconEnabled));

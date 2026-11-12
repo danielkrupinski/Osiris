@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include <CS2/Classes/CUtlString.h>
 #include <CS2/Classes/EntitySystem/CEntityHandle.h>
 #include <Platform/Macros/PlatformSpecific.h>
 
@@ -25,6 +26,7 @@ struct CCSPlayerController : C_BaseEntity {
 
     using m_hPawn = CEntityHandle;
     using m_iCompTeammateColor = PlayerColorIndex;
+    using m_sSanitizedPlayerName = CUtlString;
 };
 
 }
